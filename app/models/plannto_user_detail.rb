@@ -14,6 +14,7 @@ class PlanntoUserDetail
   field :f_rank, type: Integer #Female Ranking
   field :a, type: String # Additional detail
   field :loc_id, type: String # Locaiton id
+  field :agg_info, type: String # Aggregated info
 
   embeds_many :m_item_types
   # embeds_many :m_items
@@ -91,6 +92,7 @@ class PlanntoUserDetail
 
   def update_additional_details(url)
     domain = Item.get_host_without_www(url)
+    resale = false
     male_site_list = ["team-bhp.com", "gadgetstouse.com"]
     female_site_list = ["makeupandbeauty.com", "stylecraze.com", "bollywoodshaadis.com", "southindiafashion.com", "wiseshe.com", "indusladies.com", "celebritysaree.com"]
     resale_site_list = ["olx.in", "quikr.com", "classifieds.team-bhp.com"]
@@ -104,7 +106,10 @@ class PlanntoUserDetail
       user_id_for_key = self.plannto_user_id.to_s
       key_prefix = "ubl:pl:#{user_id_for_key}"
     end
-    redis_rtb = {key_prefix => {}}
+
+    values = $redis_rtb.hgetall(key_prefix)
+    values = {} if values.blank?
+    redis_rtb = {key_prefix => values}
 
     redis_rtb_ubl = redis_rtb[key_prefix]
 
@@ -113,6 +118,7 @@ class PlanntoUserDetail
     elsif female_site_list.include?(domain)
       self.f_rank = self.f_rank.to_i + 1
     elsif resale_site_list.include?(domain)
+      resale = true
       a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
       a_hash = Hash[a_hash]
       a_hash.merge!("resale" => "true", "rad" => Date.today.to_s) #rad => resale last accessed date
@@ -150,7 +156,7 @@ class PlanntoUserDetail
 
     self.save!
 
-    return redis_rtb
+    return redis_rtb, resale
   end
 
   private

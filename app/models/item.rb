@@ -1649,6 +1649,7 @@ end
           t_length -= 1
           p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
           unless each_user_val.blank?
+            agg_info = {}
             user_id, url, type, item_ids, advertisement_id, itemtype, plannto_user_id, google_location_id = each_user_val.split("<<")
             if !user_id.blank? && !url.blank?
               already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
@@ -1689,9 +1690,6 @@ end
                       plannto_location_id = google_geo_targeting_hash[google_location_id.to_i]
                     end
                     plannto_user_detail.loc_id = plannto_location_id if !plannto_location_id.blank?
-                    #plannto user details
-                    plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
-                    plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
 
                     article_content = ArticleContent.where(:url => url).select("itemtype_id,sub_type").last
                     itemtype_id = article_content.itemtype_id rescue ""
@@ -1709,9 +1707,22 @@ end
                     end
 
                     resale = type == ArticleCategory::ReSale ? true : false
+                    #plannto user details
+                    plannto_user_detail_hash_new, resale_val = plannto_user_detail.update_additional_details(url)
+                    resale = true if (resale == false && resale_val == true)
+                    new_m_agg_info = ""
 
                     if !itemtype_id.blank?
                       m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
+
+                      if resale == true
+                        agg_info = {"#{itemtype_id}:r" => 1}
+                        new_m_agg_info = "#{itemtype_id}:r:1"
+                      else
+                        agg_info = {"#{itemtype_id}" => 1}
+                        new_m_agg_info = "#{itemtype_id}:1"
+                      end
+
                       if m_item_type.blank?
                         plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url], :r => resale)
                         m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
@@ -1724,6 +1735,17 @@ end
                         m_item_type.save!
                       end
                     end
+
+                    plannto_user_detail_hash_new.merge!(agg_info) if !agg_info.blank?
+                    plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+
+                    if !new_m_agg_info.blank?
+                      m_agg_info = plannto_user_detail.agg_info.to_s
+                      m_agg_info_arr = m_agg_info.split(",")
+                      m_agg_info_arr << new_m_agg_info
+                      plannto_user_detail.agg_info = m_agg_info_arr.uniq.join(",")
+                    end
+
                     plannto_user_detail.skip_duplicate_update = true
                     plannto_user_detail.save!
                   end
