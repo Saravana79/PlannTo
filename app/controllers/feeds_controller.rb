@@ -63,7 +63,20 @@ class FeedsController < ApplicationController
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25, :total_entries => 5000)
-    @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
+
+    categories = $redis.get("categories_for_feed_urls")
+
+    if !categories.blank?
+      @categories = categories.to_s.split(",")
+    else
+      categories = FeedUrl.find_by_sql("select distinct category from feed_urls").map(&:category)
+      categories = categories.join(",").split(",").compact.uniq
+      @categories = categories
+      $redis.set("categories_for_feed_urls", categories.join(","))
+      $redis.expire("categories_for_feed_urls", 1.day)
+    end
+
+    # @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
 
     #Assign sources to memcache
 
