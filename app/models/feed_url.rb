@@ -695,7 +695,7 @@ class FeedUrl < ActiveRecord::Base
     non_included_list = false
     if ["vicky.in", "carwale.com", "classifieds.team-bhp.com", "autonagar.com", "bikewale.com", "cartrade.com", "carsndeals.com", "mycarhelpline.com"].include?(domain)
       is_valid_for_auto_used_car_check = FeedUrl.check_auto_used_car(feed_url.url)
-    elsif url.to_s.downcase.include?("used") && feed_url.category.to_s.downcase.include?("car")
+    elsif feed_url.url.to_s.downcase.include?("used") && feed_url.category.to_s.downcase.include?("car")
       is_valid_for_auto_used_car_check = true
       non_included_list = true
     end
@@ -806,13 +806,12 @@ class FeedUrl < ActiveRecord::Base
     selected_values
   end
 
-  #TODO: have to check and prevent the R14 error
   def self.automated_feed_process
     $redis.set("automated_feed_process_is_running", 1)
     $redis.expire("automated_feed_process_is_running", 40.minutes)
 
     SourceCategory.update_all_to_cache()
-    feed_urls = FeedUrl.where("status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}'")
+    feed_urls = FeedUrl.where("status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}' and score is null")
     sources_list = JSON.parse($redis.get("sources_list_details"))
 
     feed_urls.each do |feed_url|
