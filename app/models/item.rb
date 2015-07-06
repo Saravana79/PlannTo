@@ -1691,7 +1691,10 @@ end
                     end
                     plannto_user_detail.loc_id = plannto_location_id if !plannto_location_id.blank?
 
-                    article_content = ArticleContent.where(:url => url).select("itemtype_id,sub_type").last
+                    article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
+
+                    item_ids = article_content.item_ids if item_ids.blank?
+
                     itemtype_id = article_content.itemtype_id rescue ""
                     type = article_content.sub_type rescue "" if type.blank?
 
