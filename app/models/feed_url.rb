@@ -762,14 +762,14 @@ class FeedUrl < ActiveRecord::Base
       title = feed_url.title
       title_score = title.split(" ").count / 3 * 0.1
       total_score = score + title_score
-      feed_url.update_attributes(:score => total_score) if total_score > 0
+      feed_url.update_attributes(:score => total_score)
     else
       title = feed_url.title
       result = results[0]
       score = result.blank? ? 0 : result[:score]
       title_score = title.split(" ").count / 3 * 0.1
       total_score = score + title_score
-      feed_url.update_attributes(:score => total_score) if total_score > 0
+      feed_url.update_attributes(:score => total_score)
     end
     auto_save
   end
