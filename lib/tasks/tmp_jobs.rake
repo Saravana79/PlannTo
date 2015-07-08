@@ -411,3 +411,28 @@ task :mapping_fixes => :environment do
     page += 1
   end while !item_details.empty?
 end
+
+desc "temporary rake task"
+task :plannto_user_detail_process => :environment do
+  plannto_user_details = PlanntoUserDetail.where(:lad.gte => "#{1.week.ago}")
+
+  plannto_user_details.each do |plannto_user_detail|
+    begin
+      agg_info_arr = []
+      item_types = plannto_user_detail.m_item_types
+      item_types.each do |item_type|
+        r = item_type.r == true ? "r" : ""
+        itemtype_id = item_type.itemtype_id
+        if !r.blank?
+          agg_info_arr << "#{itemtype_id}:r:1"
+        else
+          agg_info_arr << "#{itemtype_id}:1"
+        end
+      end
+      plannto_user_detail.agg_info = agg_info_arr.join(",")
+      plannto_user_detail.save!
+    rescue Exception => e
+      p "Error => #{plannto_user_detail.plannto_user_id}"
+    end
+  end
+end
