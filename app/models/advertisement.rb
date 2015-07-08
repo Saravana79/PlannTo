@@ -1228,6 +1228,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           end
 
           if !plannto_user_detail.blank?
+            agg_info = {}
+            new_m_agg_info = ""
             itemtype_id = nil
             #plannto user details
             if !each_click_mongo["item_id"].blank?
@@ -1236,6 +1238,9 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             end
 
             if !itemtype_id.blank?
+              agg_info = {"#{itemtype_id}" => 1}
+              new_m_agg_info = "#{itemtype_id}:1"
+
               m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
               if m_item_type.blank?
                 plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
@@ -1248,6 +1253,13 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               m_item_type.click_item_ids = click_item_ids
               m_item_type.lcd = Date.today
               m_item_type.save!
+            end
+
+            if !new_m_agg_info.blank?
+              m_agg_info = plannto_user_detail.agg_info.to_s
+              m_agg_info_arr = m_agg_info.split(",")
+              m_agg_info_arr << new_m_agg_info
+              plannto_user_detail.agg_info = m_agg_info_arr.uniq.join(",")
             end
 
             plannto_user_detail.skip_duplicate_update = true
