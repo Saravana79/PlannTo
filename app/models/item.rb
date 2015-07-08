@@ -1654,6 +1654,27 @@ end
             if !user_id.blank? && !url.blank?
               already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
               ranking = 0
+              itemtype_id = ""
+              ranking = ""
+
+              if item_ids.blank?
+                apartment_urls = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com"]
+
+                if apartment_urls.include?(url)
+                  item_ids = "35284,35236"
+                  itemtype_id = 33
+                  ranking = 1
+                elsif ["click.in", "trovit.co.in", "locanto.in"].include?(url)
+                  if url.include?("flat") || url.include?("apartment")
+                    item_ids = "35284"
+                  elsif url.include?("land")
+                    item_ids = "35236"
+                  end
+                  itemtype_id = 33
+                  ranking = 1
+                end
+              end
+
 
               if already_exist == false
 
@@ -1695,18 +1716,20 @@ end
 
                     item_ids = article_content.item_ids if !article_content.blank? && item_ids.blank?
 
-                    itemtype_id = article_content.itemtype_id rescue ""
+                    itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
                     type = article_content.sub_type rescue "" if type.blank?
 
-                    case type.to_s
-                      when "Reviews", "Spec", "Photo"
-                        ranking = 10
-                      when "Comparisons"
-                        ranking = 5
-                      when "Lists", "Others"
-                        ranking = 2
-                      when ""
-                        ranking = 2
+                    if ranking.blank?
+                      case type.to_s
+                        when "Reviews", "Spec", "Photo"
+                          ranking = 10
+                        when "Comparisons"
+                          ranking = 5
+                        when "Lists", "Others"
+                          ranking = 2
+                        when ""
+                          ranking = 2
+                      end
                     end
 
                     resale = type == ArticleCategory::ReSale ? true : false
