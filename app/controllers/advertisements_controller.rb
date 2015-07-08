@@ -63,7 +63,7 @@ class AdvertisementsController < ApplicationController
     item_ids = @items.blank? ? [] : @items.map(&:id)
     @item = @items.first
 
-    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids)
+    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
 
     # Default item_details based on vendor if item_details empty
     #TODO: temporary solution, have to change based on ecpm
@@ -92,7 +92,7 @@ class AdvertisementsController < ApplicationController
         #   new_item_ids = Item.get_item_ids_for_300_600()
         # end
         new_item_ids = Item.get_item_ids_for_300_600()
-        @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids)
+        @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids, @ad)
         @item_details = old_item_details + @item_details
         @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
       end
@@ -247,7 +247,7 @@ class AdvertisementsController < ApplicationController
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
-    @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
+    @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id], @ad)
     @sliced_item_details = @item_details.each_slice(3)
     
     if @is_test != "true"

@@ -1693,7 +1693,7 @@ end
 
                     article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
 
-                    item_ids = article_content.item_ids if item_ids.blank?
+                    item_ids = article_content.item_ids if !article_content.blank? && item_ids.blank?
 
                     itemtype_id = article_content.itemtype_id rescue ""
                     type = article_content.sub_type rescue "" if type.blank?
@@ -2644,11 +2644,11 @@ end
     return items, search_url
   end
 
-  def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, fashion_id)
+  def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, fashion_id, ad=nil)
     item = item_ids.blank? ? nil : Item.where(:id => item_ids.split(",")).first
     item_details = []
     if !item.blank?
-      item_details = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids, fashion_id)
+      item_details = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids, fashion_id, ad)
       # if !fashion_id.blank?
       #   item_details = Item.get_itemdetails_using_fashion_id(item_details, fashion_id)
       # else
@@ -2659,7 +2659,7 @@ end
 
       item = Item.where(:name => item_name).first
       item_id_arr = [item.id] rescue []
-      item_details = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids, fashion_id)
+      item_details = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids, fashion_id, ad)
       item_details = item_details.sample(6)
     end
     item_details = item_details.first(6)
