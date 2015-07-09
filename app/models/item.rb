@@ -1662,7 +1662,7 @@ end
                 if apartment_urls.include?(url)
                   item_ids = "35284,35236"
                   itemtype_id = 33
-                  ranking = 1
+                  ranking = 5
                 elsif ["click.in", "trovit.co.in", "locanto.in"].include?(url)
                   if url.include?("flat") || url.include?("apartment")
                     item_ids = "35284"
@@ -1670,7 +1670,7 @@ end
                     item_ids = "35236"
                   end
                   itemtype_id = 33
-                  ranking = 1
+                  ranking = 5
                 end
               end
 

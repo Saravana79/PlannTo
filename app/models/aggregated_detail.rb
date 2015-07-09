@@ -14,10 +14,10 @@ class AggregatedDetail < ActiveRecord::Base
       click_date_condition = "timestamp > '#{time.beginning_of_day.utc.strftime('%F %T')}' and timestamp < '#{time.end_of_day.utc.strftime('%F %T')}'"
 
       if entity_type == "publisher"
-        impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
+        impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price from add_impressions1 where #{impression_date_condition} group by publisher_id"
         click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} group by publisher_id"
       elsif entity_type == "advertisement"
-        impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price, a.commission from add_impressions ai inner join advertisements a on ai.advertisement_id = a.id where #{impression_date_condition} and ai.advertisement_type='advertisement' group by advertisement_id"
+        impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price, a.commission from add_impressions1 ai inner join advertisements a on ai.advertisement_id = a.id where #{impression_date_condition} and ai.advertisement_type='advertisement' group by advertisement_id"
         click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
       end
 

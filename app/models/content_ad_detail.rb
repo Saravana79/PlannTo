@@ -1,7 +1,7 @@
 class ContentAdDetail < ActiveRecord::Base
 
   def self.update_ad_details_for_contents(log, batch_size=2000)
-    query_to_get_article_contents = "SELECT a_c.* FROM view_article_contents a_c inner join add_impressions i on i.hosted_site_url= a_c.url WHERE a_c.type IN ('ArticleContent') group by url"
+    query_to_get_article_contents = "SELECT a_c.* FROM view_article_contents a_c inner join add_impressions1 i on i.hosted_site_url= a_c.url WHERE a_c.type IN ('ArticleContent') group by url"
     # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
     log.debug "********** Started Updating ContentAdDetail for Content **********"

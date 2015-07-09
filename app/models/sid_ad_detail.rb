@@ -1,7 +1,7 @@
 class SidAdDetail < ActiveRecord::Base
   def self.update_ad_details_for_sid(log, batch_size=2000)
     date_for_query = Time.now.utc - 2.month
-    query_to_get_add_impressions = "select sid FROM add_impressions where impression_time >= '2014-07-20' and impression_time >= '#{date_for_query}' and sid is not null group by sid"
+    query_to_get_add_impressions = "select sid FROM add_impressions1 where impression_time >= '2014-07-20' and impression_time >= '#{date_for_query}' and sid is not null group by sid"
     # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
     log.debug "********** Started Updating SidAdDetail for add impressions **********"
@@ -38,9 +38,9 @@ class SidAdDetail < ActiveRecord::Base
     current_date = Time.now.strftime("%Y-%m-%d")
 
     # select sid, count(*) as impression_count from add_impressions where impression_time >= "2014-07-20 00:00:00" and impression_time >= "2014-06-22 00:00:00" and sid is not null group by sid
-    impression_query = "select sid, count(*) as impression_count, avg(winning_price) as avg_winning_price from add_impressions where impression_time >= '#{date_for_query}' and impression_time <= '#{current_date}' and sid is not null group by sid having impression_count > 500"
+    impression_query = "select sid, count(*) as impression_count, avg(winning_price) as avg_winning_price from add_impressions1 where impression_time >= '#{date_for_query}' and impression_time <= '#{current_date}' and sid is not null group by sid having impression_count > 500"
     click_query = "select sid,count(*) as click_count from clicks where timestamp >= '#{date_for_query}' group by sid"
-    order_query = "select sid,count(*) as count from add_impressions ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
+    order_query = "select sid,count(*) as count from add_impressions1 ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
 where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) desc"
 
     page = 1

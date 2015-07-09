@@ -97,7 +97,7 @@ class Advertisement < ActiveRecord::Base
     advertisements = Advertisement.where("bid = 'CPC'")
     count = 0
     advertisements.each do |advertisement|
-      clicks_count = Click.joins(:add_impression).where("add_impressions.advertisement_id = ?", advertisement.id).count
+      clicks_count = Click.joins(:add_impression).where("add_impressions1.advertisement_id = ?", advertisement.id).count
       impressions_count = advertisement.add_impressions.count
 
       if (clicks_count != 0 && impressions_count != 0)
@@ -515,12 +515,12 @@ class Advertisement < ActiveRecord::Base
     click_date_condition = "timestamp > '#{ad_report.from_date.beginning_of_day.utc.strftime('%F %T')}' and timestamp < '#{ad_report.to_date.end_of_day.utc.strftime('%F %T')}'"
 
     if ad_report.report_type == "item_id"
-      query = "select a.item_id,i.name,impressions_count,clicks_count from (select  ai.item_id, count(*) as impressions_count from add_impressions ai
+      query = "select a.item_id,i.name,impressions_count,clicks_count from (select  ai.item_id, count(*) as impressions_count from add_impressions1 ai
                where advertisement_id = #{ad_report.advertisement_id} and #{impression_date_condition} group by item_id ) a left outer join (select item_id, count(*) as clicks_count from
                clicks where advertisement_id = #{ad_report.advertisement_id} and #{click_date_condition} group by item_id ) b on a.item_id= b.item_id inner join items i on i.id = a.item_id
                order by impressions_count desc"
     else
-      query = "select a.hosted_site_url,impressions_count,clicks_count from (select  ai.hosted_site_url, count(*) as impressions_count from add_impressions ai
+      query = "select a.hosted_site_url,impressions_count,clicks_count from (select  ai.hosted_site_url, count(*) as impressions_count from add_impressions1 ai
                where advertisement_id = #{ad_report.advertisement_id} and #{impression_date_condition} group by hosted_site_url ) a left outer join (select hosted_site_url, count(*) as
                clicks_count from clicks where advertisement_id = #{ad_report.advertisement_id} and #{click_date_condition} group by hosted_site_url ) b on a.hosted_site_url= b.hosted_site_url
                order by impressions_count desc"

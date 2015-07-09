@@ -104,7 +104,7 @@ class Click < ActiveRecord::Base
 
           :joins => [:add_impression],
           :group => 'month(impression_time)',
-          :conditions => { :add_impressions => {:advertisement_id => ad_id} , :timestamp => range }
+          :conditions => { :add_impressions1 => {:advertisement_id => ad_id} , :timestamp => range }
       )
 
       # CREATE JSON DATA FOR EACH MONTH

@@ -323,7 +323,7 @@ class Itemdetail < ActiveRecord::Base
   def self.amazon_price_update(actual_time)
     time = actual_time.to_time
     impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
-    query = "select distinct item_id from add_impressions where #{impression_date_condition}"
+    query = "select distinct item_id from add_impressions1 where #{impression_date_condition}"
 
     add_impressions = Item.find_by_sql(query)
     item_ids = add_impressions.map(&:item_id)
