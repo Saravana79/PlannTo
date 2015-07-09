@@ -414,9 +414,13 @@ end
 
 desc "temporary rake task"
 task :plannto_user_detail_process => :environment do
-  plannto_user_details = PlanntoUserDetail.where(:lad.gte => "#{1.week.ago}")
+  plannto_user_details = PlanntoUserDetail.where(:lad.gte => "#{1.week.ago}", :agg_info.exists => false)
+
+  total_count = plannto_user_details.count
 
   plannto_user_details.each do |plannto_user_detail|
+    total_count-=1
+    p "Remaining count => #{total_count}"
     begin
       agg_info_arr = []
       item_types = plannto_user_detail.m_item_types
