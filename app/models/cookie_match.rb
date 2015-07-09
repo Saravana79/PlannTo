@@ -200,6 +200,7 @@ where url = '#{ref_url}' group by ac.id").first
             end
           rescue Exception => e
             p "There was problem in UserAccssDetail => #{e}"
+            p "There was problem in UserAccssDetail => #{e.backtrace}"
           end
         end
 

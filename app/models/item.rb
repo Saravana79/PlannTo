@@ -1655,7 +1655,6 @@ end
               already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
               ranking = 0
               itemtype_id = ""
-              ranking = ""
 
               if item_ids.blank?
                 apartment_urls = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com"]
@@ -1719,7 +1718,7 @@ end
                     itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
                     type = article_content.sub_type rescue "" if type.blank?
 
-                    if ranking.blank?
+                    if ranking.to_i == 0
                       case type.to_s
                         when "Reviews", "Spec", "Photo"
                           ranking = 10
