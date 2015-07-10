@@ -43,9 +43,12 @@ class AdvertisementsController < ApplicationController
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
 
     if item_ids.include?(configatron.root_level_laptop_id.to_s)
-      @items = $redis.get("amazon_top_laptops").to_s.split(",")
+
+      original_ids = $redis.get("amazon_top_laptops").to_s.split(",")
+      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
     elsif item_ids.include?(configatron.root_level_television_id.to_s)
-      @items = $redis.get("amazon_top_televisions").to_s.split(",")
+       original_ids = $redis.get("amazon_top_televisions").to_s.split(",")
+      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
     elsif !@ad.blank? && @ad.id == 52
       # Nothing
     elsif !@ad.blank? && @ad.having_related_items == true
