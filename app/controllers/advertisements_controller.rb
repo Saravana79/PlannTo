@@ -42,7 +42,11 @@ class AdvertisementsController < ApplicationController
 
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
 
-    if !@ad.blank? && @ad.id == 52
+    if item_ids.include?(configatron.root_level_laptop_id.to_s)
+      @items = $redis.get("amazon_top_laptops").to_s.split(",")
+    elsif item_ids.include?(configatron.root_level_television_id.to_s)
+      @items = $redis.get("amazon_top_televisions").to_s.split(",")
+    elsif !@ad.blank? && @ad.id == 52
       # Nothing
     elsif !@ad.blank? && @ad.having_related_items == true
       itemsaccess = "advertisement"
@@ -201,7 +205,7 @@ class AdvertisementsController < ApplicationController
     @ref_url = url
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
-    @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+    # @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     winning_price_enc = params[:wp]

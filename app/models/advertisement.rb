@@ -1838,6 +1838,15 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       begin
         item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node], each_key)
         ad_item_id << item_ids
+
+        if each_key == "laptops"
+          lap_item_ids = item_ids.first(10).join(",")
+          $redis.set("amazon_top_laptops", lap_item_ids)
+        elsif each_key == "televisions"
+          tv_item_ids = item_ids.first(10).join(",")
+          $redis.set("amazon_top_televisions", tv_item_ids)
+        end
+
       rescue Exception => e
         p "Error while amazon api call"
       end
@@ -1861,7 +1870,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                    "dress_material" => {:node => 3723377031, :page_count => 10}, "kurta" => {:node => 1968255031, :page_count => 8}, "underwear" => {:node => 1968457031, :page_count => 2},
                    "legging" => {:node => 1968456031, :page_count => 2}, "dress" => {:node => 1968445031, :page_count => 8}, "handbag" => {:node => 1983346031, :page_count => 10},
                    "sunglass" => {:node => 1968401031, :page_count => 3}, "shoe" => {:node => 1983578031, :page_count => 10}, "watch" => {:node => 2563505031, :page_count => 4},
-                   "external_hard_disk" => {:node => 1375395031, :page_count => 1}, "power_banks" => {:node => 976419031, :page_count => 1}}
+                   "external_hard_disk" => {:node => 1375395031, :page_count => 1}, "power_banks" => {:node => 976419031, :page_count => 1}, "printer" => {:node => 1375443031, :page_count => 1}}
 
 
       loop_hash.each do |each_key, each_val|
