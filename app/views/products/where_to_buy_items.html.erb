@@ -300,8 +300,9 @@
 
         .shadetabs{padding:0; margin:0px!important; width:100%; list-style-type: none; text-align: left;z-index:-1;}
         .shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #12c1e6!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #12c1e6;}
+        .shadetabs li:before{background: none !important;width:0px!important;height: 0px !important;border-bottom: 0px;}
         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
-        .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:50%;text-align: center;}
+        .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE!important;background: #EEE !important; list-style-type: none!important;width:50%;text-align: center;}
         .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}
         #prodname{font-size: 15px;}
 
@@ -388,9 +389,13 @@
                       <div id="plannto_insidediv">
                           <table id="plannto_intable" width="100%">
                             <thead style="border:0px;display:table-header-group;">
+                                <%if @moredetails == "true" %>
                               <tr id="plannto_intr" style="border:0px">
                                 <td colspan="5" id="plannto_intd" style="background:white;border:0px;">
-                                 <%if @items.size == 1%>
+                                 
+                                 <%if @items.size == 1  %>
+
+                                
                                  <div style="width:100%;border-bottom: 1px solid #EEE;display: block;">
                                  <span style="float:left;padding-left: 10px;padding-top: 5px;">
 
@@ -402,6 +407,7 @@
                                 </span>
                                 <br clear="all" />
                                 </div>
+                               
                                 <%else%>
                                       <% if @activate_tab %>
                                       <ul id="plmenu" class="plnav plnav-tabs">
@@ -411,7 +417,7 @@
                                                 <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
 
                                                   <a href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>, '<%= @ref_url %>')">
-                                                    <span style="float:left;"><img  src="<%=each_item.image_url(:small)%>" alt="<%=each_item.name%>"  onerror="this.error=null;this.src='<%=each_item.base_item_image_url(:small)%>';" style="width:30px;"/>
+                                                    <span style="float:left;"><img  src="<%=each_item.image_url(:small)%>" alt="<%=each_item.name%>"  onerror="this.error=null;this.src='<%=each_item.base_item_image_url(:small)%>';" style="width:30px;border:0px;padding:0px;margin:0px"/>
                                                   </span><span style="float:left;">
                                                     <%= each_item.name.to_s.truncate(30) %>
                                                 </span></a>
@@ -442,18 +448,19 @@
                             </tr>
                           </thead>
                           <tbody style="border:0px;" id="where_to_buy_items_onchange">
+            <%end%>                 
           <%end%>
-         <% if @activate_tab && @items.size != 1 && 1 != 1%>
+         <% if @moredetails == "false" %>
              <tr >
-               <td colspan="5" id="">
+               <td colspan="5" id="" style="  padding: 2px;background: #FFF;border-bottom: 1px solid #CCC;">
 
                  <div style="width:100%;">
-		 <span style="float:left;padding-left: 10px;padding-top: 5px;">
+		 <span style="float:left;padding-left: 10px;padding-top: 0px;">
 
-		 <img src="<%= @item.image_url(:medium) %>" alt="<%= @item.name %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';" style="width:60px;"/>
+		 <img src="<%= @item.image_url(:medium) %>" alt="<%= @item.name %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';" style="width:50px;"/>
 
 		</span>
-		 <span style="padding-left:5px;padding-top:15px;float:left;" id="prodname">
+		 <span style="padding-left:5px;padding-top:10px;float:left;" id="prodname">
 		   <%= @item.get_name %>
 		</span>
                  </div>
@@ -462,10 +469,10 @@
          <% end %>
 
          <tr style="border:0px;background:white;">
-           <td style="padding:0px;border:0px!important;">
+           <td style="padding:0px;border:0px!important;background:white;">
 
              <%unless @moredetails == "true"  %>
-                  <table style="width:100%;float:right;">
+                  <table style="width:100%;float:right;  border: 0px;border-collapse: collapse;">
                     <tbody style="border:0px;">
                    <tr id="plannto_inheadertr" style="">
                      <td id="plannto_inheadercol1" width="35%">Seller</td>
@@ -476,7 +483,7 @@
 
                   <table style="width:30%;float:left;border:0px;margin:0px;border:0px;">
                <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
-               <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"/></div><div style="font-size:15px;font-weight:bold;padding: 12px 0px;"> <%= @item.name %> </div>
+               <div style="padding-top: 25px;"><img  style ="background:white;border:0px;" src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"/></div><div style="font-size:15px;font-weight:bold;padding: 12px 0px;"> <%= @item.name %> </div>
                </td></tr></tbody></table>
              <table style="width:59%;float:right;border:0px;border-collapse: collapse;margin:0px;padding:0px;">
                <tbody style="border:0px;">
