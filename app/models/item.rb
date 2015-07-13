@@ -1644,7 +1644,7 @@ end
       buying_list_del_keys = []
       user_vals.each_with_index do |each_user_val, index|
         p "Processing: url => #{each_user_val};"
-        p "index => #{index}"
+        # p "index => #{index}"
         begin
           t_length -= 1
           p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
