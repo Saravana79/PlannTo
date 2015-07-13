@@ -32,8 +32,6 @@ class PlanntoUserDetail
         cookie_match = CookieMatch.where(:plannto_user_id => impression.temp_user_id).last
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
           plannto_user_detail.google_user_id = cookie_match.google_user_id
-          plannto_user_detail.lad = Time.now
-          plannto_user_detail.skip_callback = true
           plannto_user_detail.save!
         end
       elsif plannto_user_detail.blank?
@@ -42,8 +40,6 @@ class PlanntoUserDetail
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
           plannto_user_detail.google_user_id = cookie_match.google_user_id
         end
-        plannto_user_detail.lad = Time.now
-        plannto_user_detail.skip_callback = true
         plannto_user_detail.save!
       end
     end
@@ -163,7 +159,7 @@ class PlanntoUserDetail
       redis_rtb_ubl.merge!("g" => "f")
     end
 
-    self.skip_callback = true
+    # self.skip_callback = true
     self.skip_duplicate_update = true
 
     self.save!

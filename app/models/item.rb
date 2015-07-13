@@ -1660,26 +1660,26 @@ end
               ranking = 0
               itemtype_id = ""
 
-              if item_ids.blank?
-                apartment_urls = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com"]
-
-                if apartment_urls.include?(url)
-                  item_ids = "35284,35236"
-                  itemtype_id = 33
-                  ranking = 5
-                elsif ["click.in", "trovit.co.in", "locanto.in"].include?(url)
-                  if url.include?("flat") || url.include?("apartment")
-                    item_ids = "35284"
-                  elsif url.include?("land")
-                    item_ids = "35236"
-                  end
-                  itemtype_id = 33
-                  ranking = 5
-                end
-              end
-
 
               if already_exist == false
+
+                if item_ids.blank?
+                  apartment_urls = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com"]
+
+                  if apartment_urls.include?(url)
+                    item_ids = "35284,35236"
+                    itemtype_id = 33
+                    ranking = 5
+                  elsif ["click.in", "trovit.co.in", "locanto.in"].include?(url)
+                    if url.include?("flat") || url.include?("apartment")
+                      item_ids = "35284"
+                    elsif url.include?("land")
+                      item_ids = "35236"
+                    end
+                    itemtype_id = 33
+                    ranking = 5
+                  end
+                end
 
                 item_ids = item_ids.to_s.split(",")
                 if item_ids.count < 10
@@ -1687,23 +1687,26 @@ end
                   #Updating PlanntoUserDetail
                   plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).to_a.last
 
-                  if (!plannto_user_detail.blank? && plannto_user_detail.plannto_user_id.blank?)
-                    # cookie_match = CookieMatch.where(:google_user_id => user_id).last
-                    cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
-                    if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                      plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
-                      plannto_user_detail.lad = Time.now
-                      plannto_user_detail.skip_callback = true
-                      plannto_user_detail.save!
-                    end
-                  elsif plannto_user_detail.blank?
+                  if plannto_user_detail.blank?
                     plannto_user_detail = PlanntoUserDetail.new(:google_user_id => user_id)
-                    cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
-                    if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                      plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                    if plannto_user_id.blank?
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                      end
+                    else
+                      plannto_user_detail.plannto_user_id = plannto_user_id
                     end
-                    plannto_user_detail.lad = Time.now
-                    plannto_user_detail.skip_callback = true
+                    plannto_user_detail.save!
+                  elsif plannto_user_detail.plannto_user_id.blank?
+                    if plannto_user_id.blank?
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                      end
+                    else
+                      plannto_user_detail.plannto_user_id = plannto_user_id
+                    end
                     plannto_user_detail.save!
                   end
 

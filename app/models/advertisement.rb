@@ -1211,8 +1211,6 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
               if !cookie_match.blank? && !cookie_match.google_user_id.blank?
                 plannto_user_detail.google_user_id = cookie_match.google_user_id
-                plannto_user_detail.lad = Time.now
-                plannto_user_detail.skip_callback = true
                 plannto_user_detail.save!
               end
             elsif plannto_user_detail.blank?
@@ -1221,8 +1219,6 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               if !cookie_match.blank? && !cookie_match.google_user_id.blank?
                 plannto_user_detail.google_user_id = cookie_match.google_user_id
               end
-              plannto_user_detail.lad = Time.now
-              plannto_user_detail.skip_callback = true
               plannto_user_detail.save!
             end
           end
