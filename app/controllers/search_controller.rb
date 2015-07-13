@@ -324,7 +324,7 @@ class SearchController < ApplicationController
 
 
     #select manufacturer for wiseshe.com
-    if params[:category] == "Beauty"
+    if params[:category].to_s.include?("Beauty")
       manufacturers = results.select {|a| a[:type] == "Manufacturer"}
       sel_list = manufacturers.collect {|a| a[:score].to_f > 0.5 ? a[:id] : nil}
 

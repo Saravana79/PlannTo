@@ -200,6 +200,9 @@ has_one :manufacturer,
     unless param[:category].blank?
       itemtypes = param[:category].split(',')
       if itemtypes.include?("Beauty")
+        categories = param[:category].split(",")
+        categories << ["Color", "Manufacturer"]
+        param[:category] = categories.uniq.join(",")
         itemtypes << ["Color", "Manufacturer"]
         itemtypes = itemtypes.flatten
       end
@@ -256,7 +259,7 @@ has_one :manufacturer,
       end
       categories.each do |each_category|
         name, id = Item.find_root_level_id(each_category, each_category.pluralize).to_s.split(",")
-        results << {:id => id, :value => name, :imgsrc =>"", :type => "Groups", :url => "" }
+        results << {:id => id, :value => name, :imgsrc =>"", :type => "Groups", :url => "" } if !id.blank? && !name.blank?
       end
     end
 

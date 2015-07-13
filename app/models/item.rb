@@ -666,6 +666,10 @@ class Item < ActiveRecord::Base
       return (items + "," +  configatron.root_level_game_id.to_s)
     when 'GamingConsole'
       return (items + "," +  configatron.root_level_game_id.to_s)
+    when 'Beauty'
+      return (items + "," +  configatron.root_level_beauty_id.to_s)
+    when 'Color'
+      return (items + "," +  configatron.root_level_color_id.to_s)
     end 
  end
  
