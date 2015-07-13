@@ -159,7 +159,7 @@ class PlanntoUserDetail
       redis_rtb_ubl.merge!("g" => "f")
     end
 
-    # self.skip_callback = true
+    self.skip_callback = true
     self.skip_duplicate_update = true
 
     self.save!
