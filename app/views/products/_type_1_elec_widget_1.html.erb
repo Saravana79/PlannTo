@@ -2,12 +2,13 @@
 <style type="text/css">
 
 .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
-.shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #E65E7B!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #D2D2D2;}
+.shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #E65E7B!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #D2D2D2;border-bottom: 0px;}
+.shadetabs li:before{background: none !important;width:0px!important;height: 0px !important;border-bottom: 0px;}
 .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
 .shadetabs li.selected{padding:0px!important; margin:0px !important; text-align:center; background: <%= @vendor_detail.theme_colour %> !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
 .shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
 
-.product-container{ margin:0; padding:5px 0 0 0; float:left;cursor:pointer;height:139px;}
+.product-container{ margin:0; padding:5px 0 0 0; float:left;cursor:pointer;height:110px;}
 .planntocarosel-right{ width: 32px;float: right;}
 .planntocarosel-right a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) -25px 0; right: 0;float: left;height: 50px;width:30px;}
 
@@ -19,30 +20,30 @@
 <%if @items.size == 1%>
 .product-container{width:100%;}
 .product-container-top{width:76%;float:left;border-bottom:1px solid #E5E5E5;}
-.planntocarosel-left{padding: 107px 3px 0 0px;}
-.planntocarosel-right{padding: 107px 3px 0 0px;}
+.planntocarosel-left{padding: 107px 1px 0 0px;}
+.planntocarosel-right{padding: 107px 1px 0 0px;}
 <%else%>
 .product-container{width:50%}
 .product-container-top{width:86%;float:left;}
-.planntocarosel-left{padding: 35px 3px 0 0px;}
-.planntocarosel-right{padding: 35px 3px 0 0px;}
+.planntocarosel-left{padding: 35px 1px 0 0px;}
+.planntocarosel-right{padding: 35px 1px 0 0px;}
 <%end%>
 
 @media (max-width: 600px) {
         .product-container{width:100%;border-bottom:1px solid #E5E5E5;}
         .product-container-top{width:76%;float:left;border-bottom:1px solid #E5E5E5;}
-        .planntocarosel-left{padding: 100px 3px 0 0px;height: 157px;}
-        .planntocarosel-right{padding: 100px 3px 0 0px;height: 157px;}
+        .planntocarosel-left{padding: 100px 1px 0 0px;height: 157px;}
+        .planntocarosel-right{padding: 100px 1px 0 0px;height: 157px;}
 
         }
 
 .product-container h3{ margin:0 auto; padding:0; font-size:13px; color:#222; font-weight:normal;   font-family:Arial;word-break:break-word;}
-.product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:45%; float:left;min-height:110px;}
-.product-container .product-img img { margin:0 auto; text-align:center; max-width:120px;max-height:110px; }
-.product-container .product-text {width:55%;float:left;}
-.product-container .product-text .product-title{height:38px;overflow:hidden;font-size:14px;padding:5px 0px;line-height:normal;margin:0px;}
+.product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:46%; float:left;min-height:110px;}
+.product-container .product-img img { margin:0 auto; text-align:center; max-width:112px;max-height:110px;border:0px; }
+.product-container .product-text {width:54%;float:left;}
+.product-container .product-text .product-title{height:38px;overflow:hidden;font-size:14px;padding:1px 0px;line-height:normal;margin:0px;}
 .product-container .product-text .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px;font-family: Arial;height:32px;}
-.product-container .product-text .product-price {min-height:32px;}
+.product-container .product-text .product-price {}
 .product-container .product-text .product-price .strike{list-style: outside none none;margin: 5px 0px;padding: 0;color: #585858;font-size: 12px;text-decoration: line-through; }
 .product-container .product-text .product-price .price{list-style: outside none none; margin: 5px 0px; padding:0; color:#bf0000; font-size:14px; font-weight:bold;font-family: Arial monospace;}
 .btn { margin:0 auto; padding:5px 0 0 0;}
@@ -60,10 +61,10 @@ a { outline: none; }
 </style>
 <div id="planntocontainer">
         <div>
-            <ul class="shadetabs">
+            <ul class="shadetabs" style="margin:0px 0px 5px 0px;">
                 <li class="selected">
                     <a href="javascript:void(0)" id="where_to_buy_items_a" >
-                      <img src="<%= configatron.root_image_path%>static/images/<%= @vendor_detail.theme_image %>" style="height: 20px;">
+                      <img src="<%= configatron.root_image_path%>static/images/<%= @vendor_detail.theme_image %>" style="height: 20px;border:0px;padding:0px;margin:0px;">
                     </a>
                 </li>
             </div>
@@ -116,7 +117,8 @@ a { outline: none; }
                   
             </div>
 
-            <%if @vendor = "73017" %>
+              <% if (!@publisher.nil? && @publisher.id != 18) %>
+
            <div height="20px;" style="height:20px;padding:2px;">
         <div style="text-align:center;" style ="font-size:14px;margin-top:2px;">
          <span style="vertical-align:top;font-size:12px;"> Powered by </span><span><a href="http://www.plannto.com/history_details?red_url=http://www.junglee.com?tag=plannto-junglee-g-21" style="display:inline-block;margin-top:0px;height:14px" target="_blank"><img height="18px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(@where_to_buy_items[0]) %>"></a></span>
