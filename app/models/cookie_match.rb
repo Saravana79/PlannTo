@@ -11,7 +11,10 @@ class CookieMatch < ActiveRecord::Base
   def self.enqueue_cookie_matching(param, plannto_user_id)
     param["source"] ||= "google"
     valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => param["source"]}
-    Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
+
+    if params["source"] != "google_pixel"
+      Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
+    end
   end
 
   def self.enqueue_pixel_matching(param, plannto_user_id)

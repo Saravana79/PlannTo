@@ -531,6 +531,10 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def inline_ads
+    item_names = Item.find_item_names_from_url(params[:url])
+  end
+
  private
 
   def create_impression_before_show_ads
