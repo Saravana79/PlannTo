@@ -1641,11 +1641,11 @@ end
     t_length = user_vals.count
 
     begin
-      redis_rtb_hash = {}
-      pud_redis_rtb_hash = {}
-      redis_hash = {}
-
-      buying_list_del_keys = []
+      # redis_rtb_hash = {}
+      # pud_redis_rtb_hash = {}
+      # redis_hash = {}
+      #
+      # buying_list_del_keys = []
       user_vals.each_with_index do |each_user_val, index|
         p "Processing: url => #{each_user_val};"
         # p "index => #{index}"
@@ -1768,7 +1768,7 @@ end
                       end
                     end
 
-                    plannto_user_detail_hash_new.merge!(agg_info) if !agg_info.blank?
+                    plannto_user_detail_hash_new.values.first.merge!(agg_info) if !agg_info.blank? && !plannto_user_detail_hash_new.blank?
                     plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
 
                     if !new_m_agg_info.blank?
@@ -1782,78 +1782,79 @@ end
                     plannto_user_detail.save!
                   end
 
-                  u_key = "u:ac:#{user_id}"
-                  u_values = $redis.hgetall(u_key)
+                  # u_key = "u:ac:#{user_id}"
+                  # u_values = $redis.hgetall(u_key)
 
-                  add_fad = u_values.blank? ? true : false
+                  # add_fad = u_values.blank? ? true : false
 
                   # Remove expired items from user details
-                  u_values.each do |key,val|
-                    if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
-                      item_id = key.gsub("_la", "")
-                      u_values.delete("#{item_id}_c")
-                      u_values.delete("#{item_id}_la")
-                    end
-                  end
+                  # u_values.each do |key,val|
+                  #   if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
+                  #     item_id = key.gsub("_la", "")
+                  #     u_values.delete("#{item_id}_c")
+                  #     u_values.delete("#{item_id}_la")
+                  #   end
+                  # end
 
                   # incrby count for items
-                  item_ids.each do |each_key|
-                    if u_values["#{each_key}_c"].blank?
-                      u_values["#{each_key}_c"] = ranking
-                      u_values["#{each_key}_la"] = Date.today.to_s
-                    else
-                      old_ranking = u_values["#{each_key}_c"]
-                      u_values["#{each_key}_c"] = old_ranking.to_i + ranking
-                      u_values["#{each_key}_la"] = Date.today.to_s
-                    end
-                  end
+                  # item_ids.each do |each_key|
+                  #   if u_values["#{each_key}_c"].blank?
+                  #     u_values["#{each_key}_c"] = ranking
+                  #     u_values["#{each_key}_la"] = Date.today.to_s
+                  #   else
+                  #     old_ranking = u_values["#{each_key}_c"]
+                  #     u_values["#{each_key}_c"] = old_ranking.to_i + ranking
+                  #     u_values["#{each_key}_la"] = Date.today.to_s
+                  #   end
+                  # end
 
-                  proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
-
-                  old_buying_list = u_values["buyinglist"]
-                  buying_list = old_buying_list.to_s.split(",")
-
-                  if !buying_list.blank?
-                    have_to_del = []
-
-                    #remove items from buyinglist which detail is expired
-                    buying_list.each do |each_item|
-                      if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
-                        have_to_del << each_item
-                      end
-                    end
-
-                    buying_list = buying_list - have_to_del
-                    buying_list << proc_item_ids
-                    buying_list = buying_list.flatten.uniq
-                  else
-                    buying_list = proc_item_ids
-                  end
-
-                  buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
-
-                  u_values["buyinglist"] = buying_list.join(",")
+                  # proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
+                  #
+                  # old_buying_list = u_values["buyinglist"]
+                  # buying_list = old_buying_list.to_s.split(",")
+                  #
+                  # if !buying_list.blank?
+                  #   have_to_del = []
+                  #
+                  #   #remove items from buyinglist which detail is expired
+                  #   buying_list.each do |each_item|
+                  #     if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
+                  #       have_to_del << each_item
+                  #     end
+                  #   end
+                  #
+                  #   buying_list = buying_list - have_to_del
+                  #   buying_list << proc_item_ids
+                  #   buying_list = buying_list.flatten.uniq
+                  # else
+                  #   buying_list = proc_item_ids
+                  # end
+                  #
+                  # buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+                  #
+                  # u_values["buyinglist"] = buying_list.join(",")
 
                   #buying soon check
-                  top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com","91mobiles.com","buyt.in"]
-                  host = Item.get_host_without_www(url)
-                  bs = top_sites.include?(host)
-
-                  # if !old_buying_list.blank? || !buying_list.blank?
-                  items_hash = u_values.select {|k,_| k.include?("_c")}
-                  items_count = items_hash.count
-                  all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
+                  # top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com","91mobiles.com","buyt.in"]
+                  # host = Item.get_host_without_www(url)
+                  # bs = top_sites.include?(host)
+                  #
+                  # items_hash = u_values.select {|k,_| k.include?("_c")}
+                  # items_count = items_hash.count
+                  # all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
 
                   #plannto user details
 
                   if !m_item_type.blank?
+                    removed_item_ids = m_item_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
                     existing_item_ids = m_item_type.m_items.map(&:item_id)
-                    all_item_ids = all_item_ids.map(&:to_i)
+                    arrival_item_ids = item_ids.map(&:to_i)
 
-                    common_item_ids = all_item_ids & existing_item_ids
+                    removed_item_ids = removed_item_ids - arrival_item_ids
 
-                    new_item_ids = all_item_ids - common_item_ids
-                    removed_item_ids = existing_item_ids - common_item_ids
+                    common_item_ids = arrival_item_ids & existing_item_ids
+
+                    new_item_ids = arrival_item_ids - common_item_ids
 
                     if !removed_item_ids.blank?
                       removed_item_ids.each do |item_id|
@@ -1909,28 +1910,27 @@ end
                     end
                   end
 
-                  all_item_ids = all_item_ids.join(",")
-                  temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
-                  temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
-                  temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
-                  redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => temp_store)
+                  # all_item_ids = all_item_ids.join(",")
+                  # temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
+                  # temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
+                  # temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
+                  # redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => temp_store)
+                  #
+                  # begin
+                  #   if u_values.blank?
+                  #     del_key = "users:buyinglist:#{user_id}"
+                  #     redis_rtb_hash.delete(del_key)
+                  #     buying_list_del_keys << del_key
+                  #   else
+                  #     redis_hash.merge!(u_key => u_values)
+                  #   end
+                  # rescue Exception => e
+                  #   p "Problems while hmset: Args:-"
+                  #   p u_key
+                  #   p u_values
+                  #   p u_values.flatten
+                  #   raise e
                   # end
-
-                  begin
-                    if u_values.blank?
-                      del_key = "users:buyinglist:#{user_id}"
-                      redis_rtb_hash.delete(del_key)
-                      buying_list_del_keys << del_key
-                    else
-                      redis_hash.merge!(u_key => u_values)
-                    end
-                  rescue Exception => e
-                    p "Problems while hmset: Args:-"
-                    p u_key
-                    p u_values
-                    p u_values.flatten
-                    raise e
-                  end
                 end
               end
             end
@@ -1943,27 +1943,27 @@ end
 
       p "---------------------- Process Redis and Redis rtb update ----------------------"
 
-      $redis.pipelined do
-        buying_list_del_keys.each do |del_key|
-          $redis.del(u_key)
-        end
-
-        redis_hash.each do |u_key,u_values|
-          $redis.hmset(u_key, u_values.flatten)
-          $redis.expire(u_key, 2.weeks)
-        end
-      end
+      # $redis.pipelined do
+      #   buying_list_del_keys.each do |del_key|
+      #     $redis.del(u_key)
+      #   end
+      #
+      #   redis_hash.each do |u_key,u_values|
+      #     $redis.hmset(u_key, u_values.flatten)
+      #     $redis.expire(u_key, 2.weeks)
+      #   end
+      # end
 
       $redis_rtb.pipelined do
-        buying_list_del_keys.each do |del_key|
-          $redis_rtb.del(u_key)
-        end
+        # buying_list_del_keys.each do |del_key|
+        #   $redis_rtb.del(u_key)
+        # end
 
-        redis_rtb_hash.each do |key, val|
-          $redis_rtb.hmset(key, val.flatten)
-          $redis_rtb.hincrby(key, "ap_c", 1)
-          $redis_rtb.expire(key, 2.weeks)
-        end
+        # redis_rtb_hash.each do |key, val|
+        #   $redis_rtb.hmset(key, val.flatten)
+        #   $redis_rtb.hincrby(key, "ap_c", 1)
+        #   $redis_rtb.expire(key, 2.weeks)
+        # end
 
         plannto_user_detail_hash.each do |key, val|
           $redis_rtb.hmset(key, val.flatten)
@@ -1974,6 +1974,7 @@ end
       p "------------------------------ Process Completed ------------------------------"
     rescue Exception => e
       p "Problem in buying list process"
+      p e.backtrace
     end
   end
 
