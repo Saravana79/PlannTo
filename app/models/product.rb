@@ -218,8 +218,7 @@ has_one :manufacturer,
     term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     search_type_for_data = search_type.first if search_type.is_a?(Array)
-
-    p search_type
+    
     p term
 
     search_type = Product.search_type(nil) if search_type.blank?
