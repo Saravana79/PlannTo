@@ -176,7 +176,10 @@ class PlanntoUserDetail
       self.lad = Time.now
       self.save
 
-      ActiveRecord::Base.connection.execute("update cookie_matches set updated_at = '#{Time.now.utc}' where plannto_user_id = '#{self.plannto_user_id}'") if !self.plannto_user_id.blank?
+      # ActiveRecord::Base.connection.execute("update cookie_matches set updated_at = '#{Time.now.utc}' where plannto_user_id = '#{self.plannto_user_id}'") if !self.plannto_user_id.blank?
+
+      cookie_match = CookieMatch.where(:plannto_user_id => self.plannto_user_id).last
+      cookie_match.touch if !cookie_match.blank?
 
       if !self.google_user_id.blank? && !self.plannto_user_id.blank?
         $redis_rtb.pipelined do
