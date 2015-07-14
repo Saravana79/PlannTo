@@ -1637,6 +1637,7 @@ end
     google_geo_targetings.each {|each_val| google_geo_targeting_hash.merge!(each_val.criteria_id => each_val.location_id)}
 
     plannto_user_detail_hash = {}
+    cookie_matches_plannto_ids = []
 
     t_length = user_vals.count
 
@@ -1780,6 +1781,8 @@ end
 
                     plannto_user_detail.skip_duplicate_update = true
                     plannto_user_detail.save!
+
+                    cookie_matches_plannto_ids << plannto_user_detail.plannto_user_id
                   end
 
                   # u_key = "u:ac:#{user_id}"
@@ -1939,6 +1942,24 @@ end
         rescue Exception => e
           p "Error While Processing => #{e.backtrace}"
         end
+      end
+
+      p "--------------------------------CookieMatch process------------------------------"
+
+      begin
+        cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
+        cookie_matches.update_all(:updated_at => Time.now)
+
+        $redis_rtb.pipelined do
+          cookie_matches.each do |cookie_match|
+            if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
+              $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
+              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
+            end
+          end
+        end
+      rescue Exception => e
+        p "Error processing cookie match"
       end
 
       p "---------------------- Process Redis and Redis rtb update ----------------------"
