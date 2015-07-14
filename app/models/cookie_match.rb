@@ -73,9 +73,14 @@ class CookieMatch < ActiveRecord::Base
             cookie_detail["source"] ||= "google"
             ref_url = cookie_detail.delete("ref_url")
             cookies_arr << cookie_detail
-            if !ref_url.blank?
-              param = {"plannto_user_id" => cookie_detail["plannto_user_id"], "ref_url" => ref_url, "source" => cookie_detail["source"]}
-              user_access_details << param
+
+              #temp dev
+            cookie_match = CookieMatch.where(:plannto_user_id => cookie_detail["plannto_user_id"]).last
+            if !cookie_match.blank?
+              if !ref_url.blank?
+                param = {"plannto_user_id" => cookie_detail["plannto_user_id"], "ref_url" => ref_url, "source" => cookie_detail["source"]}
+                user_access_details << param
+              end
             end
           rescue Exception => e
             p "There was problem while running cookie_match => #{e.backtrace}"
@@ -83,28 +88,18 @@ class CookieMatch < ActiveRecord::Base
           p "Remaining CookieMatch Count - #{count}"
         end
 
-        # ActiveRecord::Base.transaction do
-        #   cookies_arr.each do |cookie_detail|
-        #     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
-        #     cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
+        imported_values = []
+        # cookies_arr.each do |cookie_detail|
+        #   cookie_match = CookieMatch.where(:plannto_user_id => cookie_detail["plannto_user_id"]).last
+        #   if cookie_match.blank?
+        #     cookie_match = CookieMatch.new(:plannto_user_id => cookie_detail["plannto_user_id"], :google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"], :google_mapped => true)
+        #     imported_values << cookie_match
         #   end
         # end
-
-        imported_values = []
-        cookies_arr.each do |cookie_detail|
-          cookie_match = CookieMatch.new(:plannto_user_id => cookie_detail["plannto_user_id"], :google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"], :google_mapped => true)
-          imported_values << cookie_match
-        end
 
         imported_values = imported_values.reverse.uniq(&:plannto_user_id)
 
         result = CookieMatch.import(imported_values)
-
-        #TODO: have to delete duplicate records
-        # result.failed_instances.each do |cookie_detail|
-        #   cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
-        #   cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
-        # end
 
         $redis_rtb.pipelined do
           imported_values.each do |cookie_detail|
