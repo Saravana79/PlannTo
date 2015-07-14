@@ -1865,9 +1865,9 @@ end
 
                     if !new_item_ids.blank?
                       new_item_ids.each do |item_id|
-                        lad = u_values["#{item_id}_la"].to_date
-                        ranking = u_values["#{item_id}_c"]
-                        m_item_type.m_items << MItem.new(:item_id => item_id, :lad => lad, :ranking => ranking)
+                        # lad = u_values["#{item_id}_la"].to_date
+                        # ranking = u_values["#{item_id}_c"]
+                        m_item_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :ranking => ranking)
                       end
                     end
 
@@ -1875,8 +1875,8 @@ end
                       common_item_ids.each do |item_id|
                         m_item = m_item_type.m_items.where(:item_id => item_id).last
                         if !m_item.blank?
-                          m_item.lad = u_values["#{item_id}_la"].to_date
-                          m_item.ranking = m_item.ranking.to_i + u_values["#{item_id}_c"].to_i
+                          m_item.lad = Date.today
+                          m_item.ranking = m_item.ranking.to_i + ranking.to_i
                           m_item.save!
                         end
                       end

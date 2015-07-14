@@ -293,7 +293,7 @@ has_one :manufacturer,
 
     if param[:ac_sub_type] == "Lists"
       selected_list = []
-    elsif for_compare == "true" || param[:ac_sub_type] != "Comparisons"
+    elsif for_compare == "true" || param[:ac_sub_type] != "Comparisons" #TODO: have to include !search_type.include?(Beauty)
       selected_list = selected_list.first(1)
     end
 
@@ -309,7 +309,7 @@ has_one :manufacturer,
         list_scores.merge!("#{group.id}" => all_items_by_score["#{each_selected_item.id}"])
       else
         search_type_arr = search_type.is_a?(Array) ? search_type : [search_type].compact
-        if (["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type]) && search_type.include?(Beauty))
+        if (["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type]) && search_type.include?(Beauty)) #TODO: have to write new condition to process only beauty( selcet color, manufacturer, Beauty)
           if (each_selected_item.is_a?(Product) || each_selected_item.is_a?(CarGroup))
             new_selected_list << each_selected_item.id.to_s
             list_scores.merge!("#{each_selected_item.id}" => all_items_by_score["#{each_selected_item.id}"])
