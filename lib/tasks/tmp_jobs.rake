@@ -440,3 +440,8 @@ task :plannto_user_detail_process => :environment do
     end
   end
 end
+
+desc "temporary rake task"
+task :remove_old_plannto_user_details => :environment do
+  plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
+end
