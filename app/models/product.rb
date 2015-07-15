@@ -190,7 +190,7 @@ has_one :manufacturer,
     final_results = final_results.flatten
     selected_list << results.first[:id] if !results.first.blank?
 
-    auto_save = false
+    auto_save = "false"
 
     return final_results, selected_list, list_scores, auto_save
   end
@@ -286,6 +286,8 @@ has_one :manufacturer,
     @items.hits.map {|dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score) unless dd.result.blank?}
     items_by_score = all_items_by_score.select {|key,val| val.to_f > 0.5}
     sorted_hash = Hash[items_by_score.sort_by {|k,v| -v}]
+    all_items_by_score.each {|key,val| all_items_by_score[key] = val.to_f.round(2)}
+    all_items_by_score.default = 0
 
     if search_type.include?(Beauty)
       selected_list = sorted_hash.keys
@@ -299,20 +301,20 @@ has_one :manufacturer,
       new_selected_list.compact!
 
       if new_selected_list.map(&:class).include?(Beauty)
-        auto_save = true
+        auto_save = "true"
       end
 
       list_scores = []
-      new_selected_list.each {|each_item| list_scores << all_items_by_score["#{each_item.id}"].to_f.round(2)}
+      new_selected_list.each {|each_item| list_scores << all_items_by_score["#{each_item.id}"]}
 
       new_selected_list_ids = new_selected_list.map(&:id).map(&:to_s)
+
+      results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2))}
 
       return results, new_selected_list_ids, list_scores, auto_save
     end
 
     selected_list = sorted_hash.keys.first(2)
-    all_items_by_score.each {|key,val| all_items_by_score[key] = val.to_f.round(2)}
-    all_items_by_score.default = 0
 
     if param[:ac_sub_type] == "Lists"
       selected_list = []
