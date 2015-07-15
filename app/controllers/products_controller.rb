@@ -521,7 +521,8 @@ class ProductsController < ApplicationController
     end
 
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
-      item_ids = configatron.amazon_top_mobiles.to_s.split(",")
+      # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
+      item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
       first_six_items = item_ids.shuffle.first(6)
       @items = Item.where(:id => first_six_items)
       @item = @items.first

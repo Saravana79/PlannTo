@@ -1841,6 +1841,9 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         elsif each_key == "televisions"
           tv_item_ids = item_ids.first(10).join(",")
           $redis.set("amazon_top_televisions", tv_item_ids)
+        elsif each_key == "mobiles"
+          mobile_item_ids = item_ids.first(10).join(",")
+          $redis.set("amazon_top_mobiles", mobile_item_ids)
         end
 
       rescue Exception => e
