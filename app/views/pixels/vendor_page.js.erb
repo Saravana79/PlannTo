@@ -1,3 +1,4 @@
+<% if !@img_src.blank? %>
 var pixel = {
     pixel_src:"<%= @img_src.html_safe %>",
     parse: function(a){
@@ -6,3 +7,4 @@ var pixel = {
         plannto_pixel_img.src = pixel.pixel_src
     }
 }
+<% end %>

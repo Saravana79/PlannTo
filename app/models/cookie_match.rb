@@ -12,22 +12,33 @@ class CookieMatch < ActiveRecord::Base
     param["source"] ||= "google"
     valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => param["source"]}
 
-    if param["source"] != "google_pixel" && param["source"] != "mysmartprice" && param["source"] != "housing"
+    if param["source"] != "google_pixel" && param["source"] != "mysmartprice"
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
     end
   end
 
   def self.enqueue_pixel_matching(param, plannto_user_id)
     u_key = "u:ac:#{param["google_gid"]}"
-    u_values = $redis.hgetall(u_key)
+    # u_values = $redis.hgetall(u_key)
     google_ula = ""
 
     # if !u_values.blank?
+    #   valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}
+    #   Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
+    #   # google_ula = "&google_ula=8326120&google_ula=8365600"
+    #   google_ula = "&google_ula=8326120"
+    # end
+
+    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => param["google_gid"]).to_a.last
+
+    if !plannto_user_detail.blank?
       valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
-      # google_ula = "&google_ula=8326120&google_ula=8365600"
       google_ula = "&google_ula=8326120"
-    # end
+    else
+      google_ula = "&google_ula=58712800"
+    end
+
     google_ula
   end
 
