@@ -167,6 +167,10 @@ class PlanntoUserDetail
     return redis_rtb, resale
   end
 
+  def self.remove_old_records
+    plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
+  end
+
   private
 
   def update_lad
