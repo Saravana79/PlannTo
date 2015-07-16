@@ -301,6 +301,33 @@ class HistoryDetailsController < ApplicationController
       redirect_to url
   end
 
+  def housing_ad_click
+    params[:is_test] ||= 'false'
+    url = ""
+    params[:geo] ||= "in"
+
+    req_url = request.referer
+
+    if !params[:ads_id].blank?
+      @ad = Advertisement.where("id = ?", params[:ads_id]).first
+    end
+
+    req_url = params[:ref_url].blank? ? req_url : params[:ref_url]
+
+    publisher = Publisher.getpublisherfromdomain(req_url) rescue nil
+    vendor = nil
+
+    @impression_id = params[:iid].present? ? params[:iid] : "0"
+
+    video_impression_id = params[:video_impression_id]
+
+    click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now.utc, :item_id => nil, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
+                     :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => nil, :source_type => "PC", :temp_user_id => nil, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
+    Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
+
+    render :nothing => true
+  end
+
   private
 
   def find_item_detail(detail_id, type)

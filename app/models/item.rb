@@ -3376,6 +3376,36 @@ end
     match_words.map(&:name)
   end
 
+  def self.get_city_from_item_or_location(item_ids, location_id)
+    item = City.where(:id => item_ids).first.name rescue nil
+
+    if item.blank?
+      case location_id.to_s
+      when "1007788"
+        item = "pune"
+      when "1007751", "20456"
+        item = "delhi"
+      when "1007764"
+        item = "faridabad"
+      when "1007826"
+        item = "noida"
+      when "1007765"
+        item = "gurgaon"
+      when "1007785"
+        item = "mumbai"
+      when "1007809"
+        item = "chennai"
+      when "1007740"
+        item = "hyderabad"
+      when "1007828"
+        item = "kolkata"
+      else
+        item = "delhi"
+      end
+    end
+    item
+  end
+
   private
 
   def create_item_ad_detail

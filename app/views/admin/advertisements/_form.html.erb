@@ -41,6 +41,7 @@
             <!-- <%#= f.radio_button :advertisement_type, 'plannto', :class => "ad_type" %>Plannto -->
             <%= f.radio_button :advertisement_type, 'flash', :class => "ad_type", :checked => @advertisement.advertisement_type == "flash" ? "checked" : "" %>Flash
             <%= f.radio_button :advertisement_type, 'fashion', :class => "ad_type", :checked => @advertisement.advertisement_type == "fashion" ? "checked" : "" %>Fashion
+            <%= f.radio_button :advertisement_type, 'housing_dynamic', :class => "ad_type", :checked => @advertisement.advertisement_type == "housing_dynamic" ? "checked" : "" %>Housing Dynamic
         <% end %>
       </div>
     </div>

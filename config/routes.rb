@@ -128,7 +128,9 @@ namespace :admin do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   #  match 'products/:id' => 'products#show', :as => :products
   # This route can be invoked with purchase_url(:id => product.id)
-  resources :history_details  
+  resources :history_details
+
+  get "plannto/housing_ad_click" => "history_details#housing_ad_click"
   resources :votes do
     collection do
       post "add_vote"

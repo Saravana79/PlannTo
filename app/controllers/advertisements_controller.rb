@@ -36,8 +36,10 @@ class AdvertisementsController < ApplicationController
       return junglee_used_car_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
     elsif !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
       return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
-    elsif !@ad.blank? && @ad.id == 24
-      return show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
+    # elsif !@ad.blank? && @ad.id == 24
+    #   return show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
+    elsif !@ad.blank? && @ad.advertisement_type == "housing_dynamic"
+      return housing_dynamic_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
     end
 
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
@@ -205,7 +207,7 @@ class AdvertisementsController < ApplicationController
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     @ref_url = url
-    @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
+    # @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
     # @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
@@ -306,6 +308,25 @@ class AdvertisementsController < ApplicationController
         return render :json => {:success => true, :html => render_to_string("advertisements/show_junglee_car_ads.html.erb", :layout => false)}, :callback => params[:callback]
       }
       format.html { return render "show_junglee_car_ads.html.erb", :layout => false }
+    end
+  end
+
+  def housing_dynamic_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
+    @city = Item.get_city_from_item_or_location(item_ids, params[:l])
+
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
+    end
+
+    @click_enc_url = configatron.hostname + "/plannto/housing_ad_click?ads_id=#{@ad.id}&iid=#{@impression_id}"
+    @click_enc_url = URI.escape(@click_enc_url)
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_housing_dynamic_ads.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "show_housing_dynamic_ads.html.erb", :layout => false }
     end
   end
 
@@ -557,14 +578,14 @@ class AdvertisementsController < ApplicationController
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
-    ad = Advertisement.where(:id => params[:ads_id]).first
+    @ad = Advertisement.where(:id => params[:ads_id]).first
 
-    if (params[:item_id].blank? || params[:fashion_id].blank? || (!ad.blank? && ad.sort_type == "random"))
-      if (!ad.blank? && ((ad.id != 52 && ad.advertisement_type == "fashion") || ad.sort_type == "random"))
-        # item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
+    if (params[:item_id].blank? || params[:fashion_id].blank? || (!@ad.blank? && @ad.sort_type == "random"))
+      if (!@ad.blank? && ((@ad.id != 52 && @ad.advertisement_type == "fashion") || @ad.sort_type == "random"))
+        # item_id, random_id = Item.get_item_id_and_random_id(@ad, params[:item_id])
         #
         # if random_id.blank?
-        #   item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
+        #   item_id, random_id = Item.get_item_id_and_random_id(@ad, params[:item_id])
         # end
 
         random_id = rand(20)
@@ -575,7 +596,7 @@ class AdvertisementsController < ApplicationController
     end
 
     if !params[:item_id].blank? && params[:fashion_id].blank?
-      if !ad.blank? && ad.id == 52
+      if !@ad.blank? && @ad.id == 52
         random_id = rand(10)
 
         params[:fashion_id] = random_id
