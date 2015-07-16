@@ -320,7 +320,7 @@ class AdvertisementsController < ApplicationController
     end
 
     @click_enc_url = configatron.hostname + "/plannto/housing_ad_click?ads_id=#{@ad.id}&iid=#{@impression_id}"
-    @click_enc_url = URI.escape(@click_enc_url)
+    @click_enc_url = CGI.escape(@click_enc_url)
 
     respond_to do |format|
       format.json {
