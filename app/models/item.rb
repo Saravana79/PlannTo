@@ -1665,13 +1665,13 @@ end
               if already_exist == false
 
                 if item_ids.blank?
-                  apartment_urls = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com"]
+                  apartment_urls = ["propertywala.com","anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com","propertyforum.com"]
 
                   if apartment_urls.include?(url)
                     item_ids = "35284,35236"
                     itemtype_id = 33
                     ranking = 5
-                  elsif ["click.in", "trovit.co.in", "locanto.in"].include?(url)
+                  elsif ["click.in", "trovit.co.in", "locanto.in","olx.in"].include?(url)
                     if url.include?("flat") || url.include?("apartment")
                       item_ids = "35284"
                     elsif url.include?("land")
