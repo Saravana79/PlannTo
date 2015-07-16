@@ -6,8 +6,8 @@ class RemoveOldMongodbValue
   def self.perform(method_name)
     log = Logger.new 'log/remove_old_mongodb_values.log'
 
-    AdImpression.send(method_name)
-
     PlanntoUserDetail.remove_old_records()
+
+    AdImpression.send(method_name)
   end
 end

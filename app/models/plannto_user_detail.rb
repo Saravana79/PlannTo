@@ -168,7 +168,9 @@ class PlanntoUserDetail
   end
 
   def self.remove_old_records
-    plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
+    # plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
+
+    plannto_user_details = PlanntoUserDetail.delete_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
   end
 
   private

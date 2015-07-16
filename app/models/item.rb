@@ -1665,13 +1665,14 @@ end
               if already_exist == false
 
                 if item_ids.blank?
-                  apartment_urls = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com"]
+                  apartment_domains = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com"]
+                  domain = Item.get_host_without_www(url)
 
-                  if apartment_urls.include?(url)
+                  if apartment_domains.include?(domain)
                     item_ids = "35284,35236"
                     itemtype_id = 33
                     ranking = 5
-                  elsif ["click.in", "trovit.co.in", "locanto.in"].include?(url)
+                  elsif ["click.in", "trovit.co.in", "locanto.in"].include?(domain)
                     if url.include?("flat") || url.include?("apartment")
                       item_ids = "35284"
                     elsif url.include?("land")
@@ -1947,6 +1948,7 @@ end
       p "--------------------------------CookieMatch process------------------------------"
 
       begin
+        cookie_matches_plannto_ids = cookie_matches_plannto_ids.compact
         cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
         cookie_matches.update_all(:updated_at => Time.now)
 
