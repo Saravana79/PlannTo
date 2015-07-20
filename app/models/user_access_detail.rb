@@ -257,22 +257,24 @@ class UserAccessDetail < ActiveRecord::Base
       end
     end
 
-    p "--------------------------------CookieMatch process------------------------------"
+    p "-------------------------------- CookieMatch In User Access Detail ------------------------------"
 
-    begin
-      cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
-      cookie_matches.update_all(:updated_at => Time.now)
+    if !cookie_matches_plannto_ids.compact!.blank?
+      begin
+        cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
+        cookie_matches.update_all(:updated_at => Time.now)
 
-      $redis_rtb.pipelined do
-        cookie_matches.each do |cookie_match|
-          if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
-            $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-            $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
+        $redis_rtb.pipelined do
+          cookie_matches.each do |cookie_match|
+            if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
+              $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
+              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
+            end
           end
         end
+      rescue Exception => e
+        p "Error processing cookie match"
       end
-    rescue Exception => e
-      p "Error processing cookie match"
     end
 
     # $redis_rtb.pipelined do
