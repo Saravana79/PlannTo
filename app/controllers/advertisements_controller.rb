@@ -583,7 +583,7 @@ class AdvertisementsController < ApplicationController
     @ad = Advertisement.where(:id => params[:ads_id]).first
 
     if !@ad.blank? && @ad.advertisement_type == "housing_dynamic"
-      params[:hou_dynamic_l] ||= "l_#{params[:l]}"
+      params[:hou_dynamic_l] = "l_#{params[:l]}"
     end
 
     if (params[:item_id].blank? || params[:fashion_id].blank? || (!@ad.blank? && @ad.sort_type == "random"))
