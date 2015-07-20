@@ -139,7 +139,7 @@ class CookieMatch < ActiveRecord::Base
 
             next if including_skip_val
 
-            user_access_details_import << new_user_access_detail
+            # user_access_details_import << new_user_access_detail
 
             if new_user_access_detail.source == "housing"
               housing_user_access_details_user_ids << new_user_access_detail.plannto_user_id
@@ -174,6 +174,15 @@ class CookieMatch < ActiveRecord::Base
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end
+            elsif user_access_detail["source"] == "housing"
+              user_id = new_user_access_detail.plannto_user_id
+              type = "Reviews"
+
+              itemtype_id = item_detail_other.itemtype_id rescue ""
+
+              item_ids = ""
+              redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id)
+              plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
             elsif !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
               item_detail = Itemdetail.find_by_sql("SELECT itemid,i.itemtype_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.additional_details = '#{msp_id}' #{site_condition} ORDER BY itemdetails.item_details_id DESC LIMIT 1").first
@@ -234,9 +243,9 @@ where url = '#{ref_url}' group by ac.id").first
           end
         end
 
-        UserAccessDetail.update_buying_list_only_housing(housing_user_access_details_user_ids)
+        # UserAccessDetail.update_buying_list_only_housing(housing_user_access_details_user_ids)
 
-        UserAccessDetail.import(user_access_details_import)
+        # UserAccessDetail.import(user_access_details_import)
 
         $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
         length = length - cookie_details.count
