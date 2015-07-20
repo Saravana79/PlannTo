@@ -36,7 +36,7 @@ class AdImpression
   embeds_many :m_order_histories
   embeds_many :m_companion_impressions
 
-  index({ impression_time: 1 })
+  # index({ impression_time: 1 })
 
 
   def self.get_results_from_mongo(param, start_date, end_date)
