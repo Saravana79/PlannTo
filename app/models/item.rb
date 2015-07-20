@@ -3332,6 +3332,7 @@ end
 
     doc = Nokogiri::HTML(open(url))
     match_words = []
+    items = []
 
     node = doc.elements.first
 
@@ -3369,11 +3370,13 @@ end
 
         score = @items.hits.first.score.to_f rescue 0
         match_words << item if score > 0.5
+        items << item if score > 0.5
       end
       match_words.uniq!
     end
 
-    match_words.map(&:name)
+    item_names = match_words.map(&:name)
+    return item_names, items
   end
 
   def self.get_city_from_item_or_location(item_ids, location_id)
