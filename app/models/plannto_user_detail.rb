@@ -170,6 +170,7 @@ class PlanntoUserDetail
   def self.remove_old_records
     # plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
 
+    # heroku run rake db:mongoid:create_indexes
     plannto_user_details = PlanntoUserDetail.delete_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
   end
 
