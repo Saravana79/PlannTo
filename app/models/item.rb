@@ -1194,6 +1194,7 @@ end
     pricestring = each_rec.pricestring.split(',').map(&:to_f)
     hash_val = Hash[vendor_ids.zip(pricestring)]
     hash_val.delete("26351")
+    hash_val.delete("73017")
     is_price_non_zero = hash_val.values.map {|each_val| each_val > 0}
     if is_price_non_zero.include?(true)
       hash_val = hash_val.delete_if {|_,v| v == 0.0}
