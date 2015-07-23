@@ -107,17 +107,21 @@ var PlannTo = (function(window,undefined) {
 
             var valid_images = []
 
-            $.each(images, function(inx, val){
-                if (parseInt($(val).width()) > 400 )
+            jQuery.each(images, function(inx, val){
+                if ((parseInt(jQuery(val).width()) > 400) && (parseInt(jQuery(val).height()) > 200))
                 {
-                    valid_images.push(val)
+                    var class_val = jQuery(val).attr("class")
+                    if ((class_val == undefined) || (class_val.match(/background/g) == null))
+                    {
+                      valid_images.push(val)
+                    }
                 }
 
             });
 
             console.log(valid_images)
 
-            $.each(valid_images, function(indx, image){
+            jQuery.each(valid_images, function(indx, image){
                 if (indx != 0)
                 return
 
@@ -126,17 +130,17 @@ var PlannTo = (function(window,undefined) {
 //            var image = jQuery(".storyimg_mar10")
                 console.log(image)
 
-                var height = $(image).height() - 60
+                var height = jQuery(image).height() - 63
                 console.log(image)
 
-                jQuery(image).css({"position":"absolute", "z-index":"1"})
+                jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
                 jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; top: '+ height +'px; z-index: 2;"> <a href="#" class="close_plannto_iframe">x</a> <iframe id="plannto_ad_frame" src="http://www.plannto.com/advertisments/show_ads?item_id=&ads_id=17&size=300*60&more_vendors=true&ad_as_widget=true&ref_url=&is_test=true" width="300px" height="60px" style="border: medium none;"></iframe></div>')
 
 
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
-                    $(this).parent().hide()
+                    jQuery(this).parent().hide()
                     return false;
                 })
             })
@@ -148,7 +152,7 @@ var PlannTo = (function(window,undefined) {
 ////            var image = jQuery(".storyimg_mar10")
 //            console.log(image)
 //
-//            var height = $(image).height() - 60
+//            var height = jQuery(image).height() - 60
 //            console.log(image)
 //
 //            jQuery(image).css({"position":"absolute", "top":"25px", "z-index":"1"})
@@ -158,7 +162,7 @@ var PlannTo = (function(window,undefined) {
 //
 //            jQuery(".close_plannto_iframe").live("click", function(event)
 //            {
-//                $(this).parent().hide()
+//                jQuery(this).parent().hide()
 //                return false;
 //            })
 
