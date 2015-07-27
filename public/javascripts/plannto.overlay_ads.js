@@ -126,94 +126,42 @@ var PlannTo = (function(window,undefined) {
                 return
 
                 indx = indx + 1;
-//                var image = jQuery("img")[0]
-//            var image = jQuery(".storyimg_mar10")
-                console.log(image)
+
+                jQuery('<style type="text/css" id="plannto_style_'+indx+'"> ' +
+                    'a { outline: none; }' +
+                    '.plannto_iframe { position:absolute;width:100%;overflow:hidden;} ' +
+                    '.plannto_iframe.invisible {  left: -304px; } ' +
+                    '.plannto_hint_button {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -158px -2px;cursor: pointer !important;height: 70px;margin: 19px 0 0;opacity: 1;position: absolute;top: -110px;transition: margin-top 0.6s ease 0s;width: 26px;z-index: 5 !important;}'+
+                    '.close_plannto_iframe {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -50px -24px;cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;z-index: 5;left: 278px;' +
+                    '.plannto_iframe:hover { width:300px;} ' +
+                    '</style>').appendTo("head");
 
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
                 jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
-                jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; top: '+ height +'px; z-index: 2;"> <a href="#" class="close_plannto_iframe">x</a> <iframe id="plannto_ad_frame" src="http://www.plannto.com/advertisments/show_ads?item_id=&ads_id=17&size=300*60&more_vendors=true&ad_as_widget=true&ref_url=&is_test=true" width="300px" height="60px" style="border: medium none;"></iframe></div>')
+                jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; top: '+ height +'px; z-index: 2;width:100%;"> ' +
+                    '<div class="plannto_iframe"><a href="#" class="close_plannto_iframe"></a> <iframe id="plannto_ad_frame" src="http://www.plannto.com/advertisments/show_ads?item_id=&ads_id=17&size=300*60&more_vendors=true&ad_as_widget=true&ref_url=&is_test=true" width="300px" height="60px" style="border: medium none;"> </iframe></div>' +
+                    '<div class="plannto_hint_button plannto_hint_button'+indx+'" style="display: inline ! important; margin-top: 48px;"></div>' +
+                    '</div>')
 
+
+                jQuery(".plannto_hint_button").hide()
 
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
-                    jQuery(this).parent().hide()
+                    jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
+                    return false;
+                })
+
+                jQuery(".plannto_hint_button").live("mouseenter", function(event)
+                {
+                    jQuery(".plannto_iframe").animate({width: "300px"}, "slow")
+                    jQuery(".plannto_hint_button").hide()
                     return false;
                 })
             })
-
-
-
-
-//            var image = jQuery("img")[0]
-////            var image = jQuery(".storyimg_mar10")
-//            console.log(image)
-//
-//            var height = jQuery(image).height() - 60
-//            console.log(image)
-//
-//            jQuery(image).css({"position":"absolute", "top":"25px", "z-index":"1"})
-//
-//            jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; top: '+ height +'px; z-index: 2;"> <a href="#" class="close_plannto_iframe">x</a> <iframe id="plannto_ad_frame" src="http://www.plannto.com/advertisments/show_ads?item_id=&ads_id=17&size=300*60&more_vendors=true&ad_as_widget=true&ref_url=&is_test=true" width="300px" height="60px" style="border: medium none;"></iframe></div>')
-//
-//
-//            jQuery(".close_plannto_iframe").live("click", function(event)
-//            {
-//                jQuery(this).parent().hide()
-//                return false;
-//            })
-
-
-
-//            var doc_title =  jQuery(document).title;
-//            var pathname = getParam(url,"ref_url");
-//            var item_id = getParam(url,"item_id");
-//            var show_details = getParam(url,"show_details");
-//            var show_offer = getParam(url,"show_offer");
-//
-//            var show_price = getParam(url,"show_price");
-//            var ads = getParam(url,"advertisement");
-//            var element_id = getParam(url,"element_id");
-//            is_test = getParam(url,"is_test");
-//            page_type = getParam(url,"page_type");
-//
-
-//            if (ads == "")
-//            {
-//                if(element_id == undefined || element_id == "")
-//                {
-//                    element_id = "where_to_buy_items";
-//                }
-//                element = jQuery("#"+element_id)
-//                planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false)
-//
-//            }
-//            else
-//            {
-//
-//                if(element_id == undefined || element_id == "")
-//                {
-//                    element_id = "advertisement";
-//                }
-//                url = "http://"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
-//                jQuery.getJSON(url, function (data) {
-//                    jQuery("#"+element_id).html(data.html);
-//                });
-//            }
-
-            /*  jQuery("#where_to_buy_items_a").live("click", function(){
-             SubPath = "/where_to_buy_items.js"
-             url = url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
-             element_id = "where_to_buy_items1"
-             jQuery.getJSON(url, function (data) {
-             jQuery("#"+element_id).html(data.html);
-             });
-             })
-             */
-            //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 
         });
     }
