@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-    var domain = "www.plannto.com";
+//    var domain = "www.plannto.com";
 //for development
-//var domain = "localhost:3000";
+var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
@@ -102,7 +102,10 @@ var PlannTo = (function(window,undefined) {
 
         jQuery(document).ready(function(jQuery) {
             url = getScriptUrl();
+            var doc_title =  jQuery(document).title;
+            var pathname = getParam(url,"ref_url");
             console.log("----------------------------------")
+            console.log(pathname)
             var images = jQuery("img")
 
             var valid_images = []
@@ -126,14 +129,14 @@ var PlannTo = (function(window,undefined) {
                 return
 
                 indx = indx + 1;
+                var width = jQuery(image).width()
 
                 jQuery('<style type="text/css" id="plannto_style_'+indx+'"> ' +
                     'a { outline: none; }' +
                     '.plannto_iframe { position:absolute;width:100%;overflow:hidden;} ' +
-                    '.plannto_iframe.invisible {  left: -304px; } ' +
-                    '.plannto_hint_button {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -158px -2px;cursor: pointer !important;height: 70px;margin: 19px 0 0;opacity: 1;position: absolute;top: -110px;transition: margin-top 0.6s ease 0s;width: 26px;z-index: 5 !important;}'+
-                    '.close_plannto_iframe {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -50px -24px;cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;z-index: 5;left: 278px;' +
-                    '.plannto_iframe:hover { width:300px;} ' +
+                    '.plannto_hint_button {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -158px -2px;cursor: pointer !important;height: 70px;opacity: 1;position: absolute;top: 11px;transition: margin-top 0.6s ease 0s;width: 26px;z-index: 5 !important;}'+
+                    '.close_plannto_iframe {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -50px -24px;cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;z-index: 5;left: '+(width - 20)+'px;' +
+                    '.plannto_iframe:hover { width: '+width+'px;} ' +
                     '</style>').appendTo("head");
 
                 var height = jQuery(image).height() - 63
@@ -141,9 +144,9 @@ var PlannTo = (function(window,undefined) {
 
                 jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
-                jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; top: '+ height +'px; z-index: 2;width:100%;"> ' +
-                    '<div class="plannto_iframe"><a href="#" class="close_plannto_iframe"></a> <iframe id="plannto_ad_frame" src="http://www.plannto.com/advertisments/show_ads?item_id=&ads_id=17&size=300*60&more_vendors=true&ad_as_widget=true&ref_url=&is_test=true" width="300px" height="60px" style="border: medium none;"> </iframe></div>' +
-                    '<div class="plannto_hint_button plannto_hint_button'+indx+'" style="display: inline ! important; margin-top: 48px;"></div>' +
+                jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 90px; z-index: 2;width:100%;"> ' +
+                    '<div class="plannto_iframe"><a href="#" class="close_plannto_iframe"></a> <iframe id="plannto_ad_frame" src="http://'+domain+'/advertisments/show_ads?item_id=&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&is_test=true" style="border:medium none;" height="90px" width="'+width+'px"> </iframe></div>' +
+                    '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
                     '</div>')
 
 
@@ -157,7 +160,7 @@ var PlannTo = (function(window,undefined) {
 
                 jQuery(".plannto_hint_button").live("mouseenter", function(event)
                 {
-                    jQuery(".plannto_iframe").animate({width: "300px"}, "slow")
+                    jQuery(".plannto_iframe").animate({width: width+"px"}, "slow")
                     jQuery(".plannto_hint_button").hide()
                     return false;
                 })

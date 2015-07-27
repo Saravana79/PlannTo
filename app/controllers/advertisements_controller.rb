@@ -112,19 +112,29 @@ class AdvertisementsController < ApplicationController
     end
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
 
+    return_path = "advertisements/show_ads.html.erb"
+
+    if !@ad.blank? && @ad.advertisement_type == "image_overlay"
+      return_path = "advertisements/show_image_overlay_ads.html.erb"
+      @iframe_width = params[:width].blank? ? "" : params[:width]
+      @iframe_height = params[:height].blank? ? "" : params[:height]
+      @ad_template_type = "type_1"
+      @item_details = @item_details.first(6)
+    end
+
     respond_to do |format|
       format.json {
         if @item_details.blank?
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
-          render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string("advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
+          render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
         end
       }
       format.html {
         if @item_details.blank?
           render :nothing => true
         else
-          render :layout => false
+          render return_path, :layout => false
         end
       }
     end
