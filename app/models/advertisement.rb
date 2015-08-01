@@ -309,7 +309,7 @@ class Advertisement < ActiveRecord::Base
 
     if param[:is_test] != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,
-                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r], param[:a], param[:video], param[:video_impression_id])
+                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r], param[:a], param[:video], param[:video_impression_id], param[:visible])
       Advertisement.check_and_update_act_spent_budget_in_redis(ads_id,param[:wp])
     end
     return @impression_id
@@ -667,6 +667,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["additional_details"] = impression.a
               impression_mongo["geo"] = impression.geo
               impression_mongo["is_rii"] = impression.having_related_items
+              impression_mongo["visible"] = impression.visible if !impression.visible.blank?
 
               time = impression.impression_time.utc rescue Time.now
               date = time.to_date rescue ""

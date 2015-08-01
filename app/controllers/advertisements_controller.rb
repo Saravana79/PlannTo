@@ -5,11 +5,15 @@ class AdvertisementsController < ApplicationController
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
+  before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
+  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
-  before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
+  before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
   caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :show_ads, :ads_visited]
+  skip_before_filter  :verify_authenticity_token, :only => [:ads_visited]
   #after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
@@ -114,12 +118,117 @@ class AdvertisementsController < ApplicationController
 
     return_path = "advertisements/show_ads.html.erb"
 
+    respond_to do |format|
+      format.json {
+        if @item_details.blank?
+          render :json => {:success => false, :html => ""}, :callback => params[:callback]
+        else
+          render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
+          # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}.to_json
+        end
+      }
+      format.html {
+        if @item_details.blank?
+          render :nothing => true
+        else
+          render return_path, :layout => false
+        end
+      }
+    end
+  end
+
+  def image_show_ads
+    #TODO: everything is clickable is only updated for type1 have to update for type2
+    impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
+    @sid = sid = params[:sid] ||= ""
+
+    # TODO: hot coded values, have to change in feature
+    if @suitable_ui_size == "120" && params[:page_type] != "type_4"
+      @ad_template_type = ad_id == 21 ? "type_3" : "type_2"
+    end
+
+    @ad_template_type = params[:page_type] unless params[:page_type].blank?
+
+    p_item_ids = item_ids = []
+    p_item_ids = item_ids = params[:item_id].to_s.split(",") unless params[:item_id].blank?
+
+    sort_disable = params[:r].to_i == 1 ? "true" : "false"
+
+    if item_ids.include?(configatron.root_level_laptop_id.to_s)
+      original_ids = $redis.get("amazon_top_laptops").to_s.split(",")
+      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
+    elsif item_ids.include?(configatron.root_level_television_id.to_s)
+      original_ids = $redis.get("amazon_top_televisions").to_s.split(",")
+      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
+    elsif !@ad.blank? && @ad.id == 52
+      # Nothing
+    elsif !@ad.blank? && @ad.having_related_items == true
+      itemsaccess = "advertisement"
+      original_ids = @ad.get_item_ids_from_ads(url)
+      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
+    else
+      @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
+    end
+
+    status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+    publisher = Publisher.getpublisherfromdomain(url)
+
+    #TODO: temp commented no one is using now
+    # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
+
+    item_ids = @items.blank? ? [] : @items.map(&:id)
+    @item = @items.first
+
+    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
+
+    # Default item_details based on vendor if item_details empty
+    #TODO: temporary solution, have to change based on ecpm
+    if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
+      #TODO: - Saravana - temporarily redirecting to static image ad. we need to implement this.
+      @ad = Advertisement.get_ad_by_id(4).first
+      return static_ad_process(impression_type, url, itemsaccess="MissingURL", url_params, winning_price_enc, sid)
+    else
+      @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
+      @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+      @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visible])
+        Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
+      end
+
+      @item_details = @item_details.uniq(&:url)
+      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
+      if (@suitable_ui_size == "300_600" && @item_details.count < 3)
+        old_item_details = @item_details
+
+        # if @ad_template_type == "type_5"
+        #   new_item_ids = Item.get_carwale_item_ids_for_300_600()
+        # else
+        #   new_item_ids = Item.get_item_ids_for_300_600()
+        # end
+        new_item_ids = Item.get_item_ids_for_300_600()
+        @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids, @ad)
+        @item_details = old_item_details + @item_details
+        @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
+      end
+      if @suitable_ui_size == "300_600" && params[:page_type] == "type_2"
+        @ad_template_type = ad_id == 21 ? "type_3" : "type_1"
+      end
+      @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+      @click_url = @click_url.gsub("&amp;", "&")
+    end
+    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+
+    return_path = "advertisements/show_ads.html.erb"
+
     if !@ad.blank? && @ad.advertisement_type == "image_overlay"
       return_path = "advertisements/show_image_overlay_ads.html.erb"
       @iframe_width = params[:width].blank? ? "" : params[:width]
       @iframe_height = params[:height].blank? ? "" : params[:height]
       @ad_template_type = "type_1"
       @item_details = @item_details.first(6)
+      @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     end
 
     respond_to do |format|
@@ -127,7 +236,8 @@ class AdvertisementsController < ApplicationController
         if @item_details.blank?
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
-          render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
+          # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
+          render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}.to_json
         end
       }
       format.html {
@@ -566,6 +676,11 @@ class AdvertisementsController < ApplicationController
     item_names = Item.find_item_names_from_url(params[:url])
   end
 
+  def ads_visited
+    AddImpression.add_impression_to_update_visible(params[:impression_id])
+    render :nothing => true
+  end
+
  private
 
   def create_impression_before_show_ads
@@ -583,6 +698,10 @@ class AdvertisementsController < ApplicationController
     params[:ad_type] ||= ""
     params[:hou_dynamic_l] ||= ""
     params[:l] ||= ""
+    params[:visible] ||= ""
+
+    format = request.format.to_s.split("/")[1]
+    params[:format] = format
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
@@ -633,16 +752,21 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
     end
 
     cache_params = CGI::unescape(cache_params)
+
     cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
+    if params[:format].to_s == "json"
+      cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}.json"
+    end
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
+
       unless cache.blank?
         valid_html = cache.match(/_blank/).blank? ? false : true
         if valid_html
@@ -699,12 +823,175 @@ class AdvertisementsController < ApplicationController
         end
         p "*************************** Cache process success ***************************"
         logger.info "*************************** Cache process success ***************************"
-        return render :text => cache.html_safe
+
+        if params[:format].to_s == "json"
+          return render :json => JSON.parse(cache)
+        else
+          return render :text => cache.html_safe
+        end
         # Rails.cache.write(cache_key, cache)
       end
     end
   end
 
+  def create_impression_before_image_show_ads
+    params[:more_vendors] ||= "false"
+    params[:ads_id] ||= ""
+    params[:item_id] ||= ""
+    params[:item_id] = params[:item_id].to_s.split(",").map(&:to_i).sort.join(",") if !params[:item_id].blank?
+    params[:page_type] ||= ""
+    params[:size] ||= ""
+    params[:click_url] ||= ""
+    params[:r] ||= ""
+    params[:a] ||= ""
+    params[:fashion_id] ||= ""
+    params[:vendor_ids] ||= ""
+    params[:ad_type] ||= ""
+    params[:hou_dynamic_l] ||= ""
+    params[:l] ||= ""
+    params[:visible] ||= ""
+    p request.format
+    p format = request.format.to_s.split("/")[1]
+    params[:format] = format
+
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
+
+    # params[:protocol_type] ||= ""
+    params[:protocol_type] = request.protocol
+
+    @ad = Advertisement.where(:id => params[:ads_id]).first
+
+    if !@ad.blank? && @ad.advertisement_type == "housing_dynamic"
+      params[:hou_dynamic_l] = "l_#{params[:l]}"
+    end
+
+    if (params[:item_id].blank? || params[:fashion_id].blank? || (!@ad.blank? && @ad.sort_type == "random"))
+      if (!@ad.blank? && ((@ad.id != 52 && @ad.advertisement_type == "fashion") || @ad.sort_type == "random"))
+        # item_id, random_id = Item.get_item_id_and_random_id(@ad, params[:item_id])
+        #
+        # if random_id.blank?
+        #   item_id, random_id = Item.get_item_id_and_random_id(@ad, params[:item_id])
+        # end
+
+        random_id = rand(20)
+
+        # params[:item_id] = item_id
+        params[:fashion_id] = random_id
+      end
+    end
+
+    if !params[:item_id].blank? && params[:fashion_id].blank?
+      if !@ad.blank? && @ad.id == 52
+        random_id = rand(10)
+
+        params[:fashion_id] = random_id
+      end
+    end
+
+    params[:size] = params[:size].to_s.gsub("*", "x")
+    # check and assign page type if ab_test is enabled
+    ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
+    if !ab_test_details.blank? && ab_test_details["enabled"] == "true"
+      alternatives = ab_test_details.blank? ? {} : eval(ab_test_details["alternatives"])
+      if alternatives.include?(params[:size])
+        types = alternatives["#{params[:size]}"]
+        random_val = Random.rand(1..10)
+        params[:page_type] = random_val <= 5 ? types[0] : types[1]
+      end
+    end
+
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
+    if params[:item_id].blank?
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
+    else
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
+    end
+
+    cache_params = CGI::unescape(cache_params)
+
+    cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}"
+    if params[:format].to_s == "json"
+      cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}.json"
+    end
+
+    p cache_key
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      # p JSON.parse(cache)
+      unless cache.blank?
+        cache_json = JSON.parse(cache)
+        valid_html = cache_json["success"]
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
+          item_id = params[:item_ids]
+          matched_val = cache.match(/present_item_id=.*#/)
+          unless matched_val.blank?
+            val = matched_val[0]
+            item_id = val.split("=")[1].gsub("#", "")
+          end
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
+
+          cache_json["impression_id"] = @impression_id
+          cache_html = cache_json["html"].to_s
+
+          if !cache_html.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
+            if (params[:t].to_i == 1)
+              @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+              if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+              else
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />")
+              end
+            else
+              #remove 1x1 pixel image
+              cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
+              cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
+            end
+          elsif !cache_html.match(/<img src=\"https:\/\/www.plannto.com.*/).blank?
+            if (params[:t].to_i == 1)
+              @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+              if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+              else
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />")
+              end
+            else
+              #remove 1x1 pixel image
+              cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
+              cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
+            end
+          else
+            if (params[:t].to_i == 1)
+              @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+              if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                cache_html = cache_html.gsub("</head>", "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />\n</head>")
+              else
+                cache_html = cache_html.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />\n</head>")
+              end
+            end
+          end
+
+          cache_html = cache_html.gsub(/iid=.{36}/, "iid=#{@impression_id}")
+          cache_html.match "sid=#{params[:sid]}\""
+          cache_html = cache_html.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
+          cache_json["html"] = cache_html
+        end
+        p "*************************** Cache process success ***************************"
+        logger.info "*************************** Cache process success ***************************"
+
+        set_access_control_headers()
+        if params[:format].to_s == "json"
+          return render :json => cache_json.to_json
+        else
+          return render :text => cache.html_safe
+        end
+        # Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
 
   def create_impression_before_show_video_ads()
     params[:more_vendors] ||= "false"

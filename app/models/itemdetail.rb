@@ -19,6 +19,8 @@ class Itemdetail < ActiveRecord::Base
 
   def self.get_item_details_by_item_ids(item_ids, vendor_ids, fashion_id=nil, ad=nil)
     # status_condition = vendor_ids.count > 1 ? " and itemdetails.status in (1,3,2)" : ""
+    vendor_ids = vendor_ids.compact
+    item_ids = item_ids.compact
     status_condition = " and itemdetails.status in (1,3)"
     # vendor_id = sanitize(vendor_id)
 

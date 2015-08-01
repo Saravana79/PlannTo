@@ -532,6 +532,8 @@ resources :comments do
   match "advertisements/create_ab_settings" => "advertisements#create_ab_settings", :as => "create_ab_settings", :via => [:post]
   match "advertisements/video_ad_tracking" => "advertisements#video_ad_tracking", :as => "video_ad_tracking", :via => [:get]
   match "advertisements/video_ads" => "advertisements#video_ads", :as => "video_ads", :via => [:get]
+  match "advertisements/ads_visited" => "advertisements#ads_visited", :via => [:post]
+  match "advertisments/image_show_ads" => "advertisements#image_show_ads", :as => "image_show_ads"
 
   match "/admin/source_categories/edit" => "admin/source_categories#edit", :as => "edit_admin_source_category", :via => [:get]
 

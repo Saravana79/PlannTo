@@ -19,8 +19,9 @@ class VendorDetail < ActiveRecord::Base
   # end
 
   def self.get_vendor_ad_details(item_ids)
+    item_ids = item_ids.compact
     vendor_details = {}
-    details = find_by_sql("SELECT item_id, name as vendor_name, imageurl, default_text FROM `vendor_details` WHERE item_id in (#{item_ids.map(&:inspect).join(', ')})")
+    details = find_by_sql("SELECT item_id, name as vendor_name, imageurl, default_text FROM `vendor_details` WHERE item_id in (#{item_ids.blank? ? "''" : item_ids.map(&:inspect).join(', ')})")
 
     details.map {|each_detail| vendor_details.merge!(each_detail.item_id => each_detail.attributes.merge('imageurl' => configatron.root_image_url + "vendor" + '/medium/' + each_detail.imageurl.to_s))}
 
