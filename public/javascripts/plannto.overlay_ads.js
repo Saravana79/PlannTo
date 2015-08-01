@@ -104,8 +104,9 @@ var domain = "localhost:3000";
             url = getScriptUrl();
             var doc_title =  jQuery(document).title;
             var pathname = getParam(url,"ref_url");
+            var visible = getParam(url,"visible");
             console.log("----------------------------------")
-            console.log(pathname)
+            console.log(visible == "true")
             var images = jQuery("img")
 
             var valid_images = []
@@ -127,6 +128,7 @@ var domain = "localhost:3000";
             jQuery.each(valid_images, function(indx, image){
                 if (indx != 0)
                 return
+                var visited = false
 
                 indx = indx + 1;
                 var width = jQuery(image).width()
@@ -142,15 +144,42 @@ var domain = "localhost:3000";
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
-                jQuery(image).parent().css({"position":"relative", "z-index":"1"})
+                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id=&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visible='+visible
+                var impression_id = ""
+                jQuery.ajax({
+                    url : url,
+                    type: "get",
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        if (data.success == true)
+                        {
+                            impression_id = data.impression_id
+                            jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
-                jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 90px; z-index: 2;width:100%;"> ' +
-                    '<div class="plannto_iframe"><a href="#" class="close_plannto_iframe"></a> <iframe id="plannto_ad_frame" src="http://'+domain+'/advertisments/show_ads?item_id=&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&is_test=true" style="border:medium none;" height="90px" width="'+width+'px"> </iframe></div>' +
-                    '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
-                    '</div>')
+                            jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 90px; z-index: 2;width:100%;"> ' +
+                                '<div class="plannto_iframe"><a href="#" class="close_plannto_iframe"></a> <iframe id="plannto_ad_frame" src="" style="border:medium none;" height="90px" width="'+width+'px"> </iframe></div>' +
+                                '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
+                                '</div>')
 
+                            jQuery("#plannto_ad_frame").attr("src","data:text/html;charset=utf-8," + encodeURI(data.html))
 
-                jQuery(".plannto_hint_button").hide()
+                            if (visible == "true")
+                            {
+                                jQuery(".plannto_hint_button").hide()
+                                visited = true
+                            }
+                            else
+                            {
+                                jQuery(".plannto_iframe").css("width", "0px")
+                            }
+
+                            var iframe_body = jQuery("#plannto_ad_frame").contents().find("body")
+                            console.log(iframe_body)
+                            jQuery(iframe_body).css({"width":"500px", "height":"90px", "overflow": "hidden"})
+                        }
+                    }
+                });
 
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
@@ -162,10 +191,16 @@ var domain = "localhost:3000";
                 {
                     jQuery(".plannto_iframe").animate({width: width+"px"}, "slow")
                     jQuery(".plannto_hint_button").hide()
+
+                    if (visited == false)
+                    {
+                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id})
+                        visited = true
+                    }
+
                     return false;
                 })
             })
-
         });
     }
 
