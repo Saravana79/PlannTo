@@ -2121,6 +2121,7 @@ end
   end
 
   def self.get_item_items_from_amazon(items, item_ids, page_type, geo="in")
+    geo = "in" if geo.blank?
     item_id = item_ids.to_s.split(",").first
     if items.count == 1
       item = items.first
