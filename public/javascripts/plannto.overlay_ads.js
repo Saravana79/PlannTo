@@ -105,6 +105,7 @@ var domain = "localhost:3000";
             var doc_title =  jQuery(document).title;
             var pathname = getParam(url,"ref_url");
             var visible = getParam(url,"visible");
+            var item_ids = getParam(url,"item_ids");
             console.log("----------------------------------")
             console.log(visible == "true")
             var images = jQuery("img")
@@ -144,7 +145,7 @@ var domain = "localhost:3000";
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
-                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id=&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visible='+visible
+                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visible='+visible
                 var impression_id = ""
                 jQuery.ajax({
                     url : url,
