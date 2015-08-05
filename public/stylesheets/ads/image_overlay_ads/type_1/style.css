@@ -21,7 +21,7 @@ body {
 
 
 .advt-block { margin:0; padding:0;}
-.advt-728 { margin:0; padding:0; width:728px; height:90px; background:#fff; border:1px solid #F1F0F0;}
+.advt-728 { margin:0; padding:0; background:#fff; border:1px solid #F1F0F0;}
 
 .advt-728 .advt-box { margin:0; padding:0;}
 .advt-728 .advt-box .logo{ margin:0 auto; padding: 0; text-align:center; vertical-align:middle; float:left; width:130px; height:88px; display:block; border-right:1px solid #F1F0F0;}
@@ -29,22 +29,22 @@ body {
 .advt-728 .advt-box .logo a{vertical-align: middle;padding-top: 20px;display: block; }
     
 
-.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:470px; }
-.advt-728 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
-.advt-728 .advt-box .product-container:after { clear:both;}
+.product-container{ margin:0; padding:0px 0; float:left;border:1px solid lightgray;}
+.product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
+.product-container:after { clear:both;}
 
-.advt-728 .advt-box .product-container h3{ margin:0 auto; padding:0; font-size:14px; color:#222; font-weight:bold; text-align:center; float:left; width:200px; font-family:Arial;word-break:break-word;}
-.advt-728 .advt-box .product-container .product-img{ margin:0 auto; padding:0;text-align:center; height:86px; float:left;white-space: nowrap;}
-.advt-728 .advt-box .product-container .product-img img { margin:0 auto; text-align:center;width:auto;}
+.product-container h3{ margin:0 auto; padding:0; font-size:14px; color:#222; font-weight:bold;  float:left;  font-family:Arial;word-break:break-word;}
+.product-img{ margin:0 auto; padding:0;text-align:center;  float:left;white-space: nowrap;}
+.product-img img { margin:0 auto; text-align:center;max-height: 90px;width:auto;height: auto;max-width: 100%;}
 
 .advt-728 .advt-box .product-desc { margin:0; padding:5px; font-size:14px; font-weight:bold; color:#0085b6; text-align:center;  width:120px; float:left;font-weight: normal;}
 
 .advt-728 .advt-box .product-container .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px; text-align:center;font-family: Arial;}
 .advt-728 .advt-box .product-container .price-strike{margin: 0;padding: 0;color: #585858;font-size: 11px;text-decoration: line-through; text-align:center;}
-.advt-728 .advt-box .product-container .price{ margin: 10px 0 0 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;text-align:center;font-family: Arial monospace;width:200px;}
+.advt-728 .advt-box .product-container .price{ margin: 10px 0 0 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;font-family: Arial monospace;}
 
 .advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
-.advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 10px; background:#F76300; color:#fff; font-size:16px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
+.advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 4px; background:#F76300; color:#fff; font-size:12px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
 
 .right-div { float:right;  padding:8px 10px 10px 0;}
 

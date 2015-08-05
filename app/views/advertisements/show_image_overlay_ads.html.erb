@@ -8,17 +8,11 @@
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
   <%= javascript_include_tag "http://localhost:3000/javascripts/ads/image_overlay_ads/plannto_image_overlay.js" %>
 
-  <% if (params[:t].to_i == 1) %>
-      <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
-          <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%=params[:ref_url] %>" />
-      <% else %>
-          <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>&google_ula=8326120&google_ula=8365600" />
-      <% end %>
-  <% end %>
+  
 </head>
 <body>
 
-<div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_height %>px !important;">
+<div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_height %>px !important;width:620px;">
   <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_size_responsive.html.erb" %>
   <%= hidden_field_tag :visible, "true" %>
 </div>
