@@ -3,17 +3,18 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Advt <%= @suitable_ui_size %></title>
 <!--  <link href="<%#= configatron.root_image_path %>static/stylesheets/ads/<%#= @ad_template_type %>/<%#= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/> -->
-  <link href="http://localhost:3000/stylesheets/ads/image_overlay_ads/<%= @ad_template_type %>/style.css" type="text/css" rel="stylesheet" media="all"/>
+  <link href="http://localhost:3000/stylesheets/ads/image_overlay_ads/<%= @ad_template_type %>/<%= @item_type %>/style.css" type="text/css" rel="stylesheet" media="all"/>
 
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
-  <%= javascript_include_tag "http://localhost:3000/javascripts/ads/image_overlay_ads/plannto_image_overlay.js" %>
+  <%= javascript_include_tag "http://localhost:3000/javascripts/ads/image_overlay_ads/#{@item_type}/plannto_image_overlay.js" %>
 
   
 </head>
 <body>
 
-<div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_height %>px !important;width:620px;">
-  <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_size_responsive.html.erb" %>
+
+<div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_height %>px !important;">
+  <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>
   <%= hidden_field_tag :visible, "true" %>
 </div>
 <%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>

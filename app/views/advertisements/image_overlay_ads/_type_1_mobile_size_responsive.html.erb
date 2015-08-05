@@ -1,0 +1,89 @@
+<style type="text/css">
+
+@media (max-width: 499px) {
+        .product-container{width:100%;border-bottom:1px solid #E5E5E5;}
+        .product-img{width:30%;}
+         .product-title-div{width:70%;}
+        .product-container-top{width:76%;float:left;border-bottom:1px solid #E5E5E5;}
+        .planntocarosel-left{padding: 100px 1px 0 0px;height: 157px;}
+        .planntocarosel-right{padding: 100px 1px 0 0px;height: 157px;}
+
+        }
+
+@media (min-width: 500px) {
+        .product-container{width:50%;border-bottom:1px solid #E5E5E5;}
+        .product-img{width:30%;}
+        .product-title-div{width:70%;}
+        
+        }
+
+</style>
+
+<div class="advt-block">
+  <div class="advt-728">
+    <% if @item_details.count != 0 %>
+        <% @item_details.each_with_index do |item_detail, indx| %>
+            <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+            <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+            <div class="item_details" id="item_detail_<%= indx + 1 %>">
+              <div class="advt-box">
+               <!-- <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
+              -->
+                <div class="product-container">
+                   <div class="product-img">
+                    <a href="<%= shop_now_url %>" target="_blank" style="text-decoration:none;">
+                       <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), '', 82).html_safe %>
+                      <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
+                    </a>
+                  </div>
+                  <div style="float:right;" class="product-title-div">
+                  <div style="float:left;">
+                  <a href="<%= shop_now_url %>" target="_blank" class="">
+                    <div style="float:left;width:100%">
+                    <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
+                  </div>
+                    <div style="float:left;width:100%">
+                      <p class="price"><%= prettify(item_detail) %></p>
+                    </div>
+                   <div style="float:left;">
+                   <p class="btn">
+                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
+                      <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
+                    </a>
+                  </p> 
+                  </div>
+                  </a>
+                  </div>  
+                  </div>
+                  
+                </div>
+
+               
+              </div>
+              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+            </div>
+        <% end %>
+
+
+  <% else %>
+        No Product Found
+    <% end %>
+  </div>
+  <!-- end of advt-300 -->
+</div><!-- end of advt-block -->
+
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+    .product-container a {text-decoration: none !important;}
+
+    .advt-728 .advt-box .product-container h3 {
+        word-break: normal;
+        padding: 7px 0 0;
+    }
+
+</style>

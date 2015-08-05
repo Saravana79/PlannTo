@@ -154,100 +154,134 @@ class AdvertisementsController < ApplicationController
 
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
 
-    if item_ids.include?(configatron.root_level_laptop_id.to_s)
-      original_ids = $redis.get("amazon_top_laptops").to_s.split(",")
-      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
-    elsif item_ids.include?(configatron.root_level_television_id.to_s)
-      original_ids = $redis.get("amazon_top_televisions").to_s.split(",")
-      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
-    elsif !@ad.blank? && @ad.id == 52
-      # Nothing
-    elsif !@ad.blank? && @ad.having_related_items == true
-      itemsaccess = "advertisement"
-      original_ids = @ad.get_item_ids_from_ads(url)
-      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
+    @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
+
+    included_beauty = @items.map {|d| d.is_a?(Beauty) || d.is_a?(Apparel)}.include?(true) rescue false
+
+    if included_beauty
+      get_details_from_beauty_items(url, itemsaccess)
     else
-      @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
-    end
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      publisher = Publisher.getpublisherfromdomain(url)
 
-    status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-    publisher = Publisher.getpublisherfromdomain(url)
+      #TODO: temp commented no one is using now
+      # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
 
-    #TODO: temp commented no one is using now
-    # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
+      item_ids = @items.blank? ? [] : @items.map(&:id)
+      @item = @items.first
 
-    item_ids = @items.blank? ? [] : @items.map(&:id)
-    @item = @items.first
+      @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
 
-    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
+      # Default item_details based on vendor if item_details empty
+      #TODO: temporary solution, have to change based on ecpm
+      if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
+        #TODO: - Saravana - temporarily redirecting to static image ad. we need to implement this.
+        @ad = Advertisement.get_ad_by_id(4).first
+        return static_ad_process(impression_type, url, itemsaccess="MissingURL", url_params, winning_price_enc, sid)
+      else
+        @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
+        @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+        @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+        if @is_test != "true"
+          @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                  cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visible])
+          Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
+        end
 
-    # Default item_details based on vendor if item_details empty
-    #TODO: temporary solution, have to change based on ecpm
-    if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
-      #TODO: - Saravana - temporarily redirecting to static image ad. we need to implement this.
-      @ad = Advertisement.get_ad_by_id(4).first
-      return static_ad_process(impression_type, url, itemsaccess="MissingURL", url_params, winning_price_enc, sid)
-    else
-      @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
-      @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-      @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-      if @is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                                cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visible])
-        Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
+        @item_details = @item_details.uniq(&:url)
+        @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
+        if (@suitable_ui_size == "300_600" && @item_details.count < 3)
+          old_item_details = @item_details
+
+          # if @ad_template_type == "type_5"
+          #   new_item_ids = Item.get_carwale_item_ids_for_300_600()
+          # else
+          #   new_item_ids = Item.get_item_ids_for_300_600()
+          # end
+          new_item_ids = Item.get_item_ids_for_300_600()
+          @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids, @ad)
+          @item_details = old_item_details + @item_details
+          @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
+        end
+        if @suitable_ui_size == "300_600" && params[:page_type] == "type_2"
+          @ad_template_type = ad_id == 21 ? "type_3" : "type_1"
+        end
+        @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+        @click_url = @click_url.gsub("&amp;", "&")
       end
+      @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
 
-      @item_details = @item_details.uniq(&:url)
-      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
-      if (@suitable_ui_size == "300_600" && @item_details.count < 3)
-        old_item_details = @item_details
+      return_path = "advertisements/show_ads.html.erb"
 
-        # if @ad_template_type == "type_5"
-        #   new_item_ids = Item.get_carwale_item_ids_for_300_600()
-        # else
-        #   new_item_ids = Item.get_item_ids_for_300_600()
-        # end
-        new_item_ids = Item.get_item_ids_for_300_600()
-        @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids, @ad)
-        @item_details = old_item_details + @item_details
-        @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
-      end
-      if @suitable_ui_size == "300_600" && params[:page_type] == "type_2"
-        @ad_template_type = ad_id == 21 ? "type_3" : "type_1"
-      end
-      @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
-      @click_url = @click_url.gsub("&amp;", "&")
-    end
-    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
-
-    return_path = "advertisements/show_ads.html.erb"
-
-    if !@ad.blank? && @ad.advertisement_type == "image_overlay"
-      return_path = "advertisements/show_image_overlay_ads.html.erb"
-      @iframe_width = params[:width].blank? ? "" : params[:width]
-      @iframe_height = params[:height].blank? ? "" : params[:height]
-      @ad_template_type = "type_1"
       @item_details = @item_details.first(6)
-      @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     end
+
+    return_path = "advertisements/show_image_overlay_ads.html.erb"
+    @iframe_width = params[:width].blank? ? "" : params[:width]
+    @iframe_height = params[:height].blank? ? "" : params[:height]
+    @ad_template_type = "type_1"
+    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+
+    @item_type = "mobile"
+
+    if (!@item.blank? && ["Beauty", "Apparel"].include?(@item.type))
+      @item_type = "beauty"
+    end
+
+    p @items
 
     respond_to do |format|
       format.json {
-        if @item_details.blank?
+        if @item_details.blank? && included_beauty == false
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}.to_json
+          render :json => {:success => true, :html => render_to_string(return_path, :layout => false)}.to_json
         end
       }
       format.html {
-        if @item_details.blank?
+        if @item_details.blank? && included_beauty == false
           render :nothing => true
         else
           render return_path, :layout => false
         end
       }
     end
+  end
+
+  def get_details_from_beauty_items(url, itemsaccess)
+    if !@items.blank?
+      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
+
+      if @items.blank?
+        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+      end
+    else
+      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+    end
+
+    @search_url = CGI.escape(@search_url)
+    url_params = Advertisement.make_url_params(params)
+
+    # include pre order status if we show more details.
+    unless @items.blank?
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      @publisher = Publisher.getpublisherfromdomain(url)
+      # Check have to activate tabs for publisher or not
+      # @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("fashion", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+
+      @show_count = Item.get_show_item_count(@items)
+    else
+      @where_to_buy_items =[]
+      itemsaccess = "none"
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+    end
+    @ref_url = url
   end
 
   def video_ads
