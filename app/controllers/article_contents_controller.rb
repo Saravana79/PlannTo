@@ -275,7 +275,7 @@ class ArticleContentsController < ApplicationController
     if current_user
       #@article,@images = ArticleContent.CreateContent("http://www.plannto.com/contents/12959",current_user)
       #params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
-      url = params[:url]
+      url = params[:url].to_s
       url = FeedUrl.get_updated_url(url)
       @previous_content = ArticleContent.where(:url => url).first
       if params['url'] && !@previous_content.blank?

@@ -18,7 +18,7 @@ has_one :manufacturer,
  def self.search_type(type)
 
    if (type.blank? || type.include?("Others"))
-      return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Lens".camelize.constantize,"Television".camelize.constantize, "Beauty".camelize.constantize,"Color".camelize.constantize,"ApartmentType".camelize.constantize,"ApartmentSaleType".camelize.constantize,"Place".camelize.constantize,"State".camelize.constantize,"City".camelize.constantize,'Insurance'.camelize.constantize,'Accessory'.camelize.constantize]
+      return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Lens".camelize.constantize,"Television".camelize.constantize, "Beauty".camelize.constantize,"Color".camelize.constantize,"ApartmentType".camelize.constantize,"ApartmentSaleType".camelize.constantize,"Place".camelize.constantize,"State".camelize.constantize,"City".camelize.constantize,'Insurance'.camelize.constantize,'Accessory'.camelize.constantize, 'Apparel'.camelize.constantize, 'Style'.camelize.constantize]
    end
    if type.is_a?(Array)
      return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue (t.to_s.gsub(/\s+/,'').strip.camelize.constantize rescue nil)}
@@ -197,16 +197,17 @@ has_one :manufacturer,
 
   def self.get_search_items_by_relavance(param, itemtypes=nil, for_compare="false")
     auto_save = "false"
+    category_blank = false
     unless param[:category].blank?
-      itemtypes = param[:category].split(',')
+      itemtypes = param[:category].to_s.split(',')
       if itemtypes.include?("Beauty")
-        categories = param[:category].split(",")
+        categories = param[:category].to_s.split(",")
         categories << ["Color", "Manufacturer"]
         param[:category] = categories.uniq.join(",")
         itemtypes << ["Color", "Manufacturer"]
         itemtypes = itemtypes.flatten.uniq
       elsif itemtypes.include?("Apparel")
-        categories = param[:category].split(",")
+        categories = param[:category].to_s.split(",")
         categories << ["Color", "Style"]
         param[:category] = categories.uniq.join(",")
         itemtypes << ["Color", "Style"]
@@ -229,6 +230,10 @@ has_one :manufacturer,
 
     search_type = Product.search_type(nil) if search_type.blank?
 
+    if search_type.count > 15
+      category_blank = true
+    end
+
     @items = Sunspot.search(search_type) do
       keywords term do
         minimum_match 1
@@ -241,8 +246,8 @@ has_one :manufacturer,
 
     items = @items.results
 
-    if search_type.include?(Beauty) && !items.map(&:class).include?(Beauty)
-      categories = param[:category].split(",")
+    if (category_blank != true && (search_type.include?(Beauty) && !items.map(&:class).include?(Beauty)))
+      categories = param[:category].to_s.split(",")
       categories << ["Apparel", "Color", "Style"]
       categories = categories - ["Beauty", "Manufacturer"]
       param[:category] = categories.uniq.join(",")
@@ -297,7 +302,7 @@ has_one :manufacturer,
       if param[:category] == "Others"
         categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
       else
-        categories = param[:category].split(",")
+        categories = param[:category].to_s.split(",")
       end
       categories.each do |each_category|
         name, id = Item.find_root_level_id(each_category, each_category.pluralize).to_s.split(",")
@@ -332,7 +337,7 @@ has_one :manufacturer,
     all_items_by_score.each {|key,val| all_items_by_score[key] = val.to_f.round(2)}
     all_items_by_score.default = 0
 
-    if search_type.include?(Beauty)
+    if category_blank != true && search_type.include?(Beauty)
       selected_list = sorted_hash.keys
       selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
 
@@ -355,7 +360,7 @@ has_one :manufacturer,
       results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2))}
 
       return results, new_selected_list_ids, list_scores, auto_save
-    elsif search_type.include?(Apparel)
+    elsif category_blank != true && search_type.include?(Apparel)
       selected_list = sorted_hash.keys
       selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
 
