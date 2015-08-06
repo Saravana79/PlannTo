@@ -204,7 +204,13 @@ has_one :manufacturer,
         categories << ["Color", "Manufacturer"]
         param[:category] = categories.uniq.join(",")
         itemtypes << ["Color", "Manufacturer"]
-        itemtypes = itemtypes.flatten
+        itemtypes = itemtypes.flatten.uniq
+      elsif itemtypes.include?("Apparel")
+        categories = param[:category].split(",")
+        categories << ["Color", "Style"]
+        param[:category] = categories.uniq.join(",")
+        itemtypes << ["Color", "Style"]
+        itemtypes = itemtypes.flatten.uniq
       end
     end
     search_type = Product.search_type(itemtypes)
@@ -234,6 +240,43 @@ has_one :manufacturer,
     end
 
     items = @items.results
+
+    if search_type.include?(Beauty) && !items.map(&:class).include?(Beauty)
+      categories = param[:category].split(",")
+      categories << ["Apparel", "Color", "Style"]
+      categories = categories - ["Beauty", "Manufacturer"]
+      param[:category] = categories.uniq.join(",")
+      itemtypes << ["Apparel", "Color", "Style"]
+      itemtypes = itemtypes - ["Beauty", "Manufacturer"]
+      itemtypes = itemtypes.flatten.uniq
+
+      search_type = Product.search_type(itemtypes)
+      term = param[:term].to_s
+
+      removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
+                          "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
+                          "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
+                          "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used"]
+      term = term.gsub("-","")
+      term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+      # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+      search_type_for_data = search_type.first if search_type.is_a?(Array)
+
+      search_type = Product.search_type(nil) if search_type.blank?
+
+      @items = Sunspot.search(search_type) do
+        keywords term do
+          minimum_match 1
+        end
+        with :status, [1,2,3]
+        order_by :score,:desc
+        order_by :orderbyid , :asc
+        paginate(:page => 1, :per_page => 5)
+      end
+
+      items = @items.results
+    end
+
     results = Product.get_results_from_items(items)
 
     ids = items.map(&:id).map(&:inspect).join(",")
@@ -250,7 +293,7 @@ has_one :manufacturer,
     # Append suggestions based on category
     categories = []
 
-    unless param[:category].blank?
+    if !param[:category].blank?
       if param[:category] == "Others"
         categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
       else
@@ -281,7 +324,7 @@ has_one :manufacturer,
     end
 
     # items_by_score = {}
-    # @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
+    # @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}0
     all_items_by_score = {}
     @items.hits.map {|dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score) unless dd.result.blank?}
     items_by_score = all_items_by_score.select {|key,val| val.to_f > 0.5}
@@ -301,6 +344,29 @@ has_one :manufacturer,
       new_selected_list.compact!
 
       if new_selected_list.map(&:class).include?(Beauty)
+        auto_save = "true"
+      end
+
+      list_scores = []
+      new_selected_list.each {|each_item| list_scores << all_items_by_score["#{each_item.id}"]}
+
+      new_selected_list_ids = new_selected_list.map(&:id).map(&:to_s)
+
+      results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2))}
+
+      return results, new_selected_list_ids, list_scores, auto_save
+    elsif search_type.include?(Apparel)
+      selected_list = sorted_hash.keys
+      selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
+
+      new_selected_list = []
+
+      new_selected_list << selected_items.select {|a| a.is_a?(Apparel)}.first
+      new_selected_list << selected_items.select {|a| a.is_a?(Color)}.first
+      new_selected_list << selected_items.select {|a| a.is_a?(Style)}
+      new_selected_list = new_selected_list.flatten.compact
+
+      if new_selected_list.map(&:class).include?(Apparel)
         auto_save = "true"
       end
 

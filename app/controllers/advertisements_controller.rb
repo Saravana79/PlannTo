@@ -732,10 +732,6 @@ class AdvertisementsController < ApplicationController
     params[:ad_type] ||= ""
     params[:hou_dynamic_l] ||= ""
     params[:l] ||= ""
-    params[:visible] ||= ""
-
-    format = request.format.to_s.split("/")[1]
-    params[:format] = format
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
@@ -786,17 +782,14 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l"))
     end
 
     cache_params = CGI::unescape(cache_params)
 
     cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
-    if params[:format].to_s == "json"
-      cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}.json"
-    end
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -858,11 +851,7 @@ class AdvertisementsController < ApplicationController
         p "*************************** Cache process success ***************************"
         logger.info "*************************** Cache process success ***************************"
 
-        if params[:format].to_s == "json"
-          return render :json => JSON.parse(cache)
-        else
-          return render :text => cache.html_safe
-        end
+        return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
       end
     end
