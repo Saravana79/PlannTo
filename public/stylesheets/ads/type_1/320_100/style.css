@@ -29,7 +29,7 @@ body {
 .advt-728 .logo a{vertical-align: middle;padding-top: 0px;}
     
 
-.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:100%; }
+.advt-728 .advt-box .product-container{ margin:0; padding:0px 5px; float:left; width:100%; }
 .advt-728 .advt-box .product-container:after { clear:both;}
 
 .advt-728 .advt-box .product-container h3{ margin:0 auto; padding:3px 0 0 0; font-size:14px; color:#222; font-weight:bold;  float:left; font-family:Arial;word-break:break-word;min-height: 33px;}
@@ -55,7 +55,7 @@ body {
     background:#fff;
     float:left;
     text-align: center;
-    margin: 0px 0px 0px 15px;
+    margin: 0px 0px 0px 20px;
     position: absolute;
     top: 80px;
     
