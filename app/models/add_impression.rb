@@ -5,7 +5,7 @@ class AddImpression < ActiveRecord::Base
 
   set_table_name "add_impressions1"
 
-  attr_accessor :t, :r, :device, :a, :video, :video_impression_id, :geo, :having_related_items
+  attr_accessor :t, :r, :device, :a, :video, :video_impression_id, :geo, :having_related_items, :visible
 
   include ActiveUUID::UUID
   self.primary_key = "id"
@@ -273,7 +273,7 @@ class AddImpression < ActiveRecord::Base
    end
  end
 
-  def self.add_impression_to_resque(impression_type, item_id, request_referer, user_id, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil, t=nil, r=nil, a=nil, video=false, video_impression_id=nil, visible="")
+  def self.add_impression_to_resque(impression_type, item_id, request_referer, user_id, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil, t=nil, r=nil, a=nil, video=false, video_impression_id=nil, visible=nil)
     impression_id = SecureRandom.uuid
     impression_params = {:imp_id => impression_id, :type => impression_type, :itemid => item_id, :request_referer => request_referer, :time => Time.zone.now.utc, :user => nil, :remote_ip => remote_ip, :impression_id => impressionid, :itemaccess => itemsaccess,
                          :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => nil, :winning_price_enc => winning_price_enc, :sid => sid, :t => t, :r => r, :a => a, :video => video, :video_impression_id => video_impression_id, :visible => visible}.to_json

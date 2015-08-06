@@ -1080,7 +1080,7 @@ class Advertisement < ActiveRecord::Base
         end
 
         # Process bulk insert for mongo collection impression
-        AddImpression.import(impression_import)
+        # AddImpression.import(impression_import)
 
         # TODO: temporary disabled for optimization
         # begin
