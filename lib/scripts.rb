@@ -195,6 +195,24 @@ csv_details.each do |each_rec|
 end
 
 
+csv_details = CSV.read("/home/sivakumar/skype/Latest_LW03-1.xlsx")
+
+csv_details.each do |each_rec|
+  prev_item = nil
+  each_rec.each do |item_name|
+    next if item_name.blank?
+    item = Beauty.find_or_initialize_by_name(item_name)
+    item.update_attributes!(:imageurl => "#{item_name}.jpeg", :itemtype_id => 27, :status => 1)
+
+    if !prev_item.blank?
+      relation = Itemrelationship.find_or_initialize_by_item_id_and_relationtype(item.id, "Parent")
+      relation.update_attributes(:relateditem_id => prev_item.id)
+    end
+    prev_item = item
+  end
+end
+
+
 ##Category Item detail for text links
 
 csv_details = CSV.read("/home/sivakumar/Desktop/sports.csv", { :col_sep => "\t" })
@@ -533,3 +551,24 @@ node = doc.elements.first
   end
 end
 
+
+# UPdate apparel and style
+
+filename = "/home/sivakumar/skype/Latest_LW03-1.txt"
+csv_details = CSV.read(filename, { :col_sep => "\t" })
+
+
+csv_details.each do |each_val|
+  apparel_name = each_val[0]
+  style_name = each_val[1]
+
+  if !apparel_name.blank?
+    item = Apparel.find_or_initialize_by_name(apparel_name)
+    item.update_attributes!(:imageurl => "#{apparel_name}.jpeg", :itemtype_id => 52, :status => 1, :created_by => 1) rescue apparel_name
+  end
+
+  if !style_name.blank?
+    item = Style.find_or_initialize_by_name(style_name)
+    item.update_attributes!(:imageurl => "#{style_name}.jpeg", :itemtype_id => 53, :status => 1, :created_by => 1) rescue style_name
+  end
+end
