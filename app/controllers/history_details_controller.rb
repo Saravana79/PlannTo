@@ -69,7 +69,7 @@ class HistoryDetailsController < ApplicationController
       Resque.enqueue(CreateImpressionAndClick, 'Click', click_params)
     elsif !params[:red_url].blank?
       item_id = params[:item_id]
-      @impression_id = params[:iid].present? ? params[:iid] : "0"
+      @impression_id = !params[:iid].blank? ? params[:iid] : "0"
       url = params[:red_url]
       if !publisher.blank?
         publisher_vendor = PublisherVendor.where(:publisher_id => publisher.id, :geo => params[:geo]).first
@@ -89,7 +89,7 @@ class HistoryDetailsController < ApplicationController
                 tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
               end
 
-              url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
+              url = url.gsub(tag_val.to_s, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
             else
               url = url.gsub("tag=plannto-junglee-g-21", "tag=#{publisher_vendor.trackid}");
             end   
