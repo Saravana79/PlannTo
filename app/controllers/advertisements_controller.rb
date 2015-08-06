@@ -791,6 +791,8 @@ class AdvertisementsController < ApplicationController
 
     cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
 
+    # p cache_key
+
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
 
@@ -847,6 +849,21 @@ class AdvertisementsController < ApplicationController
           cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")
           cache.match "sid=#{params[:sid]}\""
           cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
+
+          begin
+            click_url = params[:click_url]
+            new_click_url = FeedUrl.get_value_from_pattern(click_url, "http://adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
+
+            old_click_url = FeedUrl.get_value_from_pattern(cache, "http://adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
+            cache = cache.gsub(old_click_url, new_click_url)
+
+            new_ref_url = CGI.escape(params[:ref_url].to_s)
+
+            old_ref_url = FeedUrl.get_value_from_pattern(cache, "ref_url=<ref_url>&amp;", "<ref_url>")
+            cache = cache.gsub(old_ref_url, new_ref_url)
+          rescue Exception => e
+            p "Problem in changing click_url and ref_url"
+          end
         end
         p "*************************** Cache process success ***************************"
         logger.info "*************************** Cache process success ***************************"
@@ -938,7 +955,7 @@ class AdvertisementsController < ApplicationController
       cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}.json"
     end
 
-    p cache_key
+    # p cache_key
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
