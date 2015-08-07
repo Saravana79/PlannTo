@@ -7,7 +7,7 @@
         <p style="padding-bottom: 20px;font-size: 17px;"> Electronics Widgets </p>
         <img style="height: 200px;padding-right: 30px;" src="/images/BestOffers.png">
 
-        <%= text_area_tag :general_widget, "<div id='where_to_buy_items' style='width:610px;'></div> \n\n<script async src='#{configatron.hostname}/javascripts/plannto.widget.js?ref_url=&item_id=&show_details=true'></script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
+        <%= text_area_tag :general_widget, "<div id='where_to_buy_items' style='width:610px;'></div> \n\n<script async src='#{configatron.hostname}/javascripts/plannto.widget.js?ref_url=&item_id=&show_details=true&publisher_id=#{@publisher.id}'></script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
       </div>
     </div>
 
@@ -16,7 +16,7 @@
         <p style="padding-bottom: 20px;font-size: 17px;"> Beauty Widgets </p>
         <img style="height: 200px;padding-right: 30px;" src="/images/BestOffers.png">
 
-        <%= text_area_tag :beauty_widget, "<div id='where_to_buy_items' style='width:610px;'></div> \n\n<script async src='#{configatron.hostname}/javascripts/plannto.women.widget.js?ref_url=&item_id=&show_details=true&page_type=type_1&geo=in'></script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
+        <%= text_area_tag :beauty_widget, "<div id='where_to_buy_items' style='width:610px;'></div> \n\n<script async src='#{configatron.hostname}/javascripts/plannto.women.widget.js?ref_url=&item_id=&show_details=true&page_type=type_1&geo=in&publisher_id=#{@publisher.id}'></script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
       </div>
     </div>
 
@@ -25,7 +25,7 @@
         <p style="padding-bottom: 20px;font-size: 17px;"> Image Overlay Widget </p>
         <img style="height: 200px;padding-right: 30px;" src="/images/BestOffers.png">
 
-        <%= text_area_tag :general_widget, "<script type='text/javascript'> \nvar d = document; var s = d.createElement('script'); var url = window.location.href; s.src = 'http://localhost:3000/javascripts/plannto.overlay_ads.js?ref_url='+url+'&item_ids=&visible=true'; var h = d.getElementsByTagName('head')[0]; h.appendChild(s);\n</script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
+        <%= text_area_tag :general_widget, "<script type='text/javascript'> \nvar d = document; var s = d.createElement('script'); var url = window.location.href; s.src = 'http://localhost:3000/javascripts/plannto.overlay_ads.js?ref_url='+url+'&item_ids=&visible=true&publisher_id=#{@publisher.id}'; var h = d.getElementsByTagName('head')[0]; h.appendChild(s);\n</script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
       </div>
     </div>
   </div>

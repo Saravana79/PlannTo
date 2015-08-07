@@ -293,7 +293,7 @@ class ProductsController < ApplicationController
     # include pre order status if we show more details.
     unless @items.blank?
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-      @publisher = Publisher.getpublisherfromdomain(url)
+      @publisher = Publisher.getpublisherfromdomain(url) if @publisher.blank?
       # Check have to activate tabs for publisher or not
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
 
@@ -1024,6 +1024,8 @@ class ProductsController < ApplicationController
     params[:path] ||= ""
     params[:sort_disable] ||= "false"
 
+    @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
+
     if (params[:item_ids].blank? && params[:ref_url].blank?)
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "request_referer"))
     elsif params[:item_ids].blank?
@@ -1277,6 +1279,8 @@ class ProductsController < ApplicationController
     params[:page_type] ||= ""
     params[:fashion_id] ||= ""
     params[:beauty] ||= "false"
+
+    @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url

@@ -67,7 +67,7 @@ class AdvertisementsController < ApplicationController
     return show_plannto_ads() if !@ad.blank? && @ad.advertisement_type == "plannto"
 
     status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-    publisher = Publisher.getpublisherfromdomain(url)
+    @publisher = Publisher.getpublisherfromdomain(url)
 
     #TODO: temp commented no one is using now
     # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
@@ -162,7 +162,7 @@ class AdvertisementsController < ApplicationController
       get_details_from_beauty_items(url, itemsaccess)
     else
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-      publisher = Publisher.getpublisherfromdomain(url)
+      @publisher = Publisher.getpublisherfromdomain(url) if @publisher.blank?
 
       #TODO: temp commented no one is using now
       # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
@@ -899,6 +899,8 @@ class AdvertisementsController < ApplicationController
 
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
+
+    @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     @ad = Advertisement.where(:id => params[:ads_id]).first
 

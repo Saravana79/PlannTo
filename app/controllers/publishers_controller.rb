@@ -3,6 +3,6 @@ class PublishersController < ApplicationController
   layout "product"
 
   def index
-
+    @publisher = current_user.publisher
   end
 end
