@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
     end    
   end
   
-  def is_a_publisher?(publisher)
+  def is_a_publisher?(publisher="")
     if publisher == "true"
       return true
     end  

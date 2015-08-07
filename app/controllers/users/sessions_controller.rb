@@ -36,7 +36,8 @@ class Users::SessionsController < Devise::SessionsController
     #   redirect_to "#{session[:invitation]}"
     # end
 
-    if resource.is_a_publisher?(true)
+    if resource.is_a_publisher?("")
+      # redirect_to admin_impression_reports_path, :location => after_sign_in_path_for(resource)
       redirect_to admin_impression_reports_path, :location => after_sign_in_path_for(resource)
     else
       redirect_to admin_advertisements_path, :location => after_sign_in_path_for(resource)

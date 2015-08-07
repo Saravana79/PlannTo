@@ -1,0 +1,100 @@
+<!--popup heading bar-->
+<div class="Popuptitlebar">
+  <span class="Popuptitle"><center><h1><label class="signupin">Join Now</label></center>
+    <% if @popup == "true" %>
+        <a href="#" class="Closebut">&nbsp;</a>
+    <% end %>
+    </h1></span>
+
+
+</div>
+
+<!--popup heading bar-->
+
+
+<!--poupmidder container-->
+<div class="Popupmiddercontent">
+
+
+  <!--content goes here-->
+
+  <!--<div class="Popupfacebook">-->
+  <!--<div class="FaceImg">-->
+  <!--<%#= link_to image_tag('facebook_btn_signup.jpg'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>  -->
+  <!--</div>-->
+  <!--<div style="padding: 0px 10px 0px 5px;" ><label style="font-size:10px;">(It takes one click. We'll never post without your permission)</label></div>-->
+  <!--</div>-->
+
+  <!--<div class="PopupOr"><img alt="" src="/images/or_icon.png"></div>-->
+
+
+  <div class="Popupinputblock">
+    <!--<label>Name</label>-->
+                <span class="Textinput">
+                  <%= f.text_field :name, :size => "27", :placeholder => "Name", :class => "PopupinputblockNew" %>
+
+                  </span>
+  </div>
+
+  <div class="Popupinputblock">
+    <!--<label>Email</label>-->
+                <span class="Textinput">
+                  <%= f.text_field :email, :size => "27", :placeholder => "Email", :class => "PopupinputblockNew" %>
+
+                  </span>
+  </div>
+  <div class="Popupinputblock">
+    <!--<label>Password</label>-->
+                <span class="Textinput">
+                  <%= f.password_field :password, :size => "27", :placeholder => "Password", :class => "PopupinputblockNew" %>
+
+                  </span>
+  </div>
+  <div class="Popupinputblock">
+    <!--<label>Password Confirmation</label>-->
+                <span class="Textinput">
+                <%= f.password_field :password_confirmation, :size => "27", :placeholder => "Password Confirmation", :class => "PopupinputblockNew" %>
+
+         </span>
+  </div>
+
+  <div class="Popupinputblock">
+    <!--<label>Password Confirmation</label>-->
+                <span class="Textinput">
+                <%= text_field_tag :site_name, @publisher.name, :size => "27", :placeholder => "Gadgets To Use (Site Name)", :class => "PopupinputblockNew" %>
+
+         </span>
+  </div>
+
+  <div class="Popupinputblock">
+    <!--<label>Password Confirmation</label>-->
+                <span class="Textinput">
+                <%= text_field_tag :publisher_url, @publisher.publisher_url, :size => "27", :placeholder => "gadgetstouse.com (domain)", :class => "PopupinputblockNew" %>
+
+         </span>
+  </div>
+
+  <div class="Popupinputblock">
+    <!--<label>Password Confirmation</label>-->
+                <span class="Textinput">
+                <%= text_field_tag :contact_details, @publisher.contact_details, :size => "27", :placeholder => "xxxxx@gmail.com", :class => "PopupinputblockNew" %>
+
+         </span>
+  </div>
+
+
+  <div class="Bluesubmit2" style="margin:5px 0px 0px 98px;"><%= f.submit "Sign Up" %> </div>
+
+</div>
+<!--poupmidder container-->
+
+<div class="Clearboth"></div>
+
+
+
+
+<style type="text/css">
+    .PopupinputblockNew {
+        width: 270px !important;
+    }
+</style>

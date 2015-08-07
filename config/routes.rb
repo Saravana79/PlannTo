@@ -115,6 +115,8 @@ namespace :admin do
   devise_scope :user do
     #get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
     get '/users/sign_out' => 'devise/sessions#destroy'
+    get "/users/publisher_sign_up" => "users/registrations#publisher_sign_up"
+    post "/users/publisher_create" => "users/registrations#publisher_create"
   end
   
   # The priority is based upon order of creation:
@@ -545,5 +547,7 @@ resources :comments do
   match "/pages/estore_search" => "pages#estore_search", :via => [:get]
 
   match '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
+
+  match "/publishers" => "publishers#index", :via => [:get]
 
 end

@@ -1,5 +1,7 @@
 class Publisher < ActiveRecord::Base
 
+  validates_presence_of :publisher_url
+
 	def self.getpublisherfromdomain(url)
 		host = URI.parse(url).host.downcase rescue ""
 		domain = host.start_with?('www.') ? host[4..-1] : host

@@ -9,6 +9,17 @@ class Users::RegistrationsController < Devise::RegistrationsController
     resource.email = @invitation.email unless @invitation.nil?
   end
 
+  def publisher_sign_up
+    return redirect_to root_path if !current_user.blank?
+    @static_page = "true"
+    @devise = "true"
+    @invitation = Invitation.find_by_token(params[:token])
+    @without_login = params[:type]
+    @publisher = Publisher.new
+    build_resource
+    resource.email = @invitation.email unless @invitation.nil?
+  end
+
   def create
     # @static_page = "true"
     # @devise = "true"
@@ -52,6 +63,31 @@ class Users::RegistrationsController < Devise::RegistrationsController
     else
       clean_up_passwords resource
       respond_with resource
+    end
+  end
+
+  def publisher_create
+    @static_page = "true"
+    @devise = "true"
+
+    build_resource
+
+    @publisher = Publisher.new(:publisher_url => params[:publisher_url], :contact_details => params[:contact_details], :name => params[:site_name])
+
+    publisher_valid = @publisher.valid?
+    if resource.valid? && publisher_valid && resource.save && @publisher.save!
+      @user_relationship = UserRelationship.create(:user_id => resource.id, :relationship_id => @publisher.id, :relationship_type => "Publisher")
+      if resource.active_for_authentication?
+        sign_in(resource_name, resource)
+      else
+        expire_session_data_after_sign_in!
+      end
+
+      redirect_to publishers_path, notice: "Successfully registered"
+    else
+      clean_up_passwords resource
+      # respond_with resource
+      render :publisher_sign_up
     end
   end
   
