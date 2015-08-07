@@ -59,6 +59,8 @@ class Advertisement < ActiveRecord::Base
       return_val = "160_600"
     elsif (width == 320 && height == 50)
       return_val = "320_50"
+    elsif (width == 320 && height == 100)
+      return_val = "320_100"
     elsif (width <= 120)
       return_val = "120"
     elsif (width <= 130)
