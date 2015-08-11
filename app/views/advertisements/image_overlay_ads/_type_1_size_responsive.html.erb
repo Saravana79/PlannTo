@@ -19,14 +19,17 @@
 
 </style>
 
+<link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.css"/>
+<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.min.js"></script>
+
 <div class="advt-block">
-  <div class="advt-728">
+  <div class="advt-728 responsive-ads">
     <% if @item_details.count != 0 %>
         <% @item_details.each_with_index do |item_detail, indx| %>
             <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
             <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
-            <div class="item_details" id="item_detail_<%= indx + 1 %>">
+          <!--  <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
                <!-- <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
               -->
@@ -61,9 +64,9 @@
                 </div>
 
                
-              </div>
+             <!--  </div>
               <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
-            </div>
+            </div> -->
         <% end %>
 
 
@@ -87,3 +90,9 @@
     }
 
 </style>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.responsive-ads').slick();
+    });
+  </script>
