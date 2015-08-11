@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150708050901) do
+ActiveRecord::Schema.define(:version => 20150810074815) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(:version => 20150708050901) do
     t.string   "video_details"
   end
 
-  create_table "add_impressions", :id => false, :force => true do |t|
+  create_table "add_impressions1", :id => false, :force => true do |t|
     t.uuid     "id",                                :null => false
     t.string   "advertisement_type"
     t.integer  "advertisement_id"
@@ -84,13 +84,13 @@ ActiveRecord::Schema.define(:version => 20150708050901) do
     t.float    "winning_price"
   end
 
-  add_index "add_impressions", ["advertisement_id"], :name => "index_add_impressions_on_advertisement_id"
-  add_index "add_impressions", ["advertisement_type"], :name => "index_add_impressions_on_advertisement_type"
-  add_index "add_impressions", ["impression_id"], :name => "index_add_impressions_on_impression_id"
-  add_index "add_impressions", ["impression_time"], :name => "index_add_impressions_on_impression_time"
-  add_index "add_impressions", ["item_id"], :name => "index_add_impressions_on_item_id"
-  add_index "add_impressions", ["publisher_id"], :name => "publihserid"
-  add_index "add_impressions", ["user_id"], :name => "index_add_impressions_on_user_id"
+  add_index "add_impressions1", ["advertisement_id"], :name => "index_add_impressions_on_advertisement_id"
+  add_index "add_impressions1", ["advertisement_type"], :name => "index_add_impressions_on_advertisement_type"
+  add_index "add_impressions1", ["impression_id"], :name => "index_add_impressions_on_impression_id"
+  add_index "add_impressions1", ["impression_time"], :name => "index_add_impressions_on_impression_time"
+  add_index "add_impressions1", ["item_id"], :name => "index_add_impressions_on_item_id"
+  add_index "add_impressions1", ["publisher_id"], :name => "publihserid"
+  add_index "add_impressions1", ["user_id"], :name => "index_add_impressions_on_user_id"
 
   create_table "add_impressions_temp", :id => false, :force => true do |t|
     t.integer  "id",                            :null => false
@@ -663,6 +663,12 @@ ActiveRecord::Schema.define(:version => 20150708050901) do
     t.string   "image_content_content_type"
     t.integer  "image_content_file_size"
     t.datetime "image_content_updated_at"
+    t.string   "parent_url"
+    t.string   "url"
+    t.string   "field1"
+    t.string   "field2"
+    t.string   "field3"
+    t.string   "field4"
   end
 
   create_table "images", :force => true do |t|
@@ -1550,7 +1556,7 @@ ActiveRecord::Schema.define(:version => 20150708050901) do
     v.column :domain
   end
 
-  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`contents`.`status` AS `status`,`contents`.`content_guide_info_ids` AS `content_guide_info_ids`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
+  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`contents`.`status` AS `status`,`contents`.`content_guide_info_ids` AS `content_guide_info_ids`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at`,`image_contents`.`parent_url` AS `parent_url`,`image_contents`.`url` AS `url`,`image_contents`.`field1` AS `field1`,`image_contents`.`field2` AS `field2`,`image_contents`.`field3` AS `field3`,`image_contents`.`field4` AS `field4` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -1575,6 +1581,12 @@ ActiveRecord::Schema.define(:version => 20150708050901) do
     v.column :image_content_content_type
     v.column :image_content_file_size
     v.column :image_content_updated_at
+    v.column :parent_url
+    v.column :url
+    v.column :field1
+    v.column :field2
+    v.column :field3
+    v.column :field4
   end
 
   create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`contents`.`status` AS `status`,`contents`.`content_guide_info_ids` AS `content_guide_info_ids`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered`,`question_contents`.`thumbnail` AS `thumbnail` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|

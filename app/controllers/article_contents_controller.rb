@@ -338,4 +338,23 @@ class ArticleContentsController < ApplicationController
       format.js
     end
   end
+
+  def image_content_create
+    begin
+      image_content = ImageContent.where(:url => params[:url]).last
+      ids = params[:image_content_item_ids].to_s
+
+      if !image_content.blank?
+        val = {:parent_url => params[:parent_url], :title => params[:title]}
+        image_content.update_with_items!(val, ids)
+      else
+        image_content = ImageContent.create(:parent_url => params[:parent_url], :title => params[:title], :url => params[:url])
+        @article = image_content.save_with_items!(ids)
+      end
+
+      render :json => {:success => true}
+    rescue Exception => e
+      render :json => {:success => false}
+    end
+  end
 end

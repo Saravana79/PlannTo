@@ -1,13 +1,13 @@
 <% if @already_shared == true || @invalid == "true" %>
     <div class="detailed_vales" style="margin: 35px">
       <% if @shared_message.blank? %>
-        Product is already shared, Please find the link below: <br/> <br/>
+          Product is already shared, Please find the link below: <br/> <br/>
       <% else %>
-        <%= @shared_message %>: <br/> <br/>
+          <%= @shared_message %>: <br/> <br/>
       <% end %>
 
       <% if !@article_content.blank? %>
-        <a href="<%= content_path(@article_content.id) %>" target='_blank'> <%= @article_content.title %></a>
+          <a href="<%= content_path(@article_content.id) %>" target='_blank'> <%= @article_content.title %></a>
       <% end %>
     </div>
 <% else %>
@@ -27,14 +27,15 @@
           <%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
           <%= hidden_field_tag 'external', @external %>
           <div class="title" style="clear:both;">
-            <span style="width:75px;float:left;" class="title_header"><label for="" >Title :</label></span>
-            <span style="float:left;" >
-            <%= f.text_field :title , :style => "width:750px;", :value => "#{@article_content.title.to_s} (#{@feed_url.additional_details.to_s})" %>
+            <span style="width:75px;float:left;" class="title_header"><label for="">Title :</label></span>
+            <span style="float:left;">
+            <%= f.text_field :title, :style => "width:750px;", :value => "#{@article_content.title.to_s} (#{@feed_url.additional_details.to_s})" %>
           </span>
           </div>
           <div class="url" style="clear:both;">
-            <span style="width:75px;float:left;" class="title_header"><label for="url" style="width:100px;">Url :</label></span>
-            <span style="float:left;"><%= f.text_field :url , :style => "width:750px;"%> <%= link_to image_tag("/images/open-window.png",:style=>"width:15px;"), @article_content.url, :target => "_blank", :id => "open_window" %></span>
+            <span style="width:75px;float:left;" class="title_header"><label for="url" style="width:100px;">Url
+              :</label></span>
+            <span style="float:left;"><%= f.text_field :url, :style => "width:750px;" %> <%= link_to image_tag("/images/open-window.png", :style => "width:15px;"), @article_content.url, :target => "_blank", :id => "open_window" %></span>
           </div>
 
           <div class="status_check">
@@ -42,59 +43,91 @@
             <!--<img src="/images/check.png"/>-->
           </div>
           <div class="category" style="clear:both;">
-            <span style="width:75px;float:left;" class="title_header"><label for="category" style="width:100px;">Category :</label></span>
-            <span style="float:left;"><%= f.select :sub_type, @categories, {:selected => @article.sub_type } %></span>
+            <span style="width:75px;float:left;" class="title_header"><label for="category" style="width:100px;">Category
+              :</label></span>
+            <span style="float:left;"><%= f.select :sub_type, @categories, {:selected => @article.sub_type} %></span>
           </div>
-          <br />
+          <br/>
 
-<div class="image_process">
+          <div class="image_process">
 
-  <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
-    <div class="title_header float_lft <%=@article_image%>" style="float:left;width:100px;">Thumbnail :</div>
+            <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%= @dwnld_url %> <%= @article_image %>">
+              <div class="title_header float_lft <%= @article_image %>" style="float:left;width:100px;">Thumbnail :
+              </div>
 
-        <div id="share_1" style="display:none;float:left">
-          <img id="<%=@img_thumb%>"  style="margin-left:5px;width:75px;height:75px; display:none;" class="float_lft" />
-        </div>
+              <div id="share_1" style="display:none;float:left">
+                <img id="<%= @img_thumb %>" style="margin-left:5px;width:75px;height:75px; display:none;" class="float_lft"/>
+              </div>
 
-        <div id="share_2">
-          <img src="<%= @article_content.thumbnail%>"  style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
-        </div>
+              <div id="share_2">
+                <img src="<%= @article_content.thumbnail %>" style="margin-left:5px;width:75px;height:75px;" class="float_lft"/>
+              </div>
 
-    <div class="float_lft <%=@article_image%>"><input type="checkbox" id="noincludethumbnail" name="noincludethumbnail">Don't Include Thumbnail</input></div>
-    <div class="float_lft"><input type="checkbox" id="<%=@manual_image%>">Add Image Url</input>
-      <%=f.text_field :thumbnail, :id => "#{@thumbnail_id}", :style => "display:none;width:400px"%>
-    </div>
+              <div class="float_lft"><input type="checkbox" id="image_tagging_checkbx">Image Tagging</input>
 
-  </div>
+              </div>
+              <div class="float_lft <%= @article_image %>">
+                <input type="checkbox" id="noincludethumbnail" name="noincludethumbnail">Don't Include Thumbnail</input>
+              </div>
+              <div class="float_lft"><input type="checkbox" id="<%= @manual_image %>">Add Image Url</input>
+                <%= f.text_field :thumbnail, :id => "#{@thumbnail_id}", :style => "display:none;width:400px" %>
+              </div>
 
-  <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
-    <div class="title_header float_lft <%=@article_image%>"></div>
-    <div class="float_lft <%=@article_image%>">
-      <span id="<%=@current_image_size%>"></span> <br />
-      <span id="<%=@current_image_id%>" class="txt_blue"><%if @article_content.new_record?%>0 <%else%> 1 <%end%></span>/ <span id="<%=@total_images%>" class="txt_blue total_img">0</span> &nbsp;
-      <a id="aPrev" class="txt_blue">Prev</a>
-      <a id="aNext" class="txt_blue">Next</a>
-    </div>
-  </div>
+            </div>
 
-</div>
+            <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="<%= @dwnld_url %>">
+              <div class="title_header float_lft <%= @article_image %>"></div>
+              <div class="float_lft <%= @article_image %>">
+                <span id="<%= @current_image_size %>"></span> <br/>
+                <span id="<%= @current_image_id %>" class="txt_blue"><% if @article_content.new_record? %>0 <% else %> 1 <% end %></span>/
+                <span id="<%= @total_images %>" class="txt_blue total_img">0</span> &nbsp;
+                <a id="aPrev" class="txt_blue">Prev</a>
+                <a id="aNext" class="txt_blue">Next</a>
+              </div>
+            </div>
 
+          </div>
+
+          <div class="image_tagging_div" style="display: none;padding-bottom: 23px;">
+            <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
+              <div class="title_header float_lft">ImageContent Product :</div>
+              <div class="taggingdiv" style="margin-left:5px;">
+                <ul id="new_article_product_image_list" class="tagging"></ul>
+                <div class="float_lft " style="clear:both;">
+                  <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product_image"/>
+                </div>
+                <div style="clear:both;"></div>
+
+                <div style="clear:both;"></div>
+                <!--<div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;width:800px;line-height: 25px;"></div>-->
+              </div>
+              <div style="clear:both;"></div>
+
+              <div class="title_header float_lft">ImageContent Item IDs :</div>
+              <%= text_field_tag :articles_item_id_image, "", :style => "width:400px", :readonly => true %>
+              <div style="clear:both;"></div>
+
+              <%= link_to "Populate", "javascript:void(0)", :class => "btn_submitanswer btn_submitcancel image_content_populate_btn", :id => "image_content_populate", :style => "float: left; margin-left: 144px; margin-top: 3px;" %>
+              <div style="clear:both;"></div>
+            </div>
+          </div>
 
 
           <div class="description" style="clear:both;">
-            <span style="width:75px;float:left;" class="title_header"><label for="description">Description :</label></span>
-           <span style="float:left;"> <%= f.text_area :description ,:style=>"width:600px;height:100px;"%> </span>
+            <span style="width:75px;float:left;" class="title_header"><label for="description">Description
+              :</label></span>
+            <span style="float:left;"> <%= f.text_area :description, :style => "width:600px;height:100px;" %> </span>
           </div>
 
-          <div class="productreview" style="clear:both;display:none;" id="<%=@productReviewRating%>">
+          <div class="productreview" style="clear:both;display:none;" id="<%= @productReviewRating %>">
             <div class="title_header float_lft">Rating :</div>
-            <div id="<%=@productReviewRatingField%>" class="thereisnosuchclass"></div>
+            <div id="<%= @productReviewRatingField %>" class="thereisnosuchclass"></div>
           </div>
 
           <% if  !@feed_url.blank? || @feed_url.category == "Beauty" %>
               <div class="search_text" style="clear:both;padding-top: 11px;">
                 <span style="width:75px;float:left;" class="title_header"><label for="search_text">Search Text :</label></span>
-                <span style="float:left;"> <%= f.text_field :field2 ,:style=>"width:300px;"%> </span>
+                <span style="float:left;"> <%= f.text_field :field2, :style => "width:300px;" %> </span>
               </div>
           <% end %>
 
@@ -122,19 +155,21 @@
 
 
           <div class="page_buttons" style="clear:both;margin-left:91px;margin-bottom:20px;float:left;">
-            <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :id => "save_and_continue" %>
+            <%= f.submit "Save and Continue", :class => "btn_submitanswer", :id => "save_and_continue" %>
             <a href="javascript:void(0)" class="btn_submitanswer" id="cancel" accesskey="c">Cancel</a>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid" accesskey="i">Mark as Invalid</a>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future" accesskey="f">Mark as Future</a>
-            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="default_save" accesskey="f">Default Save</a>
+            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="default_save" accesskey="f">Default
+              Save</a>
           </div>
 
-          <a accesskey="n" />
-          <a accesskey="c" />
-          <a accesskey="o" />
-          <a accesskey="b" />
-          <a accesskey="z" />
-          <a accesskey="x" />
+          <a accesskey="n"/>
+          <a accesskey="c"/>
+          <a accesskey="o"/>
+          <a accesskey="b"/>
+          <a accesskey="z"/>
+          <a accesskey="x"/>
+
           <div class='empty_div'>
 
           </div>
@@ -161,7 +196,6 @@
         a:hover {
             text-decoration: underline !important;
         }
-
 
         .image_process {
             margin: 10px;
@@ -229,7 +263,8 @@
         $("document").ready(function () {
             $("#article_content_sub_type").focus()
 //            var data =
-            <!--<%#= raw @results.to_json %>-->
+            <!--
+            <%#= raw @results.to_json %>-->
 
 //            var container = $('#search_items_by_relavance');
 //            sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
@@ -244,90 +279,81 @@
 //            });
 
 
-
             $.ajax({
                 url: "<%= @search_path %>" +
                         '',
-                dataType:'json',
+                dataType: 'json',
                 type: "get",
                 data: {term: "<%= @title_for_search %>", search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>', ac_sub_type: $("#article_content_sub_type").val(), actual_title: $("#actual_title").val(), domain: $("#domain").val()},
-                before:$('#share_spinner').show(),
+                before: $('#share_spinner').show(),
                 after: $('#share_spinner').hide(),
-                success: function(data){
+                success: function (data) {
                     $test = data
                     var container = $('#search_items_by_relavance');
                     sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
 
                     $(sub_contain).appendTo(container)
                     $.each(data, function (index, value) {
-                        if (value.selected_list == undefined)
-                        {
+                        if (value.selected_list == undefined) {
                             <% if current_user.id == 1 %>
-                             var score_val = ' ('+ value.score + ' )'
+                            var score_val = ' (' + value.score + ' )'
                             <% else %>
-                             var score_val = ''
+                            var score_val = ''
                             <% end %>
 
                             sub_contain = $("<span class='option' style='display:inline-block'></span>")
                             $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "relevance_product[]" }).appendTo(sub_contain);
-                            $('<label />', { 'for': 'matched' + value.id, text: value.value  + score_val  + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
+                            $('<label />', { 'for': 'matched' + value.id, text: value.value + score_val + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
                             $(sub_contain).appendTo(container)
                         }
-                        else
-                        {
+                        else {
                             console.log(value.list_scores[0])
                             $.each(value.selected_list, function (inx, val) {
-                                if (inx == 0 || value.beauty_process == "true")
-                                {
+                                if (inx == 0 || value.beauty_process == "true") {
                                     <% if current_user.id == 1 %>
-                                    var sel_score_val = ' ('+ value.list_scores[0] + ' )'
+                                    var sel_score_val = ' (' + value.list_scores[0] + ' )'
                                     <% else %>
                                     var sel_score_val = ''
                                     <% end %>
 
-                                    var that = $("#matched"+val)
+                                    var that = $("#matched" + val)
                                     $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + sel_score_val + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
-                                    $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
+                                    $.addIdToField("articles_item_id", $(that).attr("id").replace("matched", ""), false)
                                     $(that).parent().hide();
                                 }
-                                else if ($("#actual_title").val() != "" || $("#article_content_sub_type").val() == "Comparisons" || "<%= @is_beauty %>" == "true")
-                                {
+                                else if ($("#actual_title").val() != "" || $("#article_content_sub_type").val() == "Comparisons" || "<%= @is_beauty %>" == "true") {
                                     <% if current_user.id == 1 %>
-                                    var sel_score_val = ' ('+ value.list_scores[1] + ' )'
+                                    var sel_score_val = ' (' + value.list_scores[1] + ' )'
                                     <% else %>
                                     var sel_score_val = ''
                                     <% end %>
 
-                                    var that = $("#matched"+val)
-                                    $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + sel_score_val  + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
-                                    $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
+                                    var that = $("#matched" + val)
+                                    $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + sel_score_val + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
+                                    $.addIdToField("articles_item_id", $(that).attr("id").replace("matched", ""), false)
                                     $(that).parent().hide();
                                 }
 
                             });
                         }
 
-                        if (value.auto_save == "true")
-                        {
+                        if (value.auto_save == "true") {
                             $(".status_check").append("<img src='<%= configatron.root_image_path%>static/images/check.png'/>")
                         }
-                        else if (value.auto_save == "false")
-                        {
+                        else if (value.auto_save == "false") {
                             $(".status_check").append("<img src='<%= configatron.root_image_path%>static/images/close.png'/>")
                         }
 
 
                     });
                 }
-            }).done(function()
-            {
+            }).done(function () {
                 var cat = $("#article_content_sub_type").val()
                 var item_ids = $("#articles_item_id").val()
-                var old_def_values = cat+"-"+item_ids
+                var old_def_values = cat + "-" + item_ids
                 console.log(old_def_values)
                 $("#old_default_values").val(old_def_values)
             })
-
 
 
             settings = {
@@ -339,17 +365,83 @@
             };
             $.textTagger("new_article_product", "new_article_product_list", settings);
 
-            $('#deleteTag').live('click', function(){
-                if (settings.hidden_field != ""){
-                    var deleteId = $(this).closest('li').attr('id').replace("matched",'');
+            image_tagging_settings = {
+                close: true, addButton: false,
+                url: "/search/autocomplete_items",
+                editMode: false, multiple: true,
+                hidden_field: "articles_item_id_image",
+                has_parent: false
+            };
+            $.textTagger("new_article_product_image", "new_article_product_list", image_tagging_settings);
+
+
+            $("#image_content_populate").click(function()
+            {
+                var image_content_item_ids = $("#articles_item_id_image").val()
+                var image_url = $("#new_thumbnail_url").val()
+                var article_content_url = $("#article_content_url").val()
+                var title = $("#article_content_title").val()
+
+                if (image_content_item_ids == "")
+                {
+                    alert("Please select at least one product for image tagging")
+                }
+                else
+                {
+                    $.ajax({
+                        url: "/article_contents/image_content_create",
+                        dataType: 'json',
+                        data: {image_content_item_ids: image_content_item_ids, url: image_url, parent_url: article_content_url, title: title },
+                        success: function (data) {
+                            if (data.success == true)
+                            {
+                                alert("Successfully Populated ImageContent")
+                                $("#articles_item_id_image").val("")
+                            }
+                            else
+                            {
+                                alert("There was a problem while populating ImageContent")
+                            }
+                        }
+                    });
+                }
+
+
+            });
+
+            $("#aNext,#aPrev").click(function(event)
+            {
+                if ($('#image_tagging_checkbx').is(':checked')) {
+                    if(confirm("Are you sure, want to move?"))
+                    {
+                        move_continue = true;
+                        $("#articles_item_id_image").val("")
+                        return
+                    }
+                    else
+                    {
+                        move_continue = false;
+                        event.preventDefault()
+                        return false;
+                    }
+                }
+                else
+                {
+                    move_continue = true;
+                }
+            });
+
+            $('#deleteTag').live('click', function () {
+                if (settings.hidden_field != "") {
+                    var deleteId = $(this).closest('li').attr('id').replace("matched", '');
                     $.removeIdFromField(settings.hidden_field, deleteId, settings.has_parent);
                 }
                 $(this).closest('li').remove();
 
-                $("span #matched"+deleteId).attr("checked", false)
-                $("span #matched"+deleteId).parent().show()
+                $("span #matched" + deleteId).attr("checked", false)
+                $("span #matched" + deleteId).parent().show()
 
-                if (settings.deleteFunctionName){
+                if (settings.deleteFunctionName) {
                     data = new Object()
                     data.id = deleteId;
                     $.selectEvent(data, settings.deleteFunctionName)
@@ -362,9 +454,9 @@
     </script>
 
     <script type="text/javascript">
-        var MIN_SIZE=[100,50];
-        var first=false;
-        var images_index=0;
+        var MIN_SIZE = [100, 50];
+        var first = false;
+        var images_index = 0;
         var images = new Array();
         var sizes = new Array();
 
@@ -378,56 +470,101 @@
         <%end%>
         <%end%>
 
-        $("document").ready(function()
-        {
-            $('#aPrev').click(function(){
-                if(images  && images.length>0 && images_index>0 ){
+        $("document").ready(function () {
+            $('#aPrev').click(function () {
+                if (move_continue == true && images && images.length > 0 && images_index > 0) {
                     images_index--;
-                    $('#<%=@current_image_id%>').html(images_index+1);
-                    $("#<%=@img_thumb%>").attr("src",images[images_index]);
+                    $('#<%=@current_image_id%>').html(images_index + 1);
+                    $("#<%=@img_thumb%>").attr("src", images[images_index]);
                     $('#<%=@current_image_size%>').html(sizes[images_index]);
                     $("#<%=@new_article_thumbnail%>").val(images[images_index]);
                     $("#<%=@thumbnail_id%>").val(images[images_index]);
 
                 }
             });
-            $('#aNext').click(function(){
-                if(images && images.length>0 && images_index<images.length-1 ){
+            $('#aNext').click(function () {
+                if (move_continue == true && images && images.length > 0 && images_index < images.length - 1) {
                     images_index++;
                     $("#share_2").hide();
                     $("#share_1").show();
-                    $('#<%=@current_image_id%>').html(images_index+1);
+                    $('#<%=@current_image_id%>').html(images_index + 1);
                     $('#<%=@current_image_size%>').html(sizes[images_index]);
-                    $("#<%=@img_thumb%>").attr("src",images[images_index]);
+                    $("#<%=@img_thumb%>").attr("src", images[images_index]);
                     $("#<%=@new_article_thumbnail%>").val(images[images_index]);
                     $("#<%=@thumbnail_id%>").val(images[images_index]);
                 }
             });
 
-            $("#<%=@manual_image%>").click(function(event){
+            $("#<%=@manual_image%>").click(function (event) {
 
-                if ($('#<%=@manual_image%>').is(':checked')) {$("#<%=@thumbnail_id%>").show(); } else { $("#<%=@thumbnail_id%>").hide(); }
+                if ($('#<%=@manual_image%>').is(':checked')) {
+                    $("#<%=@thumbnail_id%>").show();
+                } else {
+                    $("#<%=@thumbnail_id%>").hide();
+                }
+            });
+
+            $("#image_tagging_checkbx").click(function (event) {
+                if ($('#image_tagging_checkbx').is(':checked')) {
+                    $(".image_tagging_div").show()
+                }
+                else
+                {
+                    $(".image_tagging_div").hide()
+                }
+            });
+
+            $("#new_article_product_image").focusin(function()
+            {
+                image_tagging = true
+            })
+
+            $("#new_article_product_image").focusout(function()
+            {
+                image_tagging = false
+            })
+
+            $("li.ui-menu-item a").live("click", function(event)
+            {
+                if ($('#image_tagging_checkbx').is(':checked')) {
+                    var image_item_ids = $("#articles_item_id_image").val()
+
+                    if (image_tagging == true && image_item_ids != "")
+                    {
+                        var image_item_ids_arr = image_item_ids.split(",")
+                        var old_article_item_ids = $("#articles_item_id").val()
+
+                        if (old_article_item_ids_arr != "")
+                        {
+                            var old_article_item_ids_arr = old_article_item_ids.split(",")
+                            var total_arr = image_item_ids_arr + "," + old_article_item_ids_arr
+                            var total_arr_val = $.unique(total_arr.split(",")).reverse().join(",")
+                        }
+                        var total_arr_val = image_item_ids_arr.join(",")
+
+                        $("#articles_item_id").val(total_arr_val)
+                    }
+                }
             });
 
             $('div#<%=@productReviewRatingField%>').raty({
-                starOff:  'assets/star-off.png',
-                starHalf   : 'assets/star-half.png',
-                half       : true,
+                starOff: 'assets/star-off.png',
+                starHalf: 'assets/star-half.png',
+                half: true,
                 starOn: 'assets/star-on.png',
                 start: score,
-                width:  '200px',
-                click: function(score, evt) {
+                width: '200px',
+                click: function (score, evt) {
                     $(".rating_field").val("" + score);
                 }
             });
 
-            $("#article_content_sub_type").live("change", function()
-            {
+            $("#article_content_sub_type").live("change", function () {
                 var category = $("#article_content_sub_type").val()
                 if (category == "Reviews")
                     $("div#ShareURLDiv div#<%=@productReviewRating%>").show();
                 else
-                   hideReview()
+                    hideReview()
 
             })
 
@@ -438,36 +575,36 @@
         })
 
 
-        function check_imagesize_on_load(url){
-            images_index=0;
+        function check_imagesize_on_load(url) {
+            images_index = 0;
             images = new Array();
             sizes = new Array();
             var img = new Image();
-            img.onload = function() {
-                if(this.width >=MIN_SIZE[0] &&  this.height >=MIN_SIZE[1]){
-                    add_image_to_list(url,[this.width,this.height]);
+            img.onload = function () {
+                if (this.width >= MIN_SIZE[0] && this.height >= MIN_SIZE[1]) {
+                    add_image_to_list(url, [this.width, this.height]);
                 }
             }
             img.src = url;
         }
-        function add_image_to_list(url,size){
+        function add_image_to_list(url, size) {
             ;
 
             images.push(url);
-            sizes.push(size[0]+"*"+size[1]);
-            if(images.length == 1){
-                first=false;
+            sizes.push(size[0] + "*" + size[1]);
+            if (images.length == 1) {
+                first = false;
 
-                $("#<%=@img_thumb%>").attr("src",url);
+                $("#<%=@img_thumb%>").attr("src", url);
                 $("#<%=@new_article_thumbnail%>").val(url);
                 <%if @article_content.new_record?%>
                 $("#<%=@thumbnail_id%>").val(url);
                 <%end%>
                 $("#<%=@img_thumb%>").show();
                 $(".<%=@article_image%>").show();
-                $('#<%=@current_image_size%>').html(size[0]+"*"+size[1]);
+                $('#<%=@current_image_size%>').html(size[0] + "*" + size[1]);
                 $('#<%=@current_image_id%>').html(1);
-                images_index=0;
+                images_index = 0;
 
             }
             <%if @article_content.new_record?%>
@@ -485,7 +622,7 @@
         }
 
 
-        function hideAddImageUrl(){
+        function hideAddImageUrl() {
             $('#<%=@manual_image%>').attr('checked', false)
             $("#<%=@thumbnail_id%>").val('');
             $("#<%=@thumbnail_id%>").hide();
@@ -496,7 +633,7 @@
         images = new Array();
         sizes = new Array();
         <% @images.each_with_index do |image,index| %>
-          check_imagesize_on_load(unescapeHTML("<%= escape_javascript(image) %>"));
+        check_imagesize_on_load(unescapeHTML("<%= escape_javascript(image) %>"));
         <% end %>
         $('#<%=@current_image_id%>').html(0);
         <% else %>
@@ -504,37 +641,33 @@
         $('#<%=@total_images%>').html(0);
         <% end %>
 
-        first=true;
-        images_index=0;
+        first = true;
+        images_index = 0;
 
         $('div.<%=@dwnld_url%>').show();
 
         var submit = 0
-        $("#article_detail_form").submit(function()
-        {
+        $("#article_detail_form").submit(function () {
             if (submit != 0)
-              return true
+                return true
 
             var title = $("#article_content_title").val()
             var article_ids = $("#articles_item_id").val()
-            if (title == "")
-            {
+            if (title == "") {
                 alert('Please Enter Title.');
                 $("#article_content_title").focus()
                 return false;
             }
-            else if (article_ids == "")
-            {
+            else if (article_ids == "") {
                 alert('Please at least one product');
                 $("#new_article_product").focus()
                 return false;
             }
-            else
-            {
+            else {
                 return true
             }
         })
-        function hideReview(){
+        function hideReview() {
             $("div#ShareURLDiv div#<%=@productReviewRating%>").hide();
             $("#<%=@productReviewRatingField%>-score").val('')
         }
