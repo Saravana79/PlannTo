@@ -253,6 +253,10 @@ resources :comments do
       #post :update - by shanmukha I have confused why they defined update as collection with  post method .  Actualy in restful method update is put method
       put :download
     end
+
+    collection do
+      get "image_content_create"
+    end
   end
   resources :mobiles do
         resources :shares
@@ -549,5 +553,4 @@ resources :comments do
   match '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
 
   match "/publishers" => "publishers#index", :via => [:get]
-
 end
