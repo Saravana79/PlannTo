@@ -602,8 +602,6 @@ class AdvertisementsController < ApplicationController
     params[:page_type] ||= "type_1"
     if params[:page_type] == "type_5" && params[:item_id].blank?
       params[:item_id] = "B00AXWKTR4"
-    else
-      params[:item_id] = ""
     end
     #params[:ref_url] ||= "http://www.sportskeeda.com/cricket/england-odi-captain-eoin-morgan-set-to-play-in-2015-ipl-season"
     render :layout => false
