@@ -11,7 +11,7 @@
                          <span >
                         <span style="float:left;" >
                          <a href="<%= get_general_click_url(each_item.url) %>" target="_blank" style="text-decoration: none;outline:none;float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;width:100%;text-align:center;">
-                           <span style="text-decoration: underline;"> <%= each_item.deal_title.to_s.truncate(45) %> </span> <%= (each_item.deal_price.to_i == 0) ? "" : "₹ #{each_item.deal_price}" %> <%= each_item.discount.blank? ? "" : "(#{each_item.discount}% off#{get_expire_time_from_deal_item(each_item)})" %>
+                           <span style="text-decoration: underline;"> <%= each_item.deal_title.to_s.truncate(45) %> </span> <%= (each_item.deal_price.to_i == 0) ? "" : " - ₹ #{each_item.deal_price}" %> <%= each_item.discount.to_i == 0  ?  get_expire_time_from_deal_item(each_item) == "" ? "" : "#{get_expire_time_from_deal_item(each_item)}" : "(#{each_item.discount}% off#{get_expire_time_from_deal_item(each_item)})" %>
                          </a>
                         </span>
 
