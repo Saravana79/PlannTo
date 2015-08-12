@@ -576,7 +576,8 @@ end
 
 
 filename = "/home/sivakumar/Downloads/DealsSample.xlsx"
-xlsx = Roo::Spreadsheet.open(filename)
+filename = "http://planntonew.s3.amazonaws.com/test_folder/DealsSample.xlsx"
+xlsx = Roo::Spreadsheet.open(open(filename))
 deal_items = []
 xlsx.each_with_index do |each_row, indx|
   if indx == 0
