@@ -1,9 +1,9 @@
 <div style="width: 100%;text-align: center;display: block;">
   <div style="display: inline-block;">
-    <span style="float: left; padding: 8px 0px 0px; color: lightsalmon; cursor: pointer;display:block;position: fixed;" class="left"> &lt;&lt; </span>
+    <span style="float: left; padding: 0px 6px; color: lightsalmon; cursor: pointer;display:block;" class="left"> &lt;&lt; </span>
     <% @items.each_with_index do |each_item, index| %>
         <% index = index + 1 %>
-        <span style="float:left;margin-left: 26px;" class="slider_plannto" id="<%= index %>">
+        <span style="float:left;" class="slider_plannto" id="<%= index %>">
         <div>
           <div style="float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;width:100%;text-align:center;">
             <div style="">
@@ -24,7 +24,7 @@
         </div>
         </span>
     <% end %>
-    <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
+    <span id="rightarrow" class="right" style="float:left;padding:0px 6px;font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
   </div>
   <br clear="both"/>
 </div>
