@@ -62,10 +62,10 @@ class ProductsController < ApplicationController
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   caches_action :sports_widget, :cache_path => proc {|c|
-    if (!params[:ref_url].blank?)
-      params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
-    elsif !params[:item_ids].blank?
+    if !params[:item_ids].blank?
       params.slice("item_ids", "category_item_detail_id", "page_type", "random_id")
+    else
+      params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -800,7 +800,6 @@ class ProductsController < ApplicationController
   def price_widget_type_2(url, itemsaccess, url_params, item_ids)
     @amazon_item = Item.get_amazon_products_from_keyword(item_ids.first).first
 
-    click_url = ""
     if item_ids.include?("B00AXWKTR4")
       click_url = "http://www.firstcry.com/huggies/huggies-new-born-taped-diapers-for-the-new-baby-24-pieces/435222/product-detail?sterm=Huggies%20Newborn%20Diapers&spos=1"
     end
