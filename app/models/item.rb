@@ -2667,6 +2667,18 @@ end
     return items
   end
 
+  def self.get_first_cry_item(url)
+    item = OpenStruct.new
+    begin
+      doc = Nokogiri::HTML(open(url))
+      node = doc.elements.first
+      item.price = node.css(".p_price").text.strip rescue ""
+    rescue Exception => e
+      item.price = ""
+    end
+    item
+  end
+
   def self.get_amazon_products_from_keyword_for_estore(keyword)
     items = []
     search_url = ""

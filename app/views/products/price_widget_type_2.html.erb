@@ -1,0 +1,57 @@
+<% if !@amazon_item.sale_price.blank? %>
+    <div class="main-container">
+      <div style="float:left;">
+        <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border:1px solid #CCC">
+          <div>
+            <a href="<%= @amazon_click_url %>" target="_blank">
+
+              <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 8px 0;font-size: 16px;font-weight: bold;color:#000000;">
+                ₹ <%= @amazon_item.sale_price.to_s.gsub("Rs", "") %> /-
+              </div>
+
+              <div style="margin: 0px 15px 0px 14px;">
+        <span style="text-align:center;background: orange;display: block;height: 23px;">
+            <div style="margin: 5px;color: white;">Buy Now</div>
+        </span>
+              </div>
+
+              <div class="type_2_image" style="padding: 10px 0px 0px;">
+                <img src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg" width="66px"></img>
+              </div>
+            </a>
+          </div>
+          <br clear="both"/>
+        </div>
+      </div>
+
+      <% if !@first_cry_item.price.blank? %>
+          <div style="float:left;">
+            <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border:1px solid #CCC">
+              <div>
+                <a href="<%= @fc_click_url %>" target="_blank">
+
+                  <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 8px 0;font-size: 16px;font-weight: bold;color:#000000;">
+                    ₹ <%= @first_cry_item.price.to_s.gsub("Rs", "") %> /-
+                  </div>
+
+                  <div style="margin: 0px 15px 0px 14px;">
+        <span style="text-align:center;background: orange;display: block;height: 23px;">
+            <div style="margin: 5px;color: white;">Buy Now</div>
+        </span>
+                  </div>
+
+                  <div class="type_2_image" style="padding: 5px 0px 0px;">
+                    <img src="http://cdn1.plannto.com/items/vendor/medium/fc_logo.jpg" width="66px"></img>
+                  </div>
+                </a>
+              </div>
+              <br clear="both"/>
+            </div>
+          </div>
+      <% end %>
+    </div>
+<% end %>
+
+<style type="text/css">
+    a { outline: none; }
+</style>

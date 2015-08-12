@@ -29,6 +29,7 @@
                 <div class="search_form">
                 <%= form_for :search, :url => "/advertisements/amazon_sports_widget", :html => {:method => 'get'} do |search_form| %>
                     <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 728px;" %>
+                    <%= search_form.text_field :item_id, :name => "item_id", :value => params[:item_id], :style => "width: 128px;" %>
                     <div class="radio_button" style="padding: 5px 0px 7px;">
                       <%= search_form.radio_button :page_type,"type_1", :name => "page_type", :checked => params[:page_type] == "type_1" ? "checked" : "" %>
                       <%= search_form.label :page_type, 'Type 1', :name => "page_type" %>
@@ -38,6 +39,12 @@
 
                       <%= search_form.radio_button :page_type,"type_3", :name => "page_type", :checked => params[:page_type] == "type_3" ? "checked" : "" %>
                       <%= search_form.label :page_type, 'Type 3', :name => "page_type" %>
+
+                      <%= search_form.radio_button :page_type,"type_4", :name => "page_type", :checked => params[:page_type] == "type_4" ? "checked" : "" %>
+                      <%= search_form.label :page_type, 'Type 4', :name => "page_type" %>
+
+                      <%= search_form.radio_button :page_type,"type_5", :name => "page_type", :checked => params[:page_type] == "type_5" ? "checked" : "" %>
+                      <%= search_form.label :page_type, 'Type 5', :name => "page_type" %>
                     </div>
                     <%= search_form.submit "Go" %>
                 <% end %>
@@ -50,7 +57,9 @@
         </div>
 
         <% if params[:page_type] == "type_3" %>
-        <script async src="<%= configatron.hostname %>/javascripts/plannto.general.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>"></script>
+          <script async src="<%= configatron.hostname %>/javascripts/plannto.general.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>"></script>
+        <% elsif params[:page_type] == "type_5" %>
+          <script async src="<%= configatron.hostname %>/javascripts/plannto.sports.widget.js?ref_url=<%= params[:ref_url] %>&item_id=<%= params[:item_id] %>&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>"></script>
         <% else %>
           <script async src="<%= configatron.hostname %>/javascripts/plannto.sports.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>"></script>
         <% end %>

@@ -563,6 +563,10 @@ class ProductsController < ApplicationController
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
+    if params[:page_type] == "type_2"
+      return price_widget_type_2(url, itemsaccess, url_params, item_ids)
+    end
+
     tempurl = "" #TODO: Hot coded values
     @price_text = Item.get_amazon_item_from_item_id(params[:item_ids])
     url =  tempurl
@@ -593,8 +597,6 @@ class ProductsController < ApplicationController
     end
     @ref_url = url
     jsonp = prepare_response_json()
-
-
 
     headers["Content-Type"] = "text/javascript; charset=utf-8"
     respond_to do |format|
@@ -721,6 +723,8 @@ class ProductsController < ApplicationController
 
     if params[:page_type] == "type_4"
       return deal_item_process(url, itemsaccess, url_params)
+    elsif params[:page_type] == "type_5"
+      return price_widget_type_2(url, itemsaccess, url_params, item_ids)
     end
 
     @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type], params[:category_item_detail_id])
@@ -789,6 +793,34 @@ class ProductsController < ApplicationController
       format.html { return render "deal_widget.html.erb", :layout => false }
       format.js {
         return render :json => {:success => true, :html => render_to_string("products/deal_widget.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+    end
+  end
+
+  def price_widget_type_2(url, itemsaccess, url_params, item_ids)
+    @amazon_item = Item.get_amazon_products_from_keyword(item_ids.first).first
+
+    click_url = ""
+    if item_ids.include?("B00AXWKTR4")
+      click_url = "http://www.firstcry.com/huggies/huggies-new-born-taped-diapers-for-the-new-baby-24-pieces/435222/product-detail?sterm=Huggies%20Newborn%20Diapers&spos=1"
+    end
+    @first_cry_item = Item.get_first_cry_item(click_url)
+
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                              cookies[:plan_to_temp_user_id], nil, nil, nil)
+    end
+
+    @amazon_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @amazon_item.click_url, :item_id => nil, :ref_url => params[:ref_url])
+    @fc_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => click_url, :item_id => nil, :ref_url => params[:ref_url])
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_2.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "price_widget_type_2.html.erb", :layout => false }
+      format.js {
+        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_2.html.erb", :layout => false)}, :callback => params[:callback]
       }
     end
   end
