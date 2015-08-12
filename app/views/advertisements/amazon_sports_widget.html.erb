@@ -28,8 +28,8 @@
             <div class="demo_form row">
                 <div class="search_form">
                 <%= form_for :search, :url => "/advertisements/amazon_sports_widget", :html => {:method => 'get'} do |search_form| %>
-                    <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 728px;" %>
-                    <%= search_form.text_field :item_id, :name => "item_id", :value => params[:item_id], :style => "width: 128px;" %>
+                    <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 728px;", :placeholder => "Ref Url" %>
+                    <%= search_form.text_field :item_id, :name => "item_id", :value => params[:item_id], :style => "width: 128px;", :placeholder => "Item ID" %>
                     <div class="radio_button" style="padding: 5px 0px 7px;">
                       <%= search_form.radio_button :page_type,"type_1", :name => "page_type", :checked => params[:page_type] == "type_1" ? "checked" : "" %>
                       <%= search_form.label :page_type, 'Type 1', :name => "page_type" %>

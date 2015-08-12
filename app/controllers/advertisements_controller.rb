@@ -600,7 +600,11 @@ class AdvertisementsController < ApplicationController
 
   def amazon_sports_widget
     params[:page_type] ||= "type_1"
-    params[:item_id] = "B00AXWKTR4" if params[:page_type] == "type_5" && params[:item_id].blank?
+    if params[:page_type] == "type_5" && params[:item_id].blank?
+      params[:item_id] = "B00AXWKTR4"
+    else
+      params[:item_id] = ""
+    end
     #params[:ref_url] ||= "http://www.sportskeeda.com/cricket/england-odi-captain-eoin-morgan-set-to-play-in-2015-ipl-season"
     render :layout => false
   end
