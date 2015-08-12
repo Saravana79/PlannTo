@@ -119,3 +119,5 @@ gem 'streamio-ffmpeg'
 
 #gem for animation work in videos
 gem 'phantomjs', '~> 1.9.7.1'
+
+gem 'roo', '~> 2.1.1'

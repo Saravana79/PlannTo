@@ -572,3 +572,19 @@ csv_details.each do |each_val|
     item.update_attributes!(:imageurl => "#{style_name}.jpeg", :itemtype_id => 53, :status => 1, :created_by => 1) rescue style_name
   end
 end
+
+
+
+filename = "/home/sivakumar/Downloads/DealsSample.xlsx"
+xlsx = Roo::Spreadsheet.open(filename)
+deal_items = []
+xlsx.each_with_index do |each_row, indx|
+  if indx == 0
+    headers = each_row
+    next
+  end
+
+  deal_items << DealItem.new(:deal_id => each_row[0], :deal_type => each_row[1], :deal_state => each_row[2], :category => each_row[3], :asin => each_row[4], :deal_title => each_row[5], :start_time => each_row[6], :end_time => each_row[7], :list_price => each_row[8], :deal_price => each_row[9], :discount => ((each_row[10].blank? || each_row[10] == "NA") ? nil : each_row[10]), :url => each_row[11], :image_url => each_row[12], :browse_node_id1 => each_row[13], :sub_category_path1 => each_row[14], :browse_node_id2 => each_row[15], :sub_category_path2 => each_row[16], :last_updated_at => Time.now)
+end
+
+DealItem.import(deal_items)

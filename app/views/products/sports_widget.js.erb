@@ -54,7 +54,7 @@
 
             <div>
                 <img src="<%=configatron.root_image_path%>static/images/amazon.png" style="width: 25px;float: left;background: #525252;">
-                <span style="width: 115px;background: orange;display: block;height: 25px;float: left;"> 
+                <span style="width: 115px;background: orange;display: block;height: 25px;float: left;">
                     <div style="margin: 5px;color: white;">Show Now</div>
                 </span>
             </div>
@@ -71,25 +71,25 @@
         <% index = index + 1 %>
         <span style="float:left;margin: 0 6px;" class="slider_plannto" id="<%= index %>">
         <div>
-            
+
 
                 <div style="float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;width:100%;text-align:center;">
                     <div style="">
                         <span style="font-size:14px;font-weight:bold;">
-                         <span >  
+                         <span >
                         <span style="float:left;" >
                          <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank" style="text-decoration: none;outline:none;float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;width:100%;text-align:center;">
                              <b style="color: #000;">Discover:</b> <%= category_item_detail.title.to_s.truncate(45) %> <%= category_item_detail.sale_price.blank? ? "" : "@ Just #{category_item_detail.sale_price}" %> <%= category_item_detail.percentage_saved.blank? ? "" : "(#{category_item_detail.percentage_saved}% OFF)" %>
                                <%unless index == 3%>
-                                
-                            
+
+
                                          <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:none;"> &gt;&gt; </span>
                             <%end%>
                           </a>
                         </span>
-                          
+
                           </span>
-           
+
                         </span>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
   </div>
       <br clear="both"/>
         </div>
-        
+
     <script type = "text/javascript" charset = "utf-8" >
       PlannTo.jQuery(document).ready(function()
       {
@@ -156,7 +156,7 @@
 
 <style type="text/css">
 
-    
+
 
 #rightarrow:hover {
 color: #D70707 !important;

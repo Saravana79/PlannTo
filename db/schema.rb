@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150810074815) do
+ActiveRecord::Schema.define(:version => 20150811104218) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -473,6 +473,29 @@ ActiveRecord::Schema.define(:version => 20150810074815) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "google_mapped"
+  end
+
+  create_table "deal_items", :force => true do |t|
+    t.string   "deal_id"
+    t.string   "deal_type"
+    t.string   "deal_state"
+    t.integer  "category"
+    t.string   "asin"
+    t.string   "deal_title"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string   "list_price"
+    t.string   "deal_price"
+    t.string   "discount"
+    t.string   "url"
+    t.string   "image_url"
+    t.string   "browse_node_id1"
+    t.string   "sub_category_path1"
+    t.string   "browse_node_id2"
+    t.string   "sub_category_path2"
+    t.datetime "last_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "dealer_locators", :force => true do |t|

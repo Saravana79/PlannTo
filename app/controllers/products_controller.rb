@@ -63,9 +63,9 @@ class ProductsController < ApplicationController
 
   caches_action :sports_widget, :cache_path => proc {|c|
     if (!params[:ref_url].blank?)
-      params.slice("category_item_detail_id", "category_type", "page_type")
+      params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
     elsif !params[:item_ids].blank?
-      params.slice("item_ids", "category_item_detail_id", "page_type")
+      params.slice("item_ids", "category_item_detail_id", "page_type", "random_id")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -719,6 +719,10 @@ class ProductsController < ApplicationController
     # end
     @category_item_details = []
 
+    if params[:page_type] == "type_4"
+      return deal_item_process(url, itemsaccess, url_params)
+    end
+
     @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type], params[:category_item_detail_id])
     if !@category_item_detail.blank? && @category_item_detail.item_type == "product links"
       @category_item_detail_id = @category_item_detail.id
@@ -767,8 +771,26 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.js { render :text => jsonp, :content_type => "text/javascript" }
     end
-
     # render :layout => false
+  end
+
+  def deal_item_process(url, itemsaccess, url_params)
+    @items = DealItem.get_deal_item_based_on_hour(params[:random_id])
+
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", @items.first.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                              cookies[:plan_to_temp_user_id], nil, nil, nil)
+    end
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("products/deal_widget.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "deal_widget.html.erb", :layout => false }
+      format.js {
+        return render :json => {:success => true, :html => render_to_string("products/deal_widget.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+    end
   end
 
   def vendor_widget
@@ -1118,8 +1140,14 @@ class ProductsController < ApplicationController
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
     params[:ref_url] ||= ""
+    params[:random_id] ||= ""
 
     #Get dynamic id from url
+
+    if (params[:page_type] == "type_4")
+      random_id = rand(20)
+      params[:random_id] = random_id
+    end
 
     sub_category, sub_category_condition = Item.get_sub_category_and_condition_from_url(url)
 
@@ -1141,9 +1169,9 @@ class ProductsController < ApplicationController
 
     cache_params = ""
     if (!params[:ref_url].blank?)
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type", "random_id"))
     elsif !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type", "random_id"))
     end
     cache_params = CGI::unescape(cache_params)
 

@@ -62,4 +62,18 @@ module ProductsHelper
   def get_general_click_url(url)
     click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => url, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
   end
+
+  def get_expire_time_from_deal_item(each_item)
+    if each_item.end_time.to_date == Date.today
+      remaining_time = each_item.end_time.hour - Time.now.hour
+      if (remaining_time > 8)
+        return_val = " - only today"
+      else
+        return_val = " - Expires in #{remaining_time} hours"
+      end
+    else
+      return_val = ""
+    end
+    return_val
+  end
 end

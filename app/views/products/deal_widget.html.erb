@@ -1,0 +1,92 @@
+<div style="width: 100%;text-align: center;display: block;">
+  <div style="display: inline-block;">
+    <span style="float: left; padding: 8px 0px 0px; color: lightsalmon; cursor: pointer;display:block;position: fixed;" class="left"> &lt;&lt; </span>
+    <% @items.each_with_index do |each_item, index| %>
+        <% index = index + 1 %>
+        <span style="float:left;margin-left: 26px;" class="slider_plannto" id="<%= index %>">
+        <div>
+          <div style="float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;width:100%;text-align:center;">
+            <div style="">
+                        <span style="font-size:14px;font-weight:bold;">
+                         <span >
+                        <span style="float:left;" >
+                         <a href="<%= get_general_click_url(each_item.url) %>" target="_blank" style="text-decoration: none;outline:none;float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;width:100%;text-align:center;">
+                           <span style="text-decoration: underline;"> <%= each_item.deal_title.to_s.truncate(45) %> </span> <%= (each_item.deal_price.to_i == 0) ? "" : "₹ #{each_item.deal_price}" %> <%= each_item.discount.blank? ? "" : "(#{each_item.discount}% off#{get_expire_time_from_deal_item(each_item)})" %>
+                         </a>
+                        </span>
+
+                          </span>
+
+                        </span>
+            </div>
+          </div>
+          <br clear="both"/>
+        </div>
+        </span>
+    <% end %>
+    <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
+  </div>
+  <br clear="both"/>
+</div>
+
+<script type = "text/javascript" charset = "utf-8" >
+    PlannTo.jQuery(document).ready(function()
+    {
+        PlannTo.jQuery(".slider_plannto").hide()
+        PlannTo.jQuery("#1").show()
+        PlannTo.jQuery("#1").addClass("active")
+
+        var active_div = PlannTo.jQuery(".active")
+        var next_div = PlannTo.jQuery(active_div).next()
+
+        if (active_div.length == 0 || PlannTo.jQuery(next_div).attr("class") == "right")
+        {
+            PlannTo.jQuery(".right").hide();
+        }
+    });
+
+    PlannTo.jQuery(".left").click(function()
+    {
+        var active_div = PlannTo.jQuery(".active")
+        var prev_div = PlannTo.jQuery(active_div).prev()
+        PlannTo.jQuery(".right").show();
+        if (PlannTo.jQuery(prev_div).attr("class") != "left")
+        {
+            PlannTo.jQuery(".slider_plannto").hide()
+            PlannTo.jQuery(prev_div).show()
+            PlannTo.jQuery(".slider_plannto").removeClass("active")
+            PlannTo.jQuery(prev_div).addClass("active")
+        }
+    });
+
+    PlannTo.jQuery(".right").click(function(event)
+    {
+        var active_div = PlannTo.jQuery(".active")
+        var next_div = PlannTo.jQuery(active_div).next()
+
+        if (PlannTo.jQuery(next_div).next().attr("class") == "right")
+        {
+            PlannTo.jQuery(".right").hide();
+        }
+
+        if (PlannTo.jQuery(next_div).attr("class") != "right")
+        {
+            PlannTo.jQuery(".slider_plannto").hide()
+            PlannTo.jQuery(next_div).show()
+            PlannTo.jQuery(".slider_plannto").removeClass("active")
+            PlannTo.jQuery(next_div).addClass("active")
+        }
+        event.preventDefault();
+        return false;
+    });
+</script>
+
+<style type="text/css">
+    #rightarrow:hover {
+        color: #D70707 !important;
+    }
+
+   .type_2_description {
+        padding: 3px;
+    }
+</style>
