@@ -1648,6 +1648,9 @@ end
 
     t_length = user_vals.count
 
+    valid_item_types = $redis.get("valid_item_types_for_buying_list").to_s.split(",")
+    valid_item_ids = $redis.get("valid_item_ids_for_buying_list").to_s.split(",")
+
     begin
       # redis_rtb_hash = {}
       # pud_redis_rtb_hash = {}
@@ -1663,6 +1666,17 @@ end
           unless each_user_val.blank?
             agg_info = {}
             user_id, url, type, item_ids, advertisement_id, itemtype, plannto_user_id, google_location_id = each_user_val.split("<<")
+
+            if !valid_item_types.include?(itemtype.to_s)
+              splt_item_ids = item_ids.to_s.split(",").compact
+              match_item_ids = valid_item_ids & splt_item_ids
+              if match_item_ids.blank?
+                next
+              else
+                item_ids = match_item_ids.join(",")
+              end
+            end
+
             if !user_id.blank? && !url.blank?
               already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
               ranking = 0
