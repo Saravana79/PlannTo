@@ -1648,7 +1648,9 @@ end
 
     t_length = user_vals.count
 
+    # $redis.set("valid_item_types_for_buying_list", "Car,Bike") #Note to set item types
     valid_item_types = $redis.get("valid_item_types_for_buying_list").to_s.split(",")
+    #$redis.set("valid_item_ids_for_buying_list", "28712,75427,73319") #Note to set item ids
     valid_item_ids = $redis.get("valid_item_ids_for_buying_list").to_s.split(",")
 
     begin
