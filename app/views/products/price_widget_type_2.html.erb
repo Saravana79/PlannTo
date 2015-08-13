@@ -11,7 +11,7 @@
 
               <div style="margin: 0px 15px 0px 14px;">
         <span style="text-align:center;background: orange;display: block;height: 23px;">
-            <div style="margin: 5px;color: white;">Buy Now</div>
+            <div style="padding:3px;color: white;">Buy Now</div>
         </span>
               </div>
 
@@ -26,7 +26,7 @@
 
       <% if !@first_cry_item.blank? && !@first_cry_item.price.blank? %>
           <div style="float:left;">
-            <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border:1px solid #CCC">
+            <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border:1px solid #CCC;border-left:0px;">
               <div>
                 <a href="<%= @fc_click_url %>" target="_blank">
 
@@ -35,8 +35,8 @@
                   </div>
 
                   <div style="margin: 0px 15px 0px 14px;">
-        <span style="text-align:center;background: orange;display: block;height: 23px;">
-            <div style="margin: 5px;color: white;">Buy Now</div>
+        <span style="text-align:center;background: orange;display: block;">
+            <div style="padding: 3px;color: white;">Buy Now</div>
         </span>
                   </div>
 
@@ -53,5 +53,5 @@
 <% end %>
 
 <style type="text/css">
-    a { outline: none; }
+    a { outline: none; text-decoration: none;}
 </style>
