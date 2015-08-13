@@ -798,20 +798,23 @@ class ProductsController < ApplicationController
   end
 
   def price_widget_type_2(url, itemsaccess, url_params, item_ids)
-    @amazon_item = Item.get_amazon_products_from_keyword(item_ids.first).first
+    keyword = item_ids[0]
+    @amazon_item = keyword.blank? ? OpenStruct.new : Item.get_amazon_product_link_from_asin(keyword)
 
-    if item_ids.include?("B00AXWKTR4")
-      click_url = "http://www.firstcry.com/huggies/huggies-new-born-taped-diapers-for-the-new-baby-24-pieces/435222/product-detail?sterm=Huggies%20Newborn%20Diapers&spos=1"
+    if @amazon_item.asin.to_s == item_ids.first
+      if item_ids.include?("B00AXWKTR4")
+        click_url = "http://www.firstcry.com/huggies/huggies-new-born-taped-diapers-for-the-new-baby-24-pieces/435222/product-detail?sterm=Huggies%20Newborn%20Diapers&spos=1"
+      end
+      @first_cry_item = Item.get_first_cry_item(click_url)
+
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+
+      @amazon_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @amazon_item.click_url, :item_id => nil, :ref_url => params[:ref_url])
+      @fc_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => click_url, :item_id => nil, :ref_url => params[:ref_url])
     end
-    @first_cry_item = Item.get_first_cry_item(click_url)
-
-    if @is_test != "true"
-      @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                              cookies[:plan_to_temp_user_id], nil, nil, nil)
-    end
-
-    @amazon_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @amazon_item.click_url, :item_id => nil, :ref_url => params[:ref_url])
-    @fc_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => click_url, :item_id => nil, :ref_url => params[:ref_url])
 
     respond_to do |format|
       format.json {

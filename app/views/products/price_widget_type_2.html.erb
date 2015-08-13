@@ -6,7 +6,7 @@
             <a href="<%= @amazon_click_url %>" target="_blank">
 
               <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 8px 0;font-size: 16px;font-weight: bold;color:#000000;">
-                ₹ <%= @amazon_item.sale_price.to_s.gsub("Rs", "") %> /-
+                ₹ <%= @amazon_item.sale_price.to_s.gsub("INR", "") %> /-
               </div>
 
               <div style="margin: 0px 15px 0px 14px;">
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <% if !@first_cry_item.price.blank? %>
+      <% if !@first_cry_item.blank? && !@first_cry_item.price.blank? %>
           <div style="float:left;">
             <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border:1px solid #CCC">
               <div>

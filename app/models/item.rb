@@ -2549,6 +2549,7 @@ end
 
     if !item.blank?
       category_item_detail.title = item.get_element("ItemAttributes").get("Title").to_s
+      category_item_detail.asin = item.get("ASIN").to_s rescue ""
       sale_price = item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
       if sale_price.blank?
         sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
@@ -2644,7 +2645,8 @@ end
   def self.get_amazon_products_from_keyword(keyword)
     items = []
     begin
-      res = APICache.get(keyword.to_s.gsub(" ", ""), :cache => 5.hours) do
+      keyword_cache = "cache_key-" + keyword.to_s.gsub(" ", "")
+      res = APICache.get(keyword_cache, :cache => 5.hours) do
         Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
       end
 
@@ -2654,6 +2656,8 @@ end
         item = OpenStruct.new
 
         item.title = each_item.get_element("ItemAttributes").get("Title")
+
+        item.asin = each_item.get("ASIN") rescue ""
 
         sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
         if sale_price.blank?
