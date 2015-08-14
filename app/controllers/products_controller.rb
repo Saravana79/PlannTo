@@ -812,7 +812,7 @@ class ProductsController < ApplicationController
                                                                 cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
 
-      @amazon_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @amazon_item.click_url, :item_id => nil, :ref_url => params[:ref_url])
+      @amazon_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @amazon_item.link, :item_id => nil, :ref_url => params[:ref_url])
       @fc_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => click_url, :item_id => nil, :ref_url => params[:ref_url])
     end
 

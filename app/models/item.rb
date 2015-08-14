@@ -2538,11 +2538,25 @@ end
   end
 
   def self.get_amazon_product_link_from_asin(asin)
-    category_item_detail = OpenStruct.new
+    begin
+      res = APICache.get(asin.to_s.gsub(" ", ""), :cache => 5.hours) do
+        Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
+      end
 
-    res = APICache.get(asin.to_s.gsub(" ", ""), :cache => 5.hours) do
-      Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
+      category_item_detail = Item.process_response(res)
+    rescue Exception => e
+      sleep(10)
+      res = APICache.get(asin.to_s.gsub(" ", ""), :cache => 5.hours) do
+        Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
+      end
+
+      category_item_detail = Item.process_response(res)
     end
+    category_item_detail
+  end
+
+  def self.process_response(res)
+    category_item_detail = OpenStruct.new
 
     item = res.items.first
     sale_price = ""
@@ -2554,10 +2568,10 @@ end
       if sale_price.blank?
         sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
       end
-      category_item_detail.image_url = item.get("ImageSets/ImageSet/SwatchImage/URL")
+      category_item_detail.image_url = item.get("ImageSets/ImageSet/SwatchImage/URL") rescue ""
       #temporary solution to replace image  SL30 to SL50
       category_item_detail.image_url = category_item_detail.image_url.gsub("SL30","SL80");
-      category_item_detail.link = item.get("DetailPageURL")
+      category_item_detail.link = item.get("DetailPageURL") rescue ""
     end
 
     category_item_detail.sale_price = sale_price
