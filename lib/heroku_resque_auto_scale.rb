@@ -107,6 +107,10 @@ module HerokuResqueAutoScale
             :workers => min_worker+4,
             :job_count => 5000
         }
+        {
+            :workers => min_worker+5,
+            :job_count => 10000
+        }
     ].reverse_each do |scale_info|
       # Run backwards so it gets set to the highest value first
       # Otherwise if there were 70 jobs, it would get set to 1, then 2, then 3, etc
