@@ -214,6 +214,12 @@ class HistoryDetailsController < ApplicationController
           url = "#{@item_detail.url}"
           url = url.strip
 
+          if url.inclue?("autoportal.com") && url.inclue?(".htm")
+            splt_url = url.split("/")
+            splt_url[splt_url.length -1] = ""
+            url = splt_url.join("/")
+          end
+
           if !params[:extra_link].blank?
             if url.include?(".htm")
               splt_url = url.split("/")
