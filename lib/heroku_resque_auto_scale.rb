@@ -106,7 +106,7 @@ module HerokuResqueAutoScale
         {
             :workers => min_worker+4,
             :job_count => 5000
-        }
+        },
         {
             :workers => min_worker+5,
             :job_count => 10000
