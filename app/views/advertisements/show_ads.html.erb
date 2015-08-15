@@ -231,6 +231,14 @@
             }
         });
 
+        $(".car_extra_link_ad").click(function()
+        {
+            var href = $(this).attr("href")
+
+            window.open(href, "_blank")
+            return false;
+        })
+
     });
 
     function set_logo_url(that, class_name)

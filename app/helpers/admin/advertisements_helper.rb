@@ -9,6 +9,23 @@ module Admin::AdvertisementsHelper
     return_val
   end
 
+  def get_autoportal_links_for_ad(click_url, ad_url)
+    photo_ad_url = ad_url+"&extra_link=photos.html"
+    reviews_ad_url = ad_url+"&extra_link=reviews.html"
+    sales_statistics_ad_url = ad_url+"&extra_link=sales-statistics.html"
+
+    photo_shop_now_url = click_url.blank? ? photo_ad_url : (click_url+photo_ad_url)
+    photo_link = "<a href='#{photo_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >photos</a>"
+
+    reviews_shop_now_url = click_url.blank? ? reviews_ad_url : (click_url+reviews_ad_url)
+    reviews_link = "<a href='#{reviews_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Reviews</a>"
+
+    sales_statistics_shop_now_url = click_url.blank? ? sales_statistics_ad_url : (click_url+sales_statistics_ad_url)
+    sales_statistics_link = "<a href='#{sales_statistics_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank'>Sales Statistics</a>"
+
+    return "#{photo_link} | #{reviews_link} | #{sales_statistics_link}"
+  end
+
   def get_image_url(item_detail, vendor_name='')
     return_val = ''
     if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
@@ -133,9 +150,9 @@ module Admin::AdvertisementsHelper
     param[:only_layout] ||= "false"
     ad_url = ""
     if @is_test == "true"
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id])
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id], :click_url => "")
     else
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id])
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id], :click_url => "")
     end
     ad_url
   end

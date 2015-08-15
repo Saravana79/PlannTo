@@ -57,10 +57,10 @@
                       </div>
                     </div>
                     <div class="product-txt-desc">
-                      <p>
-                        <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
-                      </p>
+                      <%= raw get_autoportal_links_for_ad(@click_url, ad_url) %>
+                      <!--<p>-->
+                        <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                      <!--</p>-->
                     </div>
                   </div>
                   <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">

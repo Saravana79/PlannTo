@@ -49,12 +49,17 @@
                       <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Check On-Road Price</a>
                     </p>
                   </div>
+
+
+                        <% if sliced_item_detail.length - 1 == itindex %>
+                            <div class="product-extra-desc">
+                              <%= raw get_autoportal_links_for_ad(@click_url, ad_url) %>
+                              <p>
+                                <%#= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil) %>
+                              </p>
+                            </div>
+                        <% end %>
               <% end %>
-              <div class="product-extra-desc">
-                <p>
-                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil) %>
-                </p>
-              </div>
                 <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
                 <% else %>
                     <%= render :partial => '/advertisements/get_120_page_content.html.erb', :locals => {:item_detail => sliced_item_detail.first, :indx => indx} %>

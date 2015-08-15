@@ -25,8 +25,9 @@
         <div class="divshadow">
           <ul id="foo3" height="190px;">
             <% @sliced_item_details.each_with_index do |item_detail, indx| %>
+                <% ad_url = get_ad_url(item_detail.first.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
-                  <% item_detail.each do |each_slice_item_detail| %>
+                  <% item_detail.each_with_index do |each_slice_item_detail, itindx| %>
                   <% ad_url = get_ad_url(each_slice_item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                   <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
                   <div class="advt-box">
@@ -57,13 +58,16 @@
                       </div>
                     </div>
                   </div>
+
+                      <% if item_detail.length - 1 == itindx %>
+                          <div class="product-txt-desc">
+                            <%= raw get_autoportal_links_for_ad(@click_url, ad_url) %>
+                            <!--<p>-->
+                            <%#= raw get_offer_for_ad(@ad, item_detail.first, @vendor_ad_details[item_detail.first.site.to_i]['default_text'], 90, "") %>
+                            <!--</p>-->
+                          </div>
+                      <% end %>
                   <% end %>
-                  <div class="product-txt-desc">
-                    <p>
-                      <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                      <%= raw get_offer_for_ad(@ad, item_detail.first, @vendor_ad_details[item_detail.first.site.to_i]['default_text'], 90, "") %>
-                    </p>
-                  </div>
                   <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
                 </li>
             <% end %>

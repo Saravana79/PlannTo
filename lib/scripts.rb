@@ -589,3 +589,22 @@ xlsx.each_with_index do |each_row, indx|
 end
 
 DealItem.import(deal_items)
+
+
+require 'xmlsimple'
+url = "http://autoportal.com/vizury_feed.xml"
+xml_data = Net::HTTP.get_response(URI.parse(url)).body
+data = XmlSimple.xml_in(xml_data)
+items = data["item"]
+source_items = []
+
+items.each do |item|
+  title = item["pname"][0]
+  url = item["landing_page"][0]
+
+  source_item = Sourceitem.new(:url => url, :name => title, :status => 1, :urlsource => "Autoportal", :itemtype_id => 1, :created_by => "System", :verified => false)
+
+  source_items << source_item
+end
+
+Sourceitem.import(source_items)

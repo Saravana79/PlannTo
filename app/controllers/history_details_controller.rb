@@ -213,6 +213,19 @@ class HistoryDetailsController < ApplicationController
         else
           url = "#{@item_detail.url}"
           url = url.strip
+
+          if !params[:extra_link].blank?
+            if url.include?(".htm")
+              splt_url = url.split("/")
+              splt_url[splt_url.length - 1] = params[:extra_link]
+              url = splt_url.join("/")
+            else
+              splt_url = url.split("/")
+              splt_url[splt_url.length] = params[:extra_link]
+              url = splt_url.join("/")
+            end
+          end
+          url
         end
 
         item_id = @item_detail.blank? ? "" : @item_detail.itemid
