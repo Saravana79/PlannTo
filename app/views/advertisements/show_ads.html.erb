@@ -79,7 +79,7 @@
         $("#1").addClass('selected')
 
 // TODO: temporary commented
-       <% if (params[:page_type] == "type_5" || (!@ad.blank? && @ad.sort_type == "random")) %>
+       <% if (@ad_template_type == "type_5" || (!@ad.blank? && @ad.sort_type == "random")) %>
         $(".item_details").each(function (index) {
 
             if (index == 0)
