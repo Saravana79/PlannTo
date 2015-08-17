@@ -893,8 +893,7 @@ class AdvertisementsController < ApplicationController
     params[:hou_dynamic_l] ||= ""
     params[:l] ||= ""
     params[:visible] ||= ""
-    p request.format
-    p format = request.format.to_s.split("/")[1]
+    format = request.format.to_s.split("/")[1]
     params[:format] = format
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)

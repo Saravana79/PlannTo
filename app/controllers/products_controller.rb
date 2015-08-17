@@ -20,9 +20,9 @@ class ProductsController < ApplicationController
 
   caches_action :elec_widget_1, :cache_path => proc {|c|
     if !params[:item_ids].blank?
-      params.slice("item_ids", "page_type", "vendor_ids")
+      params.slice("item_ids", "page_type", "vendor_ids", "ret_format")
     else
-      params.slice("ref_url", "page_type", "vendor_ids")
+      params.slice("ref_url", "page_type", "vendor_ids", "ret_format")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -553,8 +553,13 @@ class ProductsController < ApplicationController
     @vendor_detail = @vendor.vendor_detail rescue VendorDetail.new
 
     @ref_url = url
-    jsonp = prepare_response_json()
-    render :text => jsonp, :content_type => "text/javascript"
+
+    if params[:ret_format] == "html"
+      return render "elec_widget_1.js.erb", :layout => false, :content_type => "text/html"
+    else
+      jsonp = prepare_response_json()
+      return render :text => jsonp, :content_type => "text/javascript"
+    end
   end
 
   def price_vendor_details
@@ -1244,25 +1249,33 @@ class ProductsController < ApplicationController
     params[:ref_url] = url
     params[:ref_url] = "" if params[:ref_url].blank?
     params[:vendor_ids] ||= ""
+    params[:ret_format] ||= ""
     params[:is_test] ||= "false"
+
+    if params[:ret_format] == "html"
+      params[:format] = "html"
+      extname = "html"
+    else
+      extname = "js"
+    end
 
     params[:is_test] = "false" if params[:ref_url].to_s.include?("gizbot.com")
 
     cache_params = ""
     if !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "vendor_ids"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "vendor_ids", "ret_format"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "vendor_ids"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "vendor_ids", "ret_format"))
     end
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/elec_widget_1.js?#{cache_params}.js"
+    cache_key = "views/#{host_name}/elec_widget_1.#{extname}?#{cache_params}.#{extname}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
         valid_html = cache.match(/_blank/).blank? ? false : true
-        cache = reset_json_callback(cache, params[:callback])
+        cache = reset_json_callback(cache, params[:callback]) if extname == "js"
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
@@ -1270,7 +1283,12 @@ class ProductsController < ApplicationController
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
           cache = cache.gsub(old_iid, @impression_id)
         end
-        return render :text => cache.html_safe, :content_type => "text/javascript"
+
+        if extname == "js"
+          return render :text => cache.html_safe, :content_type => "text/javascript"
+        else
+          return render :text => cache.html_safe
+        end
         ## Rails.cache.write(cache_key, cache)
       end
     end

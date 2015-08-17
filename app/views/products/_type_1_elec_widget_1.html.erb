@@ -37,7 +37,7 @@
 
         }
 
-.product-container h3{ margin:0 auto; padding:0; font-size:13px; color:#222; font-weight:normal;   font-family:Arial;word-break:break-word;}
+.product-container h3{ margin:0 auto; padding:0; font-size:13px; color:#222; font-weight:normal;font-family:Arial;word-break:break-word;}
 .product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:46%; float:left;min-height:110px;}
 .product-container .product-img img { margin:0 auto; text-align:center; max-width:112px;max-height:110px;border:0px; }
 .product-container .product-text {width:54%;float:left;}
@@ -67,6 +67,7 @@ a { outline: none; }
                       <img src="<%= configatron.root_image_path%>static/images/<%= @vendor_detail.theme_image %>" style="height: 20px;border:0px;padding:0px;margin:0px;">
                     </a>
                 </li>
+                </ul>
             </div>
             <div id="productdiv">
                 <div class="planntocarosel-left">
@@ -131,81 +132,81 @@ a { outline: none; }
         <% end %>
 
         <script type="text/javascript">
-        PlannTo.jQuery(".product-container").click(function()
+        jQuery(".product-container").click(function()
         {
-            var shop_now = PlannTo.jQuery(this).find(".shop-now")
+            var shop_now = jQuery(this).find(".shop-now")
             window.open(shop_now.attr("href"))
             return false;
         });
 
-//PlannTo.jQuery(document).ready(function()
+//jQuery(document).ready(function()
 //{
-    PlannTo.jQuery(".product-container-top").hide()
-    PlannTo.jQuery("#1").show()
-    PlannTo.jQuery("#1").addClass("activeplannto")
-    PlannTo.jQuery(".planntocarosel-left").css("opacity", 0.2);
+    jQuery(".product-container-top").hide()
+    jQuery("#1").show()
+    jQuery("#1").addClass("activeplannto")
+    jQuery(".planntocarosel-left").css("opacity", 0.2);
 
-    var active_div = PlannTo.jQuery(".activeplannto")
-    var next_div = PlannTo.jQuery(active_div).next()
+    var active_div = jQuery(".activeplannto")
+    var next_div = jQuery(active_div).next()
 
-    if (active_div.length == 0 || PlannTo.jQuery(next_div).attr("class") == "planntocarosel-right")
+    if (active_div.length == 0 || jQuery(next_div).attr("class") == "planntocarosel-right")
     {
-        PlannTo.jQuery(".planntocarosel-right").css("opacity", 0.2);
-        PlannTo.jQuery(".planntocarosel-left").css("opacity", 0.2);
+        jQuery(".planntocarosel-right").css("opacity", 0.2);
+        jQuery(".planntocarosel-left").css("opacity", 0.2);
     }
 //});
 
-PlannTo.jQuery(".planntocarosel-left").click(function(event)
+jQuery(".planntocarosel-left").click(function(event)
 {
-    var active_div = PlannTo.jQuery(".activeplannto")
-    var prev_div = PlannTo.jQuery(active_div).prev()
+    var active_div = jQuery(".activeplannto")
+    var prev_div = jQuery(active_div).prev()
 
-    if (PlannTo.jQuery(prev_div).next().attr("class") == "planntocarosel-right")
+    if (jQuery(prev_div).next().attr("class") == "planntocarosel-right")
     {
-        PlannTo.jQuery(".planntocarosel-right").css("opacity", 0.2);
+        jQuery(".planntocarosel-right").css("opacity", 0.2);
     }
     else
     {
-        PlannTo.jQuery(".planntocarosel-right").css("opacity", 1);
+        jQuery(".planntocarosel-right").css("opacity", 1);
     }
 
-    if (PlannTo.jQuery(prev_div).prev().attr("class") == "planntocarosel-left")
+    if (jQuery(prev_div).prev().attr("class") == "planntocarosel-left")
     {
-        PlannTo.jQuery(".planntocarosel-left").css("opacity", 0.2);
+        jQuery(".planntocarosel-left").css("opacity", 0.2);
     }
 
-    if (PlannTo.jQuery(prev_div).attr("class") != "planntocarosel-left")
+    if (jQuery(prev_div).attr("class") != "planntocarosel-left")
     {
-        PlannTo.jQuery(".product-container-top").hide()
-        PlannTo.jQuery(prev_div).show()
-        PlannTo.jQuery(".product-container-top").removeClass("activeplannto")
-        PlannTo.jQuery(prev_div).addClass("activeplannto")
+        jQuery(".product-container-top").hide()
+        jQuery(prev_div).show()
+        jQuery(".product-container-top").removeClass("activeplannto")
+        jQuery(prev_div).addClass("activeplannto")
     }
     event.preventDefault();
     return false;
 });
 
-PlannTo.jQuery(".planntocarosel-right").click(function(event)
+jQuery(".planntocarosel-right").click(function(event)
 {
-    var active_div = PlannTo.jQuery(".activeplannto")
-    var next_div = PlannTo.jQuery(active_div).next()
+    var active_div = jQuery(".activeplannto")
+    var next_div = jQuery(active_div).next()
 
-    if (PlannTo.jQuery(next_div).next().attr("class") == "planntocarosel-right")
+    if (jQuery(next_div).next().attr("class") == "planntocarosel-right")
     {
-        PlannTo.jQuery(".planntocarosel-right").css("opacity", 0.2);
+        jQuery(".planntocarosel-right").css("opacity", 0.2);
     }
 
-    if (PlannTo.jQuery(next_div).prev().attr("class") != "planntocarosel-left")
+    if (jQuery(next_div).prev().attr("class") != "planntocarosel-left")
     {
-        PlannTo.jQuery(".planntocarosel-left").css("opacity", 1);;
+        jQuery(".planntocarosel-left").css("opacity", 1);;
     }
 
-    if (PlannTo.jQuery(next_div).attr("class") != "planntocarosel-right")
+    if (jQuery(next_div).attr("class") != "planntocarosel-right")
     {
-        PlannTo.jQuery(".product-container-top").hide()
-        PlannTo.jQuery(next_div).show()
-        PlannTo.jQuery(".product-container-top").removeClass("activeplannto")
-        PlannTo.jQuery(next_div).addClass("activeplannto")
+        jQuery(".product-container-top").hide()
+        jQuery(next_div).show()
+        jQuery(".product-container-top").removeClass("activeplannto")
+        jQuery(next_div).addClass("activeplannto")
     }
     event.preventDefault();
     return false;
