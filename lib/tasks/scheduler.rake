@@ -238,3 +238,13 @@ task :article_content_auto_process => :environment do
   time = Time.zone.now.utc
   Resque.enqueue(ArticleContentAutoProcess, "article_content_auto_process_in_redis", Time.zone.now.utc, article_contents=[])
 end
+
+desc "Update Sourceitem for autoportals"
+task :update_source_item_for_auto_portals => :environment do
+  Resque.enqueue(UpdateSourceitemForAutoportal, Time.zone.now.utc)
+end
+
+desc "Auto update amazon deal"
+task :auto_update_amazon_deal => :environment do
+  Resque.enqueue(AutoUpdateAmazonDeal, Time.zone.now.utc)
+end
