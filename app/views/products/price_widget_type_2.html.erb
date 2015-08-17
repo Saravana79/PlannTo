@@ -1,12 +1,12 @@
 <% if !@amazon_item.sale_price.blank? %>
     <div class="main-container">
       <div style="float:left;">
-        <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border:1px solid #CCC">
+        <div style="text-align:center;margin:0 auto;width:115px;height: 98px;">
           <div>
             <a href="<%= @amazon_click_url %>" target="_blank">
 
               <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 8px 0;font-size: 16px;font-weight: bold;color:#000000;">
-                ₹ <%= @amazon_item.sale_price.to_s.gsub("INR", "") %> /-
+                &#8377; <%= @amazon_item.sale_price.to_s.gsub("INR", "").to_i %> /-
               </div>
 
               <div style="margin: 0px 15px 0px 14px;">
@@ -26,12 +26,12 @@
 
       <% if !@first_cry_item.blank? && !@first_cry_item.price.blank? %>
           <div style="float:left;">
-            <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border:1px solid #CCC;border-left:0px;">
+            <div style="text-align:center;margin:0 auto;width:115px;height: 98px;border-left:0px;">
               <div>
                 <a href="<%= @fc_click_url %>" target="_blank">
 
                   <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 8px 0;font-size: 16px;font-weight: bold;color:#000000;">
-                    ₹ <%= @first_cry_item.price.to_s.gsub("Rs", "") %> /-
+                    &#8377; <%= @first_cry_item.price.to_s.gsub("Rs", "").to_i %> /-
                   </div>
 
                   <div style="margin: 0px 15px 0px 14px;">
