@@ -15,7 +15,7 @@ module Admin::AdvertisementsHelper
     sales_statistics_ad_url = ad_url+"&extra_link=sales-statistics/"
 
     photo_shop_now_url = click_url.blank? ? photo_ad_url : (click_url+photo_ad_url)
-    photo_link = "<a href='#{photo_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >photos</a>"
+    photo_link = "<a href='#{photo_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Photos</a>"
 
     reviews_shop_now_url = click_url.blank? ? reviews_ad_url : (click_url+reviews_ad_url)
     reviews_link = "<a href='#{reviews_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Reviews</a>"
