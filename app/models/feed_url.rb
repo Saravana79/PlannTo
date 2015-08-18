@@ -549,21 +549,24 @@ class FeedUrl < ActiveRecord::Base
     # $redis_rtb.del($redis_rtb.keys("spottags:*"))
 
     begin
-      remove_missing_keys_new_way("missingurl:*")
+      # FeedUrl.remove_missing_keys_new_way("missingurl:*")
+      FeedUrl.remove_missing_keys("missingurl:*")
     rescue Exception => e
       #clean missingurl:*
-      remove_missing_keys("missingurl:*")
+      FeedUrl.remove_missing_keys("missingurl:*")
     end
 
     begin
-      remove_missing_keys_new_way("missingad:*")
+      # remove_missing_keys_new_way("missingad:*")
+      remove_missing_keys("missingad:*")
     rescue Exception => e
       #clean missingad:*
       remove_missing_keys("missingad:*")
     end
 
     begin
-      remove_missing_keys_new_way("spottags:*")
+      # remove_missing_keys_new_way("spottags:*")
+      remove_missing_keys("spottags:*")
     rescue Exception => e
       #clean spottags:*
       remove_missing_keys("spottags:*")
