@@ -37,7 +37,8 @@ class ItemAdDetail < ActiveRecord::Base
       log.debug "********** Completed Updating ItemAdDetail for Items **********"
       log.debug "\n"
 
-      update_clicks_and_impressions_for_ad_details(log, batch_size, Time.now)
+      #update_clicks_and_impressions_for_ad_details(log, batch_size, Time.now) #Note: we will enable if there is any problem on mongo
+      update_clicks_and_impressions_for_ad_details_from_mongodb(log, batch_size, Time.now)
 
       $redis.set("ad_details_for_items_is_running", 0)
     end
@@ -93,6 +94,55 @@ class ItemAdDetail < ActiveRecord::Base
       item_ad_detail.update_attributes(:orders => each_order.count)
     end
 
+    update_ectr_for_item_ad_detail(log, batch_size)
+  end
+
+  def self.update_clicks_and_impressions_for_ad_details_from_mongodb(log, batch_size=2000, time)
+    start_date = 1.month.ago
+    end_date = Date.today
+
+    query = {}
+
+    if start_date.to_date == end_date.to_date
+      query[:agg_date] = start_date.to_date
+    else
+      query[:agg_date.gte] = start_date.to_date
+      query[:agg_date.lte] = end_date.to_date
+    end
+
+    query[:agg_type] = "Item"
+    query[:ad_id.ne] = nil
+
+    results = AggregatedImpressionByType.where(query)
+
+    option = "agg_coll"
+
+    result_hash = results.map(&:"#{option}")
+
+    final_hash = {}
+    result_hash = result_hash.compact
+
+    result_hash.each do |each_hash|
+      each_hash.each do |key, val|
+        final_hash[key] = {} if final_hash[key].blank?
+        final_hash[key]["total_imp"] = final_hash[key]["total_imp"].to_i + val["imp"].to_i
+        final_hash[key]["total_clicks"] = final_hash[key]["total_clicks"].to_i + val["clicks"].to_i
+        final_hash[key]["total_orders"] = final_hash[key]["total_orders"].to_i + val["orders"].to_i
+      end
+    end
+
+    results = final_hash
+
+    results = Hash[results.sort_by {|_, v| v["total_imp"].to_i}.reverse]
+
+    results.each do |each_key, each_result|
+      each_key
+      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_key)
+      impression_count = each_result["total_imp"]
+      clicks = each_result["total_clicks"]
+      orders = each_result["total_orders"]
+      item_ad_detail.update_attributes(:impressions => impression_count, :clicks => clicks, :orders => orders)
+    end
     update_ectr_for_item_ad_detail(log, batch_size)
   end
 
