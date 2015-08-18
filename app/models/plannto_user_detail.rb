@@ -201,85 +201,87 @@ class PlanntoUserDetail
     # self.skip_callback = true
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
-      plannto_user_details = PlanntoUserDetail.where(:plannto_user_id => self.plannto_user_id)
-      p plannto_user_details.count
-      if plannto_user_details.count > 1
-        old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
-        old_plannto_user_details.each do |old_detail|
-          self.skip_duplicate_update = true
+      if self.plannto_user_id_changed? || self.google_user_id_changed?
+        plannto_user_details = PlanntoUserDetail.where(:plannto_user_id => self.plannto_user_id)
+        if plannto_user_details.count > 1
+          old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
-          if self.google_user_id.blank? && !old_detail.google_user_id.blank?
-            self.google_user_id = old_detail.google_user_id
-          end
+          old_plannto_user_details.each do |old_detail|
+            self.skip_duplicate_update = true
 
-          old_detail.m_item_types.each do |old_m_item_type|
-            valid_attributes = old_m_item_type.attributes.slice("loc_id","m_rank", "gender", "agg_info", "f_rank", "a")
-            self.update_attributes!(valid_attributes)
-            m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
-            if m_item_type.blank?
-              self.m_item_types << MItemType.new(:itemtype_id => old_m_item_type.itemtype_id)
-              m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
+            if self.google_user_id.blank? && !old_detail.google_user_id.blank?
+              self.google_user_id = old_detail.google_user_id
             end
 
-            if !m_item_type.blank?
-              old_m_item_type.m_items.each do |old_m_item|
-                m_item = m_item_type.m_items.where(:item_id => old_m_item.item_id).last
-                if m_item.blank?
-                  m_item_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :ranking => old_m_item.ranking)
-                else
-                  m_item.ranking = m_item.ranking.to_i + old_m_item.ranking.to_i
-                  m_item.save!
+            old_detail.m_item_types.each do |old_m_item_type|
+              valid_attributes = old_m_item_type.attributes.slice("loc_id","m_rank", "gender", "agg_info", "f_rank", "a")
+              self.update_attributes!(valid_attributes)
+              m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
+              if m_item_type.blank?
+                self.m_item_types << MItemType.new(:itemtype_id => old_m_item_type.itemtype_id)
+                m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
+              end
+
+              if !m_item_type.blank?
+                old_m_item_type.m_items.each do |old_m_item|
+                  m_item = m_item_type.m_items.where(:item_id => old_m_item.item_id).last
+                  if m_item.blank?
+                    m_item_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :ranking => old_m_item.ranking)
+                  else
+                    m_item.ranking = m_item.ranking.to_i + old_m_item.ranking.to_i
+                    m_item.save!
+                  end
                 end
               end
             end
+            old_detail.destroy
           end
-          old_detail.destroy
+          self.save!
         end
-        self.save!
-      end
 
-      plannto_user_details = PlanntoUserDetail.where(:google_user_id => self.google_user_id)
-      if plannto_user_details.count > 1
-        old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
+        plannto_user_details = PlanntoUserDetail.where(:google_user_id => self.google_user_id)
+        if plannto_user_details.count > 1
+          old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
-        old_plannto_user_details.each do |old_detail|
+          old_plannto_user_details.each do |old_detail|
 
-          if self.plannto_user_id.blank? && !old_detail.plannto_user_id.blank?
-            self.plannto_user_id = old_detail.plannto_user_id
-          end
-
-          old_detail.m_item_types.each do |old_m_item_type|
-            valid_attributes = old_m_item_type.attributes.slice("loc_id","m_rank", "gender", "agg_info", "f_rank", "a")
-            self.update_attributes!(valid_attributes)
-
-            m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
-            if m_item_type.blank?
-              self.m_item_types << MItemType.new(:itemtype_id => old_m_item_type.itemtype_id)
-              m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
+            if self.plannto_user_id.blank? && !old_detail.plannto_user_id.blank?
+              self.plannto_user_id = old_detail.plannto_user_id
             end
 
-            if !m_item_type.blank?
-              old_m_item_type.m_items.each do |old_m_item|
-                m_item = m_item_type.m_items.where(:item_id => old_m_item.item_id).last
-                if m_item.blank?
-                  m_item_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :ranking => old_m_item.ranking)
-                else
-                  m_item.ranking = m_item.ranking.to_i + old_m_item.ranking.to_i
-                  m_item.save!
+            old_detail.m_item_types.each do |old_m_item_type|
+              valid_attributes = old_m_item_type.attributes.slice("loc_id","m_rank", "gender", "agg_info", "f_rank", "a")
+              self.update_attributes!(valid_attributes)
+
+              m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
+              if m_item_type.blank?
+                self.m_item_types << MItemType.new(:itemtype_id => old_m_item_type.itemtype_id)
+                m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
+              end
+
+              if !m_item_type.blank?
+                old_m_item_type.m_items.each do |old_m_item|
+                  m_item = m_item_type.m_items.where(:item_id => old_m_item.item_id).last
+                  if m_item.blank?
+                    m_item_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :ranking => old_m_item.ranking)
+                  else
+                    m_item.ranking = m_item.ranking.to_i + old_m_item.ranking.to_i
+                    m_item.save!
+                  end
                 end
               end
             end
+            old_detail.destroy
           end
-          old_detail.destroy
+          self.save!
         end
-        self.save!
-      end
 
-      if !self.google_user_id.blank? && !self.plannto_user_id.blank?
-        $redis_rtb.pipelined do
-          $redis_rtb.set("cm:#{self.google_user_id}", self.plannto_user_id)
-          $redis_rtb.expire("cm:#{self.google_user_id}", 2.weeks)
+        if !self.google_user_id.blank? && !self.plannto_user_id.blank?
+          $redis_rtb.pipelined do
+            $redis_rtb.set("cm:#{self.google_user_id}", self.plannto_user_id)
+            $redis_rtb.expire("cm:#{self.google_user_id}", 2.weeks)
+          end
         end
       end
     end
