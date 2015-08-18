@@ -459,7 +459,7 @@ class FeedUrl < ActiveRecord::Base
     start = 0
     total_length = $redis_rtb.scard(redis_key)
     begin
-      redis_val = $redis_rtb.sscan(redis_key, next_val, count: 3)
+      redis_val = $redis_rtb.sscan(redis_key, next_val, count: 300)
       total_length = total_length - 300
       next_val = redis_val[0].to_i
       val = redis_val[1]
@@ -470,7 +470,7 @@ class FeedUrl < ActiveRecord::Base
       FeedUrl.send(method, val, count)
       p "started count: #{start} - #{start * 300}"
       start += 1
-      break if total_length > 0
+      break if total_length < 0
     end while next_val != 0
     return
   end
