@@ -166,6 +166,8 @@ class FeedUrl < ActiveRecord::Base
 
         title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
+        images = images.to_s.split(",").uniq.join(",")
+
         if category.to_s.split(",").include?("ApartmentType")
           begin
             page_category = FeedUrl.get_additional_details_for_housing(missing_url)
@@ -455,8 +457,10 @@ class FeedUrl < ActiveRecord::Base
   def self.get_missing_keys_and_process_recent(redis_key, count, method, invalid_urls=[])
     next_val = 0
     start = 0
+    total_length = $redis_rtb.scard(redis_key)
     begin
-      redis_val = $redis_rtb.sscan(redis_key, next_val, count: 300)
+      redis_val = $redis_rtb.sscan(redis_key, next_val, count: 3)
+      total_length = total_length - 300
       next_val = redis_val[0].to_i
       val = redis_val[1]
       invalid_urls.each do |each_invalid_url|
@@ -466,6 +470,7 @@ class FeedUrl < ActiveRecord::Base
       FeedUrl.send(method, val, count)
       p "started count: #{start} - #{start * 300}"
       start += 1
+      break if total_length > 0
     end while next_val != 0
     return
   end
