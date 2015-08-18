@@ -215,7 +215,7 @@ class PlanntoUserDetail
 
           old_detail.m_item_types.each do |old_m_item_type|
             valid_attributes = old_m_item_type.attributes.slice("loc_id","m_rank", "gender", "agg_info", "f_rank", "a")
-            self.update_attrbutes(valid_attributes)
+            self.update_attributes!(valid_attributes)
             m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
             if m_item_type.blank?
               self.m_item_types << MItemType.new(:itemtype_id => old_m_item_type.itemtype_id)
@@ -251,7 +251,7 @@ class PlanntoUserDetail
 
           old_detail.m_item_types.each do |old_m_item_type|
             valid_attributes = old_m_item_type.attributes.slice("loc_id","m_rank", "gender", "agg_info", "f_rank", "a")
-            self.update_attributes(valid_attributes)
+            self.update_attributes!(valid_attributes)
 
             m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
             if m_item_type.blank?
