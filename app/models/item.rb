@@ -1624,7 +1624,7 @@ end
       length = $redis.llen("resque:queue:buying_list_process")
       if length < 50
         [*length...50].each do |each_count|
-          user_vals = $redis_rtb.lrange("users:visits", 0, 20000)
+          user_vals = $redis_rtb.lrange("users:visits", 0, 10000)
           Resque.enqueue(BuyingListProcess, "buying_list_process_in_redis", Time.zone.now.utc, user_vals)
           $redis_rtb.ltrim("users:visits", user_vals.count, -1)
         end
@@ -1674,6 +1674,7 @@ end
               splt_item_ids = item_ids.to_s.split(",").compact
               match_item_ids = valid_item_ids & splt_item_ids
               if match_item_ids.blank?
+                p "-------------------------- Skip buying list process --------------------------"
                 next
               else
                 item_ids = match_item_ids.join(",")
