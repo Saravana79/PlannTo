@@ -609,6 +609,11 @@ class Advertisement < ActiveRecord::Base
       length = $redis.llen("resque:queue:create_impression_and_click")
       count = length
 
+      # $redis.set("valid_item_types_for_buying_list", "Car,Bike") #Note to set item types
+      valid_item_types = $redis.get("valid_item_types_for_buying_list").to_s.split(",")
+      #$redis.set("valid_item_ids_for_buying_list", "28712,75427,73319") #Note to set item ids
+      valid_item_ids = $redis.get("valid_item_ids_for_buying_list").to_s.split(",")
+
       begin
         add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 1000)
 
@@ -1159,9 +1164,25 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               type = article_content.sub_type
               item_ids = article_content.all_item_ids.to_s rescue ""
               itemtype_id = article_content.itemtype_id
-              redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
-              redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
-              plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+
+              itemtype_name = article_content.itemtype.itemtype.to_s rescue ""
+              if !valid_item_types.include?(itemtype_name)
+                splt_item_ids = item_ids.to_s.split(",").compact
+                match_item_ids = valid_item_ids & splt_item_ids
+                if match_item_ids.blank?
+                  p "-------------------------- Skip buying list process --------------------------"
+                else
+                  item_ids = match_item_ids.join(",")
+
+                  redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
+                  redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+                  plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+                end
+              end
+
+              # redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
+              # redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+              # plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
             end
           rescue Exception => e
             p "Error invalid url errors => #{impression.hosted_site_url}"
