@@ -177,7 +177,7 @@ class PlanntoUserDetail
   private
 
   def update_lad
-    # self.skip_duplicate_update = true
+    self.skip_duplicate_update = true
     if self.skip_callback != true
       self.skip_callback = true
       self.lad = Time.now
