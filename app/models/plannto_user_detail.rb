@@ -177,7 +177,7 @@ class PlanntoUserDetail
   private
 
   def update_lad
-    self.skip_duplicate_update = true
+    # self.skip_duplicate_update = true
     if self.skip_callback != true
       self.skip_callback = true
       self.lad = Time.now
@@ -198,7 +198,7 @@ class PlanntoUserDetail
   end
 
   def update_duplicate_record
-    self.skip_callback = true
+    # self.skip_callback = true
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
       plannto_user_details = PlanntoUserDetail.where(:plannto_user_id => self.plannto_user_id)
@@ -252,7 +252,7 @@ class PlanntoUserDetail
           old_detail.m_item_types.each do |old_m_item_type|
             valid_attributes = old_m_item_type.attributes.slice("loc_id","m_rank", "gender", "agg_info", "f_rank", "a")
             self.update_attrbutes(valid_attributes)
-            
+
             m_item_type = self.m_item_types.where(:itemtype_id => old_m_item_type.itemtype_id).last
             if m_item_type.blank?
               self.m_item_types << MItemType.new(:itemtype_id => old_m_item_type.itemtype_id)
