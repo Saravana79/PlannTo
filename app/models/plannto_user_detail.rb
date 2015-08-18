@@ -198,7 +198,7 @@ class PlanntoUserDetail
   end
 
   def update_duplicate_record
-    # self.skip_callback = true
+    self.skip_callback = true
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
 
