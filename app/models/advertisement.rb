@@ -709,6 +709,7 @@ class Advertisement < ActiveRecord::Base
                 device_name = impression.device.to_s
                 is_rii = impression_mongo["is_rii"].to_s
                 ret_val = impression.r.to_i == 1
+                ad_size = impression_mongo["size"].to_s
 
                 current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
 
@@ -735,6 +736,14 @@ class Advertisement < ActiveRecord::Base
                   current_hash["device"].merge!({"#{device_name}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
                   curr_device.merge!({"imp" => curr_device["imp"].to_i + 1, "costs" => curr_device["costs"].to_f + winning_price.to_f})
+                end
+
+                current_hash["size"] = {} if current_hash["size"].blank?
+                curr_size = current_hash["size"]["#{ad_size}"]
+                if curr_size.blank?
+                  current_hash["size"].merge!({"#{ad_size}" => {"imp" => 1, "costs" => winning_price.to_f}})
+                else
+                  curr_size.merge!({"imp" => curr_size["imp"].to_i + 1, "costs" => curr_size["costs"].to_f + winning_price.to_f})
                 end
 
                 current_hash["rii"] = {} if current_hash["rii"].blank?
@@ -880,7 +889,8 @@ class Advertisement < ActiveRecord::Base
                     url_params = Advertisement.reverse_make_url_params(click_impression.params) rescue {}
                     url_params.symbolize_keys!
 
-                    device_name = url_params[:device]
+                    device_name = url_params[:device].to_s
+                    ad_size = url_params[:size].to_s
 
                     current_hash["device"] = {} if current_hash["device"].blank?
                     curr_device = current_hash["device"]["#{device_name}"]
@@ -888,6 +898,14 @@ class Advertisement < ActiveRecord::Base
                       current_hash["device"].merge!({"#{device_name}" => {"clicks" => 1}})
                     else
                       curr_device.merge!({"clicks" => curr_device["clicks"].to_i + 1})
+                    end
+
+                    current_hash["size"] = {} if current_hash["size"].blank?
+                    curr_size = current_hash["size"]["#{ad_size}"]
+                    if curr_size.blank?
+                      current_hash["size"].merge!({"#{ad_size}" => {"clicks" => 1}})
+                    else
+                      curr_size.merge!({"clicks" => curr_size["clicks"].to_i + 1})
                     end
                   end
 
@@ -1029,6 +1047,7 @@ class Advertisement < ActiveRecord::Base
             else
               agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, val["hours"]) if !val["hours"].blank?
               agg_imp.device = Advertisement.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
+              agg_imp.size = Advertisement.combine_hash(agg_imp.size, val["size"]) if !val["size"].blank?
               agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
               agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
 
