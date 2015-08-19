@@ -1,22 +1,22 @@
 <% if !@amazon_item.sale_price.blank? %>
-    <div class="main-container">
+    <div class="main-container" style="margin:5px;">
       <div style="float:left;">
         <div style="text-align:center;margin:0 auto;width:115px;height: 98px;">
           <div>
             <a href="<%= @amazon_click_url %>" target="_blank">
 
-              <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 8px 0;font-size: 16px;font-weight: bold;color:#000000;">
+              <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 3px 0;font-size: 16px;font-weight: bold;color:#000000;font-family: Arial;">
                 &#8377; <%= @amazon_item.sale_price.to_s.gsub("INR", "").to_i %> /-
               </div>
 
               <div style="margin: 0px 15px 0px 14px;">
-        <span style="text-align:center;background: orange;display: block;height: 23px;">
+        <span style="text-align:center;background: orange;display: block;">
             <div style="padding:3px;color: white;">Buy Now</div>
         </span>
               </div>
 
-              <div class="type_2_image" style="padding: 10px 0px 0px;">
-                <img src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg" width="94px"></img>
+              <div class="type_2_image" style="padding: 8px 0px 0px;">
+                <img src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg" width="86px"></img>
               </div>
             </a>
           </div>
@@ -30,7 +30,7 @@
               <div>
                 <a href="<%= @fc_click_url %>" target="_blank">
 
-                  <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 8px 0;font-size: 16px;font-weight: bold;color:#000000;">
+                  <div class="type_2_image" style="text-align:center;text-decoration: none;margin: 3px 0;font-size: 16px;font-weight: bold;color:#000000;font-family: Arial;">
                     &#8377; <%= @first_cry_item.price.to_s.gsub("Rs", "").to_i %> /-
                   </div>
 
@@ -40,8 +40,8 @@
         </span>
                   </div>
 
-                  <div class="type_2_image" style="padding: 5px 0px 0px;">
-                    <img src="http://cdn1.plannto.com/items/vendor/medium/fc_logo.jpg" width="66px"></img>
+                  <div class="type_2_image" style="padding: 8px 0px 0px;">
+                    <img src="http://cdn1.plannto.com/items/vendor/medium/fc_logo.jpg" height="28px"></img>
                   </div>
                 </a>
               </div>
