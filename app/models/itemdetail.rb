@@ -1032,6 +1032,20 @@ class Itemdetail < ActiveRecord::Base
     end
   end
 
+  def self.convert_to_itemdetails(item_details)
+    itemdetails = []
+
+    item_details.each do |each_item_detail|
+      new_item_detail =  OpenStruct.new(each_item_detail.attributes)
+      new_item_detail.site = 9882
+      new_item_detail.deal_item = true
+      new_item_detail.ItemName = new_item_detail.deal_title
+      new_item_detail.price = new_item_detail.deal_price.to_f
+      itemdetails << new_item_detail
+    end
+    itemdetails
+  end
+
   private
 
   def update_last_verified_date

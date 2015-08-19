@@ -1674,9 +1674,9 @@ end
               splt_item_ids = item_ids.to_s.split(",").compact
               match_item_ids = valid_item_ids & splt_item_ids
               if match_item_ids.blank?
-                p "-------------------------- Skip buying list process --------------------------"
                 next
               else
+                p "-------------------------- Continue Process --------------------------"
                 item_ids = match_item_ids.join(",")
               end
             end

@@ -18,6 +18,7 @@ class AdvertisementsController < ApplicationController
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
+    return_path = "advertisements/show_ads.html.erb"
     @sid = sid = params[:sid] ||= ""
 
     # TODO: hot coded values, have to change in feature
@@ -38,6 +39,8 @@ class AdvertisementsController < ApplicationController
       return fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
     elsif !@ad.blank? && @ad.id == 52
       return junglee_used_car_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
+    elsif !@ad.blank? && @ad.id == 56
+      return amazon_deal_ads(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids, return_path)
     elsif !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
       return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
     # elsif !@ad.blank? && @ad.id == 24
@@ -115,8 +118,6 @@ class AdvertisementsController < ApplicationController
       @click_url = @click_url.gsub("&amp;", "&")
     end
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
-
-    return_path = "advertisements/show_ads.html.erb"
 
     respond_to do |format|
       format.json {
@@ -465,6 +466,22 @@ class AdvertisementsController < ApplicationController
     end
   end
 
+  def amazon_deal_ads(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_id, vendor_ids, return_path)
+    @item_details = DealItem.get_deal_item_based_on_hour(params[:fashion_id])
+    @item_details = Itemdetail.convert_to_itemdetails(@item_details)
+
+    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    @item = Item.new
+    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_id, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
+    end
+
+    render return_path, :layout => false
+  end
+
   def housing_dynamic_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
     @city = Item.get_city_from_item_or_location(item_ids, params[:l])
 
@@ -769,6 +786,12 @@ class AdvertisementsController < ApplicationController
 
         params[:fashion_id] = random_id
       end
+    end
+
+    if !@ad.blank? && @ad.id == 56
+      random_id = rand(10)
+
+      params[:fashion_id] = random_id
     end
 
     params[:size] = params[:size].to_s.gsub("*", "x")

@@ -40,7 +40,13 @@ module Admin::AdvertisementsHelper
     return_url = ''
     img_id = ''
     next_src = ''
-    if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
+
+    deal_item = item_detail.deal_item rescue false
+    if deal_item
+      return_url = item_detail.image_url
+      img_id = 'item'
+      next_src = ""
+    elsif !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
       type = item_detail.type.to_s.downcase rescue item_detail.item.type.to_s.downcase
       image_url = item_detail.imageurl.to_s rescue item_detail.item.imageurl.to_s
       return_url = configatron.root_image_path + 'vendors/' + vendor_name + "/#{format}/" + item_detail.Image.to_s
@@ -146,13 +152,21 @@ module Admin::AdvertisementsHelper
     return status, displaycount, activate_tab
   end
 
-  def get_ad_url(item_detail_id, impression_id, ref_url, sid, ads_id, param={})
+  def get_ad_url(item_detail_id, impression_id, ref_url, sid, ads_id, param={}, item_detail)
+    deal_item = item_detail.deal_item rescue false
     param[:only_layout] ||= "false"
     ad_url = ""
+    red_sports_url = ""
+
+    if deal_item == true
+      item_detail_id = nil
+      red_sports_url = item_detail.url
+    end
+
     if @is_test == "true"
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id], :click_url => "")
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id], :click_url => "", :red_sports_url => red_sports_url)
     else
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id], :click_url => "")
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id], :click_url => "", :red_sports_url => red_sports_url)
     end
     ad_url
   end
