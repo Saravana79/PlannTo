@@ -824,21 +824,28 @@ class FeedUrl < ActiveRecord::Base
     $redis.expire("automated_feed_process_is_running", 40.minutes)
 
     SourceCategory.update_all_to_cache()
-    feed_urls = FeedUrl.where("status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}' and score is null")
     sources_list = JSON.parse($redis.get("sources_list_details"))
 
-    feed_urls.each do |feed_url|
-      begin
-        host = Item.get_host_without_www(feed_url.url)
-        if sources_list[host]["site_status"] == false
-          feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
-        else
-          feed_url.auto_save_feed_urls(false,0, "auto")
+    page = 1
+    begin
+      feed_urls = FeedUrl.paginate_by_sql("select * from feed_urls where status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}' and score is null", :page => page, :per_page => 2000)
+
+      feed_urls.each do |feed_url|
+        begin
+          host = Item.get_host_without_www(feed_url.url)
+          if sources_list[host]["site_status"] == false
+            feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
+          else
+            feed_url.auto_save_feed_urls(false,0, "auto")
+          end
+        rescue Exception => e
+          feed_url.update_attributes!(:score => 0)
+          p e.backtrace
         end
-      rescue Exception => e
-        p e.backtrace
       end
-    end
+
+      page += 1
+    end while !feed_urls.blank?
 
     $redis.set("automated_feed_process_is_running", 0)
   end

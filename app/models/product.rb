@@ -311,8 +311,10 @@ has_one :manufacturer,
     end
 
     if categories.include?('Mobile')
-      ['App', 'WearableGadget'].each do |each_new_type|
-        app_items = ItemtypeTag.where("name = '#{each_new_type}'")
+      # ['App', 'WearableGadget'].each do |each_new_type|
+      ['15430', "15432"].each do |each_new_id|
+        # app_items = ItemtypeTag.where("name = '#{each_new_type}'")
+        app_items = ItemtypeTag.where("id = #{each_new_id}")
         app_results = Product.get_results_from_items(app_items)
         results << app_results
         results = results.flatten
@@ -320,8 +322,10 @@ has_one :manufacturer,
     end
 
     if categories.include?('Games')
-      ["Console"].each do |each_new_type|
-        app_items = ItemtypeTag.where("name = '#{each_new_type}'")
+      # ["Console"].each do |each_new_type|
+      ["15431"].each do |each_new_id|
+        # app_items = ItemtypeTag.where("name = '#{each_new_type}'")
+        app_items = ItemtypeTag.where("id = #{each_new_id}")
         app_results = Product.get_results_from_items(app_items)
         results << app_results
         results = results.flatten
