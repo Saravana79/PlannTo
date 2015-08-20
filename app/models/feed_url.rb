@@ -190,7 +190,8 @@ class FeedUrl < ActiveRecord::Base
         end
 
         begin
-          google_content_categories = GoogleContentCategory.where(:category_id => verticals.to_s.split(","))
+          vertical_ids = verticals.to_s.split(",").compact.select {|d| !d.blank? && d.to_s != "nil" && d.to_s != "0"}
+          google_content_categories = GoogleContentCategory.where(:category_id => vertical_ids)
 
           plannto_categories = []
           google_content_categories.each do |google_content_category|
@@ -238,11 +239,15 @@ class FeedUrl < ActiveRecord::Base
           p e
         end
       else
-        ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
+        if missingurl_count.to_i != 0
+          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
+        end
         $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
       end
     else
-      ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
+      if missingurl_count.to_i != 0
+        ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
+      end
       $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
     end
   end
@@ -489,11 +494,11 @@ class FeedUrl < ActiveRecord::Base
     end while next_val != 0
   end
 
-  def self.remove_missing_keys(match)
+  def self.remove_missing_keys(match, rm_count=3000)
     next_val = 0
     loop_count = 0
     begin
-      redis_val = $redis_rtb.scan(next_val, match: match, count: 3000)
+      redis_val = $redis_rtb.scan(next_val, match: match, count: rm_count)
       next_val = redis_val[0].to_i
       p "Loop Count => #{loop_count}"
       loop_count+=1
@@ -550,7 +555,7 @@ class FeedUrl < ActiveRecord::Base
 
     begin
       # FeedUrl.remove_missing_keys_new_way("missingurl:*")
-      FeedUrl.remove_missing_keys("missingurl:*")
+      FeedUrl.remove_missing_keys("missingurl:*", 300000)
     rescue Exception => e
       #clean missingurl:*
       FeedUrl.remove_missing_keys("missingurl:*")
@@ -558,7 +563,7 @@ class FeedUrl < ActiveRecord::Base
 
     begin
       # remove_missing_keys_new_way("missingad:*")
-      remove_missing_keys("missingad:*")
+      remove_missing_keys("missingad:*", 300000)
     rescue Exception => e
       #clean missingad:*
       remove_missing_keys("missingad:*")
@@ -566,7 +571,7 @@ class FeedUrl < ActiveRecord::Base
 
     begin
       # remove_missing_keys_new_way("spottags:*")
-      remove_missing_keys("spottags:*")
+      remove_missing_keys("spottags:*", 300000)
     rescue Exception => e
       #clean spottags:*
       remove_missing_keys("spottags:*")
