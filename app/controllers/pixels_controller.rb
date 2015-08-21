@@ -12,7 +12,8 @@ class PixelsController < ApplicationController
   end
 
   def pixel_matching
-    google_ula = CookieMatch.enqueue_pixel_matching(params, cookies[:plan_to_temp_user_id])
+  #  google_ula = CookieMatch.enqueue_pixel_matching(params, cookies[:plan_to_temp_user_id])
+    google_ula = "&google_ula=58712800"
     redirect_val = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_push=#{params[:google_push]}" + google_ula
     redirect_to redirect_val
   end
