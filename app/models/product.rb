@@ -311,7 +311,7 @@ has_one :manufacturer,
     end
 
     if categories.include?('Mobile')
-      # ['App', 'WearableGadget'].each do |each_new_type|
+      # ['App', 'WearableGadget'].each do |each_new_type| #TODO: temp optimization
       ['15430', "15432"].each do |each_new_id|
         # app_items = ItemtypeTag.where("name = '#{each_new_type}'")
         app_items = ItemtypeTag.where("id = #{each_new_id}")
@@ -322,7 +322,7 @@ has_one :manufacturer,
     end
 
     if categories.include?('Games')
-      # ["Console"].each do |each_new_type|
+      # ["Console"].each do |each_new_type| #TODO: temp optimization
       ["15431"].each do |each_new_id|
         # app_items = ItemtypeTag.where("name = '#{each_new_type}'")
         app_items = ItemtypeTag.where("id = #{each_new_id}")

@@ -828,10 +828,11 @@ class FeedUrl < ActiveRecord::Base
 
     page = 1
     begin
-      feed_urls = FeedUrl.paginate_by_sql("select * from feed_urls where status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}' and score is null", :page => page, :per_page => 2000)
-
+      feed_urls = FeedUrl.paginate_by_sql("select * from feed_urls where score is null and status = 0 and ((created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}')", :page => page, :per_page => 200)
+      total_count = feed_urls.count
       feed_urls.each do |feed_url|
         begin
+          total_count -= 1
           host = Item.get_host_without_www(feed_url.url)
           if sources_list[host]["site_status"] == false
             feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
@@ -839,9 +840,18 @@ class FeedUrl < ActiveRecord::Base
             feed_url.auto_save_feed_urls(false,0, "auto")
           end
         rescue Exception => e
-          feed_url.update_attributes!(:score => 0)
+          is_valid = feed_url.valid?
+          keys = feed_url.errors.messages.keys rescue {}
+          if keys.include?(:url)
+            grouped_values = FeedUrl.where(:url => feed_url.url)
+            first_one = grouped_values.shift
+            grouped_values.each{|double| double.destroy}
+          else
+            feed_url.update_attributes!(:score => 0)
+          end
           p e.backtrace
         end
+        p "------------------------------------- Remaining FeedProcess count #{total_count} -------------------------------------"
       end
 
       page += 1
