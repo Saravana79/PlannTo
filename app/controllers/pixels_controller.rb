@@ -1,7 +1,8 @@
 class PixelsController < ApplicationController
 
   skip_before_filter :cache_follow_items, :store_session_url
-  before_filter :generate_cookie_if_not_exist
+  before_filter :generate_cookie_if_not_exist, :except => [:pixel_matching]
+  caches_action :pixel_matching, :cache_path => proc {|c|  "pixel_matching"}, :expires_in => 2.hours
 
   # cookie matching
   def index
@@ -13,9 +14,10 @@ class PixelsController < ApplicationController
 
   def pixel_matching
   #  google_ula = CookieMatch.enqueue_pixel_matching(params, cookies[:plan_to_temp_user_id])
-    google_ula = "&google_ula=58712800"
-    redirect_val = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_push=#{params[:google_push]}" + google_ula
-    redirect_to redirect_val
+  #   google_ula = "&google_ula=58712800"
+  #   redirect_val = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_push=#{params[:google_push]}" + google_ula
+  #   redirect_to redirect_val
+    render :nothing => true
   end
 
   def vendor_page
