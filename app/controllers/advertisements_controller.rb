@@ -229,8 +229,6 @@ class AdvertisementsController < ApplicationController
       @item_type = "beauty"
     end
 
-    p @items
-
     respond_to do |format|
       format.json {
         if @item_details.blank? && included_beauty == false
