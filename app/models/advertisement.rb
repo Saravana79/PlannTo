@@ -907,6 +907,10 @@ class Advertisement < ActiveRecord::Base
                     else
                       curr_size.merge!({"clicks" => curr_size["clicks"].to_i + 1})
                     end
+
+                    if ret_val == false
+                      ret_val = click_impression.r.to_i == 1
+                    end
                   end
 
                   current_hash["rii"] = {} if current_hash["rii"].blank?
