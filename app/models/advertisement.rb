@@ -909,7 +909,7 @@ class Advertisement < ActiveRecord::Base
                     end
 
                     if ret_val == false
-                      ret_val = click_impression.r.to_i == 1
+                      ret_val = url_params[:r].to_i == 1
                     end
                   end
 
