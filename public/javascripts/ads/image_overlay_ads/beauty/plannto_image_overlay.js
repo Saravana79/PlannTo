@@ -1,4 +1,3 @@
-alert(1)
 console.log($(".product-container"))
 $(".product-container").click(function()
 {

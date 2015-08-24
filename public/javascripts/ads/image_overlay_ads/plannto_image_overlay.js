@@ -152,7 +152,6 @@ $(document).ready(function () {
         ids_list.push(a.attr('class'))
         ids_list.push(a.target.parentNode.attr('class'))
         ids_list.push(a.target.parentNode.parentNode.attr('class'))
-            alert(ids_list);
             var present = $.inArray("owl-page", ids_list)
         }
         if (present < 0)
