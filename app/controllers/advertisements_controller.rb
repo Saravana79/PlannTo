@@ -6,7 +6,7 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
-  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
@@ -159,6 +159,10 @@ class AdvertisementsController < ApplicationController
 
     included_beauty = @items.map {|d| d.is_a?(Beauty) || d.is_a?(Apparel)}.include?(true) rescue false
 
+    if params[:expanded].to_i == 1
+      return return_expanded_html()
+    end
+
     if included_beauty
       get_details_from_beauty_items(url, itemsaccess, impression_type, ad_id, winning_price_enc, sid)
     else
@@ -248,6 +252,22 @@ class AdvertisementsController < ApplicationController
     end
   end
 
+  def return_expanded_html()
+    return_path = "advertisements/show_image_overlay_expanded_ads.html.erb"
+
+    expanded = params[:expanded].to_s
+    AddImpression.add_impression_to_update_visible(params[:impression_id], "", expanded)
+
+    respond_to do |format|
+      format.json {
+        render :json => {:success => true, :html => render_to_string(return_path, :layout => false)}.to_json
+      }
+      format.html {
+        render return_path, :layout => false
+      }
+    end
+  end
+
   def get_details_from_beauty_items(url, itemsaccess, impression_type, ad_id, winning_price_enc, sid)
     if !@items.blank?
       @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
@@ -257,7 +277,7 @@ class AdvertisementsController < ApplicationController
       end
     else
       @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
-      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, impression_type)
     end
 
     @search_url = CGI.escape(@search_url)
@@ -919,6 +939,7 @@ class AdvertisementsController < ApplicationController
     params[:visited] ||= ""
     format = request.format.to_s.split("/")[1]
     params[:format] = format
+    params[:expanded] ||= ""
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
@@ -971,9 +992,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded"))
     end
 
     cache_params = CGI::unescape(cache_params)
@@ -992,60 +1013,64 @@ class AdvertisementsController < ApplicationController
         cache_json = JSON.parse(cache)
         valid_html = cache_json["success"]
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
-          impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
-          item_id = params[:item_ids]
-          matched_val = cache.match(/present_item_id=.*#/)
-          unless matched_val.blank?
-            val = matched_val[0]
-            item_id = val.split("=")[1].gsub("#", "")
-          end
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
+          if params[:expanded].blank?
+            url_params = set_cookie_for_temp_user_and_url_params_process(params)
+            impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
+            item_id = params[:item_ids]
+            matched_val = cache.match(/present_item_id=.*#/)
+            unless matched_val.blank?
+              val = matched_val[0]
+              item_id = val.split("=")[1].gsub("#", "")
+            end
+            @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
 
-          cache_json["impression_id"] = @impression_id
-          cache_html = cache_json["html"].to_s
+            cache_json["impression_id"] = @impression_id
+            cache_html = cache_json["html"].to_s
 
-          if !cache_html.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
-            if (params[:t].to_i == 1)
-              @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
-              if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-                cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+            if !cache_html.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
+              if (params[:t].to_i == 1)
+                @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+                if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                  cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+                else
+                  cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />")
+                end
               else
-                cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />")
+                #remove 1x1 pixel image
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
+              end
+            elsif !cache_html.match(/<img src=\"https:\/\/www.plannto.com.*/).blank?
+              if (params[:t].to_i == 1)
+                @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+                if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                  cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+                else
+                  cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />")
+                end
+              else
+                #remove 1x1 pixel image
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
+                cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
               end
             else
-              #remove 1x1 pixel image
-              cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
-              cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
-            end
-          elsif !cache_html.match(/<img src=\"https:\/\/www.plannto.com.*/).blank?
-            if (params[:t].to_i == 1)
-              @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
-              if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-                cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
-              else
-                cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />")
+              if (params[:t].to_i == 1)
+                @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+                if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                  cache_html = cache_html.gsub("</head>", "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />\n</head>")
+                else
+                  cache_html = cache_html.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />\n</head>")
+                end
               end
-            else
-              #remove 1x1 pixel image
-              cache_html = cache_html.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
-              cache_html = cache_html.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
             end
+
+            cache_html = cache_html.gsub(/iid=.{36}/, "iid=#{@impression_id}")
+            cache_html.match "sid=#{params[:sid]}\""
+            cache_html = cache_html.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
+            cache_json["html"] = cache_html
           else
-            if (params[:t].to_i == 1)
-              @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
-              if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-                cache_html = cache_html.gsub("</head>", "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />\n</head>")
-              else
-                cache_html = cache_html.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120&google_ula=8365600' />\n</head>")
-              end
-            end
+            cache_json["html"] = cache_html
           end
-
-          cache_html = cache_html.gsub(/iid=.{36}/, "iid=#{@impression_id}")
-          cache_html.match "sid=#{params[:sid]}\""
-          cache_html = cache_html.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
-          cache_json["html"] = cache_html
         end
         p "*************************** Cache process success ***************************"
         logger.info "*************************** Cache process success ***************************"
