@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-    var domain = "www.plannto.com";
+//    var domain = "www.plannto.com";
 //for development
-//var domain = "localhost:3000";
+var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
@@ -104,10 +104,10 @@ var PlannTo = (function(window,undefined) {
             url = getScriptUrl();
             var doc_title =  jQuery(document).title;
             var pathname = getParam(url,"ref_url");
-            var visible = getParam(url,"visible");
+            var visited = getParam(url,"visited");
             var item_ids = getParam(url,"item_ids");
             console.log("----------------------------------")
-            console.log(visible == "true")
+            console.log(visited == "1")
             var images = jQuery("img")
 
             var valid_images = []
@@ -129,23 +129,29 @@ var PlannTo = (function(window,undefined) {
             jQuery.each(valid_images, function(indx, image){
                 if (indx != 0)
                 return
-                var visited = false
+                var page_visited = false;
+                var expanded = false;
 
                 indx = indx + 1;
-                var width = jQuery(image).width()
+                var img_width = jQuery(image).width()
+                var img_height = jQuery(image).height()
+
+                console.log(img_width)
+                console.log(img_height)
 
                 jQuery('<style type="text/css" id="plannto_style_'+indx+'"> ' +
                     'a { outline: none; }' +
                     '.plannto_iframe { position:absolute;width:100%;overflow:hidden;} ' +
                     '.plannto_hint_button {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -158px -2px;cursor: pointer !important;height: 70px;opacity: 1;position: absolute;top: 11px;transition: margin-top 0.6s ease 0s;width: 26px;z-index: 5 !important;}'+
-                    '.close_plannto_iframe {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -50px -24px;cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;z-index: 5;left: '+(width - 20)+'px;' +
-                    '.plannto_iframe:hover { width: '+width+'px;} ' +
+                    '.expand_plannto_iframe {cursor: pointer;height: 19px;left: 515px;opacity: 1;position: absolute;width: 20px;z-index: 5;text-decoration:none;color:black;}' +
+                    '.close_plannto_iframe {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -50px -24px;cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;z-index: 5;left: '+(img_width - 20)+'px;' +
+                    '.plannto_iframe:hover { width: '+img_width+'px;} ' +
                     '</style>').appendTo("head");
 
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
-                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visible='+visible
+                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited
                 var impression_id = ""
                 jQuery.ajax({
                     url : url,
@@ -155,20 +161,20 @@ var PlannTo = (function(window,undefined) {
                     {
                         if (data.success == true)
                         {
-                            impression_id = data.impression_id
+                            impression_id = data.impression_id;
                             jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
                             jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 90px; z-index: 2;width:100%;"> ' +
-                                '<div class="plannto_iframe"><a href="#" class="close_plannto_iframe"></a> <iframe id="plannto_ad_frame" src="" style="border:medium none;" height="90px" width="'+width+'px"> </iframe></div>' +
+                                '<div class="plannto_iframe"><a href="#" class="expand_plannto_iframe">expand</a><a href="#" class="close_plannto_iframe"></a><iframe id="plannto_ad_frame" src="" style="border:medium none;" height="90px" width="'+img_width+'px"> </iframe></div>' +
                                 '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
                                 '</div>')
 
                             jQuery("#plannto_ad_frame").attr("src","data:text/html;charset=utf-8," + encodeURI(data.html))
 
-                            if (visible == "true")
+                            if (visited == "1")
                             {
                                 jQuery(".plannto_hint_button").hide()
-                                visited = true
+                                page_visited = true
                             }
                             else
                             {
@@ -185,18 +191,35 @@ var PlannTo = (function(window,undefined) {
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
                     jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
+                    jQuery(".expand_plannto_iframe").show();
+                    return false;
+                })
+
+                jQuery(".expand_plannto_iframe").live("click", function(event)
+                {
+                    console.log(impression_id)
+                    jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height})
+                    jQuery(".plan_ad_image_1").css({"bottom":img_height})
+
+                    if (expanded == false)
+                    {
+                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id, "expanded": "1"})
+                        expanded = true
+                    }
+                    $(this).hide()
+
                     return false;
                 })
 
                 jQuery(".plannto_hint_button").live("mouseenter", function(event)
                 {
-                    jQuery(".plannto_iframe").animate({width: width+"px"}, "slow")
+                    jQuery(".plannto_iframe").animate({width: img_width+"px"}, "slow")
                     jQuery(".plannto_hint_button").hide()
 
-                    if (visited == false)
+                    if (page_visited == false)
                     {
-                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id})
-                        visited = true
+                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id, "visited": "1"})
+                        page_visited = true
                     }
 
                     return false;
