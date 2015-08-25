@@ -10,12 +10,15 @@
 
   
 </head>
-<body>
-
-
+<body style="margin: 0;">
 <div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_height %>px !important;">
-  <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>
-  <%= hidden_field_tag :visible, "true" %>
+  <div id="expanded_view" style="display: none;">
+    temporary disabled
+  </div>
+  <div id="normal_view">
+    <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>
+    <%= hidden_field_tag :visited, "true" %>
+  </div>
 </div>
 <%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>
 </body>
