@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-    var domain = "www.plannto.com";
+//    var domain = "www.plannto.com";
 //for development
-//var domain = "localhost:3000";
+var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
@@ -191,22 +191,45 @@ var PlannTo = (function(window,undefined) {
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
                     jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
-                    jQuery(".expand_plannto_iframe").show();
+//                    jQuery(".expand_plannto_iframe").show();
+
                     return false;
                 })
 
                 jQuery(".expand_plannto_iframe").live("click", function(event)
                 {
                     console.log(impression_id)
-                    jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height})
+                    jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
                     jQuery(".plan_ad_image_1").css({"bottom":img_height})
+
+//                    var swf = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" id="plannto-flash-ad" name="plannto-ad" width="300" height="60"> <param name="plannto-flash-movie" value="http://cdn1.plannto.com/static/video_ads/Flipkart 300x60.swf"> <param name="wmode" value="opaque"> <param name="allowscriptaccess" value="always"> <object type="application/x-shockwave-flash" data="http://cdn1.plannto.com/static/video_ads/Flipkart 300x60.swf" width="300" height="60"> <param name="FlashVars" value="clickTag=shop_now_url"> <param name="wmode" value="opaque"> <param name="allowscriptaccess" value="always"> </object></object>'
 
                     if (expanded == false)
                     {
-                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id, "expanded": "1"})
+                        var expanded_url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=62&size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expanded=1'+'&impression_id='+impression_id
+                        jQuery.ajax({
+                            url : expanded_url,
+                            type: "get",
+                            dataType:"json",
+                            success:function(data)
+                            {
+                                if (data.success == true)
+                                {
+                                    var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
+                                    jQuery(normal_view).hide()
+
+                                    var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
+                                    jQuery(expanded_view).html(data.html)
+                                    jQuery(expanded_view).show()
+                                }
+                            }
+                        });
+
+
+//                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id, "expanded": "1"})
                         expanded = true
                     }
-                    $(this).hide()
+                    jQuery(this).hide()
 
                     return false;
                 })
