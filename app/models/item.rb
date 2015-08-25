@@ -2570,6 +2570,7 @@ end
       if sale_price.blank?
         sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
       end
+      category_item_detail.price = item.get_element("Offer/OfferListing/ListPrice").get("FormattedPrice") rescue ""
       category_item_detail.image_url = item.get("ImageSets/ImageSet/SwatchImage/URL") rescue ""
       #temporary solution to replace image  SL30 to SL50
       category_item_detail.image_url = category_item_detail.image_url.gsub("SL30","SL80");
