@@ -160,7 +160,7 @@ class AdvertisementsController < ApplicationController
     included_beauty = @items.map {|d| d.is_a?(Beauty) || d.is_a?(Apparel)}.include?(true) rescue false
 
     if included_beauty
-      get_details_from_beauty_items(url, itemsaccess)
+      get_details_from_beauty_items(url, itemsaccess, impression_type, ad_id, winning_price_enc, sid)
     else
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       @publisher = Publisher.getpublisherfromdomain(url) if @publisher.blank?
@@ -185,7 +185,7 @@ class AdvertisementsController < ApplicationController
         @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
         if @is_test != "true"
           @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                                  cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visible])
+                                                                  cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
           Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
         end
 
@@ -235,7 +235,7 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => true, :html => render_to_string(return_path, :layout => false)}.to_json
+          render :json => {:success => true, :html => render_to_string(return_path, :layout => false), :impression_id => @impression_id}.to_json
         end
       }
       format.html {
@@ -248,7 +248,7 @@ class AdvertisementsController < ApplicationController
     end
   end
 
-  def get_details_from_beauty_items(url, itemsaccess)
+  def get_details_from_beauty_items(url, itemsaccess, impression_type, ad_id, winning_price_enc, sid)
     if !@items.blank?
       @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
 
@@ -270,15 +270,16 @@ class AdvertisementsController < ApplicationController
       # Check have to activate tabs for publisher or not
       # @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
       if @is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque("fashion", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+        @impression_id = AddImpression.add_impression_to_resque(impression_type, @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
+        Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
       end
 
       @show_count = Item.get_show_item_count(@items)
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, impression_type)
     end
     @ref_url = url
   end
@@ -729,7 +730,9 @@ class AdvertisementsController < ApplicationController
   end
 
   def ads_visited
-    AddImpression.add_impression_to_update_visible(params[:impression_id])
+    visited = params[:visited].to_s
+    expanded = params[:expanded].to_s
+    AddImpression.add_impression_to_update_visible(params[:impression_id], visited, expanded)
     render :nothing => true
   end
 
@@ -913,7 +916,7 @@ class AdvertisementsController < ApplicationController
     params[:ad_type] ||= ""
     params[:hou_dynamic_l] ||= ""
     params[:l] ||= ""
-    params[:visible] ||= ""
+    params[:visited] ||= ""
     format = request.format.to_s.split("/")[1]
     params[:format] = format
 

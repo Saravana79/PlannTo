@@ -16,6 +16,8 @@ class AggregatedImpression
   field :ret, type: Hash #Retargetting True or False
   field :rii, type: Hash #Related Item Impression True or False
   field :size, type: Hash #Related Item Impression True or False
+  field :visited, type: Hash #Related Item Impression True or False
+  field :expanded, type: Hash #Related Item Impression True or False
 
   # field :hours, type: Array
   # [*0..23].each do |each_hour|

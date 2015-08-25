@@ -311,7 +311,7 @@ class Advertisement < ActiveRecord::Base
 
     if param[:is_test] != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,
-                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r], param[:a], param[:video], param[:video_impression_id], param[:visible])
+                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r], param[:a], param[:video], param[:video_impression_id], param[:visited])
       Advertisement.check_and_update_act_spent_budget_in_redis(ads_id,param[:wp])
     end
     return @impression_id
@@ -625,6 +625,7 @@ class Advertisement < ActiveRecord::Base
         clicks_import_mongo = []
         video_imp_import = []
         non_ad_impressions_list = []
+        update_impressions = []
         ads_hash = {}
         publisher_hash = {}
         items_hash = {}
@@ -674,7 +675,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["additional_details"] = impression.a
               impression_mongo["geo"] = impression.geo
               impression_mongo["is_rii"] = impression.having_related_items
-              impression_mongo["visible"] = impression.visible if !impression.visible.blank?
+              impression_mongo["visited"] = impression.visited if !impression.visited.blank?
 
               time = impression.impression_time.utc rescue Time.now
               date = time.to_date rescue ""
@@ -709,6 +710,7 @@ class Advertisement < ActiveRecord::Base
                 device_name = impression.device.to_s
                 is_rii = impression_mongo["is_rii"].to_s
                 ret_val = impression.r.to_i == 1
+                visited = impression.visited.to_i == 1
                 ad_size = impression_mongo["size"].to_s
 
                 current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
@@ -760,6 +762,16 @@ class Advertisement < ActiveRecord::Base
                   current_hash["ret"].merge!({"#{ret_val}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
                   curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + winning_price.to_f})
+                end
+
+                if visited == true
+                  current_hash["visited"] = {} if current_hash["visited"].blank?
+                  curr_visited = current_hash["visited"]["#{visited}"]
+                  if curr_visited.blank?
+                    current_hash["visited"].merge!({"#{visited}" => {"imp" => 1, "costs" => winning_price.to_f}})
+                  else
+                    curr_visited.merge!({"imp" => curr_visited["imp"].to_i + 1, "costs" => curr_visited["costs"].to_f + winning_price.to_f})
+                  end
                 end
 
                 #Items hash
@@ -1020,7 +1032,61 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["viewability"] = url_params[:v].blank? ? 101 : url_params[:v].to_i
               impression_mongo["additional_details"] = impression.a
               impression_import_mongo << impression_mongo
+            elsif each_rec_class == "UpdateImpression"
+              obj_params = each_rec_detail
+              unless obj_params.is_a?(Hash)
+                obj_params = JSON.parse(obj_params)
+              end
+              obj_params = obj_params.symbolize_keys
 
+              impression_id = obj_params.delete(:impression_id)
+
+              add_impression = AddImpression.where(:id => impression_id).last
+
+              if add_impression.blank?
+                add_impression = impression_import.select {|each_imp| each_imp.id.to_s == impression_id.to_s}.last
+                add_impression = non_ad_impressions_list.select {|each_imp| each_imp.id.to_s == impression_id.to_s}.last if add_impression.blank?
+              end
+
+              if !add_impression.blank?
+                time = add_impression.impression_time.utc rescue Time.now
+                imp_date = time.to_date rescue ""
+                hour = time.hour rescue ""
+                imp_advertisement_id = add_impression.advertisement_id.to_s
+
+                current_hash = ads_hash["#{imp_date}_#{imp_advertisement_id}"]
+                if current_hash.blank?
+                  ads_hash["#{imp_date}_#{imp_advertisement_id}"] = {}
+                  current_hash = ads_hash["#{imp_date}_#{imp_advertisement_id}"]
+                end
+
+                current_hash.merge!("agg_date" => "#{date}", "ad_id" => imp_advertisement_id)
+
+                visited = obj_params[:visited].to_i == 1
+                expanded = obj_params[:expanded].to_i == 1
+
+                if visited == true
+                  current_hash["visited"] = {} if current_hash["visited"].blank?
+                  curr_visited = current_hash["visited"]["#{visited}"]
+                  if curr_visited.blank?
+                    current_hash["visited"].merge!({"#{visited}" => {"imp" => 1, "costs" => winning_price.to_f}})
+                  else
+                    curr_visited.merge!({"imp" => curr_visited["imp"].to_i + 1, "costs" => curr_visited["costs"].to_f + winning_price.to_f})
+                  end
+                end
+
+                if expanded == true
+                  current_hash["expanded"] = {} if current_hash["expanded"].blank?
+                  curr_expanded = current_hash["expanded"]["#{expanded}"]
+                  if curr_expanded.blank?
+                    current_hash["expanded"].merge!({"#{expanded}" => {"imp" => 1, "costs" => winning_price.to_f}})
+                  else
+                    curr_expanded.merge!({"imp" => curr_expanded["imp"].to_i + 1, "costs" => curr_expanded["costs"].to_f + winning_price.to_f})
+                  end
+                end
+              end
+
+              # update_impressions << {impression_id => obj_params} if !impression_id.blank?
             end
           rescue Exception => e
             p "There was problem while running impressions process => #{e.backtrace}"
@@ -1054,6 +1120,8 @@ class Advertisement < ActiveRecord::Base
               agg_imp.size = Advertisement.combine_hash(agg_imp.size, val["size"]) if !val["size"].blank?
               agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
               agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
+              agg_imp.visited = Advertisement.combine_hash(agg_imp.visited, val["visited"]) if !val["visited"].blank?
+              agg_imp.expanded = Advertisement.combine_hash(agg_imp.expanded, val["expanded"]) if !val["expanded"].blank?
 
               agg_imp.total_imp = agg_imp.total_imp.to_i + val["total_imp"].to_i
               agg_imp.total_clicks = agg_imp.total_clicks.to_i + val["total_clicks"].to_i

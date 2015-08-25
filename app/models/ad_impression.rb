@@ -29,7 +29,7 @@ class AdImpression
   field :video_impression_id, type: String
   field :geo, type: String
   field :is_rii, type: Boolean #is_related_item_impression
-  field :visible, type: Boolean #is_related_item_impression
+  field :visited, type: Boolean #is visited
 
   # has_one :m_click
   # embeds_many :m_clicks
