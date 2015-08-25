@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-//    var domain = "www.plannto.com";
+    var domain = "www.plannto.com";
 //for development
-var domain = "localhost:3000";
+//var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
