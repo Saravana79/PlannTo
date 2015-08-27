@@ -2093,7 +2093,7 @@ end
     host
   end
 
-  def self.get_items_from_amazon(keyword, page_type, excluded_items=[], geo="in")
+  def self.get_items_from_amazon(keyword, page_type, excluded_items=[], geo="in", valid_item_names=[])
     if geo == "us"
       browse_node = 3760911
       sort = 'relevancerank'
@@ -2105,19 +2105,8 @@ end
       sort = 'relevancerank'
     end
 
-    api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}"
-    res = APICache.get(api_keyword, :cache => 5.hours) do
-      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => sort})
-    end
-
     items = []
-    if excluded_items.blank?
-      loop_items = res.items
-      loop_items = loop_items.sample(8)
-    else
-      loop_items = res.items
-      loop_items = loop_items.sample(8)
-    end
+    loop_items, search_url = Item.get_loop_items_from_amazon_api(keyword, geo, browse_node, sort, valid_item_names)
 
     loop_items.each_with_index do |each_item, index|
       item = OpenStruct.new
@@ -2140,18 +2129,59 @@ end
       item.click_url = each_item.get("DetailPageURL")
       items << item
     end
-    search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content rescue nil
     return items, search_url
   end
 
-  def self.get_item_items_from_amazon(items, item_ids, page_type, geo="in")
+  def self.get_loop_items_from_amazon_api(keyword, geo, browse_node, sort, valid_item_names)
+    loop_items = []
+    search_url = ""
+    [*1..10].each do |each_page|
+      begin
+        api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}#{each_page}"
+        sleep(3)
+
+        res = APICache.get(api_keyword, :cache => 5.hours) do
+          Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => sort, :item_page => each_page})
+        end
+
+        search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content rescue nil if !search_url.blank?
+
+        if valid_item_names.blank?
+          loop_items = res.items
+          break
+        else
+          if !res.items.blank?
+            items = res.items
+
+            items.each do |each_item|
+              name = each_item.get_element("ItemAttributes").get("Title").to_s rescue ""
+
+              if !valid_item_names.select {|each_m| name.to_s.downcase.include?(each_m)}.blank?
+                loop_items << each_item
+                break if loop_items.count >= 10
+              end
+            end
+          else
+            break
+          end
+        end
+      rescue Exception => e
+        p "Error"
+      end
+    end
+
+    loop_items = loop_items.sample(10)
+    return loop_items, search_url
+  end
+
+  def self.get_item_items_from_amazon(items, item_ids, page_type, geo="in", valid_item_names=[])
     geo = "in" if geo.blank?
     item_id = item_ids.to_s.split(",").first
     if items.count == 1
       item = items.first
       extra_items = item.blank? ? [] : [item.parent].compact rescue []
       keyword = item.name.to_s
-      items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo)
+      items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo, valid_item_names)
     else
       manufacturer = items.select {|a| a.is_a?(Manufacturer)}.first
       color = items.select {|a| a.is_a?(Color)}.first
@@ -2166,18 +2196,18 @@ end
       #Decide keyword combination
       if !manufacturer.blank? && !color.blank?
         keyword = "#{color.name} #{manufacturer.name} #{item.name}"
-        items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo)
+        items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo, valid_item_names)
 
         if items.blank?
           keyword = "#{manufacturer.name} #{item.name}"
-          items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo)
+          items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo, valid_item_names)
           if items.blank?
-            items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
+            items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo, valid_item_names)
             extra_items = products - [item]
             extra_items = extra_items.first(8)
           else
             if items.count < 8
-              added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
+              added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo, valid_item_names)
               items = items + added_items
               items = items.flatten.first(8)
             end
@@ -2190,7 +2220,7 @@ end
           end
         else
           if items.count < 8
-            added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
+            added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo, valid_item_names)
             items = items + added_items
             items = items.flatten.first(8)
           end
@@ -2203,14 +2233,14 @@ end
         end
       elsif !manufacturer.blank?
         keyword = "#{manufacturer.name} #{item.name}"
-        items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo)
+        items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo, valid_item_names)
         if items.blank?
-          items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
+          items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo, valid_item_names)
           extra_items = products - [item]
           extra_items = extra_items.first(8)
         else
           if items.count < 8
-            added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
+            added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo, valid_item_names)
             items = items + added_items
             items = items.flatten.first(8)
           end
@@ -2226,7 +2256,7 @@ end
         extra_items = extra_items.first(8)
 
         keyword = item.name.to_s
-        items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo)
+        items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo, valid_item_names)
       end
     end
 
@@ -2236,7 +2266,7 @@ end
 
   def self.get_items_from_url(url, item_ids)
     @items = []
-    tempurl = url
+    tempurl = url.to_s
     if !item_ids.blank?
       item_id = item_ids.to_s.split(",").first
       @items = Item.where(:id => item_id)
@@ -2244,8 +2274,8 @@ end
       unless url.nil?
         @articles, tempurl = Item.get_articles_from_url(url)
 
-        if (url.include?("stylecraze.com") || url.include?("fashionlady.in"))
-          article = @articles.first
+        if (url.include?("stylecraze.com") || url.include?("fashionlady.in") || url.include?("bebeautiful.in"))
+          p article = @articles.first
           if !article.blank?
             keyword = article.field2
             if !keyword.blank?
@@ -2384,7 +2414,7 @@ end
     @item
   end
 
-  def self.get_best_seller_beauty_items_from_amazon(page_type, url=nil, geo="in")
+  def self.get_best_seller_beauty_items_from_amazon(page_type, url=nil, geo="in", valid_item_names=[])
     #$redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K","B007E9IGSS","B007E9INFO","B00B5AK41E","B00MPS44A2","B00L8PEEAI"])
 
     items = []
@@ -2403,17 +2433,17 @@ end
 
           items << OpenStruct.new(:name => term)
 
-          item, items, search_url, extra_items = Item.get_item_items_from_amazon(items, "", page_type, geo)
+          item, items, search_url, extra_items = Item.get_item_items_from_amazon(items, "", page_type, geo, valid_item_names)
         end
       end
     end
 
-    if items.blank?
+    if (items.blank? || (!valid_item_names.blank? && items.count < 4))
       excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
       keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
       keyword = keywords.sample(1)[0]
       p keyword + " - sample keyword"
-      items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo)
+      items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
       item = Item.where(:id => 27731).first
       extra_items = []
     end

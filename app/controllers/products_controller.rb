@@ -394,7 +394,9 @@ class ProductsController < ApplicationController
     url =  @url
 
     included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
-    if included_beauty
+    if url.include?("bebeautiful.in")
+      show_widget_for_bebeautiful(url, itemsaccess)
+    elsif included_beauty
       get_details_from_beauty_items(url, itemsaccess)
     else
       get_details_from_fashion_ads()
@@ -418,7 +420,7 @@ class ProductsController < ApplicationController
       end
     else
       @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
-      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
     end
 
     @search_url = CGI.escape(@search_url)
@@ -439,7 +441,43 @@ class ProductsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+    end
+    @ref_url = url
+  end
+
+  def show_widget_for_bebeautiful(url, itemsaccess)
+    valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline"]
+    if !@items.blank?
+      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+
+      if @items.blank? || @items.count < 4
+        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
+      end
+    else
+      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+    end
+
+    @search_url = CGI.escape(@search_url)
+    url_params = Advertisement.make_url_params(params)
+
+    # include pre order status if we show more details.
+    unless @items.blank?
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      @publisher = Publisher.getpublisherfromdomain(url)
+      # Check have to activate tabs for publisher or not
+      # @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("fashion", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+
+      @show_count = Item.get_show_item_count(@items)
+    else
+      @where_to_buy_items =[]
+      itemsaccess = "none"
+      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
     end
     @ref_url = url
   end
@@ -858,7 +896,7 @@ class ProductsController < ApplicationController
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
-    return url_params, url, itemsaccess, item_ids
+    return url_params, url.to_s, itemsaccess, item_ids
   end
 
   def product_offers
