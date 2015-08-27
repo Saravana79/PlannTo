@@ -329,7 +329,7 @@ class ProductsController < ApplicationController
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
-    @items, tempurl = Item.get_items_from_url(url, params[:item_ids])
+    @items, tempurl, from_article_field = Item.get_items_from_url(url, params[:item_ids])
     url =  tempurl
 
     if !@items.blank?
@@ -448,11 +448,34 @@ class ProductsController < ApplicationController
 
   def show_widget_for_bebeautiful(url, itemsaccess)
     valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline"]
+
     if !@items.blank?
-      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+      is_multi_array = @items.first.is_a?(Array)
+
+      if is_multi_array
+        multi_items = @items
+        multi_items.each_with_index do |each_items, index|
+          if index == 0
+            @item, items, @search_url, @extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+            @items = []
+            @items << items
+          else
+            new_item, new_items, new_search_url, new_extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+            @items << new_items
+          end
+
+          break if @items.flatten.count >= 4
+        end
+        @items = @items.flatten
+      else
+        @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+      end
 
       if @items.blank? || @items.count < 4
+        total_items = @items
         @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
+        @items = total_items + @items
+        @items = @items.flatten
       end
     else
       @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
@@ -1403,17 +1426,17 @@ class ProductsController < ApplicationController
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
 
-    @items, @url = Item.get_items_from_url(url, params[:item_ids])
+    @items, @url, from_article_field = Item.get_items_from_url(url, params[:item_ids])
 
-    if !@items.blank?
-      params[:item_ids] = @items.map(&:id).join(",")
-      included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
-      if included_beauty
+    if !@items.flatten.blank?
+      params[:item_ids] = @items.flatten.map(&:id).compact.join(",")
+      included_beauty = @items.flatten.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
+      if included_beauty || from_article_field
         params[:beauty] = "true"
       end
     end
 
-    if params[:beauty] != "true" && (params[:item_ids].blank? || params[:fashion_id].blank?)
+    if params[:beauty] != "true" && (params[:item_ids].blank? && params[:fashion_id].blank?)
       # item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
       #
       # if random_id.blank?

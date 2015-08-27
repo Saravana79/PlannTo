@@ -2265,53 +2265,55 @@ end
 
 
   def self.get_items_from_url(url, item_ids)
-    @items = []
+    items = []
+    from_article_field = false
     tempurl = url.to_s
     if !item_ids.blank?
       item_id = item_ids.to_s.split(",").first
-      @items = Item.where(:id => item_id)
+      items = Item.where(:id => item_id)
     else
       unless url.nil?
         @articles, tempurl = Item.get_articles_from_url(url)
 
         if (url.include?("stylecraze.com") || url.include?("fashionlady.in") || url.include?("bebeautiful.in"))
-          p article = @articles.first
+          article = @articles.first
           if !article.blank?
             keyword = article.field2
             if !keyword.blank?
-              @items << OpenStruct.new(:name => keyword)
-            else
-              @items = Item.get_items_from_articles(@articles)
-              if @items.blank?
-                @items = Item.get_items_from_fashion_url(url)
-              end
+              from_article_field = true
+              items << [OpenStruct.new(:name => keyword)]
+            end
+
+            items << Item.get_items_from_articles(@articles)
+            if items.flatten.blank?
+              items = Item.get_items_from_fashion_url(url)
             end
           else
-            @items = Item.get_items_from_fashion_url(url)
+            items = Item.get_items_from_fashion_url(url)
             @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
           end
         else
           if !@articles.blank?
-            # @items = @articles[0].allitems.select{|a| a.is_a? Product}
-            @items = Item.get_items_from_articles(@articles)
+            # items = @articles[0].allitems.select{|a| a.is_a? Product}
+            items = Item.get_items_from_articles(@articles)
           end
         end
       end
     end
-    return @items, tempurl
+    return items, tempurl, from_article_field
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
   end
 
   def self.get_items_from_articles(articles)
-    @items = articles[0].allitems
+    items = articles[0].allitems
 
-    article_items_ids = @items.map(&:id)
-    new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+    article_items_ids = items.map(&:id)
+    new_items = article_items_ids.blank? ? [] : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
 
     if !new_items.blank?
-      @items = new_items
+      items = new_items
     end
-    @items
+    items
   end
 
   def self.get_items_from_fashion_url(url)

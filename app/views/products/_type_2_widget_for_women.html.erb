@@ -1,3 +1,7 @@
+<%= javascript_include_tag "http://localhost:3000/javascripts/owl.carousel.min.js" %>
+
+<link rel="stylesheet" type="text/css" href="http://localhost:3000/stylesheets/owl.carousel.css"/>
+
 <% if !@items.blank? %>
 
     <style type="text/css">
@@ -23,7 +27,7 @@
         .planntocarosel-left{padding: 107px 3px 0 0px;}
         .planntocarosel-right{padding: 107px 3px 0 0px;}
         <%else%>
-        .product-container{width:50%}
+        .product-container{width:25%}
         .product-container-top{width:86%;float:left;}
         .planntocarosel-left{padding: 35px 3px 0 0px;}
         .planntocarosel-right{padding: 35px 3px 0 0px;}
@@ -50,7 +54,7 @@
         .btn .shop-now{ margin:0; padding:3px 10px; background:#E47911; color:#fff; font-size:13px; text-transform:none; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
 
         #container {border-left:1px solid #E5E5E5;border-right:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;}
-        #productdiv {max-height:260px;overflow:hidden;}
+        .productdiv {max-height:260px;overflow:hidden;}
         a { outline: none; }
 
         .strike_price {text-decoration: line-through;color: #555;
@@ -68,13 +72,13 @@
         </ul>
       </div>
       <% search_url = !@search_url.blank? ? "#{configatron.hostname}/history_details?item_id=&geo=#{params[:geo]}&red_url=#{@search_url}&iid=#{@impression_id}" : "" %>
-      <div id="productdiv">
-        <div class="planntocarosel-left">
-          <a  title="Prev" href="<%= search_url %>" target="_blank">
-            <span></span>
-          </a>
-        </div>
-        <% @items.first(8).each_slice(2).each_with_index do |items, indx| %>
+      <div class="productdiv owl-carousel" id="owl-demo">
+        <!--<div class="planntocarosel-left">-->
+          <!--<a  title="Prev" href="<%= search_url %>" target="_blank">-->
+            <!--<span></span>-->
+          <!--</a>-->
+        <!--</div>-->
+        <% @items.first(10).each_slice(4).each_with_index do |items, indx| %>
             <div class="product-container-top" id="<%= indx + 1 %>">
               <% items.each do |item| %>
                   <% if item.itemdetail_id.blank? %>
@@ -116,11 +120,11 @@
               <% end %>
             </div>
         <% end %>
-        <div class="planntocarosel-right">
-          <a  title="Next" href="<%= search_url %>" target="_blank">
-            <span></span>
-          </a>
-        </div>
+        <!--<div class="planntocarosel-right">-->
+          <!--<a  title="Next" href="<%= search_url %>" target="_blank">-->
+            <!--<span></span>-->
+          <!--</a>-->
+        <!--</div>-->
       </div>
       <% if !search_url.blank? %>
           <div class="bottompan">
@@ -140,6 +144,33 @@
         window.open(shop_now.attr("href"))
         return false;
     });
+
+    function owl_carousel()
+    {
+        PlannTo.jQuery("#owl-demo").owlCarousel({
+            /*   navigation: true,
+             navigationText: [
+             "<i class='icon-chevron-left icon-white'></i>",
+             "<i class='icon-chevron-right icon-white'></i>"
+             ],*/
+            items : 2, //10 items above 1000px browser width
+            itemsDesktop : [1000,2], //5 items between 1000px and 901px
+            itemsDesktopSmall : [600,2], // betweem 900px and 601px
+            itemsTablet: [500,1], //2 items between 600 and 0
+            itemsMobile : [300,1]// itemsMobile disabled - inherit from itemsTablet option
+
+        });
+    }
+
+//    PlannTo.jQuery(window).load(function()
+    PlannTo.jQuery(function()
+    {
+        setTimeout(owl_carousel, 1000)
+
+        setTimeout(owl_carousel, 3000)
+    });
+
+    <% if 1 != 1 %>
 
     PlannTo.jQuery(document).ready(function()
     {
@@ -213,4 +244,5 @@
         event.preventDefault();
         return false;
     });
+    <% end %>
 </script>
