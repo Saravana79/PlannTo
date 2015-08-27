@@ -14,7 +14,7 @@ var domain = "www.plannto.com";
 //for development
 //var domain = "localhost:3000";
 // Localize jQuery variable
-var jQuery; 
+//var jQuery;
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.7.1') {
@@ -46,7 +46,7 @@ function scriptLoadHandler() {
     // Restore jQuery and window.jQuery to their previous values and store the
     // new jQuery in our local jQuery variable
     jQuery = window.jQuery.noConflict(true);
-    PlannTo.jQuery = jQuery;    
+    PlannTo.jQuery = jQuery;
   
     // Call our main function
 
