@@ -238,6 +238,8 @@ class PlanntoUserDetail
           end
           old_detail.destroy
         end
+        self.skip_callback = true
+        self.skip_duplicate_update = true
         self.save!
       end
 
@@ -276,6 +278,8 @@ class PlanntoUserDetail
           end
           old_detail.destroy
         end
+        self.skip_callback = true
+        self.skip_duplicate_update = true
         self.save!
       end
 
