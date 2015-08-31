@@ -1,21 +1,68 @@
 <style type="text/css">
 
-.shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
-.shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #E65E7B!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #D2D2D2;}
-.shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
-.shadetabs li.selected{padding:0px!important; margin:0px !important; text-align:center; background: <%= @vendor_detail.theme_colour %> !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292!important;font-weight: 700;}
-.shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
+    .shadetabs {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        list-style-type: none;
+        text-align: left;
+        z-index: -1;
+    }
+
+    .shadetabs li.unselected {
+        float: left;
+        padding: 0px !important;
+        margin: 0 0 0 2px !important;
+        background: #E65E7B !important;
+        list-style-type: none !important;
+        width: 49.2%;
+        text-align: center;
+        border-bottom: 2px solid #D2D2D2;
+    }
+
+    .shadetabs li.unselected a {
+        text-decoration: none;
+        font-size: 14px;
+        color: #fff !important;
+        text-decoration: none;
+        padding: 6px 15px;
+        display: inline-block;
+        margin: 0;
+        text-align: center;
+    }
+
+    .shadetabs li.selected {
+        padding: 0px !important;
+        margin: 0px !important;
+        text-align: center;
+        background: <%= @vendor_detail.theme_colour %> !important;
+        list-style-type: none !important;
+        text-align: center;
+        text-transform: uppercase;
+        border: 1px solid #929292 !important;
+        font-weight: 700;
+    }
+
+    .shadetabs li.selected a {
+        color: black !important;
+        font-size: 14px;
+        text-decoration: none;
+        padding: 4px 15px;
+        display: inline-block;
+        margin: 0;
+        text-align: center;
+    }
 </style>
-<div id="planntobuy"   style="border: 1px solid #E2E2E2;">
-     <div>
-          <!--  <ul class="shadetabs">
+<div id="planntobuy" style="border: 1px solid #E2E2E2;">
+  <div>
+    <!--  <ul class="shadetabs">
                 <li class="selected">
-                    <a href="javascript:void(0)" id="where_to_buy_items_a" ><img src="<%= configatron.root_image_path%>static/images/<%= @vendor_detail.theme_image %>" style="height: 20px;"></a>
+                    <a href="javascript:void(0)" id="where_to_buy_items_a" ><img src="<%= configatron.root_image_path %>static/images/<%= @vendor_detail.theme_image %>" style="height: 20px;"></a>
                 </li>-->
-            </div>
+  </div>
   <% @where_to_buy_items.each do |item_detail| %>
 
-      <div style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;">
+      <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;">
    
         <span style="float: left;padding-right: 2px;">
           <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 50, 0, "medium").html_safe %>
@@ -34,33 +81,43 @@
                <span style="float: right;margin-top:2px;margin-right:40px;">
                 <img width="50px" height="px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(item_detail) %>">
               </span>
-         <% end %>
-         <span style="float: right;width:10%;text-align:center;">
+              <% end %>
+              <span style="float: right;width:10%;text-align:center;">
     
          <div style="margin-top:10px;">
-            <p class="btn">
-              <a style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; background: #FF972E;padding: 3px 5px; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= item_detail.id %>">
-                GO
-              </a>
-            </p>
-          </div>
+           <p class="btn">
+             <a style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; background: #FF972E;padding: 3px 5px; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href="<%= configatron.hostname %>/history_details?iid=<%= @impression_id %>&detail_id=<%= item_detail.id %>">
+               GO
+             </a>
+           </p>
+         </div>
         </span>
             </div>
         </span>
-        
-        
+
 
         <br clear="all">
       </div>
   <% end %>
-            <% if (!@publisher.nil? && @publisher.id != 18) %>
-        <div height="20px;" style="height:20px;padding:2px;">
-        <div style="text-align:center;" style ="font-size:14px;margin-top:2px;">
-         <span style="vertical-align:top;font-size:12px;"> Powered by </span><span><a href="http://www.plannto.com/history_details?red_url=http://www.junglee.com?tag=plannto-junglee-g-21" style="display:inline-block;margin-top:0px;height:14px" target="_blank"><img height="18px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(@where_to_buy_items[0]) %>"></a></span>
-         </div>
-       </div>
+  <% if (!@publisher.nil? && @publisher.id != 18) %>
+      <div height="20px;" style="height:20px;padding:2px;">
+        <div style="text-align:center;" style="font-size:14px;margin-top:2px;">
+          <span style="vertical-align:top;font-size:12px;"> Powered by </span><span><a href="http://www.plannto.com/history_details?red_url=http://www.junglee.com?tag=plannto-junglee-g-21" style="display:inline-block;margin-top:0px;height:14px" target="_blank"><img height="18px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(@where_to_buy_items[0]) %>"></a></span>
+        </div>
+      </div>
 
-        <%end%>
+  <% end %>
 </div>
 
+<script type="text/javascript">
+    jQuery(document).ready(function()
+    {
+        jQuery(".each_item_detail").live("click", function()
+        {
+            var shop_now_url = jQuery(this).find(".shop-now").attr('href')
 
+            window.open(shop_now_url, "_blank")
+            return false;
+        })
+    })
+</script>
