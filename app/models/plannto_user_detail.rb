@@ -1,7 +1,7 @@
 class PlanntoUserDetail
   include Mongoid::Document
   # include Mongoid::Timestamps::Created
-  after_save :update_lad, :update_duplicate_record
+  after_save :update_lad#, :update_duplicate_record
 
   attr_accessor :skip_callback, :skip_duplicate_update
 
@@ -177,15 +177,13 @@ class PlanntoUserDetail
   private
 
   def update_lad
-    self.skip_callback = true
-
     # if self.skip_duplicate_update != true
     #   self.skip_duplicate_update = true
     #   update_duplicate_record
     # end
 
     if self.skip_callback != true
-      # self.skip_duplicate_update = true
+      self.skip_duplicate_update = true
       self.skip_callback = true
       self.lad = Time.now
       self.save
@@ -205,9 +203,6 @@ class PlanntoUserDetail
   end
 
   def update_duplicate_record
-    self.skip_callback = true
-    self.skip_duplicate_update = true
-
     if self.plannto_user_id_changed? || self.google_user_id_changed?
       plannto_user_details = PlanntoUserDetail.where(:plannto_user_id => self.plannto_user_id)
       if plannto_user_details.count > 1
