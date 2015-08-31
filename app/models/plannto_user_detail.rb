@@ -180,7 +180,7 @@ class PlanntoUserDetail
     p 1111111111111111111111111
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
-      update_duplicate_record
+      # update_duplicate_record
     end
 
     if self.skip_callback != true
