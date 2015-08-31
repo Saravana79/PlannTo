@@ -62,7 +62,7 @@
   </div>
   <% @where_to_buy_items.each do |item_detail| %>
 
-      <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;">
+      <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
    
         <span style="float: left;padding-right: 2px;">
           <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 50, 0, "medium").html_safe %>
