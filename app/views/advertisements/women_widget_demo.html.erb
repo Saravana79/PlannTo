@@ -29,6 +29,15 @@
   <div class="demo_form row">
     <div class="search_form">
       <%= form_for :search, :url => "/advertisements/women_widget_demo", :html => {:method => 'get'} do |search_form| %>
+          <div class="radio_button" style="padding: 5px 0 19px;text-align: center;">
+            Type:
+            <%= search_form.radio_button :page_type,"type_1", :name => "page_type", :checked => params[:page_type] == "type_1" ? "checked" : "" %>
+            <%= search_form.label :page_type, 'Type 1', :name => "page_type" %>
+
+            <%= search_form.radio_button :page_type,"type_2", :name => "page_type", :checked => params[:page_type] == "type_2" ? "checked" : "" %>
+            <%= search_form.label :page_type, 'Type 2', :name => "page_type" %>
+          </div>
+
           Url : <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 528px;" %>
           Item Ids : <%= search_form.text_field :item_id, :name => "item_id", :value => params[:item_id], :style => "width: 200px;" %>
           <%= search_form.submit "Go" %>
@@ -43,7 +52,7 @@
 
 <div id="where_to_buy_items">
 </div>
-<script async src="<%= configatron.hostname %>/javascripts/plannto.women.widget.js?ref_url=<%= params[:ref_url] %>&item_id=<%= params[:item_id] %>&show_details=true&element_id=where_to_buy_items&is_test=&page_type=type_1&geo=in"></script>
+<script async src="<%= configatron.hostname %>/javascripts/plannto.women.widget.js?ref_url=<%= params[:ref_url] %>&item_id=<%= params[:item_id] %>&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>&geo=in"></script>
 
 <br/>
 

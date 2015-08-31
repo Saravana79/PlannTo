@@ -655,6 +655,7 @@ class AdvertisementsController < ApplicationController
 
   def women_widget_demo
     params[:ref_url] ||= "http://www.wiseshe.com/2014/12/how-to-make-your-curls-last-long.html"
+    params[:page_type] ||= "type_1"
     params[:type] ||= "elec_widget"
     render :layout => false
   end

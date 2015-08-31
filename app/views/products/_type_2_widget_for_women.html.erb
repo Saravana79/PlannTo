@@ -78,7 +78,7 @@
                         <% if !item.image_name.blank? %>
                           <%= get_image_tag_from_image_name(item.image_name, "Amazon", @item.base_item_image_url(:medium), 140,105).html_safe %>
                         <% else %>
-                            <img src="<%= item.image_url.gsub("SL75","SL150") %>" alt="" id="item_details">
+                            <img src="<%= item.image_url.to_s.gsub("SL75","SL150") %>" alt="" id="item_details">
                         <% end %>
                       </a>
 
@@ -105,7 +105,7 @@
         <!--</div>-->
       </div>
        <div class="planntocarosel-right next" style="position: absolute;z-index: 10;top: 70px;right: 10px;cursor:hand;">
-          <img src="<%= configatron.root_image_path%>static/images//arrow_right.png" style="height:40px;"/>
+          <img src="<%= configatron.root_image_path%>static/images/arrow_right.png" style="height:40px;"/>
         </div>
       <% if !search_url.blank? %>
           <div class="bottompan">
@@ -128,7 +128,7 @@
 
     function owl_carousel()
     {
-        PlannTo.jQuery("#owl-demo").owlCarousel({
+        owl.owlCarousel({
             /*   navigation: true,
              navigationText: [
              "<i class='icon-chevron-left icon-white'></i>",
@@ -147,11 +147,13 @@
       PlannTo.jQuery(".prev").click(function(){
         owl.trigger('owl.prev');
       })
-        }
+    }
 
 //    PlannTo.jQuery(window).load(function()
     PlannTo.jQuery(function()
     {
+        owl = PlannTo.jQuery("#owl-demo")
+
         setTimeout(owl_carousel, 1000)
 
         setTimeout(owl_carousel, 3000)
