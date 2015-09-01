@@ -447,7 +447,7 @@ class ProductsController < ApplicationController
   end
 
   def show_widget_for_bebeautiful(url, itemsaccess)
-    valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline"]
+    valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme"]
 
     if !@items.blank?
       is_multi_array = @items.first.is_a?(Array)
