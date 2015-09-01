@@ -2161,6 +2161,7 @@ end
                 break if loop_items.count >= 10
               end
             end
+            break if items.count < 10
           else
             break
           end
