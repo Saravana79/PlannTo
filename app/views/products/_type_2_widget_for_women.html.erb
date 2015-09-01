@@ -1,6 +1,6 @@
-<%= javascript_include_tag "http://localhost:3000/javascripts/owl.carousel.min.js" %>
+<%= javascript_include_tag "http://www.plannto.com/javascripts/owl.carousel.min.js" %>
 
-<link rel="stylesheet" type="text/css" href="http://localhost:3000/stylesheets/owl.carousel.css"/>
+<link rel="stylesheet" type="text/css" href="http://www.plannto.com/stylesheets/owl.carousel.css"/>
 
 <% if !@items.blank? %>
 
@@ -14,10 +14,7 @@
 
         .product-container{ margin:0; padding:5px 0 0 0; float:left;cursor:pointer;width:160px;}
         .planntocarosel-right{ width: 32px;float: right;}
-        .planntocarosel-right a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) -25px 0; right: 0;float: left;height: 50px;width:30px;}
-
-        .planntocarosel-left{ width: 32px;float: left;}
-        .planntocarosel-left a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) 5px 0; right: 0;float: left;height: 50px;width:30px;}
+        .planntocarosel-left{ width: 32px;float: left;height:4px;}
         .bottompan{border-top:1px solid #E5E5E5;display:block;text-align: right;padding: 5px 10px;text-decoration:none;font-size:14px;}
 
 
@@ -25,15 +22,15 @@
         .product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:100%; float:left;min-height:110px;}
         .product-container .product-img img { margin:0 auto; text-align:center; max-width:140px;max-height:110px; }
         .product-container .product-text {float:left;}
-        .product-container .product-text .product-title{height:48px;overflow:hidden;font-size:14px;padding:2px 0px;line-height:normal;margin:0px;}
+        .product-container .product-text .product-title{height:38px;overflow:hidden;font-size:14px;padding:2px 0px;line-height:normal;margin:0px;}
         .product-container .product-text .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px;font-family: Arial;height:32px;}
         .product-container .product-text .product-price {}
-        .product-container .product-text .product-price .strike{list-style: outside none none;margin: 5px 0px;padding: 0;color: #585858;font-size: 12px;text-decoration: line-through; }
-        .product-container .product-text .product-price .price{list-style: outside none none; margin: 5px 0px; padding:0; color:#bf0000; font-size:14px; font-weight:bold;font-family: Arial monospace;}
+        .product-container .product-text .product-price .strike{list-style: outside none none;margin: 0px 0px;padding: 0;color: #585858;font-size: 12px;text-decoration: line-through; }
+        .product-container .product-text .product-price .price{list-style: outside none none; margin: 0px 0px; padding:0; color:#bf0000; font-size:14px; font-weight:bold;font-family: Arial monospace;text-align: center;}
         .btn { margin:0 auto; padding:5px 0 0 0;}
         .btn .shop-now{ margin:0; padding:3px 10px; background:#E47911; color:#fff; font-size:13px; text-transform:none; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
 
-        #container {border-left:1px solid #E5E5E5;border-right:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;}
+        #container {border:0px solid #E5E5E5;}
         .productdiv {max-height:260px;overflow:hidden;}
         a { outline: none; }
 
@@ -44,7 +41,7 @@
         .price_class { list-style: outside none none; }
     </style>
     <div id="container">
-      <div>
+      <div style="padding:5px;">
         <ul class="shadetabs">
           <li class="">
             <a href="javascript:void(0)" id="where_to_buy_items_a" style ="    color: #3D3D3D;text-transform: uppercase;font-weight: bold;text-decoration: none;font-size: 13px;">Recommended Products For You</a>
@@ -53,10 +50,10 @@
       </div>
       <% search_url = !@search_url.blank? ? "#{configatron.hostname}/history_details?item_id=&geo=#{params[:geo]}&red_url=#{@search_url}&iid=#{@impression_id}" : "" %>
 
-     <div class="planntocarosel-left prev" style="position: absolute;z-index: 10;top: 70px;left: 10px;cursor:hand;">
+     <div class="planntocarosel-left prev" style="position: relative;z-index: 10;top: 60px;left: 10px;cursor:hand;">
          <img src="<%= configatron.root_image_path%>static/images/arrow_left.png" style="height:40px;"/>
         </div>
-
+      <div style="padding:0px 40px">
       <div class="productdiv owl-carousel" id="owl-demo" width="100%">
 
         <!--<div class="planntocarosel-left">-->
@@ -65,8 +62,7 @@
           <!--</a>-->
         <!--</div>-->
         <% @items.first(12).each do |item| %>
-            <div class="product-container-top" id="<%= 1 %>">
-              
+           
                   <% if item.itemdetail_id.blank? %>
                       <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{@item.id}&geo=#{params[:geo]}&red_url=#{item.click_url}&iid=#{@impression_id}" %>
                   <% else %>
@@ -86,17 +82,15 @@
                     <div class="product-text">
                       <p class="product-title" style="max-height:38px;overflow:hidden;font-size:14px;padding:2px 8px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(42) %></p>
                       <div class="product-price">
-                        <ul style="margin:0px;padding:0px;text-align:center;">
-                          <li class='price'><%= item.sale_price.blank? ? item.price.blank? ? "" : prettifyforprice(item.price) : prettifyforprice(item.sale_price) %></li>
-                        </ul>
-
+                  
+                          <p class='price'><%= item.sale_price.blank? ? item.price.blank? ? "" : prettifyforprice(item.price) : prettifyforprice(item.sale_price) %></p>
                       </div>
                      </a>
                       <br clear="both" />
 
                     </div>
-                  </div>
-            </div>
+             
+                </div>
         <% end %>
         <!--<div class="planntocarosel-right">-->
           <!--<a  title="Next" href="<%= search_url %>" target="_blank">-->
@@ -104,7 +98,8 @@
           <!--</a>-->
         <!--</div>-->
       </div>
-       <div class="planntocarosel-right next" style="position: absolute;z-index: 10;top: 70px;right: 10px;cursor:hand;">
+    </div>
+       <div class="planntocarosel-right next" style="position: relative;z-index: 10;top: -145px;right: 0px;cursor:hand;">
           <img src="<%= configatron.root_image_path%>static/images/arrow_right.png" style="height:40px;"/>
         </div>
       <% if !search_url.blank? %>
@@ -114,8 +109,9 @@
                     </span>
           </div>
       <% end %>
+      
     </div>
-
+    <br clear="both" />
 <% end %>
 
 <script type="text/javascript">
@@ -159,79 +155,5 @@
         setTimeout(owl_carousel, 3000)
     });
 
-    <% if 1 != 1 %>
-
-    PlannTo.jQuery(document).ready(function()
-    {
-        PlannTo.jQuery(".product-container-top").hide()
-        PlannTo.jQuery("#1").show()
-        PlannTo.jQuery("#1").addClass("active")
-        PlannTo.jQuery(".planntocarosel-left").css("opacity", 0.2);
-
-        var active_div = PlannTo.jQuery(".active")
-        var next_div = PlannTo.jQuery(active_div).next()
-
-        if (active_div.length == 0 || PlannTo.jQuery(next_div).attr("class") == "planntocarosel-right")
-        {
-            PlannTo.jQuery(".planntocarosel-right").css("opacity", 0.2);
-            PlannTo.jQuery(".planntocarosel-left").css("opacity", 0.2);
-        }
-    });
-
-    PlannTo.jQuery(".planntocarosel-left").click(function(event)
-    {
-        var active_div = PlannTo.jQuery(".active")
-        var prev_div = PlannTo.jQuery(active_div).prev()
-
-        if (PlannTo.jQuery(prev_div).next().attr("class") == "planntocarosel-right")
-        {
-            PlannTo.jQuery(".planntocarosel-right").css("opacity", 0.2);
-        }
-        else
-        {
-            PlannTo.jQuery(".planntocarosel-right").css("opacity", 1);
-        }
-
-        if (PlannTo.jQuery(prev_div).prev().attr("class") == "planntocarosel-left")
-        {
-            PlannTo.jQuery(".planntocarosel-left").css("opacity", 0.2);
-        }
-
-        if (PlannTo.jQuery(prev_div).attr("class") != "planntocarosel-left")
-        {
-            PlannTo.jQuery(".product-container-top").hide()
-            PlannTo.jQuery(prev_div).show()
-            PlannTo.jQuery(".product-container-top").removeClass("active")
-            PlannTo.jQuery(prev_div).addClass("active")
-        }
-        event.preventDefault();
-        return false;
-    });
-
-    PlannTo.jQuery(".planntocarosel-right").click(function(event)
-    {
-        var active_div = PlannTo.jQuery(".active")
-        var next_div = PlannTo.jQuery(active_div).next()
-
-        if (PlannTo.jQuery(next_div).next().attr("class") == "planntocarosel-right")
-        {
-            PlannTo.jQuery(".planntocarosel-right").css("opacity", 0.2);
-        }
-
-        if (PlannTo.jQuery(next_div).prev().attr("class") != "planntocarosel-left")
-        {
-            PlannTo.jQuery(".planntocarosel-left").css("opacity", 1);;
-        }
-
-        if (PlannTo.jQuery(next_div).attr("class") != "planntocarosel-right")
-        {
-            PlannTo.jQuery(".product-container-top").hide()
-            PlannTo.jQuery(next_div).show()
-            PlannTo.jQuery(".product-container-top").removeClass("active")
-            PlannTo.jQuery(next_div).addClass("active")
-        }
-        event.preventDefault();
-        return false;
-    });
-    <% end %>
+   
 </script>
