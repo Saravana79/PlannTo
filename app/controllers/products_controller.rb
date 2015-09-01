@@ -1428,6 +1428,10 @@ class ProductsController < ApplicationController
 
     @items, @url, from_article_field = Item.get_items_from_url(url, params[:item_ids])
 
+    if @url.to_s.include?("bebeautiful.in")
+      params[:beauty] = "true"
+    end
+
     if !@items.flatten.blank?
       params[:item_ids] = @items.flatten.map(&:id).compact.join(",")
       included_beauty = @items.flatten.map {|d| d.is_a?(Beauty)}.include?(true) rescue false

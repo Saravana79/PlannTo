@@ -2285,9 +2285,11 @@ end
             end
 
             items << Item.get_items_from_articles(@articles)
-            if items.flatten.blank?
-              items = Item.get_items_from_fashion_url(url)
-            end
+
+            items << Item.get_items_from_fashion_url(url)
+            # if items.flatten.blank?
+            #   items = Item.get_items_from_fashion_url(url)
+            # end
           else
             items = Item.get_items_from_fashion_url(url)
             @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
