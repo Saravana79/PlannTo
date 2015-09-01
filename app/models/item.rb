@@ -2135,7 +2135,7 @@ end
   def self.get_loop_items_from_amazon_api(keyword, geo, browse_node, sort, valid_item_names)
     loop_items = []
     search_url = ""
-    [*1..10].each do |each_page|
+    [*1..5].each do |each_page|
       begin
         api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}#{each_page}"
 
@@ -2157,7 +2157,7 @@ end
 
               if !valid_item_names.select {|each_m| name.to_s.downcase.include?(each_m)}.blank?
                 loop_items << each_item
-                break if loop_items.count >= 8
+                break if loop_items.count >= 6
               end
             end
             break if items.count < 10
