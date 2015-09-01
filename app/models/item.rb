@@ -2135,7 +2135,7 @@ end
   def self.get_loop_items_from_amazon_api(keyword, geo, browse_node, sort, valid_item_names)
     loop_items = []
     search_url = ""
-    [*1..8].each do |each_page|
+    [*1..10].each do |each_page|
       begin
         api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}#{each_page}"
 
