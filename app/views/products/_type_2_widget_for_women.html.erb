@@ -1,8 +1,7 @@
-<%= javascript_include_tag "http://www.plannto.com/javascripts/owl.carousel.min.js" %>
-
-<link rel="stylesheet" type="text/css" href="http://www.plannto.com/stylesheets/owl.carousel.css"/>
-
 <% if !@items.blank? %>
+    <%= javascript_include_tag "http://www.plannto.com/javascripts/owl.carousel.min.js" %>
+
+    <link rel="stylesheet" type="text/css" href="http://www.plannto.com/stylesheets/owl.carousel.css"/>
 
     <style type="text/css">
 
@@ -112,7 +111,7 @@
       
     </div>
     <br clear="both" />
-<% end %>
+
 
 <script type="text/javascript">
     PlannTo.jQuery(".product-container").click(function()
@@ -157,3 +156,5 @@
 
    
 </script>
+
+<% end %>
