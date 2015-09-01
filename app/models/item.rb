@@ -2138,7 +2138,6 @@ end
     [*1..10].each do |each_page|
       begin
         api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}#{each_page}"
-        sleep(3)
 
         res = APICache.get(api_keyword, {:cache => 5.hours}) do
           Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => sort, :item_page => each_page})
@@ -2158,7 +2157,7 @@ end
 
               if !valid_item_names.select {|each_m| name.to_s.downcase.include?(each_m)}.blank?
                 loop_items << each_item
-                break if loop_items.count >= 10
+                break if loop_items.count >= 8
               end
             end
             break if items.count < 10
@@ -2445,7 +2444,7 @@ end
 
     if (items.blank? || (!valid_item_names.blank? && items.count < 4))
       excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
-      keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
+      keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
       keyword = keywords.sample(1)[0]
       p keyword + " - sample keyword"
       new_items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
