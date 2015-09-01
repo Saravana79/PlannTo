@@ -2302,7 +2302,7 @@ end
         end
       end
     end
-    return items, tempurl, from_article_field
+    return items.uniq, tempurl, from_article_field
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
   end
 
@@ -2447,7 +2447,17 @@ end
       keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
       keyword = keywords.sample(1)[0]
       p keyword + " - sample keyword"
-      items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
+      new_items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
+
+      items = items.blank? ? new_items : (items + new_items).flatten
+
+      if (items.blank? || (!valid_item_names.blank? && items.count < 4))
+        keyword = keywords.sample(1)[0]
+        new_items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
+
+        items = items.blank? ? new_items : (items + new_items).flatten
+      end
+
       item = Item.where(:id => 27731).first
       extra_items = []
     end
