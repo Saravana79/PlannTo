@@ -447,7 +447,7 @@ class ProductsController < ApplicationController
   end
 
   def show_widget_for_bebeautiful(url, itemsaccess)
-    valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & loverly","hamam","ayush ","liril","lux ","pears ","pepsodent","rexona","rin","surf excel","vim "]
+    valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze ","clinic plus","close up","elle 18","fair and lovely","fair & lovely","hamam ","ayush ","liril ","lux ","pears ","pepsodent","rexona","rin ","surf excel","vim "]
 
     if !@items.blank?
       is_multi_array = @items.first.is_a?(Array)
