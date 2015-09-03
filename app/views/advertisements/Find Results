@@ -1,0 +1,17 @@
+Searching 2652 files for "dove"
+
+/Users/saravana/projects/plannto/PlannTo/app/controllers/products_controller.rb:
+  448  
+  449    def show_widget_for_bebeautiful(url, itemsaccess)
+  450:     valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & loverly","hamam","ayush ","liril","lux ","pears ","pepsodent","rexona","rin","surf excel","vaseline","vim "]
+  451  
+  452      if !@items.blank?
+
+/Users/saravana/projects/plannto/PlannTo/public/javascripts/jquery-ui-1.8.14.custom/development-bundle/jquery-1.5.1.js:
+ 2802  		}
+ 2803  
+ 2804: 	// assuming we've left the element since we most likely mousedover a xul element
+ 2805  	} catch(e) { }
+ 2806  },
+
+2 matches across 2 files
