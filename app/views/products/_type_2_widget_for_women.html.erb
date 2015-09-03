@@ -79,7 +79,7 @@
 
                     </div>
                     <div class="product-text">
-                      <p class="product-title" style="max-height:38px;overflow:hidden;font-size:14px;padding:2px 8px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(42) %></p>
+                      <div class="product-title" style="height:34px;overflow:hidden;font-size:14px;padding:2px 8px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(42) %></div>
                       <div class="product-price">
                       <ul style="margin:0px;padding:0px;height:31px;">
                         <% if ((!item.sale_price.blank?) && item.sale_price != item.price) %>
