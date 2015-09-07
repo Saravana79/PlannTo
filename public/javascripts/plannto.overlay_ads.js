@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-//    var domain = "www.plannto.com";
+    var domain = "www.plannto.com";
 //for development
-var domain = "localhost:3000";
+//var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
@@ -151,7 +151,7 @@ var domain = "localhost:3000";
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
-                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=62&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited
+                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited
                 var impression_id = ""
                 jQuery.ajax({
                     url : url,
@@ -190,11 +190,33 @@ var domain = "localhost:3000";
 
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
-                    jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
+                    jQuery("#plannto_ad_frame").attr("src", "")
+
+//                    var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
+//                    jQuery(expanded_view).hide()
+//
+//                    var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
+//                    jQuery(normal_view).show()
+//                    jQuery(".expand_plannto_iframe").show()
+
+                    jQuery(".plannto_iframe").animate({width: "0px"}, "fast", function() { jQuery(".plannto_hint_button").show() })
+
+                    jQuery(".plan_ad_image_1").css({"bottom":"90px"})
 //                    jQuery(".expand_plannto_iframe").show();
 
                     return false;
                 })
+
+                jQuery(".plannto_hint_button").live("hover", function(event)
+                {
+                    if (expanded == true)
+                    {
+                        jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+                        jQuery(".plan_ad_image_1").css({"bottom":img_height})
+
+                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
+                    }
+                });
 
                 jQuery(".expand_plannto_iframe").live("click", function(event)
                 {
@@ -206,7 +228,7 @@ var domain = "localhost:3000";
 
                     if (expanded == false)
                     {
-                        var expanded_url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=62&size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expanded=1'+'&impression_id='+impression_id
+                        var expanded_url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expanded=1'+'&impression_id='+impression_id
                         jQuery.ajax({
                             url : expanded_url,
                             type: "get",
@@ -215,12 +237,14 @@ var domain = "localhost:3000";
                             {
                                 if (data.success == true)
                                 {
-                                    var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
-                                    jQuery(normal_view).hide()
-
-                                    var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
-                                    jQuery(expanded_view).html(data.html)
-                                    jQuery(expanded_view).show()
+                                    expanded_html = "data:text/html;charset=utf-8," + encodeURI(data.html)
+                                    jQuery("#plannto_ad_frame").attr("src", expanded_html)
+//                                    var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
+//                                    jQuery(normal_view).hide()
+//
+//                                    var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
+//                                    jQuery(expanded_view).html(data.html)
+//                                    jQuery(expanded_view).show()
                                 }
                             }
                         });
@@ -228,6 +252,25 @@ var domain = "localhost:3000";
 
 //                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id, "expanded": "1"})
                         expanded = true
+                    }
+                    else
+                    {
+                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
+
+//                        var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
+//                        jQuery(normal_view).hide()
+//
+//                        var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
+//                        jQuery(expanded_view).show()
+//                        jQuery(".expand_plannto_iframe").hide()
+//
+//                        var my_videos = jQuery("#plannto_ad_frame").contents().find(".plannto-advertisement video");
+//
+//                        if (my_videos.length != 0)
+//                        {
+//                            var my_video = my_videos[0]
+//                            my_video.play();
+//                        }
                     }
                     jQuery(this).hide()
 
