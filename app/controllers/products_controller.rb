@@ -742,6 +742,7 @@ class ProductsController < ApplicationController
 
     @publisher = Publisher.getpublisherfromdomain(url)
     @itemdetail = Item.get_price_text_from_url(url, @publisher)
+    @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
 
     if params[:page_type] == "type_3"
       return price_widget_type_3(url, itemsaccess, url_params)
