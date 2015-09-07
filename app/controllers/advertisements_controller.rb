@@ -255,6 +255,7 @@ class AdvertisementsController < ApplicationController
   def return_expanded_html()
     return_path = "advertisements/show_image_overlay_expanded_ads.html.erb"
 
+    @ad_video_detail = AdVideoDetail.last
     expanded = params[:expanded].to_s
     AddImpression.add_impression_to_update_visible(params[:impression_id], "", expanded)
 

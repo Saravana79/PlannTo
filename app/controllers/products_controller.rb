@@ -7,6 +7,7 @@ class ProductsController < ApplicationController
   before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
   before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
+
   # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
   caches_action :where_to_buy_items, :cache_path => proc {|c|
     if (params[:item_ids].blank? && params[:ref_url].blank?)
@@ -742,6 +743,10 @@ class ProductsController < ApplicationController
     @publisher = Publisher.getpublisherfromdomain(url)
     @itemdetail = Item.get_price_text_from_url(url, @publisher)
 
+    if params[:page_type] == "type_3"
+      return price_widget_type_3(url, itemsaccess, url_params)
+    end
+
     # include pre order status if we show more details.
     unless @itemdetail.blank?
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
@@ -892,6 +897,33 @@ class ProductsController < ApplicationController
       format.html { return render "price_widget_type_2.html.erb", :layout => false }
       format.js {
         return render :json => {:success => true, :html => render_to_string("products/price_widget_type_2.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+    end
+  end
+
+  def price_widget_type_3(url, itemsaccess, url_params)
+    if !@itemdetail.blank?
+      # if item_ids.include?("B00AXWKTR4")
+      #   click_url = "http://www.firstcry.com/huggies/huggies-new-born-taped-diapers-for-the-new-baby-24-pieces/435222/product-detail?sterm=Huggies%20Newborn%20Diapers&spos=1"
+      # end
+      # @first_cry_item = Item.get_first_cry_item(click_url)
+
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("amazon_price_widget", nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+
+      @amazon_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @itemdetail.url, :item_id => nil, :ref_url => params[:ref_url])
+      # @fc_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => click_url, :item_id => nil, :ref_url => params[:ref_url])
+    end
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_3.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "price_widget_type_3.html.erb", :layout => false }
+      format.js {
+        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_3.html.erb", :layout => false)}, :callback => params[:callback]
       }
     end
   end

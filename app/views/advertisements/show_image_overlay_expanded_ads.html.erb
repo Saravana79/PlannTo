@@ -4,22 +4,30 @@
   <title>Advt <%= params[:size] %></title>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 </head>
-<body>
+<body style="margin: 0px;padding: 0px;">
 <% shop_now_url = "" %>
 <div class="main_div">
   <div class="static_plannto_ad">
-    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
-            id="plannto-flash-ad" name="plannto-ad" width="300" height="60">
-      <param name="plannto-flash-movie" value="<%=configatron.root_image_path + "static/video_ads/Chevroletcompletecare_exp.swf"%>">
-      <param name="wmode" value="opaque">
-      <param name="allowscriptaccess" value="always">
-      <object type="application/x-shockwave-flash" data="<%=configatron.root_image_path + "static/video_ads/Chevroletcompletecare_exp.swf"%>" width="<%= @iframe_width %>" height="<%= @iframe_height %>">
-        <%= link_to(image_tag(configatron.root_image_path + "static/video_ads/Flipkart 300x60.jpg", :alt => "PlannTo Flash Ad"), shop_now_url, :target => "_blank") %>
-        <param name="FlashVars" value="clickTag=<%= shop_now_url %>">
-        <param name="wmode" value="opaque">
-        <param name="allowscriptaccess" value="always">
-      </object>
-    </object>
+    <% if 1 != 1 %>
+        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
+                id="plannto-flash-ad" name="plannto-ad" width="300" height="60">
+          <param name="plannto-flash-movie" value="<%=configatron.root_image_path + "static/video_ads/Chevroletcompletecare_exp.swf"%>">
+          <param name="wmode" value="opaque">
+          <param name="allowscriptaccess" value="always">
+          <object type="application/x-shockwave-flash" data="<%=configatron.root_image_path + "static/video_ads/Chevroletcompletecare_exp.swf"%>" width="<%= @iframe_width %>" height="<%= @iframe_height %>">
+            <%= link_to(image_tag(configatron.root_image_path + "static/video_ads/Flipkart 300x60.jpg", :alt => "PlannTo Flash Ad"), shop_now_url, :target => "_blank") %>
+            <param name="FlashVars" value="clickTag=<%= shop_now_url %>">
+            <param name="wmode" value="opaque">
+            <param name="allowscriptaccess" value="always">
+          </object>
+        </object>
+    <% else %>
+        <video controls autoplay>
+          <source src="<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.mp4 %>" type="video/mp4">
+          <source src="<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.webm %>" type="video/webm">
+          Your browser does not support the video tag.
+        </video>
+    <% end %>
   </div>
 </div>
 </body>
