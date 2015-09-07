@@ -10,7 +10,7 @@
     </span>
         <% end %>
         <span style="color:B12704;">
-    &nbsp;Rs <%= @itemdetail.price %>
+    &nbsp;Rs <%= '%.2f' % @itemdetail.price.to_f %>
           <% if @itemdetail.savepercentage.to_i != 0 %>
         (Save <%= @itemdetail.savepercentage %>%)
               </span>

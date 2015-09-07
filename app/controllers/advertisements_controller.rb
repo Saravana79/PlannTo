@@ -661,6 +661,11 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def price_widget_demo
+    params[:ref_url] ||= "http://www.bgr.in/gadgets/mobile-phones/xiaomi/mi-4i-limited-edition-32-gb"
+    render :layout => false
+  end
+
   def ad_via_iframe
     render :layout => false
   end
