@@ -153,7 +153,8 @@ class FeedsController < ApplicationController
   def batch_update
     @error = false
     begin
-      @feed_urls = FeedUrl.where(:id => params[:feed_urls])
+      @feed_urls = FeedUrl.where(:id => params[:feed_urls]).order("field(id, #{params[:feed_urls].map(&:inspect).join(', ')})")
+      category_list = params[:category_list].to_s.split(",")
       if params[:commit] == "Mark As Feature"
         @feed_urls.update_all(:status => 2)
       elsif params[:commit] == "Mark As Invalid"
@@ -164,7 +165,6 @@ class FeedsController < ApplicationController
         articles_item_id = params[:articles_item_id]
         @feed_urls.each_with_index do |feed_url, index|
           category = params[:article_category]
-          category_list = params[:category_list].to_s.split(",")
           category = category_list[index] if category.blank?
           category = "Others" if category.blank?
 
@@ -184,7 +184,6 @@ class FeedsController < ApplicationController
 
         @feed_urls.each_with_index do |feed_url, index|
           category = params[:article_category]
-          category_list = params[:category_list].to_s.split(",")
           old_category = category_list[index]
           category = old_category if category.blank?
           category = "Others" if category.blank?
