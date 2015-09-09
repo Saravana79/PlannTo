@@ -1026,6 +1026,7 @@ class AdvertisementsController < ApplicationController
       unless cache.blank?
         cache_json = JSON.parse(cache)
         valid_html = cache_json["success"]
+        cache_html = cache_json["html"].to_s
         if valid_html
           if params[:expanded].blank?
             url_params = set_cookie_for_temp_user_and_url_params_process(params)
@@ -1039,7 +1040,6 @@ class AdvertisementsController < ApplicationController
             @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
 
             cache_json["impression_id"] = @impression_id
-            cache_html = cache_json["html"].to_s
 
             if !cache_html.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
               if (params[:t].to_i == 1)
