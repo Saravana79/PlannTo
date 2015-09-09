@@ -106,6 +106,7 @@ var PlannTo = (function(window,undefined) {
             var pathname = getParam(url,"ref_url");
             var visited = getParam(url,"visited");
             var item_ids = getParam(url,"item_ids");
+            var expand_type = getParam(url,"expand_type");
             console.log("----------------------------------")
             console.log(visited == "1")
             var images = jQuery("img")
@@ -184,6 +185,11 @@ var PlannTo = (function(window,undefined) {
                             var iframe_body = jQuery("#plannto_ad_frame").contents().find("body")
                             console.log(iframe_body)
                             jQuery(iframe_body).css({"width":"500px", "height":"90px", "overflow": "hidden"})
+
+                            if (expand_type == "")
+                            {
+                                jQuery(".expand_plannto_iframe").hide()
+                            }
                         }
                     }
                 });
@@ -228,7 +234,7 @@ var PlannTo = (function(window,undefined) {
 
                     if (expanded == false)
                     {
-                        var expanded_url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expanded=1'+'&impression_id='+impression_id
+                        var expanded_url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expanded=1'+'&impression_id='+impression_id+'&expand_type='+expand_type
                         jQuery.ajax({
                             url : expanded_url,
                             type: "get",

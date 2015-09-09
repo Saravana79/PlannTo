@@ -517,6 +517,7 @@ resources :comments do
   match "advertisements/test_ads" => "advertisements#test_ads"
   match "advertisements/demo" => "advertisements#demo"
   match "advertisements/price_widget_demo" => "advertisements#price_widget_demo"
+  match "advertisements/in_image_ads" => "advertisements#in_image_ads"
   match "advertisements/vendor_demo" => "advertisements#vendor_demo"
   match "advertisements/amazon_demo" => "advertisements#amazon_demo"
   match "advertisements/carwale_demo" => "advertisements#carwale_demo"
