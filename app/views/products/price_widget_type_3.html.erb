@@ -1,16 +1,16 @@
 <% if !@itemdetail.blank? %>
     <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{@itemdetail.url}" %>
 
-    <div class="plannto_book_price_div" style="height: 75px;padding: 2px 0px;border: 0px solid #D8D8D8;font-size:12px;">
-      <p style="font-weight: bold;margin:0px;color:#474747">
-        <span>Current Sale Price: </span>
-        <% if @itemdetail.mrpprice.to_i != 0 %>
+    <div class="plannto_book_price_div" style="height: 75px;padding: 2px 0px;border: 0px solid #D8D8D8;font-size:12px;font-family: 'Titillium Web',Arial,Helvetica,sans-serif;">
+      <p style="font-weight: normal;margin:0px;font-size:15px;">
+        <span>Sale Price: </span>
+   <!--      <% if @itemdetail.mrpprice.to_i != 0 %>
     <span style="text-decoration:line-through;">
       Rs <%= @itemdetail.mrpprice %>
     </span>
         <% end %>
-        <span style="color:B12704;">
-    &nbsp;Rs <%= '%.2f' % @itemdetail.price.to_f %>
+    -->     <span style="color:#666;">
+    &nbsp;<i class="" style="background-image: url('http://st1.gadgets.india.com/img/sprit-icon.png?v=22042015');background-repeat: no-repeat;background-position: 0 0;background-position: -131px -6px;width: 9px;height: 12px;display: inline-block;margin-right:0px;position: relative;top: 1px;"></i> <%= number_with_delimiter(@itemdetail.price.to_i) %>
           <% if @itemdetail.savepercentage.to_i != 0 %>
      <!--   (Save <%= @itemdetail.savepercentage %>%) -->
               </span>
