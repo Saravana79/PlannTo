@@ -41,7 +41,7 @@
 <br />
 
 <div class="main_img">
-  <img src="http://www.plannto.com/assets/highcharts/skies.jpg" style="z-index: 1;" width="600px" height="500px" class="imgA1"/>
+  <img src="<%= configatron.hostname %>/assets/highcharts/skies.jpg" style="z-index: 1;" width="600px" height="500px" class="imgA1"/>
 </div>
 
 <!--<div id="where_to_buy_items" style="width:610px;">-->
@@ -80,7 +80,7 @@
     var s = d.createElement('script');
 //    var url = "http://indiatoday.intoday.in/technology/story/samsung-galaxy-note-edge-review/1/420649.html"
 //    url = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"
-    s.src = "http://localhost:3000/javascripts/plannto.overlay_ads.js?ref_url=<%= params[:ref_url] %>&item_ids=&visited=1&expand_type=<%= params[:type] %>";
+    s.src = "<%= configatron.hostname %>/javascripts/plannto.overlay_ads.js?ref_url=<%= params[:ref_url] %>&item_ids=&visited=1&expand_type=<%= params[:type] %>";
     var h = d.getElementsByTagName('head')[0];
     h.appendChild(s);
 
