@@ -166,7 +166,7 @@ var PlannTo = (function(window,undefined) {
                             jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
                             jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 90px; z-index: 2;width:100%;"> ' +
-                                '<div class="plannto_iframe"><a href="#" class="expand_plannto_iframe">expand</a><a href="#" class="close_plannto_iframe"></a><iframe id="plannto_ad_frame" src="" style="border:medium none;" height="90px" width="'+img_width+'px"> </iframe></div>' +
+                                '<div class="plannto_iframe"><a href="#" class="expand_plannto_iframe">expand</a><a href="#" class="close_plannto_iframe"></a><iframe id="plannto_ad_frame" src="" style="border:medium none;" height="90px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="90px" width="'+img_width+'px"> </iframe></div>' +
                                 '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
                                 '</div>')
 
@@ -196,8 +196,6 @@ var PlannTo = (function(window,undefined) {
 
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
-                    jQuery("#plannto_ad_frame").attr("src", "")
-
 //                    var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
 //                    jQuery(expanded_view).hide()
 //
@@ -205,29 +203,37 @@ var PlannTo = (function(window,undefined) {
 //                    jQuery(normal_view).show()
 //                    jQuery(".expand_plannto_iframe").show()
 
-                    jQuery(".plannto_iframe").animate({width: "0px"}, "fast", function() { jQuery(".plannto_hint_button").show() })
+                    jQuery("#exp_plannto_ad_frame").hide()
+                    jQuery("#plannto_ad_frame").show()
+
+                    jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
 
                     jQuery(".plan_ad_image_1").css({"bottom":"90px"})
+//
 //                    jQuery(".expand_plannto_iframe").show();
 
                     return false;
                 })
 
-                jQuery(".plannto_hint_button").live("hover", function(event)
-                {
-                    if (expanded == true)
-                    {
-                        jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
-                        jQuery(".plan_ad_image_1").css({"bottom":img_height})
-
-                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
-                    }
-                });
+//                jQuery(".plannto_hint_button").live("hover", function(event)
+//                {
+////                    if (expanded == true)
+////                    {
+////                        jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+////                        jQuery(".plan_ad_image_1").css({"bottom":img_height})
+////
+////                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
+////                    }
+//
+//                    jQuery("#plannto_ad_frame").show()
+//                    jQuery("#exp_plannto_ad_frame").hide()
+//                });
 
                 jQuery(".expand_plannto_iframe").live("click", function(event)
                 {
                     console.log(impression_id)
-                    jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+                    jQuery(".plannto_iframe").animate({height: img_height+4+"px"}, "slow")
+//                    jQuery("#plannto_ad_frame").hide()
                     jQuery(".plan_ad_image_1").css({"bottom":img_height})
 
 //                    var swf = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" id="plannto-flash-ad" name="plannto-ad" width="300" height="60"> <param name="plannto-flash-movie" value="http://cdn1.plannto.com/static/video_ads/Flipkart 300x60.swf"> <param name="wmode" value="opaque"> <param name="allowscriptaccess" value="always"> <object type="application/x-shockwave-flash" data="http://cdn1.plannto.com/static/video_ads/Flipkart 300x60.swf" width="300" height="60"> <param name="FlashVars" value="clickTag=shop_now_url"> <param name="wmode" value="opaque"> <param name="allowscriptaccess" value="always"> </object></object>'
@@ -244,7 +250,12 @@ var PlannTo = (function(window,undefined) {
                                 if (data.success == true)
                                 {
                                     expanded_html = "data:text/html;charset=utf-8," + encodeURI(data.html)
-                                    jQuery("#plannto_ad_frame").attr("src", expanded_html)
+                                    jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
+
+                                    jQuery("#plannto_ad_frame").hide()
+                                    jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+                                    jQuery("#exp_plannto_ad_frame").show()
+
 //                                    var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
 //                                    jQuery(normal_view).hide()
 //
@@ -261,7 +272,10 @@ var PlannTo = (function(window,undefined) {
                     }
                     else
                     {
-                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
+//                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
+
+                        jQuery("#plannto_ad_frame").hide()
+                        jQuery("#exp_plannto_ad_frame").show()
 
 //                        var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
 //                        jQuery(normal_view).hide()
@@ -285,6 +299,16 @@ var PlannTo = (function(window,undefined) {
 
                 jQuery(".plannto_hint_button").live("mouseenter", function(event)
                 {
+                    jQuery("#exp_plannto_ad_frame").hide()
+                    jQuery("#plannto_ad_frame").show()
+
+                    console.log(expand_type)
+
+                    if (expand_type != "")
+                    {
+                        jQuery(".expand_plannto_iframe").show()
+                    }
+
                     jQuery(".plannto_iframe").animate({width: img_width+"px"}, "slow")
                     jQuery(".plannto_hint_button").hide()
 
