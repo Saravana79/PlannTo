@@ -203,6 +203,7 @@ var PlannTo = (function(window,undefined) {
 //                    jQuery(normal_view).show()
 //                    jQuery(".expand_plannto_iframe").show()
 
+                    jQuery("#exp_plannto_ad_frame").attr("src", "")
                     jQuery("#exp_plannto_ad_frame").hide()
                     jQuery("#plannto_ad_frame").show()
 
@@ -275,6 +276,7 @@ var PlannTo = (function(window,undefined) {
 //                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
 
                         jQuery("#plannto_ad_frame").hide()
+                        jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
                         jQuery("#exp_plannto_ad_frame").show()
 
 //                        var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
@@ -300,6 +302,7 @@ var PlannTo = (function(window,undefined) {
                 jQuery(".plannto_hint_button").live("mouseenter", function(event)
                 {
                     jQuery("#exp_plannto_ad_frame").hide()
+                    jQuery("#exp_plannto_ad_frame").attr("src", "")
                     jQuery("#plannto_ad_frame").show()
 
                     console.log(expand_type)
