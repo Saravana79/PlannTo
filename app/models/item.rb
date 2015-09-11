@@ -1980,7 +1980,7 @@ end
           cookie_matches.each do |cookie_match|
             if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
               $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
+              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
             end
           end
         end

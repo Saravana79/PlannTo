@@ -27,7 +27,7 @@ task :cookie_match_update_mapping => :environment do
     $redis_rtb.pipelined do
       cookie_matches.each do |cookie_match|
         $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-        $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
+        $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
       end
     end
     page += 1

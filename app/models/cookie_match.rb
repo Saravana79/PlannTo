@@ -49,7 +49,7 @@ class CookieMatch < ActiveRecord::Base
 
     $redis_rtb.pipelined do
       $redis_rtb.set("cm:#{param['google_id']}", param["plannto_user_id"])
-      $redis_rtb.expire("cm:#{param['google_id']}", 2.weeks)
+      $redis_rtb.expire("cm:#{param['google_id']}", 1.weeks)
     end
 
     if !param["ref_url"].blank?
@@ -120,7 +120,7 @@ class CookieMatch < ActiveRecord::Base
         $redis_rtb.pipelined do
           imported_values.each do |cookie_detail|
             $redis_rtb.set("cm:#{cookie_detail.google_user_id}", cookie_detail.plannto_user_id)
-            $redis_rtb.expire("cm:#{cookie_detail.google_user_id}", 2.weeks)
+            $redis_rtb.expire("cm:#{cookie_detail.google_user_id}", 1.weeks)
           end
         end
 

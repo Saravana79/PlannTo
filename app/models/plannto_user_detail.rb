@@ -285,7 +285,7 @@ class PlanntoUserDetail
       if !self.google_user_id.blank? && !self.plannto_user_id.blank?
         $redis_rtb.pipelined do
           $redis_rtb.set("cm:#{self.google_user_id}", self.plannto_user_id)
-          $redis_rtb.expire("cm:#{self.google_user_id}", 2.weeks)
+          $redis_rtb.expire("cm:#{self.google_user_id}", 1.weeks)
         end
       end
     # end
