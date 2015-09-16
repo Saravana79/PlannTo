@@ -1,4 +1,5 @@
 class Sourceitem < ActiveRecord::Base
+  # validates_uniqueness_of :url
   belongs_to :itemtype
 
   def self.update_suggestions

@@ -684,3 +684,225 @@ xml_response.split("\n").each_with_index do |each_row, indx|
 end
 
 DealItem.import(deal_items)
+
+
+
+
+
+url = "/home/sivakumar/Downloads/feed.xml"
+# url = "https://s3-ap-southeast-1.amazonaws.com/paytmreports/googlepla/feed.xml.gz"
+each_node_list = Nokogiri::XML::Reader(File.open(url)).first
+
+each_node_list.first
+product_types = []
+source_items = []
+each_node_list.each_with_index do |each_node, index|
+  begin
+    p index += 1
+    # logger.info index += 1
+    if each_node.local_name == "item"
+      p "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      # logger.info "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      outer_item_xml = each_node.outer_xml
+
+      p xml_hash = XmlSimple.xml_in(outer_item_xml)
+      product_type = xml_hash["product_type"][0] rescue ""
+      p product_type = product_type.split(">").last.strip rescue ""
+      if ["Mobiles", "Tablets", "Laptops", "DSLR", "Point & Shoot"].include?(product_type)
+        p "-------------------------------------------------------------------------------"
+        # logger.info "-------------------------------------------------------------------------------"
+        p product_type
+        # logger.info product_type
+        product_types << product_type
+        p "success"
+        # logger.info "success"
+        # process_count += 1
+        url = xml_hash["link"][0] rescue ""
+        title = xml_hash["title"][0] rescue ""
+        itemtype_id = case product_type
+                        when "Mobiles"
+                          6
+                        when "Tablets"
+                          13
+                        when "Laptops"
+                          23
+                        when "DSLR", "Point & Shoot"
+                          12
+                      end
+
+        status = (xml_hash["availability"][0].to_s.include?("in stock") ? 1 : 2) rescue 2
+
+        mrpprice = xml_hash["price"][0].to_s.gsub("INR", "").strip rescue ""
+        price = xml_hash["sale_price"][0].to_s.gsub("INR", "").strip rescue ""
+        mpn = xml_hash["mpn"][0].to_s rescue ""
+        description = xml_hash["description"][0].to_s rescue ""
+        image_url = xml_hash["image_link"][0].to_s rescue ""
+
+        # cashback = FeedUrl.get_value_from_pattern(offer.to_s.downcase, "rs<price>cashback", "<price>").strip rescue ""
+        # isemiavailable = offer.to_s.downcase.include?("emi available") ? true : false
+
+        source_item = Sourceitem.find_or_initialize_by_url(url)
+        if source_item.new_record?
+          source_item.update_attributes(:name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+        elsif source_item.verified && !source_item.matchitemid.blank?
+          item_detail = Itemdetail.find_or_initialize_by_url(url)
+          if item_detail.new_record?
+            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => mpn, :cashback => 0, :description => description, :IsError => false, :mrpprice => mrpprice)
+            image = item_detail.Image
+          else
+            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
+            image = item_detail.Image
+          end
+          begin
+            if image.blank? && !image_url.blank?
+              image = item_detail.build_image
+              tempfile = open(image_url)
+              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+              filename = image_url.split("/").last
+              avatar.original_filename = filename
+              image.avatar = avatar
+              image.save
+            end
+          rescue Exception => e
+            p "There was a problem in image update"
+          end
+        end
+
+
+        # source_item = Sourceitem.new(:url => url, :name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+        #
+        # source_items << source_item
+        #
+        # if source_items.count > 20
+        #   # Sourceitem.import(source_items)
+        #   source_items = []
+        # end
+      end
+    end
+  rescue Exception => e
+    p e
+    p "3333333333333333"
+    p product_types
+  end
+end
+
+
+source_items = Sourceitem.where("verified=true and matchitemid is not null and url like '%paytm.com%'")
+
+source_items.each do |source_item|
+  if source_item.verified && !source_item.matchitemid.blank?
+    json_url = "https://catalog.paytm.com/v1/p/" + source_item.url.to_s.split("/").last
+    response = RestClient.get(json_url)
+
+    response_hash = JSON.parse(response) rescue {}
+
+    product_id = response_hash["product_id"] rescue ""
+    image_url = response_hash["image_url"] rescue ""
+    status = response_hash["status"] == true ? 1 : 2
+    offer = response_hash["promo_text"] rescue ""
+    title = response_hash["name"] rescue ""
+    mrpprice = response_hash["actual_price"] rescue ""
+    offer_price = response_hash["offer_price"] rescue ""
+    description = response_hash["meta_description"] rescue ""
+    cashback = FeedUrl.get_value_from_pattern(offer.to_s.downcase, "rs<price>cashback", "<price>").strip rescue ""
+    isemiavailable = offer.to_s.downcase.include?("emi available") ? true : false
+    iscashondeliveryavailable = offer.to_s.downcase.include?("cod option will be available") ? true : false
+
+    item_detail = Itemdetail.find_or_initialize_by_url(source_item.url)
+    if item_detail.new_record?
+      item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => source_item.url, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => iscashondeliveryavailable, :isemiavailable => isemiavailable, :additional_details => product_id, :cashback => cashback, :description => description, :IsError => false, :mrpprice => mrpprice, :offer => offer)
+      image = item_detail.Image
+    else
+      item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now)
+      image = item_detail.Image
+    end
+
+    begin
+      if image.blank? && !image_url.blank?
+        image = item_detail.build_image
+        tempfile = open(image_url)
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+        # filename = image_url.split("/").last
+        filename = "#{item_detail.id}.jpeg"
+        avatar.original_filename = filename
+        image.avatar = avatar
+        image.save
+      end
+    rescue Exception => e
+      p "There was a problem in image update"
+    end
+  end
+end
+
+
+
+
+# Update sourceitem from paytm
+
+require 'rubygems'
+require 'nokogiri'
+
+class MyDocument < Nokogiri::XML::SAX::Document
+  def initialize
+    @open_struct = OpenStruct.new
+    @i = 0
+  end
+
+  def start_element(name, attrs)
+    @attrs = attrs
+    @content = ''
+    @i += 1
+    #@open_struct = OpenStruct.new
+  end
+
+  def end_element(name)
+    p @i
+    @open_struct.title = @content if name == 'title'
+    @open_struct.product_type = @content if name == "g:product_type"
+    if name == "link"
+      @open_struct.url = @content
+      # p @open_struct.title
+      # p @open_struct.product_type
+      # p @open_struct.url
+
+      product_type = @open_struct.product_type.split(">").last.strip rescue ""
+
+      itemtype_id = case product_type
+                      when "Mobiles"
+                        6
+                      when "Tablets"
+                        13
+                      when "Laptops"
+                        23
+                      when "DSLR", "Point & Shoot"
+                        12
+                      else
+                        0
+                    end
+
+      if itemtype_id != 0
+        source_item = Sourceitem.find_or_initialize_by_url(@open_struct.url)
+
+        if source_item.new_record?
+          p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+          p source_item.url
+          p @open_struct.title
+          source_item.update_attributes(:name => @open_struct.title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+        end
+      end
+    end
+    @content = nil
+  end
+
+  def characters(string)
+    @content << string if @content
+  end
+
+  def cdata_block(string)
+    characters(string)
+  end
+
+end
+
+parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+parser.parse_file("/home/sivakumar/Downloads/feed.xml")

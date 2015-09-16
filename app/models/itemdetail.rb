@@ -909,7 +909,9 @@ class Itemdetail < ActiveRecord::Base
       return_val = vendor_name
     rescue Exception => e
       p "Error while getting vendor name"
+      return_val = vendor_name
     end
+    return_val
   end
 
   def itemtype_id

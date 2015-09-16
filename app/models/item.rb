@@ -2749,6 +2749,45 @@ end
     return items
   end
 
+  def self.get_amazon_product_from_keyword(keyword)
+    begin
+      keyword_cache = "cache_key-" + keyword.to_s.gsub(" ", "")
+      res = APICache.get(keyword_cache, {:cache => 5.hours}) do
+        Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
+      end
+
+      each_item = res.items.first
+
+      if !each_item.blank?
+        item = OpenStruct.new
+
+        item.title = each_item.get_element("ItemAttributes").get("Title")
+
+        item.asin = each_item.get("ASIN") rescue ""
+
+        mrp_price = each_item.get_element("ItemAttributes/ListPrice").get("FormattedPrice") rescue ""
+        item.mrp_price = mrp_price.gsub("INR", "Rs")
+
+        sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
+        if sale_price.blank?
+          sale_price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+        end
+        item.sale_price = sale_price.gsub("INR", "Rs")
+
+        item.percentage_saved = each_item.get_element("Offers/Offer/OfferListing").get("PercentageSaved") rescue ""
+
+
+        item.click_url = each_item.get("DetailPageURL")
+        return_val = item
+      else
+        return_val = nil
+      end
+    rescue Exception => e
+      return_val = nil
+    end
+    return_val
+  end
+
   def self.get_first_cry_item(url)
     item = OpenStruct.new
     begin

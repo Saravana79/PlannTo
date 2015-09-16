@@ -446,3 +446,62 @@ task :remove_old_plannto_user_details => :environment do
   # plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
   plannto_user_details = PlanntoUserDetail.delete_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
 end
+
+desc "paytm product update"
+task :update_source_item_with_paytm => :environment do
+
+  url = "/home/sivakumar/Downloads/feed.xml"
+  each_node_list = Nokogiri::XML::Reader(File.open(url)).first
+
+  each_node_list.first
+  product_types = []
+  source_items = []
+  each_node_list.each_with_index do |each_node, index|
+    begin
+      p index += 1
+      logger.info index += 1
+      if each_node.local_name == "item"
+        outer_item_xml = each_node.outer_xml
+
+        xml_hash = XmlSimple.xml_in(outer_item_xml)
+        product_type = xml_hash["product_type"][0] rescue ""
+        product_type = product_type.split(">").last.strip rescue ""
+        if ["Mobiles", "Tablets", "Laptops", "DSLR", "Point & Shoot"].include?(product_type)
+          p "-------------------------------------------------------------------------------"
+          logger.info "-------------------------------------------------------------------------------"
+          p product_type
+          logger.info product_type
+          product_types << product_type
+          p "success"
+          logger.info "success"
+          # process_count += 1
+          url = xml_hash["link"][0] rescue ""
+          title = xml_hash["title"][0] rescue ""
+          itemtype_id = case product_type
+                          when "Mobiles"
+                            6
+                          when "Tablets"
+                            13
+                          when "Laptops"
+                            23
+                          when "DSLR", "Point & Shoot"
+                            12
+                        end
+
+          source_item = Sourceitem.new(:url => url, :name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+
+          source_items << source_item
+
+          if source_items.count > 2
+            Sourceitem.import(source_items)
+            source_items = []
+          end
+        end
+      end
+    rescue Exception => e
+      p e
+      p "3333333333333333"
+      p product_types
+    end
+  end
+end
