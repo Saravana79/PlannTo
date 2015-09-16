@@ -718,6 +718,16 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def paytm_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_6"
+    params[:ads_id] ||= 70
+    params[:more_vendors] ||= "false"
+    params[:is_test] ||= "true"
+    params[:item_id] ||= ""
+    render :layout => false
+  end
+
   def newcar_demo
     params[:ref_url] ||= ""
     params[:page_type] ||= "type_5"

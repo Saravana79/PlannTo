@@ -813,7 +813,7 @@ source_items.each do |source_item|
       item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => source_item.url, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => iscashondeliveryavailable, :isemiavailable => isemiavailable, :additional_details => product_id, :cashback => cashback, :description => description, :IsError => false, :mrpprice => mrpprice, :offer => offer)
       image = item_detail.Image
     else
-      item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now)
+      item_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now)
       image = item_detail.Image
     end
 
@@ -829,7 +829,10 @@ source_items.each do |source_item|
         image.save
       end
     rescue Exception => e
+      p e.backtrace
       p "There was a problem in image update"
+      p "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      p source_item.url
     end
   end
 end
