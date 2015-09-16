@@ -505,3 +505,8 @@ task :update_source_item_with_paytm => :environment do
     end
   end
 end
+
+desc "paytm - sourceitem update to item details"
+task :update_source_item_to_item_detail => :environment do
+  Sourceitem.process_source_item_update_paytm()
+end
