@@ -1,6 +1,6 @@
 development:
   root_image_url: "http://cdn1.plannto.com/items/"
-  root_image_path: "http://planntonew.s3.amazonaws.com/"
+  root_image_path: "http://cdn1.plannto.com/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -117,8 +117,8 @@ test:
   amazon_top_mobiles: "18093,5527,27976,9950,27976,19673,9952"
  
 production:
-  root_image_url: "http://planntonew.s3.amazonaws.com/items/"
-  root_image_path: "http://planntonew.s3.amazonaws.com/"
+  root_image_url: "http://cdn1.plannto.com/items/"
+  root_image_path: "http://cdn1.plannto.com/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
