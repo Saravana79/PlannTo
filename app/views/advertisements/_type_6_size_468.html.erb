@@ -7,7 +7,7 @@
 
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
-                <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
+                <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt="" style="width:70px;"></a></div>
 
                 <div class="product-container">
                   <div style="float:left;width:168px;">
@@ -15,8 +15,8 @@
                     <div style="float:left;">
                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(36) %></h3>
                   </div>
-                    <div style="float:left;">
-                      <p class="price"><%= prettify(item_detail) %></p>
+                    <div style="float:left;width:100%">
+                           <span class="price"><%= prettify(item_detail) %></span><span style="color:black;padding: 0px 2px 2px 5px;font-size:8px;">(Price includes cashback)</span>
                     </div>
                   </a>
                   </div>  
@@ -47,7 +47,7 @@
                   </p>
                 </div>
               </div>
-              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;width:70px;">
             </div>
         <% end %>
 

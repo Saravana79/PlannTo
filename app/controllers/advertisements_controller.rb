@@ -22,7 +22,8 @@ class AdvertisementsController < ApplicationController
     @sid = sid = params[:sid] ||= ""
 
     # TODO: hot coded values, have to change in feature
-    if @suitable_ui_size == "120" && params[:page_type] != "type_4"
+    
+    if @suitable_ui_size == "120" && params[:page_type] != "type_4" && params[:page_type] != "type_6"
       @ad_template_type = ad_id == 21 ? "type_3" : "type_2"
     end
 
@@ -144,7 +145,7 @@ class AdvertisementsController < ApplicationController
     @sid = sid = params[:sid] ||= ""
 
     # TODO: hot coded values, have to change in feature
-    if @suitable_ui_size == "120" && params[:page_type] != "type_4"
+    if @suitable_ui_size == "120" && params[:page_type] != "type_4" && params[:page_type] != "type_6"
       @ad_template_type = ad_id == 21 ? "type_3" : "type_2"
     end
 

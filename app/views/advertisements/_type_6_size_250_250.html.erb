@@ -44,6 +44,7 @@
                       </div>
                       <div class="product-txt-right">
                         <a href="<%= shop_now_url %>" target="_blank" class="">
+                          <p class="price-strike"><%= prettify_price(item_detail) %></p>
                           <p class="price"><%= prettify(item_detail) %></p>
                         </a>
 
@@ -58,7 +59,7 @@
                     <div class="product-txt-desc">
                       <p>
                         <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %> Price shown above includes cashback.
                       </p>
                     </div>
                   </div>

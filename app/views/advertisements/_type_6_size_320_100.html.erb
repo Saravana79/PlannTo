@@ -24,11 +24,10 @@
                       <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
                     </div>
                       <div style="float:left;width:100%">
-                        <p class="price"><%= prettify(item_detail) %></p>
+                        <p class="price-strike"><%= prettify_price(item_detail) %></p>
+                        <span class="price"><%= prettify(item_detail) %></span><span style="color:black;padding: 0px 2px 2px 5px;font-size:9px;">(Price includes cashback)</span>
                       </div>
-                      <% if  @item_details[0].site.to_i == 9861%>
-                        <!-- <div style = "font-size: 9px;margin: 3px 0px;float:left;color: #343434;" > Extra 10% off on SBI Cards. </div>-->
-                     <%end%>
+                       <!--  <div style = "font-size: 9px;margin: 3px 0px;float:left;color: #343434;" > Price includes cashback. </div>-->
                       <div class="right-div" style="float:left;width:100%;margin-top:5px;">
                         <div style="float:left">
                         <p class="btn">

@@ -42,6 +42,7 @@
                         <a href="<%= shop_now_url %>" target="_blank" class="">
                           <h3><%= each_slice_item_detail.ItemName.to_s.truncate(62) %></h3>
 
+                          <p class="price-strike"><%= prettify_price(each_slice_item_detail) %></p>
                           <p class="price"><%= prettify(each_slice_item_detail) %></p>
                         </a>
 
@@ -58,7 +59,7 @@
                   <div class="product-txt-desc">
                     <p>
                       <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                      <%= raw get_offer_for_ad(@ad, item_detail.first, @vendor_ad_details[item_detail.first.site.to_i]['default_text'], 90, "") %>
+                      <%= raw get_offer_for_ad(@ad, item_detail.first, @vendor_ad_details[item_detail.first.site.to_i]['default_text'], 90, "") %> Price shown above includes cashback.
                     </p>
                   </div>
                   <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
