@@ -88,7 +88,7 @@ class Sourceitem < ActiveRecord::Base
 
           product_id = response_hash["product_id"] rescue ""
           image_url = response_hash["image_url"] rescue ""
-          status = response_hash["status"] == true ? 1 : 2
+          status = response_hash["instock"] == true ? 1 : 2
           offer = response_hash["promo_text"] rescue ""
           offer_url = response_hash["offer_url"] rescue ""
           offer_url = "https://paytm.com/papi" + offer_url
