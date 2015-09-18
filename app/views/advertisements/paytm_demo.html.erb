@@ -26,7 +26,7 @@
   <h1>Contextual Ads Demo</h1>
   <div class="demo_form row">
     <div class="search_form">
-      <%= form_for :search, :url => "/advertisements/carwale_demo", :html => {:method => 'get'} do |search_form| %>
+      <%= form_for :search, :url => "/advertisements/paytm_demo", :html => {:method => 'get'} do |search_form| %>
           Ads ID: <%= text_field_tag :ads_id, params[:ads_id], :style => "width: 40px;" %>
           Item IDs: <%= text_field_tag :item_id, params[:item_id], :style => "width: 350px;" %>
           <%= search_form.submit "Go" %>
