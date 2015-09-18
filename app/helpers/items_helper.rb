@@ -497,11 +497,8 @@ module ItemsHelper
    end  
     return str.html_safe
   end
-  
-  
-  
-  def
-  display_required(value, required)
+
+  def display_required(value, required)
     logger.info value
     logger.info required
     return "display: none;" if value != required
