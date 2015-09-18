@@ -114,7 +114,7 @@ class Sourceitem < ActiveRecord::Base
             image = item_detail.Image
           else
             # item_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now)
-            item_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now, :offer => offer_text, :cashback => cashback, :description => effective_price)
+            item_detail.update_attributes!(:mrpprice => mrpprice, :price => offer_price, :status => status, :last_verified_date => Time.now, :offer => offer_text, :cashback => cashback, :description => effective_price)
             image = item_detail.Image
           end
 

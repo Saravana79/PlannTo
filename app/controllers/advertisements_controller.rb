@@ -725,7 +725,7 @@ class AdvertisementsController < ApplicationController
     params[:ads_id] ||= 70
     params[:more_vendors] ||= "false"
     params[:is_test] ||= "true"
-    params[:item_id] ||= "4745"
+    params[:item_id] ||= "19673,22889,22890,22892,22893,22894"
     render :layout => false
   end
 
