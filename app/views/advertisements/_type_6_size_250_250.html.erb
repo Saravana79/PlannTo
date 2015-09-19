@@ -59,7 +59,7 @@
                     <div class="product-txt-desc">
                       <p>
                         <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %> Price shown above includes cashback.
+                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url).to_s.gsub("cashback", "Cashback") %> Price shown above includes Cashback.
                       </p>
                     </div>
                   </div>

@@ -48,7 +48,7 @@
               <% end %>
               <div class="product-extra-desc">
                 <p>
-                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil) %> Price shown above includes cashback.
+                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil).to_s.gsub("cashback", "Cashback") %> Price shown above includes Cashback.
                 </p>
               </div>
                 <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
