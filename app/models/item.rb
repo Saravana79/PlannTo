@@ -3550,6 +3550,14 @@ end
     item
   end
 
+  def update_redis_with_item_manual
+    #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
+    related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(10).collect(&:related_item_id).join(",")
+
+    # Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "advertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
+    $redis_rtb.HMSET("items:#{id}", "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
+  end
+
   private
 
   def create_item_ad_detail
