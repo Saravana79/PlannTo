@@ -44,7 +44,9 @@
                       </div>
                       <div class="product-txt-right">
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <p class="price-strike"><%= prettify_price(item_detail) %></p>
+                          <% if(!item_detail.cashback.nil? && item_detail.cashback != 0.0) %>
+                            <p class="price-strike"><%= prettify_price(item_detail) %></p>
+                          <%end%>
                           <p class="price"><%= prettify(item_detail) %></p>
                         </a>
 

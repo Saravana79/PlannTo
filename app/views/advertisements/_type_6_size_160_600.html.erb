@@ -22,7 +22,9 @@
               <% sliced_item_detail.each_with_index do |item_detail, itindex| %>
                     <div class="product-container" >
                     <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
-                     <p class="price-strike"><%= prettify_price(item_detail) %></p>
+                      <% if(!item_detail.cashback.nil? && item_detail.cashback != 0.0) %>
+                            <p class="price-strike"><%= prettify_price(item_detail) %></p>
+                      <%end%>
                     <p class="price"><%= prettify(item_detail) %></p>
                     <div class="product-img">
                       <a href="javascript:void(0)" style="text-decoration:none;">
@@ -51,7 +53,10 @@
               <% end %>
               <div class="product-extra-desc">
                 <p>
-                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil).to_s.gsub("cashback", "Cashback") %> Price shown above includes Cashback.
+                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil).to_s.gsub("cashback", "Cashback") %> 
+                   <% if(!sliced_item_detail.first.cashback.nil? && sliced_item_detail.first.cashback != 0.0) %>
+                          Price shown above includes Cashback.
+                   <% end %> 
                 </p>
               </div>
                 <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
