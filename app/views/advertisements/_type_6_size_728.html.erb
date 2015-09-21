@@ -16,7 +16,9 @@
                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
                   </div>
                     <div style="float:left;">
-                      <p class="price-strike"><%= prettify_price(item_detail) %></p>
+                    <% if(!item_detail.cashback.nil? && item_detail.cashback != 0.0) %>
+                            <p class="price-strike"><%= prettify_price(item_detail) %></p>
+                    <%end%>
                       <p class="price"><%= prettify(item_detail) %></p>
                     </div>
                   </a>
@@ -31,7 +33,10 @@
                   <div class="product-desc">
                     <a href="<%= shop_now_url %>" target="_blank" class="">
                       <p class="text-desc">
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url).to_s.gsub("cashback", "Cashback") %> Price shown above includes Cashback.
+                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url).to_s.gsub("cashback", "Cashback") %>        
+                         <% if(!item_detail.cashback.nil? && item_detail.cashback != 0.0) %>
+                          Price shown above includes Cashback.
+                         <% end %> 
                       </p>
                       
                     </a>
