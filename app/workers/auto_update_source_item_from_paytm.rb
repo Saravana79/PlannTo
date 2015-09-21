@@ -1,4 +1,4 @@
-class AutoUpdateSourceitemFromPaytm
+class AutoUpdateSourceItemFromPaytm
   extend HerokuResqueAutoScale if Rails.env.production?
   extend Resque::Plugins::Retry
   @queue = :auto_update_source_item_from_paytm
