@@ -251,6 +251,6 @@ task :auto_update_amazon_deal => :environment do
 end
 
 desc "Auto update source item to itemdetail for paytm"
-task :auto_update_sourceitem_to_itemdetail_paytm => :environment do
-  Resque.enqueue(AutoUpdateSourceitemToItemdetailForPaytm, Time.zone.now.utc)
+task :auto_update_itemdetail_sourceitem_for_paytm => :environment do
+  Resque.enqueue(AutoUpdateItemdetailFromSourceitemForPaytm, Time.zone.now.utc)
 end
