@@ -89,6 +89,7 @@ class Sourceitem < ActiveRecord::Base
           if response_hash.blank?
             item_detail = Itemdetail.find_or_initialize_by_url(source_item.url)
             item_detail.update_attributes(:status => 2)
+            next
           end
 
           product_id = response_hash["product_id"] rescue ""
