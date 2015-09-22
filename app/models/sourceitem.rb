@@ -86,6 +86,11 @@ class Sourceitem < ActiveRecord::Base
 
           response_hash = JSON.parse(response) rescue {}
 
+          if response_hash.blank?
+            item_detail = Itemdetail.find_or_initialize_by_url(source_item.url)
+            item_detail.update_attributes(:status => 2)
+          end
+
           product_id = response_hash["product_id"] rescue ""
           image_url = response_hash["image_url"] rescue ""
           status = response_hash["instock"] == true ? 1 : 2

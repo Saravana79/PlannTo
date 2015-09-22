@@ -806,6 +806,10 @@ class AdvertisementsController < ApplicationController
 
     @ad = Advertisement.where(:id => params[:ads_id]).first
 
+    if !@ad.blank? && !@ad.template_type.blank? && params[:page_type].blank?
+      params[:page_type] = @ad.template_type
+    end
+
     if !@ad.blank? && @ad.advertisement_type == "housing_dynamic"
       params[:hou_dynamic_l] = "l_#{params[:l]}"
     end
