@@ -14,7 +14,7 @@ Paperclip.interpolates(:image_prefix_path) do |attachment, style|
   if_item_detail = itemdetail.blank? ? "" : itemdetail.class.to_s.downcase rescue ""
   image_type = attachment.instance.imageable.type.downcase rescue "ad"
   table_name = attachment.instance.imageable.class.table_name
-  if if_item_detail == "itemdetail"
+  if (if_item_detail == "itemdetail" || if_item_detail == "itembeautydetail")
     vendor_name = itemdetail.get_vendor_name rescue nil
     vendor_name = vendor_name.blank? ? "MySmartPrice" : vendor_name
     return_val = "vendors/#{vendor_name}"    #TODO: hot code value for MySmartPrice

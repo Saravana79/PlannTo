@@ -34,7 +34,7 @@ class Image < ActiveRecord::Base
 
   def set_styles
     format = self.avatar_content_type.include?("gif") ? :gif : :jpeg
-    if ((self.imageable_type == "Item" || self.imageable_type == "Itemdetail"))
+    if ((self.imageable_type == "Item" || self.imageable_type == "Itemdetail" || self.imageable_type == "ItemBeautyDetail"))
       { :original => ["100%", format], :medium => ["176x132>", format], :small => ["40x30>", format] }
     else
       { :original => ["100%", format] }
@@ -42,7 +42,7 @@ class Image < ActiveRecord::Base
   end
 
   def set_convert_options
-    if self.imageable_type == "Item" || self.imageable_type == "Itemdetail"
+    if self.imageable_type == "Item" || self.imageable_type == "Itemdetail" || self.imageable_type == "ItemBeautyDetail"
       { :medium => "-gravity center -extent 176x132", :small => "-gravity center -extent 40x30"}
     else
       {}

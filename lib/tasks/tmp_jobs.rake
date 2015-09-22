@@ -544,3 +544,69 @@ task :update_content_mapping_to_redis_rtb => :environment do
   end while !contents.empty?
 end
 
+desc "tmp job to update item beauty detail"
+task :update_item_beauty_detail_from_xml_feed => :environment do
+  # data = XmlSimple.xml_in(File.open("/home/sivakumar/skype/335-21092015-085816.xml"))
+  data = XmlSimple.xml_in(open("http://feeds.omgpm.com/GetFeed/?aid=524511&feedid=335&Format=xml"))
+
+  products = data["Product"]
+
+  products.each do |each_product|
+    begin
+      url = each_product["ProductURL"][0].to_s rescue ""
+      url = CGI.unescape(url) rescue ""
+      url = FeedUrl.get_value_from_pattern(url, "r=<url>?", "<url>").strip rescue ""
+      item_beauty_detail = ItemBeautyDetail.find_or_initialize_by_url(:url => url)
+      name = each_product["ProductName"][0].to_s rescue ""
+      offer_price = each_product["ProductPrice"][0] rescue ""
+      status = each_product["StockAvailability"][0].to_s.downcase.include?("in stock") ? 1 : 2 rescue 2
+      image_url = each_product["ProductImageLargeURL"][0].to_s rescue ""
+      mrp_price = each_product["WasPrice"][0] rescue ""
+      description = each_product["ProductDescription"][0].to_s rescue ""
+      product_id = each_product["ProductID"][0].to_s rescue ""
+      category = each_product["CategoryName"][0].to_s rescue ""
+      gender = each_product["custom1"][0].to_s rescue ""
+      gender = FeedUrl.get_value_from_pattern(gender, "Gender -<gender>", "<gender>").to_s.strip.downcase rescue ""
+
+      if item_beauty_detail.new_record?
+        begin
+          uri = URI.parse(URI.encode(url.to_s.strip))
+          doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
+
+          color_label = doc.at_css("#selected_color_label").content.to_s.downcase rescue ""
+        rescue Exception => e
+          color_label = ""
+        end
+
+        item_beauty_detail.update_attributes!(:name => name, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76326, :additional_details => product_id, :description => description, :is_error => false, :mrp_price => mrp_price, :gender => gender, :color => color_label)
+        image = item_beauty_detail.image
+      else
+        item_beauty_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now)
+        image = item_beauty_detail.image
+      end
+
+      begin
+        if image.blank? && !image_url.blank?
+          image = item_beauty_detail.build_image
+          tempfile = open(image_url)
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+          # filename = image_url.split("/").last
+          filename = "#{item_beauty_detail.id}.jpeg"
+          avatar.original_filename = filename
+          image.avatar = avatar
+          image.save
+        end
+      rescue Exception => e
+        p e.backtrace
+        p "There was a problem in image update"
+        p "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        p url
+      end
+    rescue Exception => e
+      p "Error problem on product update"
+      p each_product["ProductURL"][0].to_s rescue ""
+    end
+  end
+end
+
+

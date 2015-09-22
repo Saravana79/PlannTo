@@ -932,19 +932,19 @@ products.each do |each_product|
     product_id = each_product["ProductID"][0].to_s rescue ""
     category = each_product["CategoryName"][0].to_s rescue ""
     gender = each_product["custom1"][0].to_s rescue ""
-    gender = FeedUrl.get_value_from_pattern(gender, "Gender -<gender>", "<gender>").strip rescue ""
+    gender = FeedUrl.get_value_from_pattern(gender, "Gender -<gender>", "<gender>").to_s.strip.downcase rescue ""
 
     if item_beauty_detail.new_record?
       begin
         uri = URI.parse(URI.encode(url.to_s.strip))
-        doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+        doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
 
         color_label = doc.at_css("#selected_color_label").content.to_s.downcase rescue ""
       rescue Exception => e
         color_label = ""
       end
 
-      item_beauty_detail.update_attributes!(:name => name, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76201, :additional_details => product_id, :description => description, :is_error => false, :mrp_price => mrp_price, :gender => gender, :color => color_label)
+      item_beauty_detail.update_attributes!(:name => name, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76326, :additional_details => product_id, :description => description, :is_error => false, :mrp_price => mrp_price, :gender => gender, :color => color_label)
       image = item_beauty_detail.image
     else
       item_beauty_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now)
