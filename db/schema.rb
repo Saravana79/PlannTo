@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150922083316) do
+ActiveRecord::Schema.define(:version => 20150922143852) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -784,7 +784,7 @@ ActiveRecord::Schema.define(:version => 20150922083316) do
     t.boolean  "is_error",                                          :default => false
     t.string   "error_details"
     t.string   "offer"
-    t.string   "image"
+    t.string   "image_name"
     t.decimal  "mrp_price",          :precision => 10, :scale => 0
     t.integer  "cashback"
     t.string   "site"
