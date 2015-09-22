@@ -82,7 +82,7 @@ class Sourceitem < ActiveRecord::Base
       begin
         if source_item.verified && !source_item.matchitemid.blank?
           json_url = "https://catalog.paytm.com/v1/p/" + source_item.url.to_s.split("/").last
-          response = RestClient.get(json_url)
+          response = RestClient.get(json_url) rescue nil
 
           response_hash = JSON.parse(response) rescue {}
 
