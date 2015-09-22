@@ -60,6 +60,10 @@ class Image < ActiveRecord::Base
       item_detail = imageable
       item_detail.Image = avatar_file_name
       item_detail.save!
+    elsif imageable_type == "ItemBeautyDetail"
+      item_beauty_detail = imageable
+      item_beauty_detail.image_name = avatar_file_name
+      item_beauty_detail.save!
     end
   end
 

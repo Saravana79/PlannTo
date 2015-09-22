@@ -945,10 +945,10 @@ products.each do |each_product|
       end
 
       item_beauty_detail.update_attributes!(:name => name, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76326, :additional_details => product_id, :description => description, :is_error => false, :mrp_price => mrp_price, :gender => gender, :color => color_label)
-      image = item_beauty_detail.image
+      image = item_beauty_detail.image_name
     else
       item_beauty_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now)
-      image = item_beauty_detail.image
+      image = item_beauty_detail.image_name
     end
 
     begin
