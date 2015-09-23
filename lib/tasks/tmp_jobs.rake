@@ -547,7 +547,9 @@ end
 desc "tmp job to update item beauty detail"
 task :update_item_beauty_detail_from_xml_feed => :environment do
   # data = XmlSimple.xml_in(File.open("/home/sivakumar/skype/335-21092015-085816.xml"))
-  data = XmlSimple.xml_in(open("http://feeds.omgpm.com/GetFeed/?aid=524511&feedid=335&Format=xml"))
+  # url = "http://feeds.omgpm.com/GetFeed/?aid=524511&feedid=335&Format=xml"
+  url = "http://cdn1.plannto.com/test_folder/335-21092015-085816.xml"
+  data = XmlSimple.xml_in(open(url))
 
   products = data["Product"]
 
