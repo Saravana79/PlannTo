@@ -1081,7 +1081,7 @@ class Itemdetail < ActiveRecord::Base
         offer_price = response_hash["offer_price"] rescue ""
         cashback = response_offer_hash["codes"][0]["savings"] rescue ""
 
-        order_url = order_url.gsub("<product_id>", product_id.to_s)
+        order_url = "https://paytm.com/papi/rr/products/#{product_id}/statistics?channel=web&version=2"
         response_order = RestClient.get(order_url) rescue nil
         response_order_hash = JSON.parse(response_order) rescue {}
         order_count = response_order_hash["statistics"]["all"]["order_count"] rescue 0
