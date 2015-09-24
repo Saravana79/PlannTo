@@ -77,6 +77,7 @@ class Sourceitem < ActiveRecord::Base
 
   def self.process_source_item_update_paytm()
     source_items = Sourceitem.where("verified=true and matchitemid is not null and url like '%paytm.com%'")
+    order_url = "https://paytm.com/papi/rr/products/<product_id>/statistics?channel=web&version=2"
 
     source_items.each do |source_item|
       begin
@@ -119,8 +120,13 @@ class Sourceitem < ActiveRecord::Base
             item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => source_item.url, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => iscashondeliveryavailable, :isemiavailable => isemiavailable, :additional_details => product_id, :cashback => cashback, :description => effective_price, :IsError => false, :mrpprice => mrpprice, :offer => offer_text)
             image = item_detail.Image
           else
+            order_url = order_url.gsub("<product_id>", product_id.to_s)
+            response_order = RestClient.get(order_url) rescue nil
+            response_order_hash = JSON.parse(response_order) rescue {}
+            order_count = response_order_hash["statistics"]["all"]["order_count"] rescue 0
+
             # item_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now)
-            item_detail.update_attributes!(:mrpprice => mrpprice, :price => offer_price, :status => status, :last_verified_date => Time.now, :offer => offer_text, :cashback => cashback, :description => effective_price)
+            item_detail.update_attributes!(:mrpprice => mrpprice, :price => offer_price, :status => status, :last_verified_date => Time.now, :offer => offer_text, :cashback => cashback, :description => effective_price, :shippingunit => order_count)
             image = item_detail.Image
           end
 
