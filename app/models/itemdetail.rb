@@ -1048,6 +1048,53 @@ class Itemdetail < ActiveRecord::Base
     itemdetails
   end
 
+  def self.process_and_update_top_itemdetail_for_paytm()
+    item_details = Itemdetail.where(:site => 76201).order("shippingunit desc").first(50)
+
+    item_details.each do |item_detail|
+      begin
+        url = item_detail.url
+
+        json_url = "https://catalog.paytm.com/v1/p/" + url.to_s.split("/").last
+        response = RestClient.get(json_url) rescue nil
+
+        response_hash = JSON.parse(response) rescue {}
+
+        if response_hash.blank?
+          item_detail.update_attributes(:status => 2)
+          next
+        end
+
+        product_id = response_hash["product_id"] rescue ""
+        status = response_hash["instock"] == true ? 1 : 2
+        offer_url = response_hash["offer_url"] rescue ""
+        offer_url = "https://paytm.com/papi" + offer_url
+
+        response_offer = RestClient.get(offer_url)
+        response_offer_hash = JSON.parse(response_offer) rescue {}
+
+        offer_text = response_offer_hash["codes"][0]["offerText"] rescue ""
+        offer_text = offer_text.gsub(/\(Max.*/, "").to_s.strip rescue ""
+        effective_price =  response_offer_hash["codes"][0]["effective_price"] rescue ""
+
+        mrpprice = response_hash["actual_price"] rescue ""
+        offer_price = response_hash["offer_price"] rescue ""
+        cashback = response_offer_hash["codes"][0]["savings"] rescue ""
+
+        order_url = order_url.gsub("<product_id>", product_id.to_s)
+        response_order = RestClient.get(order_url) rescue nil
+        response_order_hash = JSON.parse(response_order) rescue {}
+        order_count = response_order_hash["statistics"]["all"]["order_count"] rescue 0
+
+        # item_detail.update_attributes!(:price => offer_price, :status => status, :last_verified_date => Time.now)
+        item_detail.update_attributes!(:mrpprice => mrpprice, :price => offer_price, :status => status, :last_verified_date => Time.now, :offer => offer_text, :cashback => cashback, :description => effective_price, :shippingunit => order_count)
+      rescue Exception => e
+        p "problem while updating item detail"
+      end
+    end
+
+  end
+
   private
 
   def update_last_verified_date

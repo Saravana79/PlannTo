@@ -254,3 +254,8 @@ desc "Auto update source item to itemdetail for paytm"
 task :auto_update_itemdetail_sourceitem_for_paytm => :environment do
   Resque.enqueue(AutoUpdateItemdetailFromSourceitemForPaytm, Time.zone.now.utc)
 end
+
+desc "Auto update top itemdetail for paytm"
+task :auto_update_top_itemdetail_for_paytm => :environment do
+  Resque.enqueue(AutoUpdateTopItemdetailForPaytm, Time.zone.now.utc)
+end
