@@ -50,7 +50,7 @@
       <% search_url = !@search_url.blank? ? "#{configatron.hostname}/history_details?item_id=&geo=#{params[:geo]}&red_url=#{@search_url}&iid=#{@impression_id}" : "" %>
 
      <div class="planntocarosel-left prev" style="position: relative;z-index: 10;top: 80px;left: 10px;cursor:hand;">
-         <img src="<%= configatron.root_image_path%>static/images/arrow_left.png" style="height:40px;"/>
+         <img src="<%= configatron.root_image_path%>static/images/arrow_left.png" style="height:40px;cursor:pointer;"/>
         </div>
       <div style="padding:0px 40px">
       <div class="productdiv owl-carousel" id="owl-demo" width="100%">
@@ -73,7 +73,7 @@
                         <% if !item.image_name.blank? %>
                           <%= get_image_tag_from_image_name(item.image_name, "Amazon", @item.base_item_image_url(:medium), 140,105).html_safe %>
                         <% else %>
-                            <img src="<%= item.image_url.to_s.gsub("SL75","SL150") %>" alt="" id="item_details">
+                            <img src="<%= item.image_url.to_s.gsub("SL75","SL150") %>" alt="" id="item_details" style="width:auto;height:auto;">
                         <% end %>
                       </a>
 
@@ -108,7 +108,7 @@
       </div>
     </div>
        <div class="planntocarosel-right next" style="position: relative;z-index: 10;top: -145px;right: 0px;cursor:hand;">
-          <img src="<%= configatron.root_image_path%>static/images/arrow_right.png" style="height:40px;"/>
+          <img src="<%= configatron.root_image_path%>static/images/arrow_right.png" style="height:40px;cursor:pointer;"/>
         </div>
       <% if !search_url.blank? %>
           <div class="bottompan">
