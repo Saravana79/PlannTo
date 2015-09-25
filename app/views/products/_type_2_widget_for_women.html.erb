@@ -207,7 +207,7 @@
       </div>
       <% search_url = !@search_url.blank? ? "#{configatron.hostname}/history_details?item_id=&geo=#{params[:geo]}&red_url=#{@search_url}&iid=#{@impression_id}" : "" %>
 
-     <div class="planntocarosel-left prev" style="position: relative;z-index: 10;top: 80px;left: 10px;cursor:hand;">
+     <div class="planntocarosel-left prev" style="position: relative;z-index: 10;top: 80px;left: 10px;cursor:hand;display:none;">
          <img src="<%= configatron.root_image_path%>static/images/arrow_left.png" style="height:40px;cursor:pointer;"/>
         </div>
       <div style="padding:0px 40px">
@@ -265,7 +265,7 @@
         <!--</div>-->
       </div>
     </div>
-       <div class="planntocarosel-right next" style="position: relative;z-index: 10;top: -145px;right: 0px;cursor:hand;">
+       <div class="planntocarosel-right next" style="position: relative;z-index: 10;top: -145px;right: 0px;cursor:hand;display:none;">
           <img src="<%= configatron.root_image_path%>static/images/arrow_right.png" style="height:40px;cursor:pointer;"/>
         </div>
       <% if !search_url.blank? %>
@@ -314,10 +314,12 @@
 //    PlannTo.jQuery(window).load(function()
     PlannTo.jQuery(function()
     {
+        PlannTo.jQuery(".planntocarosel-left").show()
+        PlannTo.jQuery(".planntocarosel-right").show()
         owl = PlannTo.jQuery("#owl-demo")
-        owl_carousel
+//        owl_carousel
 
-//        setTimeout(owl_carousel, 300)
+        setTimeout(owl_carousel, 300)
 
 //        setTimeout(owl_carousel, 1000)
     });
