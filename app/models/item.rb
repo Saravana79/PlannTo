@@ -72,25 +72,30 @@ class Item < ActiveRecord::Base
 #  end
 
   def get_base_itemtypeid
-    itemtype_id = case self.type
-    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", self.id).first.try(:itemtype_id)
-    when "Manufacturer" then 
-        if !self.itemrelationships.first.related_cars.blank?
-          self.itemrelationships.first.related_cars.itemtype_id  
-        else 
-          self.itemtype_id
-        end
-    when "CarGroup" then 
-        if !self.itemrelationships.first.related_cars.blank?
-          self.itemrelationships.first.related_cars.itemtype_id  
-        else 
-          self.itemtype_id
-        end
-    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", self.name.singularize).first.try(:id)
-    when "Topic" then TopicItemtypeRelation.find_by_item_id(self.id).itemtype_id
-    else self.itemtype_id
+    begin
+      itemtype_id = case self.type
+                      when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", self.id).first.try(:itemtype_id)
+                      when "Manufacturer" then
+                        if !self.itemrelationships.first.related_cars.blank?
+                          self.itemrelationships.first.related_cars.itemtype_id
+                        else
+                          self.itemtype_id
+                        end
+                      when "CarGroup" then
+                        if !self.itemrelationships.first.related_cars.blank?
+                          self.itemrelationships.first.related_cars.itemtype_id
+                        else
+                          self.itemtype_id
+                        end
+                      when "ItemtypeTag" then Itemtype.where("itemtype = ? ", self.name.singularize).first.try(:id)
+                      when "Topic" then TopicItemtypeRelation.find_by_item_id(self.id).itemtype_id
+                      else self.itemtype_id
+                    end
+      return itemtype_id
+    rescue Exception => e
+      p "There was a problem fetching itemtype id"
+      return ""
     end
-    return itemtype_id
   end
   
   def impression_count
