@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-    var domain = "www.plannto.com";
+//    var domain = "www.plannto.com";
 //for development
-//var domain = "localhost:3000";
+var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
@@ -141,13 +141,13 @@ var PlannTo = (function(window,undefined) {
                 console.log(img_height)
 
                 jQuery('<style type="text/css" id="plannto_style_'+indx+'"> ' +
-                    'a { outline: none; }' +
-                    '.plannto_iframe { position:absolute;width:100%;overflow:hidden;} ' +
-                    '.plannto_hint_button {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -158px -2px;cursor: pointer !important;height: 70px;opacity: 1;position: absolute;top: 11px;transition: margin-top 0.6s ease 0s;width: 26px;z-index: 5 !important;}'+
-                    '.expand_plannto_iframe {cursor: pointer;height: 19px;left: 515px;opacity: 1;position: absolute;width: 20px;z-index: 5;text-decoration:none;color:black;}' +
-                    '.close_plannto_iframe {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/assets/cbolaSprite.png") no-repeat scroll -50px -24px;cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;z-index: 5;left: '+(img_width - 20)+'px;' +
-                    '.plannto_iframe:hover { width: '+img_width+'px;} ' +
-                    '</style>').appendTo("head");
+                'a { outline: none; }' +
+                '.plannto_iframe { position:absolute;width:100%;overflow:hidden;} ' +
+                '.plannto_hint_button {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/images/plannto_overlay_images.png") no-repeat scroll -158px -2px;cursor: pointer !important;height: 70px;opacity: 1;position: absolute;top: 11px;transition: margin-top 0.6s ease 0s;width: 26px;z-index: 5 !important;}'+
+                '.expand_plannto_iframe {cursor: pointer;opacity: 1;position: absolute;width: 12px;z-index: 5;text-decoration:none;color:black;}' +
+                '.close_plannto_iframe {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAZlBMVEUAAAAAAAAXFxcWFhYZGRkaGhoAAAAAAAALCwsNDQ0ODg7k5OTo6OjV1dXZ2dnj4+Pm5ubAwMDCwsLZ2dna2trQ0NC/v7/Dw8PHx8fNzc3R0dHS0tLq6uru7u7y8vL29vb6+vr9/f2tB0eZAAAAHHRSTlMzNDc4ODlTVVhYWLS6vL29vb/AxsbIy83Nzc3Nu0nGLwAAAFpJREFUeNq9yEcSgCAMAMAECxIpVsBC8f+f9JoHOO5x4Q+jFgBCj6y2ZxJielZWdFXn6kmskI5SDkJguj3nveHT2hRjsi0rcwelwm1YLX5AVH5m1UsEQNnD116VFgP50TblxgAAAABJRU5ErkJggg==");cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;z-index: 5;left: '+(img_width - 20)+'px;' +
+                '.plannto_iframe:hover { width: '+img_width+'px;} ' +
+                '</style>').appendTo("head");
 
                 var height = jQuery(image).height() - 63
                 console.log(image)
@@ -165,10 +165,12 @@ var PlannTo = (function(window,undefined) {
                             impression_id = data.impression_id;
                             jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
-                            jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 90px; z-index: 2;width:100%;"> ' +
-                                '<div class="plannto_iframe"><a href="#" class="expand_plannto_iframe">expand</a><a href="#" class="close_plannto_iframe"></a><iframe id="plannto_ad_frame" src="" style="border:medium none;" height="90px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="90px" width="'+img_width+'px"> </iframe></div>' +
+                         jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 100px; z-index:2;width:100%;"> ' +
+                                '<div class="plannto_iframe" style="width:'+img_width+'px"><div style="width:100%;""><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
+                                '<span style="float: right;width:12px;display:block;height:20px;"><a href="#" class="expand_plannto_iframe">E</a></span><span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 4px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div>' +
                                 '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
                                 '</div>')
+
 
                             jQuery("#plannto_ad_frame").attr("src","data:text/html;charset=utf-8," + encodeURI(data.html))
 
@@ -179,12 +181,12 @@ var PlannTo = (function(window,undefined) {
                             }
                             else
                             {
-                                jQuery(".plannto_iframe").css("width", "0px")
+                                jQuery(".plannto_iframe").css("width", img_width+"px")
                             }
 
                             var iframe_body = jQuery("#plannto_ad_frame").contents().find("body")
                             console.log(iframe_body)
-                            jQuery(iframe_body).css({"width":"500px", "height":"90px", "overflow": "hidden"})
+                            jQuery(iframe_body).css({"width":"500px", "height":"100px", "overflow": "hidden"})
 
                             if (expand_type == "")
                             {
@@ -209,7 +211,7 @@ var PlannTo = (function(window,undefined) {
 
                     jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
 
-                    jQuery(".plan_ad_image_1").css({"bottom":"90px"})
+                    jQuery(".plan_ad_image_1").css({"bottom":"100px"})
 //
 //                    jQuery(".expand_plannto_iframe").show();
 
