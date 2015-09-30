@@ -160,8 +160,15 @@ class AdvertisementsController < ApplicationController
 
     included_beauty = @items.map {|d| d.is_a?(Beauty) || d.is_a?(Apparel)}.include?(true) rescue false
 
-    if params[:expanded].to_i == 1
+    if( params[:only_flash] == "true" && params[:expanded].to_i == 1)
       return return_expanded_html()
+      return_exp_path = ""
+    else
+      return_exp_path = "advertisements/show_image_overlay_expanded_ads.html.erb"
+
+      @ad_video_detail = @ad.ad_video_detail
+      expanded = params[:expanded].to_s
+      # AddImpression.add_impression_to_update_visible(params[:impression_id], "", expanded)
     end
 
     if included_beauty
@@ -240,7 +247,7 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => true, :html => render_to_string(return_path, :layout => false), :impression_id => @impression_id}.to_json
+          render :json => {:success => true, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
         end
       }
       format.html {
@@ -259,6 +266,8 @@ class AdvertisementsController < ApplicationController
     @ad_video_detail = @ad.ad_video_detail
     expanded = params[:expanded].to_s
     AddImpression.add_impression_to_update_visible(params[:impression_id], "", expanded)
+
+    # expanded_html = render_to_string(return_path, :layout => false)
 
     respond_to do |format|
       format.json {
@@ -380,6 +389,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ids = params[:vendor_ids].to_s.split(",")
     @ref_url = params[:ref_url] ||= ""
     @iframe_width, @iframe_height = params[:size].split("x")
+    @iframe_exp_width, @iframe_exp_height = params[:exp_size].split("x")
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     @ref_url = url
@@ -1014,6 +1024,7 @@ class AdvertisementsController < ApplicationController
     end
 
     params[:size] = params[:size].to_s.gsub("*", "x")
+    params[:exp_size] = params[:exp_size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
     ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
     if !ab_test_details.blank? && ab_test_details["enabled"] == "true"

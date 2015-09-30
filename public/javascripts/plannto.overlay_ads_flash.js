@@ -81,7 +81,7 @@ var domain = "localhost:3000";
             element = scripts[i];
             src = element.src;
 
-            if (src.indexOf(domain+"/javascripts/plannto.overlay_ads.js") != -1)
+            if (src.indexOf(domain+"/javascripts/plannto.overlay_ads_flash.js") != -1)
             {
                 if (count >= scriptCount)
                 {
@@ -152,7 +152,7 @@ var domain = "localhost:3000";
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
-                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*80&exp_size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expand_type='+expand_type
+                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*80&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&only_flash=true'
                 var impression_id = ""
                 jQuery.ajax({
                     url : url,
@@ -165,9 +165,9 @@ var domain = "localhost:3000";
                             impression_id = data.impression_id;
                             jQuery(image).parent().css({"position":"relative", "z-index":"1"})
 
-                         jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 120px; z-index:2;width:100%;"> ' +
+                         jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 100px; z-index:2;width:100%;"> ' +
                                 '<div class="plannto_iframe" style="width:'+img_width+'px"><div style="width:100%;""><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
-                                '<span style="float: right;width:12px;display:block;height:20px;"><a href="#" class="expand_plannto_iframe">E</a></span><span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 4px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div>' +
+                                '<span style="float: right;width:12px;display:block;height:20px;"><a href="#" class="expand_plannto_iframe">E</a></span><span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 0px;height:20px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div>' +
                                 '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
                                 '</div>')
 
@@ -182,18 +182,16 @@ var domain = "localhost:3000";
                             else
                             {
                                 jQuery(".plannto_iframe").css("width", img_width+"px")
+                                jQuery(".plannto_iframe").css("width", img_width+"px")
                             }
 
                             var iframe_body = jQuery("#plannto_ad_frame").contents().find("body")
                             console.log(iframe_body)
                             jQuery(iframe_body).css({"width":"500px", "height":"100px", "overflow": "hidden"})
 
-                            expanded_html = "data:text/html;charset=utf-8," + encodeURI(data.expanded_html)
-
                             if (expand_type == "")
                             {
                                 jQuery(".expand_plannto_iframe").hide()
-                                expand_plannto_iframe_key = false
                             }
                         }
                     }
@@ -201,6 +199,13 @@ var domain = "localhost:3000";
 
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
+//                    var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
+//                    jQuery(expanded_view).hide()
+//
+//                    var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
+//                    jQuery(normal_view).show()
+//                    jQuery(".expand_plannto_iframe").show()
+
                     jQuery("#exp_plannto_ad_frame").attr("src", "")
                     jQuery("#exp_plannto_ad_frame").hide()
                     jQuery("#plannto_ad_frame").show()
@@ -208,56 +213,91 @@ var domain = "localhost:3000";
                     jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
 
                     jQuery(".plan_ad_image_1").css({"bottom":"100px"})
+//
+//                    jQuery(".expand_plannto_iframe").show();
 
                     return false;
                 })
 
+//                jQuery(".plannto_hint_button").live("hover", function(event)
+//                {
+////                    if (expanded == true)
+////                    {
+////                        jQuery("#plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+////                        jQuery(".plan_ad_image_1").css({"bottom":img_height})
+////
+////                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
+////                    }
+//
+//                    jQuery("#plannto_ad_frame").show()
+//                    jQuery("#exp_plannto_ad_frame").hide()
+//                });
 
                 jQuery(".expand_plannto_iframe").live("click", function(event)
                 {
                     console.log(impression_id)
                     jQuery(".plannto_iframe").animate({height: img_height+4+"px"}, "slow")
+//                    jQuery("#plannto_ad_frame").hide()
                     jQuery(".plan_ad_image_1").css({"bottom":img_height})
+
+//                    var swf = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" id="plannto-flash-ad" name="plannto-ad" width="300" height="60"> <param name="plannto-flash-movie" value="http://cdn1.plannto.com/static/video_ads/Flipkart 300x60.swf"> <param name="wmode" value="opaque"> <param name="allowscriptaccess" value="always"> <object type="application/x-shockwave-flash" data="http://cdn1.plannto.com/static/video_ads/Flipkart 300x60.swf" width="300" height="60"> <param name="FlashVars" value="clickTag=shop_now_url"> <param name="wmode" value="opaque"> <param name="allowscriptaccess" value="always"> </object></object>'
 
                     if (expanded == false)
                     {
-//                        var expanded_url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expanded=1'+'&impression_id='+impression_id+'&expand_type='+expand_type
-//                        jQuery.ajax({
-//                            url : expanded_url,
-//                            type: "get",
-//                            dataType:"json",
-//                            success:function(data)
-//                            {
-//                                if (data.success == true)
-//                                {
-//                                    expanded_html = "data:text/html;charset=utf-8," + encodeURI(data.html)
-//                                    jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
+                        var expanded_url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expanded=1'+'&impression_id='+impression_id+'&expand_type='+expand_type+'&only_flash=true'
+                        jQuery.ajax({
+                            url : expanded_url,
+                            type: "get",
+                            dataType:"json",
+                            success:function(data)
+                            {
+                                if (data.success == true)
+                                {
+                                    expanded_html = "data:text/html;charset=utf-8," + encodeURI(data.html)
+                                    jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
+
+                                    jQuery("#plannto_ad_frame").hide()
+                                    jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+                                    jQuery("#exp_plannto_ad_frame").show()
+
+//                                    var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
+//                                    jQuery(normal_view).hide()
 //
-//                                    jQuery("#plannto_ad_frame").hide()
-//                                    jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
-//                                    jQuery("#exp_plannto_ad_frame").show()
-//
-//                                }
-//                            }
-//                        });
+//                                    var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
+//                                    jQuery(expanded_view).html(data.html)
+//                                    jQuery(expanded_view).show()
+                                }
+                            }
+                        });
 
-                        jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
 
-                        jQuery("#plannto_ad_frame").hide()
-                        jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
-                        jQuery("#exp_plannto_ad_frame").show()
-
+//                        jQuery.post('http://'+domain+'/advertisements/ads_visited', {"impression_id": impression_id, "expanded": "1"})
                         expanded = true
                     }
                     else
                     {
+//                        jQuery("#plannto_ad_frame").attr("src", expanded_html)
+
                         jQuery("#plannto_ad_frame").hide()
                         jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
                         jQuery("#exp_plannto_ad_frame").show()
+
+//                        var normal_view = jQuery("#plannto_ad_frame").contents().find("#normal_view")
+//                        jQuery(normal_view).hide()
+//
+//                        var expanded_view = jQuery("#plannto_ad_frame").contents().find("#expanded_view")
+//                        jQuery(expanded_view).show()
+//                        jQuery(".expand_plannto_iframe").hide()
+//
+//                        var my_videos = jQuery("#plannto_ad_frame").contents().find(".plannto-advertisement video");
+//
+//                        if (my_videos.length != 0)
+//                        {
+//                            var my_video = my_videos[0]
+//                            my_video.play();
+//                        }
                     }
                     jQuery(this).hide()
-
-                    jQuery("#exp_swiffycontainer").css({"width":img_width, "height":img_height})
 
                     return false;
                 })
@@ -285,11 +325,6 @@ var domain = "localhost:3000";
                     }
 
                     return false;
-                })
-
-                jQuery(".plannto_ad_frame").live("click", function(event)
-                {
-                    //# TODO:
                 })
             })
 //        });
