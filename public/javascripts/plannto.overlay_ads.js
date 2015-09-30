@@ -167,7 +167,7 @@ var domain = "localhost:3000";
 
                          jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 120px; z-index:2;width:100%;"> ' +
                                 '<div class="plannto_iframe" style="width:'+img_width+'px"><div style="width:100%;""><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
-                                '<span style="float: right;width:12px;display:block;height:20px;"><a href="#" class="expand_plannto_iframe">E</a></span><span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 4px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div>' +
+                                '<span style="float: right;width:12px;display:block;height:20px;"><a href="#" class="expand_plannto_iframe">E</a></span><span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 0px;height:20px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div>' +
                                 '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
                                 '</div>')
 
@@ -181,6 +181,7 @@ var domain = "localhost:3000";
                             }
                             else
                             {
+                                jQuery(".plannto_iframe").css("width", img_width+"px")
                                 jQuery(".plannto_iframe").css("width", img_width+"px")
                             }
 
