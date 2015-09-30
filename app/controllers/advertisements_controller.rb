@@ -223,8 +223,8 @@ class AdvertisementsController < ApplicationController
     end
 
     return_path = "advertisements/show_image_overlay_ads.html.erb"
-    @iframe_width = params[:width].blank? ? "" : params[:width]
-    @iframe_height = params[:height].blank? ? "" : params[:height]
+    @iframe_width = params[:width].blank? ? "" : params[:width] if @iframe_width.blank?
+    @iframe_height = params[:height].blank? ? "" : params[:height] if @iframe_height.blank?
     @ad_template_type = "type_1"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
 
@@ -669,6 +669,12 @@ class AdvertisementsController < ApplicationController
 
   def in_image_ads
     params[:type] ||= ""
+    params[:ref_url] ||= "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"
+    render :layout => false
+  end
+
+  def in_image_ads_demo
+    params[:type] ||= "flash"
     params[:ref_url] ||= "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"
     render :layout => false
   end
