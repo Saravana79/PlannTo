@@ -100,7 +100,7 @@ var domain = "localhost:3000";
     /******** Main function ********/
     function main() {
 
-        jQuery(document).ready(function(jQuery) {
+//        jQuery(document).ready(function(jQuery) {
             url = getScriptUrl();
             var doc_title =  jQuery(document).title;
             var pathname = getParam(url,"ref_url");
@@ -152,7 +152,7 @@ var domain = "localhost:3000";
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
-                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size=&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited
+                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*80&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited
                 var impression_id = ""
                 jQuery.ajax({
                     url : url,
@@ -326,7 +326,7 @@ var domain = "localhost:3000";
                     return false;
                 })
             })
-        });
+//        });
     }
 
 
