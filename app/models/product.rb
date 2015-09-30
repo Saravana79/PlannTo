@@ -18,7 +18,13 @@ has_one :manufacturer,
  def self.search_type(type)
 
    if (type.blank? || type.include?("Others"))
-      return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Lens".camelize.constantize,"Television".camelize.constantize, "Beauty".camelize.constantize,"Color".camelize.constantize,"ApartmentType".camelize.constantize,"ApartmentSaleType".camelize.constantize,"Place".camelize.constantize,"State".camelize.constantize,"City".camelize.constantize,'Insurance'.camelize.constantize,'Accessory'.camelize.constantize, 'Apparel'.camelize.constantize, 'Style'.camelize.constantize,'Training'.camelize.constantize]
+      return [ "ItemtypeTag".camelize.constantize, "Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, 
+              "Beauty".camelize.constantize,"Color".camelize.constantize,"Apparel".camelize.constantize, "Style".camelize.constantize,
+              "Car".camelize.constantize, "Camera".camelize.constantize,"Laptop".camelize.constantize,
+              "Lens".camelize.constantize,"Television".camelize.constantize, 
+              "ApartmentType".camelize.constantize,"ApartmentSaleType".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Place".camelize.constantize,"State".camelize.constantize,
+              'Accessory'.camelize.constantize, "Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,'Training'.camelize.constantize,
+              "AttributeTag".camelize.constantize,"Topic".camelize.constantize,'Insurance'.camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
    end
    if type.is_a?(Array)
      return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue (t.to_s.gsub(/\s+/,'').strip.camelize.constantize rescue nil)}
