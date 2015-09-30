@@ -2349,11 +2349,11 @@
                 });
     }
     function getTheYearForModel(modelId){
-        $.post('http://overdrive.in/wp-content/themes/overdrive/getMakeModel.php',{modelId:modelId,type:'year'},function(data){
-            var yearFinal = Trimnew(data);
-            $('#modelYearF').val(yearFinal);
-
-        })
+//        $.post('http://overdrive.in/wp-content/themes/overdrive/getMakeModel.php',{modelId:modelId,type:'year'},function(data){
+//            var yearFinal = Trimnew(data);
+//            $('#modelYearF').val(yearFinal);
+//
+//        })
     }
     function CheckForSelectionValue(){
         var CarPostID = $('#variantID').val();
@@ -2402,18 +2402,18 @@
 
         if(x==0)
         {
-            $.post('http://overdrive.in/wp-content/themes/overdrive/getMakeModel.php',{makeId:makeIdVal,modelId:modelIdVal,variantID:variantVal,type:'bucket'},function(data){
-                //alert(data);
-                if(data!="")
-                {
-                    window.location.href = data;
-                }
-                else {
-                    $.post('http://overdrive.in/wp-content/themes/overdrive/getMakeModel.php',{makeId:makeIdVal,modelId:modelIdVal,variantID:variantVal,type:'bucket'},function(data){
-                        window.location.href = data;
-                    })
-                }
-            })
+//            $.post('http://overdrive.in/wp-content/themes/overdrive/getMakeModel.php',{makeId:makeIdVal,modelId:modelIdVal,variantID:variantVal,type:'bucket'},function(data){
+//                //alert(data);
+//                if(data!="")
+//                {
+//                    window.location.href = data;
+//                }
+//                else {
+//                    $.post('http://overdrive.in/wp-content/themes/overdrive/getMakeModel.php',{makeId:makeIdVal,modelId:modelIdVal,variantID:variantVal,type:'bucket'},function(data){
+//                        window.location.href = data;
+//                    })
+//                }
+//            })
         }
         //window.location.href='/car-filter/model-'+modelIdVal;
 
