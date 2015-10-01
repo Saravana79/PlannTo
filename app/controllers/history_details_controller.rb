@@ -13,7 +13,7 @@ class HistoryDetailsController < ApplicationController
 
     req_url = request.referer
     unless req_url.nil?
-      if request.referer.include? "plannto.com" or request.referer.include? "localhost"
+      if request.referer.to_s.include? "plannto.com" or request.referer.to_s.include? "localhost"
         if (params["req"].present? && params["req"] != "")
           req_url = params["req"]
         end
@@ -94,7 +94,11 @@ class HistoryDetailsController < ApplicationController
               url = url.gsub("tag=plannto-junglee-g-21", "tag=#{publisher_vendor.trackid}");
             end   
           else
-            url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
+            if url.include?("?")
+              url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
+            else
+              url = url + "?tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
+            end
           end
         end
       else
