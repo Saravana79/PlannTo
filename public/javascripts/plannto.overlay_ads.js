@@ -142,7 +142,18 @@ var PlannTo = (function(window,undefined) {
             var img_h = off_d.height - 100
             var off_top = off_d.top + img_h
 
-            jQuery(".plannto_in_image_ad_1").css({"top":off_top+"px","left":off_d.left+"px","width":off_d.width+"px"})
+            if (pln_frame_expanded == true)
+            {
+                jQuery(".plannto_in_image_ad_1").css({"width":off_d.width+"px", "height":off_d.height+"px", "top":off_d.top+"px", "left":off_d.left+"px"})
+            }
+            else if (pln_frame_closed == false)
+            {
+                jQuery(".plannto_in_image_ad_1").css({"top":off_top+"px","left":off_d.left+"px","width":off_d.width+"px", "height":"100px"})
+            }
+            else
+            {
+                jQuery(".plannto_in_image_ad_1").css({"top":off_top+"px","left":off_d.left+"px","width":off_d.width+"px", "height":"100px"})
+            }
         });
     }
 
@@ -159,6 +170,8 @@ var PlannTo = (function(window,undefined) {
             console.log("----------------------------------")
             console.log(visited == "1")
             var images = jQuery("img")
+            pln_frame_closed = false;
+            pln_frame_expanded = false;
 
             jQuery(window).bind('resize', reposition);
 
@@ -226,9 +239,7 @@ var PlannTo = (function(window,undefined) {
 
                             jQuery("body").append('<div class="plan_ad_image_1" style="padding: 0px; margin: 0px; border: medium none; background: transparent none repeat scroll 0px 0px; position: static;"> ' +
                                 '<div class="plannto_in_image_ad_1" style="margin: 0px; top: '+ off_top +'px; right: 0px; height: 100px; left: '+ off_d.left +'px; overflow: hidden; padding: 0px; position: absolute; visibility: visible; width: '+ off_d.width +'px; z-index: 100;"><div class="plannto_iframe" style="position: relative; height: 100%; width: 100%; background: transparent none repeat scroll 0% 0%; color: inherit; font: 12px/0.5 Arial; margin-top: 0px; opacity: 1; bottom: 0px;"><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
-                                '<span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 7px;height:13px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;position:absolute;z-index:-1;bottom:0px;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div></div>' +
-                                '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
-                                '</div>')
+                                '<span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 7px;height:13px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span> <iframe id="plannto_ad_frame" src="" style="border:medium none;position:absolute;z-index:-1;bottom:0px;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div><div class="plannto_hint_button plannto_hint_button'+indx+'"></div></div></div>')
 
 
                             jQuery("#plannto_ad_frame").attr("src","data:text/html;charset=utf-8," + encodeURI(data.html))
@@ -246,9 +257,9 @@ var PlannTo = (function(window,undefined) {
                                 jQuery(".plannto_iframe").css("width", img_width+"px")
                             }
 
-                            var iframe_body = jQuery("#plannto_ad_frame").contents().find("body")
-                            console.log(iframe_body)
-                            jQuery(iframe_body).css({"width":"500px", "height":"110px", "overflow": "hidden"})
+//                            var iframe_body = jQuery("#plannto_ad_frame").contents().find("body")
+//                            console.log(iframe_body)
+//                            jQuery(iframe_body).css({"width":"500px", "height":"100px", "overflow": "hidden"})
 
                             expanded_html = "data:text/html;charset=utf-8," + encodeURI(data.expanded_html)
 
@@ -263,52 +274,55 @@ var PlannTo = (function(window,undefined) {
 
                 jQuery(".close_plannto_iframe").live("click", function(event)
                 {
+                    pln_frame_closed = true
+                    pln_frame_expanded = false
+
+                    reposition()
+
                     jQuery('.close_plannto_iframe').hide()
 
                     jQuery("#exp_plannto_ad_frame").attr("src", "")
                     jQuery("#exp_plannto_ad_frame").hide()
                     jQuery(".plannto_iframe").css({"height":"100px"})
+//                    jQuery(".plannto_in_image_ad_1").css({"height":"100px"})
                     jQuery("#plannto_ad_frame").show()
 
-                    jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show() })
+                    jQuery(".plannto_iframe").animate({width: "0px"}, "slow", function() { jQuery(".plannto_hint_button").show(); })
 
-                    jQuery(".plannto_hint_button").show()
+//                    jQuery(".plannto_hint_button").show()
 
-                    jQuery(".plan_ad_image_1").css({"bottom":"110px"})
+//                    jQuery(".plan_ad_image_1").css({"bottom":"110px"})
 
                     return false;
+
+                    event.preventDefault()
                 })
 
 
 //                jQuery(".expand_plannto_iframe").live("click", function(event)
                 jQuery(".plannto_iframe").live("click", function(event)
                 {
+                    pln_frame_expanded = true
+                    reposition()
                     console.log(jQuery(this).attr("class"))
 
                     console.log(impression_id)
                     jQuery('.close_plannto_iframe').show()
 
-                    jQuery(".plannto_iframe").animate({height: img_height+4+"px"}, "slow")
-                    jQuery(".plan_ad_image_1").css({"bottom":img_height})
+                    jQuery(".plannto_iframe").animate({height: img_height+"px"}, "slow")
+//                    jQuery(".plan_ad_image_1").css({"bottom":img_height})
                     jQuery(".plannto_iframe").css({"position":"absolute"})
 
-                    if (expanded == false)
-                    {
 
-                        jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
+                    jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
 
-                        jQuery("#plannto_ad_frame").hide()
-                        jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
-                        jQuery("#exp_plannto_ad_frame").show()
+                    jQuery("#plannto_ad_frame").hide()
+                    jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+                    jQuery("#exp_plannto_ad_frame").show()
 
-                        expanded = true
-                    }
-                    else
-                    {
-                        jQuery("#plannto_ad_frame").hide()
-                        jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
-                        jQuery("#exp_plannto_ad_frame").show()
-                    }
+                    expanded = true
+
+                    jQuery(".plannto_in_image_ad_1").css({"width":off_d.width+"px", "height":off_d.height+"px", "top":off_d.top+"px"})
 
                     jQuery("#exp_swiffycontainer").css({"width":img_width, "height":img_height})
 
@@ -317,6 +331,10 @@ var PlannTo = (function(window,undefined) {
 
                 jQuery(".plannto_hint_button").live("mouseenter", function(event)
                 {
+
+                    pln_frame_closed = false
+                    pln_frame_expanded = false
+
                     jQuery("#exp_plannto_ad_frame").hide()
                     jQuery("#exp_plannto_ad_frame").attr("src", "")
                     jQuery("#plannto_ad_frame").show()
@@ -330,6 +348,7 @@ var PlannTo = (function(window,undefined) {
 
                     jQuery(".plannto_iframe").animate({width: img_width+"px"}, "slow")
                     jQuery(".plannto_hint_button").hide()
+                    jQuery(".close_plannto_iframe").show()
 
                     if (page_visited == false)
                     {
