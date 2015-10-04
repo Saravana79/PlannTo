@@ -97,6 +97,55 @@ var PlannTo = (function(window,undefined) {
         return null;
     }
 
+    pln_off = function(el) {
+        var width = el.offsetWidth,
+            height = el.offsetHeight,
+            top = 0, left = 0,
+            rect = false, w = window, d = document, de = d.documentElement, b = d.body;
+        if (el.getBoundingClientRect) {
+            try {
+                rect = el.getBoundingClientRect();
+                top = ~~(rect.top) + Math.max(w.pageYOffset||0,de.scrollTop,b.scrollTop,0) - Math.max(de.clientTop,b.clientTop,0);
+                left = ~~(rect.left) + Math.max(w.pageXOffset||0,de.scrollLeft,b.scrollLeft,0) - Math.max(de.clientLeft,b.clientLeft,0);
+            } catch(e){ rect = false; top = 0; left = 0; }
+        }
+        if (!rect) {
+            do {
+                top += el.offsetTop;
+                left += el.offsetLeft;
+            } while ((el = el.offsetParent));
+        }
+        return {
+            top: top,
+            t : top,
+            bottom: top+height,
+            b : top+height,
+            left: left,
+            l : left,
+            right: left + width,
+            r : left + width,
+            height: height,
+            h : height,
+            width: width,
+            w : width
+        };
+    };
+
+    reposition = function() {
+        jQuery.each(valid_images, function(indx, image) {
+            if (indx != 0)
+                return
+
+            indx = indx + 1;
+            var off_d = pln_off(image)
+
+            var img_h = off_d.height - 100
+            var off_top = off_d.top + img_h
+
+            jQuery(".plannto_in_image_ad_1").css({"top":off_top+"px","left":off_d.left+"px","width":off_d.width+"px"})
+        });
+    }
+
     /******** Main function ********/
     function main() {
 
@@ -111,7 +160,11 @@ var PlannTo = (function(window,undefined) {
             console.log(visited == "1")
             var images = jQuery("img")
 
-            var valid_images = []
+            jQuery(window).bind('resize', reposition);
+
+            sto = setInterval(reposition, 1000);
+
+            valid_images = []
 
             jQuery.each(images, function(inx, val){
                 if ((parseInt(jQuery(val).width()) > 400) && (parseInt(jQuery(val).height()) > 200))
@@ -136,6 +189,12 @@ var PlannTo = (function(window,undefined) {
                 indx = indx + 1;
                 var img_width = jQuery(image).width()
                 var img_height = jQuery(image).height()
+
+//                var off_d = pln_off(image)
+                off_d = pln_off(image)
+
+                var img_h = off_d.height - 100
+                var off_top = off_d.top + img_h
 
                 console.log(img_width)
                 console.log(img_height)
@@ -163,18 +222,18 @@ var PlannTo = (function(window,undefined) {
                         if (data.success == true)
                         {
                             impression_id = data.impression_id;
-                            jQuery(image).parent().css({"position":"relative"})
+//                            jQuery(image).parent().css({"position":"relative"})
 
-                            jQuery(image).parent().append('<div class="plan_ad_image_1" style="position: absolute; bottom: 0px;width:100%;z-index: 1;"> ' +
-                                '<div class="plannto_iframe" style="width:'+img_width+'px"><div style="width:100%;""><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
-                                '<span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 0px;height:20px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;position:absolute;z-index:-1;bottom:0px;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div>' +
+                            jQuery("body").append('<div class="plan_ad_image_1" style="padding: 0px; margin: 0px; border: medium none; background: transparent none repeat scroll 0px 0px; position: static;"> ' +
+                                '<div class="plannto_in_image_ad_1" style="margin: 0px; top: '+ off_top +'px; right: 0px; height: 100px; left: '+ off_d.left +'px; overflow: hidden; padding: 0px; position: absolute; visibility: visible; width: '+ off_d.width +'px; z-index: 100;"><div class="plannto_iframe" style="position: relative; height: 100%; width: 100%; background: transparent none repeat scroll 0% 0%; color: inherit; font: 12px/0.5 Arial; margin-top: 0px; opacity: 1; bottom: 0px;"><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
+                                '<span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 7px;height:13px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span></div> <iframe id="plannto_ad_frame" src="" style="border:medium none;position:absolute;z-index:-1;bottom:0px;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div></div>' +
                                 '<div class="plannto_hint_button plannto_hint_button'+indx+'"></div>' +
                                 '</div>')
 
 
                             jQuery("#plannto_ad_frame").attr("src","data:text/html;charset=utf-8," + encodeURI(data.html))
 
-                            jQuery('.close_plannto_iframe').hide()
+//                            jQuery('.close_plannto_iframe').hide()
 
                             if (visited == "1")
                             {
