@@ -389,7 +389,9 @@ class AdvertisementsController < ApplicationController
     @vendor_ids = params[:vendor_ids].to_s.split(",")
     @ref_url = params[:ref_url] ||= ""
     @iframe_width, @iframe_height = params[:size].split("x")
-    @iframe_exp_width, @iframe_exp_height = params[:exp_size].split("x")
+    if(!params[:exp_size].nil?)
+      @iframe_exp_width, @iframe_exp_height = params[:exp_size].split("x") 
+    end
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     @ref_url = url
