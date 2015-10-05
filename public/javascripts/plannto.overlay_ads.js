@@ -254,7 +254,7 @@ var PlannTo = (function(window,undefined) {
 
                             jQuery("body").append('<div class="plan_ad_image_1" style="padding: 0px; margin: 0px; border: medium none; background: transparent none repeat scroll 0px 0px; position: static;"> ' +
                                 '<div class="plannto_in_image_ad_1" style="margin: 0px; top: '+ off_top +'px; right: 0px; height: 100px; left: '+ off_d.left +'px; overflow: hidden; padding: 0px; position: absolute; visibility: visible; width: '+ off_d.width +'px; z-index: 100;"><div class="plannto_iframe" style="position: relative; height: 100%; width: 100%; background: transparent none repeat scroll 0% 0%; color: inherit; font: 12px/0.5 Arial; margin-top: 0px; opacity: 1; bottom: 0px;"><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
-                                '<span style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 7px;height:13px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span> <iframe id="plannto_ad_frame" src="" style="border:medium none;position:absolute;z-index:-1;bottom:0px;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div><div class="plannto_hint_button plannto_hint_button'+indx+'"></div></div></div>')
+                                '<span class="plannto_ad_tag" style="float: right;float: right;margin-right: 5px;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;padding-top: 7px;height:13px;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">PlannTo Ads</a></span> <iframe id="plannto_ad_frame" src="" style="border:medium none;position:absolute;z-index:-1;bottom:0px;" height="80px" width="'+img_width+'px"> </iframe><iframe id="exp_plannto_ad_frame" src="" style="border:medium none;display: none;" height="80px" width="'+img_width+'px"> </iframe></div><div class="plannto_hint_button plannto_hint_button'+indx+'"></div></div></div>')
 
 
                             jQuery("#plannto_ad_frame").attr("src","data:text/html;charset=utf-8," + encodeURI(data.html))
@@ -374,6 +374,12 @@ var PlannTo = (function(window,undefined) {
                         page_visited = true
                     }
 
+                    return false;
+                })
+
+                jQuery(".plannto_ad_tag").live("click", function()
+                {
+                    window.open("https://www.plannto.com", "_blank")
                     return false;
                 })
             })
