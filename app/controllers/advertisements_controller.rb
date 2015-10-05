@@ -389,6 +389,10 @@ class AdvertisementsController < ApplicationController
     @vendor_ids = params[:vendor_ids].to_s.split(",")
     @ref_url = params[:ref_url] ||= ""
     @iframe_width, @iframe_height = params[:size].split("x")
+
+    ratio = 970.to_f/@iframe_width.to_f
+    @ad_height = 400/ratio
+
     if(!params[:exp_size].nil?)
       @iframe_exp_width, @iframe_exp_height = params[:exp_size].split("x") 
     end

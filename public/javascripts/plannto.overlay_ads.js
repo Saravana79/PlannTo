@@ -139,12 +139,26 @@ var PlannTo = (function(window,undefined) {
             indx = indx + 1;
             var off_d = pln_off(image)
 
+            console.log(off_d)
+
             var img_h = off_d.height - 100
             var off_top = off_d.top + img_h
 
+            var ratio = 970/img_width
+            ad_height = 400/ratio
+
+            var exp_img_h = off_d.height - ad_height
+            var exp_off_top = off_d.top + exp_img_h
+
+            console.log(exp_off_top)
+            console.log(pln_frame_expanded)
+
+//            var ratio = 970/img_width
+//            ad_height = 400/ratio
+
             if (pln_frame_expanded == true)
             {
-                jQuery(".plannto_in_image_ad_1").css({"width":off_d.width+"px", "height":off_d.height+"px", "top":off_d.top+"px", "left":off_d.left+"px"})
+                jQuery(".plannto_in_image_ad_1").css({"width":off_d.width+"px", "height":ad_height+"px", "top":exp_off_top+"px", "left":off_d.left+"px"})
             }
             else if (pln_frame_closed == false)
             {
@@ -167,6 +181,7 @@ var PlannTo = (function(window,undefined) {
             var visited = getParam(url,"visited");
             var item_ids = getParam(url,"item_ids");
             var expand_type = getParam(url,"expand_type");
+            var only_flash = getParam(url,"only_flash");
             console.log("----------------------------------")
             console.log(visited == "1")
             var images = jQuery("img")
@@ -200,8 +215,8 @@ var PlannTo = (function(window,undefined) {
                 var expanded = false;
 
                 indx = indx + 1;
-                var img_width = jQuery(image).width()
-                var img_height = jQuery(image).height()
+                img_width = jQuery(image).width()
+                img_height = jQuery(image).height()
 
 //                var off_d = pln_off(image)
                 off_d = pln_off(image)
@@ -224,7 +239,7 @@ var PlannTo = (function(window,undefined) {
                 var height = jQuery(image).height() - 63
                 console.log(image)
 
-                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*80&exp_size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expand_type='+expand_type
+                url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=7&size='+ img_width +'*80&exp_size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname+'&visited='+visited+'&expand_type='+expand_type+'&only_flash='+only_flash
                 var impression_id = ""
                 jQuery.ajax({
                     url : url,
@@ -302,6 +317,9 @@ var PlannTo = (function(window,undefined) {
 //                jQuery(".expand_plannto_iframe").live("click", function(event)
                 jQuery(".plannto_iframe").live("click", function(event)
                 {
+                    var ratio = 970/img_width
+                    ad_height = 400/ratio
+
                     pln_frame_expanded = true
                     reposition()
                     console.log(jQuery(this).attr("class"))
@@ -309,7 +327,7 @@ var PlannTo = (function(window,undefined) {
                     console.log(impression_id)
                     jQuery('.close_plannto_iframe').show()
 
-                    jQuery(".plannto_iframe").animate({height: img_height+"px"}, "slow")
+                    jQuery(".plannto_iframe").animate({height: ad_height+"px"}, "slow")
 //                    jQuery(".plan_ad_image_1").css({"bottom":img_height})
                     jQuery(".plannto_iframe").css({"position":"absolute"})
 
@@ -317,14 +335,14 @@ var PlannTo = (function(window,undefined) {
                     jQuery("#exp_plannto_ad_frame").attr("src", expanded_html)
 
                     jQuery("#plannto_ad_frame").hide()
-                    jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": img_height + 4})
+                    jQuery("#exp_plannto_ad_frame").css({"width":img_width, "height": ad_height+"px"})
                     jQuery("#exp_plannto_ad_frame").show()
 
                     expanded = true
 
-                    jQuery(".plannto_in_image_ad_1").css({"width":off_d.width+"px", "height":off_d.height+"px", "top":off_d.top+"px"})
+//                    jQuery(".plannto_in_image_ad_1").css({"width":off_d.width+"px", "height":off_d.height+"px", "top":off_d.top+"px"})
 
-                    jQuery("#exp_swiffycontainer").css({"width":img_width, "height":img_height})
+//                    jQuery("#exp_swiffycontainer").css({"width":img_width, "height":img_height})
 
                     return false;
                 })
