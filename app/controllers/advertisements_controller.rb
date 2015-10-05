@@ -156,10 +156,6 @@ class AdvertisementsController < ApplicationController
 
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
 
-    @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
-
-    included_beauty = @items.map {|d| d.is_a?(Beauty) || d.is_a?(Apparel)}.include?(true) rescue false
-
     if( params[:only_flash] == "true" && params[:expanded].to_i == 1)
       return return_expanded_html()
       return_exp_path = ""
@@ -171,62 +167,68 @@ class AdvertisementsController < ApplicationController
       # AddImpression.add_impression_to_update_visible(params[:impression_id], "", expanded)
     end
 
-    if included_beauty
-      get_details_from_beauty_items(url, itemsaccess, impression_type, ad_id, winning_price_enc, sid)
-    else
-      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-      @publisher = Publisher.getpublisherfromdomain(url) if @publisher.blank?
+    if 1 != 1
+      @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
 
-      #TODO: temp commented no one is using now
-      # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
+      included_beauty = @items.map {|d| d.is_a?(Beauty) || d.is_a?(Apparel)}.include?(true) rescue false
 
-      item_ids = @items.blank? ? [] : @items.map(&:id)
-      @item = @items.first
-
-      @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
-
-      # Default item_details based on vendor if item_details empty
-      #TODO: temporary solution, have to change based on ecpm
-      if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
-        #TODO: - Saravana - temporarily redirecting to static image ad. we need to implement this.
-        @ad = Advertisement.get_ad_by_id(4).first
-        return static_ad_process(impression_type, url, itemsaccess="MissingURL", url_params, winning_price_enc, sid)
+      if included_beauty
+        get_details_from_beauty_items(url, itemsaccess, impression_type, ad_id, winning_price_enc, sid)
       else
-        @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
-        @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-        @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-        if @is_test != "true"
-          @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                                  cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
-          Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
-        end
+        status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+        @publisher = Publisher.getpublisherfromdomain(url) if @publisher.blank?
 
-        @item_details = @item_details.uniq(&:url)
-        @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
-        if (@suitable_ui_size == "300_600" && @item_details.count < 3)
-          old_item_details = @item_details
+        #TODO: temp commented no one is using now
+        # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
 
-          # if @ad_template_type == "type_5"
-          #   new_item_ids = Item.get_carwale_item_ids_for_300_600()
-          # else
-          #   new_item_ids = Item.get_item_ids_for_300_600()
-          # end
-          new_item_ids = Item.get_item_ids_for_300_600()
-          @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids, @ad)
-          @item_details = old_item_details + @item_details
-          @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
+        item_ids = @items.blank? ? [] : @items.map(&:id)
+        @item = @items.first
+
+        @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
+
+        # Default item_details based on vendor if item_details empty
+        #TODO: temporary solution, have to change based on ecpm
+        if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
+          #TODO: - Saravana - temporarily redirecting to static image ad. we need to implement this.
+          @ad = Advertisement.get_ad_by_id(4).first
+          return static_ad_process(impression_type, url, itemsaccess="MissingURL", url_params, winning_price_enc, sid)
+        else
+          @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
+          @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+          @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+          if @is_test != "true"
+            @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                    cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
+            Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
+          end
+
+          @item_details = @item_details.uniq(&:url)
+          @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
+          if (@suitable_ui_size == "300_600" && @item_details.count < 3)
+            old_item_details = @item_details
+
+            # if @ad_template_type == "type_5"
+            #   new_item_ids = Item.get_carwale_item_ids_for_300_600()
+            # else
+            #   new_item_ids = Item.get_item_ids_for_300_600()
+            # end
+            new_item_ids = Item.get_item_ids_for_300_600()
+            @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids, @ad)
+            @item_details = old_item_details + @item_details
+            @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
+          end
+          if @suitable_ui_size == "300_600" && params[:page_type] == "type_2"
+            @ad_template_type = ad_id == 21 ? "type_3" : "type_1"
+          end
+          @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+          @click_url = @click_url.gsub("&amp;", "&")
         end
-        if @suitable_ui_size == "300_600" && params[:page_type] == "type_2"
-          @ad_template_type = ad_id == 21 ? "type_3" : "type_1"
-        end
-        @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
-        @click_url = @click_url.gsub("&amp;", "&")
+        @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+
+        return_path = "advertisements/show_ads.html.erb"
+
+        @item_details = @item_details.first(6)
       end
-      @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
-
-      return_path = "advertisements/show_ads.html.erb"
-
-      @item_details = @item_details.first(6)
     end
 
     return_path = "advertisements/show_image_overlay_ads.html.erb"
@@ -243,7 +245,7 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        if @item_details.blank? && included_beauty == false
+        if @item_details.blank? && included_beauty == false && 1 != 1 #TODO: temp check
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
@@ -251,7 +253,7 @@ class AdvertisementsController < ApplicationController
         end
       }
       format.html {
-        if @item_details.blank? && included_beauty == false
+        if @item_details.blank? && included_beauty == false && 1 != 1 #TODO: temp check
           render :nothing => true
         else
           render return_path, :layout => false
