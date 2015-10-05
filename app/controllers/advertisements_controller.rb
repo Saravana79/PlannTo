@@ -997,6 +997,8 @@ class AdvertisementsController < ApplicationController
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
 
+    params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
+
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
