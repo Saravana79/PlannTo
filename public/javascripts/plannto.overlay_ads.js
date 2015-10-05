@@ -145,7 +145,7 @@ var PlannTo = (function(window,undefined) {
             var off_top = off_d.top + img_h
 
             var ratio = 970/img_width
-            ad_height = 400/ratio
+            ad_height = (400/ratio) + 20
 
             var exp_img_h = off_d.height - ad_height
             var exp_off_top = off_d.top + exp_img_h
