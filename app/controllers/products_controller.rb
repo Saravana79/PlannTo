@@ -796,8 +796,8 @@ class ProductsController < ApplicationController
     # end
     @category_item_details = []
 
-    if params[:page_type] == "type_4"
-      return deal_item_process(url, itemsaccess, url_params)
+    if (params[:page_type] == "type_4" || params[:page_type] == "type_6")
+        return deal_item_process(url, itemsaccess, url_params)
     elsif params[:page_type] == "type_5"
       return price_widget_type_2(url, itemsaccess, url_params, item_ids)
     end
@@ -854,20 +854,27 @@ class ProductsController < ApplicationController
   end
 
   def deal_item_process(url, itemsaccess, url_params)
-    @items = DealItem.get_deal_item_based_on_hour(params[:random_id])
+    @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id])
+    return_path = "products/deal_widget.html.erb"
 
     if @is_test != "true"
       @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", @items.first.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                               cookies[:plan_to_temp_user_id], nil, nil, nil)
     end
 
+    if params[:page_type] == "type_6"
+      @suitable_ui_size = "300_250"
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
+      return_path = "products/deal_widget_type_6.html.erb"
+    end
+
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("products/deal_widget.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "deal_widget.html.erb", :layout => false }
+      format.html { return render return_path, :layout => false }
       format.js {
-        return render :json => {:success => true, :html => render_to_string("products/deal_widget.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
       }
     end
   end

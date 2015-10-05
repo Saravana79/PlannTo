@@ -6,6 +6,10 @@ class DealItem < ActiveRecord::Base
     # p items = DealItem.where("id=1085").order("rand()").limit(6)
   end
 
+  def site
+    "9882"
+  end
+
   def self.update_amazon_deals()
     begin
       url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_df_deals.csv.gz"

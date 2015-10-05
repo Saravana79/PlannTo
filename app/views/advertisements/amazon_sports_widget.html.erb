@@ -45,6 +45,9 @@
 
                       <%= search_form.radio_button :page_type,"type_5", :name => "page_type", :checked => params[:page_type] == "type_5" ? "checked" : "" %>
                       <%= search_form.label :page_type, 'Type 5', :name => "page_type" %>
+
+                      <%= search_form.radio_button :page_type,"type_6", :name => "page_type", :checked => params[:page_type] == "type_6" ? "checked" : "" %>
+                      <%= search_form.label :page_type, 'Type 6', :name => "page_type" %>
                     </div>
                     <%= search_form.submit "Go" %>
                 <% end %>

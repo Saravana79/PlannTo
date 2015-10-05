@@ -324,6 +324,17 @@ module ApplicationHelper
     price
   end
 
+  def prettify_mrpprice_widget(price)
+
+    price = price.blank? ? "" : number_to_indian_currency("%.2f" % price.to_f)
+
+    if price == number_to_indian_currency("%.2f" % price.to_f)
+      price =""
+    end
+
+    price
+  end
+
   def prettify_price(item_detail)
     price = item_detail.price.blank? ? "" : number_to_indian_currency("%.2f" % item_detail.price.to_f)
     price
