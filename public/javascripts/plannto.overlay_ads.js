@@ -229,7 +229,7 @@ var PlannTo = (function(window,undefined) {
 
                 jQuery('<style type="text/css" id="plannto_style_'+indx+'"> ' +
                     'a { outline: none; }' +
-                    '.plannto_iframe { height:100px;width:100%;overflow:hidden;} ' +
+                    '.plannto_iframe { height:100px;width:100%;overflow:hidden;cursor:pointer} ' +
                     '.plannto_hint_button {background: rgba(0, 0, 0, 0) url("http://cdn1.plannto.com/static/images/plannto_overlay_images.png") no-repeat scroll -158px -2px;cursor: pointer !important;height: 70px;opacity: 1;position: absolute;top: 11px;transition: margin-top 0.6s ease 0s;width: 26px;}'+
                     '.expand_plannto_iframe {cursor: pointer;opacity: 1;position: absolute;width: 12px;text-decoration:none;color:black;}' +
                     '.close_plannto_iframe {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAZlBMVEUAAAAAAAAXFxcWFhYZGRkaGhoAAAAAAAALCwsNDQ0ODg7k5OTo6OjV1dXZ2dnj4+Pm5ubAwMDCwsLZ2dna2trQ0NC/v7/Dw8PHx8fNzc3R0dHS0tLq6uru7u7y8vL29vb6+vr9/f2tB0eZAAAAHHRSTlMzNDc4ODlTVVhYWLS6vL29vb/AxsbIy83Nzc3Nu0nGLwAAAFpJREFUeNq9yEcSgCAMAMAECxIpVsBC8f+f9JoHOO5x4Q+jFgBCj6y2ZxJielZWdFXn6kmskI5SDkJguj3nveHT2hRjsi0rcwelwm1YLX5AVH5m1UsEQNnD116VFgP50TblxgAAAABJRU5ErkJggg==");cursor: pointer;height: 19px;opacity: 1;position: absolute;width: 20px;left: '+(img_width - 20)+'px;' +
