@@ -3,7 +3,7 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Advt <%= @suitable_ui_size %></title>
   <link href="<%= configatron.root_image_path %>static/stylesheets/widget/300/style.css" type="text/css" rel="stylesheet" media="all"/>
-  <link href="http://localhost:3000/stylesheets/widget/300/style.css" type="text/css" rel="stylesheet" media="all"/>
+  <!--<link href="http://localhost:3000/stylesheets/widget/300/style.css" type="text/css" rel="stylesheet" media="all"/>-->
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/PlannTo.jQuery/1.7.1/PlannTo.jQuery.min.js" %>
 </head>
 <body>
@@ -45,13 +45,15 @@
                         <div class="product-img-left">
                           <a href="<%= shop_now_url %>" target="_blank">
                             <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                            <%= get_image_tag_using_src(item_detail.image_url.to_s, '132', '').html_safe %>
+                            <span style="  display: inline-block;vertical-align: middle;">
+                            <%= get_image_tag_using_src(item_detail.image_url.to_s, '', '').html_safe %>
+                          </span>
                             <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                           </a>
                         </div>
                         <div class="product-txt-right">
                           <a href="<%= shop_now_url %>" target="_blank" class="">
-                            <h3><%= item_detail.deal_title.to_s.truncate(62) %></h3>
+                            <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(62) %></p>
 
                             <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
                           </a>
@@ -62,12 +64,14 @@
                             </a>
                           </p>
 
+                          <p style="padding: 5px 0px;font-size:11px;"><%= get_expire_time_from_deal_item(item_detail) == "" ? "" : "#{get_expire_time_from_deal_item(item_detail)}"%></p>
+
                         </div>
                       </div>
                       <div class="product-txt-desc">
                         <p>
                           <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                          <%= "Best Deals" %>
+                         <h3 style="font-size:12px;font-weight:bold;"> Today's Deal - Great Savings Every Day</h3>
                         </p>
                       </div>
                     </div>
@@ -134,7 +138,11 @@
     }
 
     .ad_img_tag {
-        max-height: 180px;
+        max-height: 150px;
+        max-width: 132px;
+        width:auto;
+        height: auto;
+        vertical-align: middle;
     }
 </style>
 
