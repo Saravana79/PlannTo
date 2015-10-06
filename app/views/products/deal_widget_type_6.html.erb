@@ -15,9 +15,9 @@
       <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
     </div>
   -->
-      <div class="logo">
+      <div class="logo" style="border-bottom:1px solid #F1F0F0;">
         <div style="float:left;width:110px;">
-          <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="">
+          <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
           </a>
         </div>
         <div class="list_carousel">
@@ -33,8 +33,8 @@
       </div>
 
       <% if @item_details.count != 0 %>
-          <div class="divshadow">
-            <ul id="foo3" height="190px;">
+          <div class="">
+            <ul id="foo3" height="165px;">
               <% @item_details.each_with_index do |item_detail, indx| %>
                   <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
                   <% shop_now_url = get_general_click_url(item_detail.url) %>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="product-txt-right">
                           <a href="<%= shop_now_url %>" target="_blank" class="">
-                            <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(62) %></p>
+                            <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(52) %></p>
 
                             <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
                           </a>
@@ -138,7 +138,7 @@
     }
 
     .ad_img_tag {
-        max-height: 150px;
+        max-height: 140px;
         max-width: 132px;
         width:auto;
         height: auto;
