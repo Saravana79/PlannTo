@@ -70,15 +70,20 @@ module ProductsHelper
           # url = URI.unescape(url)
           tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
           if tag_val.blank?
-            red_u = URI.parse(url)
-            red_p = CGI.parse(red_u.query)
+            p url
+            begin
+              red_u = URI.parse(url)
+              red_p = CGI.parse(red_u.query)
+            rescue Exception => e
+              red_p = CGI.parse(url)
+            end
             if red_p.keys.last == "tag"
               tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>", "<tag_val>")
             end
           end
         end
 
-        url = url.gsub("tag=#{tag_val}", "tag=#{new_tag_val}") if tag_val.blank? || tag_val.include?("INSERT_TAG_HERE")
+        url = url.gsub("tag=#{tag_val}", "tag=#{new_tag_val}")
         # url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val == "INSERT_TAG_HERE"
         url = URI.escape(url)
       else
@@ -90,6 +95,7 @@ module ProductsHelper
         url = URI.escape(url)
       end
     end
+    p 888888888
     p url
 
     click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => url, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
