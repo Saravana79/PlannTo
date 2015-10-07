@@ -85,16 +85,15 @@ module ProductsHelper
 
         url = url.gsub("tag=#{tag_val}", "tag=#{new_tag_val}")
         # url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val == "INSERT_TAG_HERE"
-        url = URI.escape(url)
       else
         if url.include?("?")
           url = url + "&tag=#{new_tag_val}"
         else
           url = url + "?tag=#{new_tag_val}"
         end
-        url = URI.escape(url)
       end
     end
+    url = URI.escape(url)
     p 888888888
     p url
 
