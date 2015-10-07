@@ -207,4 +207,68 @@ class Click < ActiveRecord::Base
     end
     @item_details
   end
+  
+  def self.update_url_tag_and_subtag(url, publisher_vendor, impression_id)
+    if url.include?("tag")
+      # url = URI.unescape(url)
+      # if url.include?("%")
+      #   url = URI.unescape(url)
+      # end
+      tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+
+      if tag_val.blank?
+        url = URI.unescape(url)
+        tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+        tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>", "<tag_val>") if tag_val.blank?
+      end
+
+      url = url.gsub("tag=#{tag_val}", "tag=#{publisher_vendor.trackid}") if tag_val.blank?
+      url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val == "INSERT_TAG_HERE"
+
+      if !url.include?("ascsubtag")
+        url = url + "&ascsubtag=#{impression_id}"
+      else
+        ascsubtag = FeedUrl.get_value_from_pattern(url, "ascsubtag=<tag_val>&", "<tag_val>")
+
+        if ascsubtag.blank?
+          url = URI.unescape(url)
+          ascsubtag = FeedUrl.get_value_from_pattern(url, "ascsubtag=<tag_val>&", "<tag_val>")
+          ascsubtag = FeedUrl.get_value_from_pattern(url, "ascsubtag=<tag_val>", "<tag_val>") if ascsubtag.blank?
+
+          if ascsubtag.blank?
+            url = url.gsub("ascsubtag=", "")
+            url = url + "&ascsubtag=#{impression_id}"
+          end
+        end
+      end
+    elsif url.include?("asscsubtag")
+      ascsubtag_val = ""
+      ascsubtag = FeedUrl.get_value_from_pattern(url, "ascsubtag=<tag_val>", "<tag_val>")
+
+      if ascsubtag.blank?
+        url = URI.unescape(url)
+        ascsubtag = FeedUrl.get_value_from_pattern(url, "ascsubtag=<tag_val>&", "<tag_val>")
+        ascsubtag = FeedUrl.get_value_from_pattern(url, "ascsubtag=<tag_val>", "<tag_val>") if ascsubtag.blank?
+
+        if ascsubtag.blank?
+          ascsubtag_val = "ascsubtag=#{impression_id}"
+          url = url.gsub("ascsubtag=", "")
+        end
+      end
+
+      if url.include?("?")
+        url = url + "&tag=#{publisher_vendor.trackid}#{ascsubtag_val.blank? ? "" : "&#{ascsubtag_val}"}"
+      else
+        url = url + "?tag=#{publisher_vendor.trackid}#{ascsubtag_val.blank? ? "" : "&#{ascsubtag_val}"}"
+      end
+    else
+      if url.include?("?")
+        url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{impression_id}"
+      else
+        url = url + "?tag=#{publisher_vendor.trackid}&ascsubtag=#{impression_id}"
+      end
+    end
+
+    url
+  end
 end

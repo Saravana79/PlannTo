@@ -81,18 +81,21 @@ class HistoryDetailsController < ApplicationController
             #   url = URI.unescape(url)
             # end
             if(publisher_vendor.vendor_id == 9882)
+              url = Click.update_url_tag_and_subtag(url, publisher_vendor, @impression_id)
 
-              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-
-              if tag_val.blank?
-                url = URI.unescape(url)
-                tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-              end
-
-              url = url.gsub(tag_val.to_s, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
+              # tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+              #
+              # if tag_val.blank?
+              #   url = URI.unescape(url)
+              #   tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+              # end
+              #
+              # url = url.gsub(tag_val.to_s, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
             else
               url = url.gsub("tag=plannto-junglee-g-21", "tag=#{publisher_vendor.trackid}");
-            end   
+            end
+          elsif url.include?("ascsubtag")
+            url = Click.update_url_tag_and_subtag(url, publisher_vendor, @impression_id)
           else
             if url.include?("?")
               url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
@@ -118,22 +121,7 @@ class HistoryDetailsController < ApplicationController
         publisher_vendor = PublisherVendor.where(:publisher_id => publisher.id, :geo => params[:geo]).first
 
         unless publisher_vendor.blank?
-          if url.include?("tag")
-            # url = URI.unescape(url)
-            # if url.include?("%")
-            #   url = URI.unescape(url)
-            # end
-            tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-
-            if tag_val.blank?
-              url = URI.unescape(url)
-              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>", "<tag_val>") if tag_val.blank?
-            end
-            url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
-          else
-            url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
-          end
+          url = Click.update_url_tag_and_subtag(url, publisher_vendor, @impression_id)
         end
       end
 
