@@ -223,7 +223,7 @@ class Click < ActiveRecord::Base
       end
 
       url = url.gsub("tag=#{tag_val}", "tag=#{publisher_vendor.trackid}") if tag_val.blank?
-      url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val == "INSERT_TAG_HERE"
+      url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val.include?("INSERT_TAG_HERE")
 
       if !url.include?("ascsubtag")
         url = url + "&ascsubtag=#{impression_id}"

@@ -60,6 +60,38 @@ module ProductsHelper
     end
 
   def get_general_click_url(url)
+    if !params[:tag].blank?
+      new_tag_val = params[:tag].to_s
+      url = URI.unescape(url)
+      if url.include?("tag")
+        tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+
+        if tag_val.blank?
+          # url = URI.unescape(url)
+          tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+          if tag_val.blank?
+            red_u = URI.parse(url)
+            red_p = CGI.parse(red_u.query)
+            if red_p.keys.last == "tag"
+              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>", "<tag_val>")
+            end
+          end
+        end
+
+        url = url.gsub("tag=#{tag_val}", "tag=#{new_tag_val}") if tag_val.blank? || tag_val.include?("INSERT_TAG_HERE")
+        # url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val == "INSERT_TAG_HERE"
+        url = URI.escape(url)
+      else
+        if url.include?("?")
+          url = url + "&tag=#{new_tag_val}"
+        else
+          url = url + "?tag=#{new_tag_val}"
+        end
+        url = URI.escape(url)
+      end
+    end
+    p url
+
     click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => url, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
   end
 
