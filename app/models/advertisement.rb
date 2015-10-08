@@ -1981,10 +1981,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       $redis.expire("popular_vendor_fashion_product_update_is_running", 50.minutes)
 
       loop_hash = {"saree" => {:node => 1968256031, :page_count => 10}, "salwar_suit" => {:node => 3723380031, :page_count => 10}, "women_top" => {:node => 1968543031, :page_count => 8},
-                   "dress_material" => {:node => 3723377031, :page_count => 10}, "kurta" => {:node => 1968255031, :page_count => 8}, "underwear" => {:node => 1968457031, :page_count => 2},
+                   "dress_material" => {:node => 3723377031, :page_count => 10}, "kurta" => {:node => 1968255031, :page_count => 8},
                    "legging" => {:node => 1968456031, :page_count => 2}, "dress" => {:node => 1968445031, :page_count => 8}, "handbag" => {:node => 1983346031, :page_count => 10},
                    "sunglass" => {:node => 1968401031, :page_count => 3}, "shoe" => {:node => 1983578031, :page_count => 10}, "watch" => {:node => 2563505031, :page_count => 4},
-                   "external_hard_disk" => {:node => 1375395031, :page_count => 1}, "power_banks" => {:node => 976419031, :page_count => 1}, "printer" => {:node => 1375443031, :page_count => 1}}
+                   "external_hard_disk" => {:node => 1375395031, :page_count => 1}, "power_banks" => {:node => 976419031, :page_count => 1}, "router" => {:node => 1375439031, :page_count => 1}, "printer" => {:node => 1375443031, :page_count => 1}}
 
 
       loop_hash.each do |each_key, each_val|
