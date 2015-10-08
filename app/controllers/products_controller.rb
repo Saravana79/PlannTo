@@ -744,7 +744,7 @@ class ProductsController < ApplicationController
     @itemdetail = Item.get_price_text_from_url(url, @publisher)
     @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
 
-    if params[:page_type] == "type_3"
+    if params[:page_type] == "type_3" || params[:page_type] == "type_4"
       return price_widget_type_3(url, itemsaccess, url_params)
     end
 
@@ -925,13 +925,19 @@ class ProductsController < ApplicationController
       # @fc_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => click_url, :item_id => nil, :ref_url => params[:ref_url])
     end
 
+    return_url = "products/price_widget_type_3.html.erb"
+
+    if params[:page_type] == "type_4"
+      return_url = "products/price_widget_type_4.html.erb"
+    end
+
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_3.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string(return_url, :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "price_widget_type_3.html.erb", :layout => false }
+      format.html { return render return_url, :layout => false }
       format.js {
-        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_3.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string(return_url, :layout => false)}, :callback => params[:callback]
       }
     end
   end

@@ -8,5 +8,11 @@ class Publisher < ActiveRecord::Base
 		domain = domain.start_with?('blog.') ? domain[5..-1] : domain
 		#publisher = Publisher.where(:publisher_url => "sportskeeda.com").first
 		publisher = Publisher.where(:publisher_url =>  domain).first
+
+    splted_domain = domain.split(".")
+    if publisher.blank? && splted_domain.count > 1
+      domain = splted_domain.last(2).join(".")
+      publisher = Publisher.where(:publisher_url =>  domain).first
+    end
 	end
 end
