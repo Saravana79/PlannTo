@@ -2679,31 +2679,35 @@ end
 
       #update source items
       source_items = Sourceitem.where(:matchitemid => dup_item.id)
+      source_items.update_all(:matchitemid => org_item.id)
 
-      source_items.each do |source_item|
-        source_item.update_attributes(:matchitemid => org_item.id)
-      end
+      # source_items.each do |source_item|
+      #   source_item.update_attributes(:matchitemid => org_item.id)
+      # end
 
       #update item_details
       item_details = Itemdetail.where(:itemid => dup_item.id)
+      item_details.update_all(:itemid => org_item.id)
 
-      item_details.each do |item_detail|
-        item_detail.update_attributes(:itemid => org_item.id)
-      end
+      # item_details.each do |item_detail|
+      #   item_detail.update_attributes(:itemid => org_item.id)
+      # end
 
       #update related items
       item_relationships = Itemrelationship.where(:item_id => dup_item.id)
+      item_relationships.update_all(:item_id => org_item.id)
 
-      item_relationships.each do |item_relationship|
-        item_relationship.update_attributes(:item_id => org_item.id)
-      end
+      # item_relationships.each do |item_relationship|
+      #   item_relationship.update_attributes(:item_id => org_item.id)
+      # end
 
       #update itemexternalurls
       itemexternalurls = Itemexternalurl.where(:ItemID => dup_item.id)
+      itemexternalurls.update_all(:ItemID => org_item.id)
 
-      itemexternalurls.each do |itemexternalurl|
-        itemexternalurl.update_attributes(:ItemID => org_item.id)
-      end
+      # itemexternalurls.each do |itemexternalurl|
+      #   itemexternalurl.update_attributes(:ItemID => org_item.id)
+      # end
 
       dup_item.destroy
     end
