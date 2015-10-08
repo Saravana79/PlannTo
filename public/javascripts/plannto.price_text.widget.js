@@ -10,7 +10,7 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
     var SubPath="/price_text_vendor_details.js"
 //for production
-   var domain = "www.plannto.com";
+    var domain = "www.plannto.com";
 //for development
 //var domain = "localhost:3000";
 // Localize jQuery variable
@@ -142,16 +142,16 @@ var PlannTo = (function(window,undefined) {
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
         url = "http://"+domain + "/product_offers.js" + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + "offer" +"&ref_url="+pathname+"&doc_title-"+doc_title+"&is_test="+is_test+"&page_type="+page_type+"&callback=?";
-        PlannTo.jQuery.getJSON(url, function (data) {
+        jQuery.getJSON(url, function (data) {
             element_id.html(data.html);
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).removeClass();
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).addClass("unselected");
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).removeClass();
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).addClass("selected");
-            PlannTo.jQuery(".navigate_offer").live("click", function(e){
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).removeClass();
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).addClass("unselected");
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).removeClass();
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).addClass("selected");
+            jQuery(".navigate_offer").live("click", function(e){
                 show = jQuery(this).attr("href");
-                PlannTo.jQuery(this).closest("tr").parent().parent().parent().parent().hide();
-                PlannTo.jQuery("#"+show).show();
+                jQuery(this).closest("tr").parent().parent().parent().parent().hide();
+                jQuery("#"+show).show();
                 event.preventDefault()
             })
         });
@@ -164,33 +164,33 @@ var PlannTo = (function(window,undefined) {
 
         url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&callback=?"
 
-        PlannTo.jQuery.getJSON(url, function (data) {
+        jQuery.getJSON(url, function (data) {
 
             element_id.html(data.html);
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).removeClass();
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).addClass("unselected");
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).removeClass();
-            PlannTo.jQuery(PlannTo.jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).addClass("selected");
+            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).removeClass();
+            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).addClass("unselected");
+            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).removeClass();
+            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).addClass("selected");
             if(show_details.toString() == "true" && jQuery(window).width() < 500)
             {
-                PlannTo.jQuery("#" + parentdivid).css("width", jQuery(window).width() - 30)
+                jQuery("#" + parentdivid).css("width", jQuery(window).width() - 30)
 
-                PlannTo.jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
-                PlannTo.jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
+                jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
+                jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
             }
             else if (show_details.toString() == "true" && jQuery(window).width() < 700)
             {
-                PlannTo.jQuery("#" + parentdivid).css("width", jQuery(window).width() - 30)
+                jQuery("#" + parentdivid).css("width", jQuery(window).width() - 30)
 
-                PlannTo.jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
+                jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
                 //jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
             }
             if(show_price.toString() == "false")
             {
-                PlannTo.jQuery(".navigate_offer").live("click", function(e){
+                jQuery(".navigate_offer").live("click", function(e){
                     show = jQuery(this).attr("href");
-                    PlannTo.jQuery(this).closest("tr").parent().parent().parent().parent().hide();
-                    PlannTo.jQuery("#"+show).show();
+                    jQuery(this).closest("tr").parent().parent().parent().parent().hide();
+                    jQuery("#"+show).show();
                     event.preventDefault()
                 })
             }
