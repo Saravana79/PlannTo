@@ -26,7 +26,7 @@
       <div style="width:120px;float:left;cursor: help;" title="<%= feed.category %>"><%= feed.category.to_s.truncate(18) %></div>
       <div style="width:100px;float:left;"><%= feed.missing_count %></div>
       <div style="width:90px;float:left;">
-        <%= feed.published_at.blank? ? "" : feed.published_at.strftime('%d %b %Y') %>
+        <%= feed.created_at %>
       </div>
       <div style="width:150px;float:left;">
         <%= select_tag("change_type_#{feed.id}", options_for_select(@categories), :prompt => 'Change Category', :class => "change_category" )%>

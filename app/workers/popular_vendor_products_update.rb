@@ -7,7 +7,7 @@ class PopularVendorProductsUpdate
     log = Logger.new 'log/popular_vendor_products_update.log'
     log.debug "********** Start Processing PopularVendorProductsUpdate **********"
 
-    Resque.enqueue(PopularVendorFlipkartProductUpdate)
+    # Resque.enqueue(PopularVendorFlipkartProductUpdate)
     Resque.enqueue(PopularVendorFashionProductUpdate)
 
     Advertisement.send(method_name)
