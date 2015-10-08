@@ -1415,9 +1415,8 @@ class ProductsController < ApplicationController
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type"))
     else
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type"))
+      cache_params = CGI::unescape(cache_params)
     end
-    cache_params = CGI::unescape(cache_params)
-
     cache_key = "views/#{host_name}/price_text_vendor_details.js?#{cache_params}.js"
 
     if params[:is_test] != "true"

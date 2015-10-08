@@ -60,44 +60,47 @@ module ProductsHelper
     end
 
   def get_general_click_url(url)
-    if !params[:tag].blank?
-      new_tag_val = params[:tag].to_s
+    url = get_url_with_key("tag", params[:tag], url)
+    url = get_url_with_key("ascsubtag", params[:ascsubtag], url)
+    url = URI.escape(url)
+
+    click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => url, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
+  end
+
+  def get_url_with_key(key_name, key_val, url)
+    if !key_val.blank?
+      new_tag_val = key_val.to_s
       url = URI.unescape(url)
-      if url.include?("tag")
-        tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+      if url.include?(key_name)
+        tag_val = FeedUrl.get_value_from_pattern(url, "#{key_name}=<tag_val>&", "<tag_val>")
 
         if tag_val.blank?
           # url = URI.unescape(url)
-          tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+          tag_val = FeedUrl.get_value_from_pattern(url, "#{key_name}=<tag_val>&", "<tag_val>")
           if tag_val.blank?
-            p url
             begin
               red_u = URI.parse(url)
               red_p = CGI.parse(red_u.query)
             rescue Exception => e
               red_p = CGI.parse(url)
             end
-            if red_p.keys.last == "tag"
-              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>", "<tag_val>")
+            if red_p.keys.last == "#{key_name}"
+              tag_val = FeedUrl.get_value_from_pattern(url, "#{key_name}=<tag_val>", "<tag_val>")
             end
           end
         end
 
-        url = url.gsub("tag=#{tag_val}", "tag=#{new_tag_val}")
+        url = url.gsub("#{key_name}=#{tag_val}", "#{key_name}=#{new_tag_val}")
         # url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val == "INSERT_TAG_HERE"
       else
         if url.include?("?")
-          url = url + "&tag=#{new_tag_val}"
+          url = url + "&#{key_name}=#{new_tag_val}"
         else
-          url = url + "?tag=#{new_tag_val}"
+          url = url + "?#{key_name}=#{new_tag_val}"
         end
       end
     end
-    url = URI.escape(url)
-    p 888888888
-    p url
-
-    click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => url, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
+    url
   end
 
   def get_expire_time_from_deal_item(each_item)
