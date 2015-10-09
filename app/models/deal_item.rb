@@ -8,7 +8,7 @@ class DealItem < ActiveRecord::Base
     end
     # items = DealItem.where("start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}' #{filter_condition}").order("rand()").limit(6)
     items = DealItem.find_by_sql("select * from deal_items where start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}' #{filter_condition} order by rand() limit 6")
-    # items = [DealItem.first]
+    
     # order_by_condition = " order by rand() limit 12"
     # p items = DealItem.where("id=1085").order("rand()").limit(6)
   end
