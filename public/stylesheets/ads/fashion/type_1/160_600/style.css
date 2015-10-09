@@ -74,7 +74,7 @@ a { outline: none; }
 
 .prev {
 	float: left;
-	background: url(http://cdn1.plannto.com/static/images/det-arrow.png) 0 0 no-repeat;
+	background: url(https://cdn1.plannto.com/static/images/det-arrow.png) 0 0 no-repeat;
 	width: 26px;
 	height: 25px;
 	text-indent: -99999px;
@@ -84,7 +84,7 @@ a { outline: none; }
 }
 .next {
 float: right;
-background: url(http://cdn1.plannto.com/static/images/det-arrow.png) -26px 0 no-repeat;
+background: url(https://cdn1.plannto.com/static/images/det-arrow.png) -26px 0 no-repeat;
 width: 26px;
 height: 25px;
 text-indent: -99999px;
