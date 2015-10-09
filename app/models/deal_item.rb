@@ -1,8 +1,14 @@
 class DealItem < ActiveRecord::Base
 
-  def self.get_deal_item_based_on_hour(random_id)
+  def self.get_deal_item_based_on_hour(random_id, for_widget="false")
+    filter_condition = ""
+    if for_widget == "true"
+      filter_arr = [976419031,1805560031,1375424031,1388977031,1350380031,1983518031,4091095031,1983396031,1350387031,1389396031,1380369031,1389375031,1355016031]
+      filter_condition = " and category in (#{filter_arr.map(&:inspect).join(",")})"
+    end
+    items = DealItem.where("start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}' #{filter_condition}").order("rand()").limit(6)
+
     # order_by_condition = " order by rand() limit 12"
-    items = DealItem.where("start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}'").order("rand()").limit(6)
     # p items = DealItem.where("id=1085").order("rand()").limit(6)
   end
 

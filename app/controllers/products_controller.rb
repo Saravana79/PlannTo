@@ -854,7 +854,7 @@ class ProductsController < ApplicationController
   end
 
   def deal_item_process(url, itemsaccess, url_params)
-    @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id])
+    @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id], for_widget="true")
     return_path = "products/deal_widget.html.erb"
 
     if @is_test != "true"
