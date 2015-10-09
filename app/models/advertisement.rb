@@ -613,6 +613,19 @@ class Advertisement < ActiveRecord::Base
       valid_item_types = $redis.get("valid_item_types_for_buying_list").to_s.split(",")
       #$redis.set("valid_item_ids_for_buying_list", "28712,75427,73319") #Note to set item ids
       valid_item_ids = $redis.get("valid_item_ids_for_buying_list").to_s.split(",")
+      # $redis.set("valid_ad_ids_for_buying_list", "1,25") #Note to set ad ids
+      valid_ad_ids = $redis.get("valid_ad_ids_for_buying_list").to_s.split(",")
+
+      valid_item_ids_from_ads = $redis.get("valid_item_ids_from_ads_for_buying_list").to_s.split(",")
+
+      if valid_item_ids_from_ads.blank?
+        valid_item_ids_from_ads = Advertisement.get_valid_item_ids_from_ads(valid_ad_ids)
+
+        $redis.set("valid_item_ids_from_ads_for_buying_list", valid_item_ids_from_ads.join(","))
+        $redis.expire("valid_item_ids_from_ads_for_buying_list", 24.hours)
+      end
+
+      valid_item_ids = (valid_item_ids_from_ads + valid_item_ids).flatten.uniq
 
       begin
         add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 1000)
@@ -2955,6 +2968,25 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     end
 
     return original_ids
+  end
+
+  def self.get_valid_item_ids_from_ads(valid_ad_ids)
+    advertisements = Advertisement.where(:id => valid_ad_ids)
+    item_ids = []
+
+    advertisements.each do |advertisement|
+      params = {:from_date => Date.today - 2.day, :to_date => Date.today, :ad_type => "advertisement", :type => "Item", :ad_id => "#{advertisement.id}"}
+
+      start_date = params[:from_date].blank? ? Date.today.beginning_of_day : params[:from_date].to_date.beginning_of_day
+      end_date = params[:to_date].blank? ? Date.today.end_of_day : params[:to_date].to_date.end_of_day
+
+      results = AggregatedImpression.get_results_from_agg_impression(params, start_date, end_date)
+
+      item_ids << results.keys.first(50)
+    end
+
+    item_ids = item_ids.flatten.uniq
+    item_ids
   end
 
   private

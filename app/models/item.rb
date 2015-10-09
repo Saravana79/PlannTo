@@ -1658,6 +1658,19 @@ end
     valid_item_types = $redis.get("valid_item_types_for_buying_list").to_s.split(",")
     #$redis.set("valid_item_ids_for_buying_list", "28712,75427,73319") #Note to set item ids
     valid_item_ids = $redis.get("valid_item_ids_for_buying_list").to_s.split(",")
+    # $redis.set("valid_ad_ids_for_buying_list", "1,25") #Note to set ad ids
+    valid_ad_ids = $redis.get("valid_ad_ids_for_buying_list").to_s.split(",")
+
+    valid_item_ids_from_ads = $redis.get("valid_item_ids_from_ads_for_buying_list").to_s.split(",")
+
+    if valid_item_ids_from_ads.blank?
+      valid_item_ids_from_ads = Advertisement.get_valid_item_ids_from_ads(valid_ad_ids)
+
+      $redis.set("valid_item_ids_from_ads_for_buying_list", valid_item_ids_from_ads.join(","))
+      $redis.expire("valid_item_ids_from_ads_for_buying_list", 24.hours)
+    end
+
+    valid_item_ids = (valid_item_ids_from_ads + valid_item_ids).flatten.uniq
 
     begin
       # redis_rtb_hash = {}
