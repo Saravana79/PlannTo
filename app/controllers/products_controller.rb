@@ -1297,6 +1297,10 @@ class ProductsController < ApplicationController
       random_id = rand(20)
       params[:random_id] = random_id
     end
+    if (params[:page_type] == "type_6")
+      random_id = rand(50)
+      params[:random_id] = random_id
+    end
 
     sub_category, sub_category_condition = Item.get_sub_category_and_condition_from_url(url)
 
