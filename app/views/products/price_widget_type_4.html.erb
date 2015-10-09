@@ -1,5 +1,7 @@
 <% if !@itemdetail.blank? %>
-    <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{@itemdetail.url}" %>
+    <% red_url = get_update_with_tag_and_ascsubtag(@itemdetail.url) %>
+    <% red_url = CGI.escape(red_url) %>
+    <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{red_url}" %>
 
     <div class="plannto_book_price_div" style="height: 75px;padding: 2px 0px;border: 0px solid #D8D8D8;font-size:12px;font-family: 'Titillium Web',Arial,Helvetica,sans-serif;">
       <p style="font-weight: normal;margin:0px;font-size:15px;">
