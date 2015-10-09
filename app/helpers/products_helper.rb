@@ -60,11 +60,16 @@ module ProductsHelper
     end
 
   def get_general_click_url(url)
-    url = get_url_with_key("tag", params[:tag], url)
-    url = get_url_with_key("ascsubtag", params[:ascsubtag], url)
+    url = get_update_with_tag_and_ascsubtag(url)
     url = URI.escape(url)
 
     click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => url, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
+  end
+
+  def get_update_with_tag_and_ascsubtag(url)
+    url = get_url_with_key("tag", params[:tag], url)
+    url = get_url_with_key("ascsubtag", params[:ascsubtag], url)
+    url
   end
 
   def get_url_with_key(key_name, key_val, url)

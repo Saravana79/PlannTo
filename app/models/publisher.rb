@@ -14,5 +14,6 @@ class Publisher < ActiveRecord::Base
       domain = splted_domain.last(2).join(".")
       publisher = Publisher.where(:publisher_url =>  domain).first
     end
+    publisher
 	end
 end

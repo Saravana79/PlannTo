@@ -3041,9 +3041,9 @@ end
     if !@items.blank?
       item = @items.first
       if !publisher.blank? && !publisher.vendor_ids.blank?
-        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(",")).first
+        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(","), :IsError => false).first
       else
-        @itemdetail = item.itemdetails.first
+        @itemdetail = item.itemdetails.where(:IsError => false).first
       end
     end
     @itemdetail
