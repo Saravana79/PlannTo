@@ -24,7 +24,7 @@ class HistoryDetailsController < ApplicationController
       @ad = Advertisement.where("id = ?", params[:ads_id]).first
     end
 
-    req_url = "http://www.bgr.in/gadgets/mobile-phones/xiaomi/mi-4i-limited-edition-32-gb"
+    #req_url = "http://www.bgr.in/gadgets/mobile-phones/xiaomi/mi-4i-limited-edition-32-gb"
 
     publisher = Publisher.getpublisherfromdomain(req_url)
     vendor = nil
