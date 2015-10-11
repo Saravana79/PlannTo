@@ -1773,11 +1773,11 @@ end
                     if ranking.to_i == 0
                       case type.to_s
                         when "Reviews", "Spec", "Photo"
-                          ranking = 10
-                        when "Comparisons"
                           ranking = 5
-                        when "Lists", "Others"
-                          ranking = 2
+                        when "Comparisons"
+                          ranking = 4
+                        when "Lists", "Others", "News"
+                          ranking = 3
                         when ""
                           ranking = 2
                       end
