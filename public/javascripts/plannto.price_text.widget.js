@@ -11,6 +11,7 @@ var PlannTo = (function(window,undefined) {
     var SubPath="/price_text_vendor_details.js"
 //for production
     var domain = "www.plannto.com";
+    
 //for development
 //var domain = "localhost:3000";
 // Localize jQuery variable
@@ -200,7 +201,7 @@ var PlannTo = (function(window,undefined) {
     /******** Main function ********/
     function main() {
 
-        jQuery(document).ready(function(jQuery) {
+       // jQuery(document).ready(function(jQuery) {
             url = getScriptUrl();
             var doc_title =  jQuery(document).title;
             var pathname = getParam(url,"ref_url");
@@ -254,7 +255,7 @@ var PlannTo = (function(window,undefined) {
              */
             //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 
-        });
+        //});
     }
 
 
