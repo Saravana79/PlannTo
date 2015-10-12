@@ -116,7 +116,7 @@ class HistoryDetailsController < ApplicationController
       item_id = params[:item_id]
       @impression_id = params[:iid].present? ? params[:iid] : "0"
       url = params[:red_sports_url]
-
+      url = URL.decode(url)
       if !publisher.blank?
         publisher_vendor = PublisherVendor.where(:publisher_id => publisher.id, :geo => params[:geo]).first
 
