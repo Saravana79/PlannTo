@@ -11,6 +11,7 @@ class HistoryDetailsController < ApplicationController
     url = ""
     params[:geo] ||= "in"
 
+
     req_url = request.referer
     unless req_url.nil?
       if request.referer.to_s.include? "plannto.com" or request.referer.to_s.include? "localhost"
@@ -19,6 +20,12 @@ class HistoryDetailsController < ApplicationController
         end
       end
     end
+
+    # unless req_url.nil?
+    #   p " request url " + req_url
+    # else
+    #   p " request url " + "tempty"
+    # end
 
     if !params[:ads_id].blank?
       @ad = Advertisement.where("id = ?", params[:ads_id]).first
@@ -116,7 +123,7 @@ class HistoryDetailsController < ApplicationController
       item_id = params[:item_id]
       @impression_id = params[:iid].present? ? params[:iid] : "0"
       url = params[:red_sports_url]
-      url = URL.decode(url)
+      url = URI.decode(url)
       if !publisher.blank?
         publisher_vendor = PublisherVendor.where(:publisher_id => publisher.id, :geo => params[:geo]).first
 
