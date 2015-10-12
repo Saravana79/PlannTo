@@ -21,11 +21,7 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
-    # unless req_url.nil?
-    #   p " request url " + req_url
-    # else
-    #   p " request url " + "tempty"
-    # end
+
 
     if !params[:ads_id].blank?
       @ad = Advertisement.where("id = ?", params[:ads_id]).first
@@ -34,6 +30,8 @@ class HistoryDetailsController < ApplicationController
     #req_url = "http://www.bgr.in/gadgets/mobile-phones/xiaomi/mi-4i-limited-edition-32-gb"
 
     publisher = Publisher.getpublisherfromdomain(req_url)
+
+    p "publisher " + publisher.id.to_s
     vendor = nil
 
     video_impression_id = params[:video_impression_id]

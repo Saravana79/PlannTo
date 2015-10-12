@@ -215,7 +215,7 @@ class Click < ActiveRecord::Base
       #   url = URI.unescape(url)
       # end
       tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-
+      
       if tag_val.blank?
         url = URI.unescape(url)
         tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
@@ -224,6 +224,7 @@ class Click < ActiveRecord::Base
 
       url = url.gsub("tag=#{tag_val}", "tag=#{publisher_vendor.trackid}") if tag_val.blank?
       url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val.include?("INSERT_TAG_HERE")
+      url = url.gsub(tag_val, "#{publisher_vendor.trackid}") if tag_val.include?("pla04-21")
 
       if !url.include?("ascsubtag")
         url = url + "&ascsubtag=#{impression_id}"
