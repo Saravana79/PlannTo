@@ -31,7 +31,7 @@ class HistoryDetailsController < ApplicationController
 
     publisher = Publisher.getpublisherfromdomain(req_url)
 
-    p "publisher " + publisher.id.to_s
+   
     vendor = nil
 
     video_impression_id = params[:video_impression_id]
