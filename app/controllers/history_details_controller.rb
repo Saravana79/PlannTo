@@ -21,6 +21,9 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
+   if (req_url.nil? && params["ref_url"].present? && params["ref_url"] != "")
+     req_url = params["ref_url"]
+   end   
 
 
     if !params[:ads_id].blank?
