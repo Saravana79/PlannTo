@@ -280,6 +280,19 @@ class AddImpression < ActiveRecord::Base
 
     unless (impression_type == "amazon_sports_widget" || impression_type == "elec_widget_1")                     
      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+    else
+      begin
+        publisher = Publisher.getpublisherfromdomain(request_referer)
+        publisher_id = ""
+        if !publisher.blank?
+          publisher_id = publisher.id
+        end
+        time = Time.zone.now.utc
+        date = time.to_date rescue ""
+        $redis.incr("publisher_#{publisher_id}_#{date}")
+      rescue Exception => e
+        p "error"
+      end
     end 
     # AddImpression.create_new_record(impression_params)
     return impression_id
