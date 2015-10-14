@@ -341,11 +341,11 @@ module ApplicationHelper
   end
 
    def prettifyforcarprice(item_detail)
-      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.price.to_f)
+      price = item_detail.price == 0.0 ? "" :  number_to_indian_currency("%.0f" % item_detail.price.to_f)
    end
 
    def prettifyforcaremi(item_detail)
-      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.cashback.to_f)
+      price = item_detail.price == 0.0 ? "" :  number_to_indian_currency("%.0f" % item_detail.cashback.to_f)
    end
 
    def prettifyforprice(priceorg)
