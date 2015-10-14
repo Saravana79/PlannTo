@@ -91,6 +91,7 @@ class AdvertisementsController < ApplicationController
       @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
       @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+      @vendor_ad_details.default = {"vendor_name" => "Amazon"}
       if @is_test != "true"
         @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                                 cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
@@ -196,6 +197,7 @@ class AdvertisementsController < ApplicationController
           @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
           @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
           @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+          @vendor_ad_details.default = {"vendor_name" => "Amazon"}
           if @is_test != "true"
             @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                                     cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
@@ -236,6 +238,7 @@ class AdvertisementsController < ApplicationController
     @iframe_height = params[:height].blank? ? "" : params[:height] if @iframe_height.blank?
     @ad_template_type = "type_1"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
     @item_type = "mobile"
 
@@ -443,6 +446,7 @@ class AdvertisementsController < ApplicationController
     # vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
@@ -478,6 +482,7 @@ class AdvertisementsController < ApplicationController
     # vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
@@ -510,6 +515,7 @@ class AdvertisementsController < ApplicationController
     @item_details = Itemdetail.convert_to_itemdetails(@item_details)
 
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
     @item = Item.new
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
 
