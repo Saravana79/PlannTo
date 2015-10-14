@@ -21,6 +21,9 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
+   if (req_url.nil? && params["ref_url"].present? && params["ref_url"] != "")
+     req_url = params["ref_url"]
+   end   
 
 
     if !params[:ads_id].blank?
@@ -31,7 +34,7 @@ class HistoryDetailsController < ApplicationController
 
     publisher = Publisher.getpublisherfromdomain(req_url)
 
-    p "publisher " + publisher.id.to_s
+   
     vendor = nil
 
     video_impression_id = params[:video_impression_id]
