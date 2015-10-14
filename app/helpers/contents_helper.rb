@@ -23,14 +23,14 @@ module ContentsHelper
   end
 
  def change_thumb_original(content, detail='original')
-   if content.thumbnail.include?("/thumb/")
+   if content.thumbnail.to_s.include?("/thumb/")
     if(detail == "original")
       return content.content_photos.first.photo.url(:original)
     else
       return content.content_photos.first.photo.url(:medium)
     end
    else
-     content.thumbnail
+     content.thumbnail.to_s
    end   
  end
  

@@ -250,7 +250,7 @@ class SearchController < ApplicationController
     end
     search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
-      keywords params[:term].gsub("-",""), :fields => :name
+      keywords params[:term].to_s.gsub("-",""), :fields => :name
       with :status,[1,2]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
