@@ -126,4 +126,28 @@ class AggregatedImpression
     results
   end
 
+  def self.update_from_redis_for_widget
+    today_date = Date.today.to_s
+    yesterday_date = Date.yesterday.to_s
+    keys = $redis.keys("publisher_*#{today_date}") + $redis.keys("publisher_*#{yesterday_date}")
+
+    keys.each do |each_key|
+      val = $redis.get(each_key)
+      splitted_key = each_key.to_s.split("_")
+
+      agg_imp = AggregatedImpression.where(:agg_date => splitted_key[2], :ad_id => nil, :for_pub => true).last
+
+      if agg_imp.blank?
+        agg_imp = AggregatedImpression.new(:agg_date => splitted_key[2], :ad_id => nil, :for_pub => true, :publishers => {splitted_key[1].to_s => {"imp" => val}}, :total_imp => val)
+        agg_imp.save!
+      else
+        publishers = agg_imp.publishers
+        publishers = {} if publishers.blank?
+        publishers.merge!(splitted_key[1].to_s => {"imp" => val})
+        agg_imp.total_imp = publishers.values.map {|d| d["imp"].to_i}.compact.sum
+        agg_imp.save!
+      end
+    end
+  end
+
 end

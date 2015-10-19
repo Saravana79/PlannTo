@@ -262,7 +262,7 @@ class ItemsController < ApplicationController
         @items = Item.includes([:attribute_values => :attribute],:item_rating).where("items.id in (?)", p)
 
         @item1 = @items[0]
-        session[:item_type] =  @item1.get_base_itemtype
+        session[:item_type] =  @item1.get_base_itemtype rescue ""
         logger.info "======================++++++====#{@items}"
         #   @attribute_ids = @items.collect{|i|i.attribute_values.collect(&:attribute_id)}.flatten.uniq
         @attributes = @items.collect(&:attribute_values).flatten.uniq.collect{|av| av.attribute}.flatten.uniq.compact

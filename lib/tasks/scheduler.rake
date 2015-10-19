@@ -259,3 +259,8 @@ desc "Auto update top itemdetail for paytm"
 task :auto_update_top_itemdetail_for_paytm => :environment do
   Resque.enqueue(AutoUpdateTopItemdetailForPaytm, Time.zone.now.utc)
 end
+
+desc "Update AggregatedImpression from redis for widgets"
+task :update_aggregated_impression_from_redis => :environment do
+  Resque.enqueue(UpdateAggregatedImpressionFromRedis, Time.zone.now.utc)
+end
