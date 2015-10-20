@@ -508,6 +508,7 @@ resources :comments do
   resources :pixels do
     collection do
       get "pixel_matching"
+      get "conv_track_pixel"
       get "un_matching_cookie"
       get 'vendor_page'
     end
