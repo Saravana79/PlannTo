@@ -625,7 +625,7 @@ class ProductsController < ApplicationController
     if params[:ret_format] == "html"
       return render "elec_widget_1.js.erb", :layout => false, :content_type => "text/html"
     elsif params[:ret_format] == "xml"
-      return render "elec_widget_1.xml.erb", :layout => false, :content_type => "text/xml"
+      return render "elec_widget_1.xml.builder", :layout => false, :content_type => "text/xml"
     else
       jsonp = prepare_response_json()
       return render :text => jsonp, :content_type => "text/javascript"
