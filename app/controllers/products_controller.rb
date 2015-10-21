@@ -572,6 +572,7 @@ class ProductsController < ApplicationController
       @item = @items.first
 
       @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, [], vendor_ids)
+      @where_to_buy_items.map {|each_item| each_item.match_type = "exact" if each_item.match_type.blank? }
 
       # Update Items if there is only one item
       if @where_to_buy_items.count < show_count
@@ -582,6 +583,7 @@ class ProductsController < ApplicationController
         @item = items.first if @item.blank?
 
         @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, related_items, @show_price, status, @where_to_buy_items, vendor_ids)
+        @where_to_buy_items.map {|each_item| each_item.match_type = "related" if each_item.match_type.blank? }
       end
     end
 
@@ -595,6 +597,7 @@ class ProductsController < ApplicationController
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
       @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items, vendor_ids)
+      @where_to_buy_items.map {|each_item| each_item.match_type = "top" if each_item.match_type.blank? }
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
 
@@ -621,6 +624,8 @@ class ProductsController < ApplicationController
 
     if params[:ret_format] == "html"
       return render "elec_widget_1.js.erb", :layout => false, :content_type => "text/html"
+    elsif params[:ret_format] == "xml"
+      return render "elec_widget_1.xml.erb", :layout => false, :content_type => "text/xml"
     else
       jsonp = prepare_response_json()
       return render :text => jsonp, :content_type => "text/javascript"
@@ -1368,6 +1373,9 @@ class ProductsController < ApplicationController
     if params[:ret_format] == "html"
       params[:format] = "html"
       extname = "html"
+    elsif params[:ret_format] == "xml"
+      params[:format] = "xml"
+      extname = "xml"
     else
       extname = "js"
     end

@@ -3,7 +3,7 @@ class Itemdetail < ActiveRecord::Base
   has_one :vendor, :primary_key => "site", :foreign_key => "id"
   has_one :image, as: :imageable
 
-  attr_accessor :skip_after_save
+  attr_accessor :skip_after_save, :match_type
 
   belongs_to :item, :foreign_key => "itemid"
 
