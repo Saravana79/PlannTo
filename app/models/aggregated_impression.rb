@@ -144,7 +144,13 @@ class AggregatedImpression
         publishers = agg_imp.publishers
         publishers = {} if publishers.blank?
         publisher_val = publishers[splitted_key[1].to_s]
-        publisher_val["imp"] = val
+        if publisher_val.blank?
+          publishers[splitted_key[1].to_s] = {}
+          publisher_val = publishers[splitted_key[1].to_s]
+          publisher_val["imp"] = val
+        else
+          publisher_val["imp"] = val
+        end
         # publishers.merge!(splitted_key[1].to_s => {"imp" => val})
         agg_imp.publishers = publishers
         agg_imp.total_imp = publishers.values.map {|d| d["imp"].to_i}.compact.sum
