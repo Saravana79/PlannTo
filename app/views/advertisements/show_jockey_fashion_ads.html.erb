@@ -2,7 +2,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Advt <%= @suitable_ui_size %></title>
-  <link href="<%= configatron.root_image_path %>static/stylesheets/ads/fashion/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
+  <link href="<%= configatron.root_image_path %>static/stylesheets/ads/jockey_fashion/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
 
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 
@@ -17,7 +17,7 @@
 <body>
 
 <div class="plannto-advertisement main_div" style="cursor:pointer;">
-  <%= render :partial => "/advertisements/fashion/#{@ad_template_type}_size_#{@suitable_ui_size}.html.erb" %>
+  <%= render :partial => "/advertisements/jockey_fashion/#{@ad_template_type}_size_#{@suitable_ui_size}.html.erb" %>
 </div>
 <%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>
 </body>

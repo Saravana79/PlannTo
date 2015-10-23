@@ -504,9 +504,9 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/jockey_show_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_jockey_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "jockey_show_fashion_ads.html.erb", :layout => false }
+      format.html { return render "show_jockey_fashion_ads.html.erb", :layout => false }
     end
   end
 

@@ -3044,7 +3044,7 @@ end
     item_id = item_id.to_i
     sample_int = [*1..100].sample
 
-    if name.to_s.downcase.include?("men")
+    if !name.to_s.downcase.include?("women")
       if item_id == 76609 || sample_int < 20
         item_name = "Men Innerwear Bottom"
         item_id = 76609
