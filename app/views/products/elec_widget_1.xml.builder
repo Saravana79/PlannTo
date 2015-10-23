@@ -5,7 +5,7 @@ xml.results do
       xml.id item_detail.itemid
       xml.provider @vendor_ad_details[item_detail.site.to_i]['vendor_name']
       xml.productName item_detail.ItemName
-      xml.URL item_detail.url
+      xml.URL "#{configatron.hostname}/history_details?iid=#{@impression_id}&detail_id=#{item_detail.id}"
       xml.price display_price_detail(item_detail)
       xml.MRP prettify_mrpprice_widget(item_detail.mrpprice)
       xml.status item_detail.status

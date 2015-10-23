@@ -973,3 +973,66 @@ products.each do |each_product|
     p each_product["ProductURL"][0].to_s rescue ""
   end
 end
+
+
+jockey_hash = {"men" => {"innerwear-bottoms" => 76609, "innerwear-tops" => 76610, "outerwear-bottoms" => 76611, "outerwear-tops" => 75427, "socks" => 75524}, "women" => {"bras" => 75520, "panties" => 76607, "camisoles-and-tops" => 75438, "outerwear-bottoms" => 76608, "shapewear" => 75522}}
+base_url = "http://www.jockeyindia.com"
+
+jockey_hash.each do |int_key, int_val|
+  type_base_url = base_url + "/#{int_key}/"
+
+  int_val.each do |key, val|
+    p url = type_base_url + key
+
+    doc = Nokogiri::HTML(open(url))
+
+    products = doc.search(".products_container_women .pro1 .thumbs_container_new_topBox")
+
+    p "+++++++++++++++++++++++++++++++++++Total Count #{products.count}+++++++++++++++++++++++++++++++++++++++++++++++++"
+    processed_count = 0
+    products.each do |each_product|
+      begin
+        url_text = each_product.css("a").first.attributes["href"].text rescue ""
+        next if url_text.blank?
+        url_link = base_url + url_text
+        image_url = each_product.css(".img_border_details_new_1").at(".img_quickviewLoader").attributes["src"].text rescue ""
+        title = each_product.css(".img_border_details_new_1").at(".img_quickviewLoader").attributes["alt"].text  rescue ""
+
+        price = each_product.css(".details_1_new .pricedetailswithstylecode").at(".price_rs").inner_text.to_s.downcase.gsub("rs.", '') rescue ""
+        style_code = each_product.css(".details_1_new .pricedetailswithstylecode").at(".style_code").inner_text.to_s.downcase.gsub("style # ", '') rescue ""
+
+        p item_detail = Itemdetail.find_or_initialize_by_url(url_link)
+
+        if item_detail.new_record?
+          item_detail.update_attributes!(:ItemName => title, :itemid => val, :url => url_link, :price => price, :status => 1, :last_verified_date => Time.now, :site => 76612, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => style_code, :cashback => "", :description => "", :IsError => false, :mrpprice => price, :offer => "")
+          image = item_detail.Image
+        else
+          item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
+          image = item_detail.Image
+        end
+
+        begin
+          if image.blank? && !image_url.blank?
+            image = item_detail.build_image
+            tempfile = open(image_url)
+            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+            # filename = image_url.split("/").last
+            filename = "#{item_detail.id}.jpeg"
+            avatar.original_filename = filename
+            image.avatar = avatar
+            image.save
+          end
+        rescue Exception => e
+          p e.backtrace
+          p "There was a problem in image update"
+          p url_link
+        end
+        processed_count += 1
+      rescue Exception => e
+        p "There was a problem while updating product #{url}"
+        break
+      end
+    end
+    p "--------------------------------------------- Processed Count #{processed_count} ---------------------------------------------"
+  end
+end

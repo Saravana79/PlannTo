@@ -2881,6 +2881,29 @@ end
     return item, item_details
   end
 
+  def self.get_item_and_item_details_from_jockey_fashion_url(url, item_ids, vendor_ids, fashion_id, ad=nil)
+    item = item_ids.blank? ? nil : Item.where(:id => item_ids.split(",")).first
+    item_details = []
+    if !item.blank?
+      item_details = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids, fashion_id, ad)
+      # if !fashion_id.blank?
+      #   item_details = Item.get_itemdetails_using_fashion_id(item_details, fashion_id)
+      # else
+      #   item_details = item_details.sample(6)
+      # end
+    else
+      ad_name = ad.name.to_s rescue ""
+      item_name = Item.get_jockey_fashion_item_name_random(nil, ad_name)
+
+      item = Item.where(:name => item_name).first
+      item_id_arr = [item.id] rescue []
+      item_details = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids, fashion_id, ad)
+      item_details = item_details.sample(6)
+    end
+    item_details = item_details.first(6)
+    return item, item_details
+  end
+
   def self.get_itemdetails_using_fashion_id(itemdetails, fashion_id)
     fashion_id = fashion_id.to_i
     if (itemdetails.count - 5) >= fashion_id
@@ -3014,6 +3037,49 @@ end
       item_name = "Shoe"
       item_id = 72353
     end
+    return item_name, item_id
+  end
+
+  def self.get_jockey_fashion_item_name_random(item_id=nil, name)
+    item_id = item_id.to_i
+    sample_int = [*1..100].sample
+
+    if name.to_s.downcase.include?("men")
+      if item_id == 76609 || sample_int < 20
+        item_name = "Men Innerwear Bottom"
+        item_id = 76609
+      elsif item_id == 76610 || sample_int < 40
+        item_name = "Men Innerwear Top"
+        item_id = 76610
+      elsif item_id == 76611 || sample_int < 60
+        item_name = "Men Outwearn Bottom"
+        item_id = 76611
+      elsif item_id == 75427 || sample_int < 80
+        item_name = "Tshirts"
+        item_id = 75427
+      elsif item_id == 75524 || sample_int < 100
+        item_name = "Socks"
+        item_id = 75524
+      end
+    else
+      if item_id == 75520 || sample_int < 20
+        item_name = "Bra"
+        item_id = 75520
+      elsif item_id == 75522 || sample_int < 40
+        item_name = "Shapewear"
+        item_id = 75522
+      elsif item_id == 75438 || sample_int < 60
+        item_name = "Tops"
+        item_id = 75438
+      elsif item_id == 76607 || sample_int < 80
+        item_name = "Panties"
+        item_id = 76607
+      elsif item_id == 76608 || sample_int < 100
+        item_name = "Women Outwear Bottoms"
+        item_id = 76608
+      end
+    end
+
     return item_name, item_id
   end
 

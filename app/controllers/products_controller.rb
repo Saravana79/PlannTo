@@ -557,10 +557,12 @@ class ProductsController < ApplicationController
       #defaulting to amazon.
       vendor_ids = '9882'.to_s.split(",");
     else
-       vendor_ids = params[:vendor_ids].to_s.split(",") 
+      vendor_ids = params[:vendor_ids].to_s.split(",")
     end
 
     show_count = params[:page_type] == "type_1" ? 6 : 4
+    show_count = 10 if params[:ret_format] == "xml"
+
     @multiple_vendors = false
 
     # include pre order status if we show more details.

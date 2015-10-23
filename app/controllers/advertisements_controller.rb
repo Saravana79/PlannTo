@@ -12,7 +12,7 @@ class AdvertisementsController < ApplicationController
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
   caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :show_ads, :ads_visited]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited]
   skip_before_filter  :verify_authenticity_token, :only => [:ads_visited]
   #after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
@@ -38,6 +38,8 @@ class AdvertisementsController < ApplicationController
 
     if !@ad.blank? && (@ad.advertisement_type == "fashion" || params[:ad_type] == "fashion")
       return fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
+    elsif !@ad.blank? && (@ad.advertisement_type == "jockey_fashion" || params[:ad_type] == "jockey_fashion")
+      return jockey_fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
     elsif !@ad.blank? && @ad.id == 52
       return junglee_used_car_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
     elsif !@ad.blank? && @ad.id == 56
@@ -469,6 +471,42 @@ class AdvertisementsController < ApplicationController
         return render :json => {:success => true, :html => render_to_string("advertisements/show_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
       }
       format.html { return render "show_fashion_ads.html.erb", :layout => false }
+    end
+  end
+
+  def jockey_fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_id, vendor_ids)
+    # static ad process
+    @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
+
+    @ad_template_type = "type_1" #TODO: only accept type 1
+
+    # @vendor = Vendor.where(:name => "Amazon").first
+    # vendor_ids = [@vendor.id]
+    @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    @vendor_ad_details.default = {"vendor_name" => "Jockey"}
+
+    @current_vendor = @vendor_ad_details[@ad.vendor_id]
+    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @current_vendor = {} if @current_vendor.blank?
+    item_ids = item_id.to_s.split(",")
+
+    @item, @item_details = Item.get_item_and_item_details_from_jockey_fashion_url(url, item_ids, vendor_ids, params[:fashion_id], @ad)
+    @sliced_item_details = @item_details.each_slice(3)
+
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
+    end
+
+    @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+    @click_url = @click_url.gsub("&amp;", "&")
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("advertisements/jockey_show_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "jockey_show_fashion_ads.html.erb", :layout => false }
     end
   end
 
