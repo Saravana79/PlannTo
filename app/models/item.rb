@@ -2893,9 +2893,9 @@ end
       # end
     else
       ad_name = ad.name.to_s rescue ""
-      item_name = Item.get_jockey_fashion_item_name_random(nil, ad_name)
+      item_name, item_id = Item.get_jockey_fashion_item_name_random(nil, ad_name)
 
-      item = Item.where(:name => item_name).first
+      item = Item.where(:id => item_id).first
       item_id_arr = [item.id] rescue []
       item_details = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids, fashion_id, ad)
       item_details = item_details.sample(6)
@@ -3055,7 +3055,7 @@ end
         item_name = "Men Outwear Bottom"
         item_id = 76611
       elsif item_id == 75427 || sample_int < 80
-        item_name = "Tshirts"
+        item_name = "T- Shirts"
         item_id = 75427
       elsif item_id == 75524 || sample_int < 101
         item_name = "Socks"
