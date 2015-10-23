@@ -3052,12 +3052,12 @@ end
         item_name = "Men Innerwear Top"
         item_id = 76610
       elsif item_id == 76611 || sample_int < 60
-        item_name = "Men Outwearn Bottom"
+        item_name = "Men Outwear Bottom"
         item_id = 76611
       elsif item_id == 75427 || sample_int < 80
         item_name = "Tshirts"
         item_id = 75427
-      elsif item_id == 75524 || sample_int < 100
+      elsif item_id == 75524 || sample_int < 101
         item_name = "Socks"
         item_id = 75524
       end
@@ -3074,7 +3074,7 @@ end
       elsif item_id == 76607 || sample_int < 80
         item_name = "Panties"
         item_id = 76607
-      elsif item_id == 76608 || sample_int < 100
+      elsif item_id == 76608 || sample_int < 101
         item_name = "Women Outwear Bottoms"
         item_id = 76608
       end
