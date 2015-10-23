@@ -3083,7 +3083,7 @@ end
     return item_name, item_id
   end
 
-  def self.get_price_text_from_url(url, publisher)
+  def self.get_price_text_from_url(url, publisher, page_type="")
     @items = []
     @itemdetail = nil
     unless url.nil?
@@ -3106,6 +3106,8 @@ end
         end
       end
 
+      status_details = page_type == "type_3" ? [1,2,3] : [1]
+
       unless @articles.empty?
         @items = @articles[0].allitems.select{|a| a.is_a? Product}
         article_items_ids = @items.map(&:id)
@@ -3120,9 +3122,9 @@ end
     if !@items.blank?
       item = @items.first
       if !publisher.blank? && !publisher.vendor_ids.blank?
-        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(","), :IsError => false, :status => 1).order(:price).first
+        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(","), :IsError => false, :status => status_details).order(:price).first
       else
-        @itemdetail = item.itemdetails.where(:IsError => false, :status => 1).order(:price).first
+        @itemdetail = item.itemdetails.where(:IsError => false, :status => status_details).order(:price).first
       end
     end
     @itemdetail

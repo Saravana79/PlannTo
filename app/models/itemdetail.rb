@@ -28,9 +28,9 @@ class Itemdetail < ActiveRecord::Base
     return [] if item_ids.blank?
 
     if (!fashion_id.blank? || (!ad.blank? && ad.sort_type == "random"))
-      order_by_condition = " order by rand() limit 12"
+      order_by_condition = " order by rand(), sort_priority desc limit 12"
     else
-      order_by_condition = "ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
+      order_by_condition = "ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), sort_priority desc, itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
                  itemdetails.cashback end) asc"
     end
 

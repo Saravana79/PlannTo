@@ -748,7 +748,7 @@ class ProductsController < ApplicationController
     tempurl = url
 
     @publisher = Publisher.getpublisherfromdomain(url)
-    @itemdetail = Item.get_price_text_from_url(url, @publisher)
+    @itemdetail = Item.get_price_text_from_url(url, @publisher, params[:page_type])
     @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
 
     if params[:page_type] == "type_3" || params[:page_type] == "type_4"

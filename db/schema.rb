@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151009102207) do
+ActiveRecord::Schema.define(:version => 20151023075752) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -875,19 +875,19 @@ ActiveRecord::Schema.define(:version => 20151009102207) do
   end
 
   create_table "itemdetails", :primary_key => "item_details_id", :force => true do |t|
-    t.integer  "itemid",                                                                   :null => false
+    t.integer  "itemid",                                                                                  :null => false
     t.text     "ItemName"
     t.string   "url",                       :limit => 1000
-    t.decimal  "price",                                     :precision => 16, :scale => 2, :null => false
-    t.integer  "status",                                                                   :null => false
+    t.decimal  "price",                                     :precision => 16, :scale => 2,                :null => false
+    t.integer  "status",                                                                                  :null => false
     t.string   "shipping",                  :limit => 10
     t.integer  "shippingunit"
     t.decimal  "guarantee",                                 :precision => 16, :scale => 2
     t.integer  "guaranteeunit"
-    t.boolean  "iscashondeliveryavailable",                                                :null => false
+    t.boolean  "iscashondeliveryavailable",                                                               :null => false
     t.decimal  "savepercentage",                            :precision => 4,  :scale => 0
     t.decimal  "cashback",                                  :precision => 16, :scale => 2
-    t.boolean  "isemiavailable",                                                           :null => false
+    t.boolean  "isemiavailable",                                                                          :null => false
     t.string   "site",                      :limit => 45
     t.datetime "last_updated"
     t.datetime "last_verified_date"
@@ -900,6 +900,7 @@ ActiveRecord::Schema.define(:version => 20151009102207) do
     t.string   "additional_details"
     t.string   "description"
     t.string   "category"
+    t.integer  "sort_priority",                                                            :default => 1
   end
 
   add_index "itemdetails", ["itemexternalurl_id"], :name => "itemexternalurl_ids"
