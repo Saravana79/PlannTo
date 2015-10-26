@@ -229,29 +229,6 @@
 
         <% end %>
 
-        jQuery(".next").click(function () {
-            var current_div = jQuery(".item_details.active")
-            jQuery(".item_details").hide();
-            jQuery(".item_details").removeClass('active')
-            jQuery("#pager2 a").removeClass('selected')
-
-            var splited_val = jQuery(current_div).attr("id").split('_')
-
-            if (parseInt(splited_val[splited_val.length - 1]) < jQuery(".item_details").length) {
-                jQuery(current_div).next().show().addClass('active')
-                set_logo_url(jQuery(current_div).next(), "shop-now")
-
-                split_div = jQuery(current_div).next().attr("id").split('_')
-                jQuery("#" + split_div[split_div.length - 1]).addClass('selected')
-            }
-            else {
-                jQuery(".item_details").first().show().addClass('active')
-                set_logo_url(jQuery(".item_details").first(), "shop-now")
-
-                jQuery("#1").addClass('selected')
-            }
-        });
-
 
       
 
