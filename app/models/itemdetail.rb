@@ -13,7 +13,7 @@ class Itemdetail < ActiveRecord::Base
     item_id = sanitize(item_id)
     # vendor_id = sanitize(vendor_id)
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id = #{item_id}
-                 and itemdetails.isError = 0 and site in (#{vendor_ids.map(&:inspect).join(', ')}) ORDER BY itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0
+                 and itemdetails.isError = 0 and site in (#{vendor_ids.map(&:inspect).join(', ')}) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0
                  else itemdetails.cashback end) asc")
   end
 
@@ -30,7 +30,7 @@ class Itemdetail < ActiveRecord::Base
     if (!fashion_id.blank? || (!ad.blank? && ad.sort_type == "random"))
       order_by_condition = " order by rand(), sort_priority desc limit 12"
     else
-      order_by_condition = "ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), sort_priority desc, itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
+      order_by_condition = "ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
                  itemdetails.cashback end) asc"
     end
 
@@ -53,7 +53,7 @@ class Itemdetail < ActiveRecord::Base
   def self.get_item_detail_with_lowest_price(item_id)
     # item_id = sanitize(item_id)
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id = #{item_id}
-                 and itemdetails.isError = 0 ORDER BY itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0
+                 and itemdetails.isError = 0 ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0
                  else itemdetails.cashback end) asc")
   end
 

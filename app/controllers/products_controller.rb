@@ -177,7 +177,7 @@ class ProductsController < ApplicationController
     end 
     @no_custom = "true" if @item.type == "Topic" 
     session[:itemtype] = @item.get_base_itemtype
-    @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     # @attribute_degree_view = @attribute_degree_view = @item.attribute_values.collect{|ia| ia if ia.attribute_id == 294}.compact.first.value rescue ""
     
     if (@item.is_a? Product)
@@ -240,7 +240,7 @@ class ProductsController < ApplicationController
     @defaulttab = params[:at].blank? ? "compare_price" : params[:at]
     @impression_id = params[:iid]
     @req = request.referer  
-    @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.zone.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
 
     # @impression_id = SecureRandom.uuid
@@ -1132,7 +1132,7 @@ class ProductsController < ApplicationController
 
     @item = Item.find(params[:item_id].gsub("product_", ""))
  
-    @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.zone.now,current_user,request.remote_ip,@impression_id)
 
     if @showspec == 1
@@ -1179,7 +1179,7 @@ class ProductsController < ApplicationController
       @ac = ArticleContent.includes(:items).where("view_article_contents.url=?", request.referer)
       unless @ac.blank?
         @item = @ac.first.item
-        @where_to_buy = @item.itemdetails.includes(:vendor).where('itemdetails.isError =?',0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        @where_to_buy = @item.itemdetails.includes(:vendor).where('itemdetails.isError =?',0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
       else
         @where_to_buy = []
       end

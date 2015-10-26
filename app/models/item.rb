@@ -1278,17 +1278,17 @@ end
         unless publisher.vendor_ids.nil? or publisher.vendor_ids.empty?
           vendor_ids = publisher.vendor_ids ? publisher.vendor_ids.split(",") : []
           exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
-          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
           where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
           where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
         else
           exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
           where_to_buy_items1 = []
-          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
         end
       else
         where_to_buy_items1 = []
-        where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
 
       end
       @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
@@ -1312,19 +1312,19 @@ end
         if !publisher.vendor_ids.blank?
           vendor_ids = publisher.vendor_ids.split(",")
           exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
-          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
           where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
           where_to_buy_items2 = []
         else
           vendor_ids = ["9882"]
           exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
           where_to_buy_items1 = []
-          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in(?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in(?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
         end
       else
         vendor_ids = vendor_ids.blank? ? ["9882"] : vendor_ids
         where_to_buy_items1 = []
-        where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?',vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?',vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
 
       end
       @where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
@@ -3122,9 +3122,9 @@ end
     if !@items.blank?
       item = @items.first
       if !publisher.blank? && !publisher.vendor_ids.blank?
-        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(","), :IsError => false, :status => status_details).order(:price).first
+        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(","), :IsError => false, :status => status_details).order("sort_priority desc, price").first
       else
-        @itemdetail = item.itemdetails.where(:IsError => false, :status => status_details).order(:price).first
+        @itemdetail = item.itemdetails.where(:IsError => false, :status => status_details).order("sort_priority desc, price").first
       end
     end
     @itemdetail
