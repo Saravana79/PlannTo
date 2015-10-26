@@ -1,13 +1,58 @@
-<!DOCTYPE html>
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>Plannto Widget</title>
-  <link href="<%= configatron.root_image_path %>static/stylesheets/widget/300_250/style.css" type="text/css" rel="stylesheet" media="all"/>
-  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
-</head>
-<body>
 
-<div class="plannto-advertisement main_div" style="cursor:pointer;">
+ <style type="text/css">
+
+
+.advt-block { margin:0; padding:0;}
+.advt-300 { margin:0; padding:0; width:300px; height:250px; background:#fff; border:1px solid #BEBEBE;}
+.advt-300 .logo{ margin:0 5px; padding:3px 0; border-bottom:0px solid #F1F0F0;}
+
+.advt-box { margin:0; padding:0;}
+
+.advt-box .product-container{ margin:5px 0 0 0; padding:5px;height:155px;}
+.advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
+.advt-box .product-container:after { clear:both;}
+.advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:132px;float:left;white-space:nowrap;}
+.advt-box .product-container .product-img-left img { margin:0 auto; text-align:center;height:auto;}
+.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:135px;}
+.advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:15px; color:#222; font-weight:800; font-family: Arial!important;word-break:break-word;min-height: 40px;}
+.advt-box .product-container .price{ margin:0; padding:10px 0 10px 0; color:#bf0000; font-size:16px; font-weight:bold;font-family: Arial monospace;}
+.advt-box .product-container .btn{ margin:10px 0px; }
+.advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:13px;text-transform: uppercase;}
+
+.advt-box .product-txt-desc { margin:0; padding:5px 10px;text-align: center;min-height: 34px;}
+.advt-box .product-txt-desc p{ margin:0; padding:0; font-size:11px; color:#222;font-family: Arial;}
+.divshadow{margin: 0px 7px 7px 7px;border: 1px solid rgba(158, 157, 157, 0.65);border-radius: 10px 10px 10px 10px;-moz-box-shadow: 2px 2px 3px 3px #E0E0E0;-webkit-box-shadow: 2px 2px 3px 3px #E0E0E0;box-shadow: 2px 2px 3px 3px #E0E0E0;}
+
+
+
+
+#pager2 {
+  float:right;
+  top:5px;
+  z-index:1000;
+  background:#fff;
+  padding:5px 0px 0px 0px;
+}
+#pager2 a {
+  /* margin: 0 2px; */
+  text-decoration: none;
+  padding:2px 5px;
+  background:#ccc;
+  color:#222;
+  font-size:12px;
+  font-family: Arial monospace;
+}
+#pager2 a.selected {
+  text-decoration: none;
+  background:#F76300;
+  color:white;
+}
+
+
+
+/* end Sliding gallery */
+ </style>
+<div class="plannto-advertisement main_div" style="cursor:pointer;height:250px!important;">
   <div class="advt-block">
     <div class="advt-300">
       <!--<div class="planntoadlogo">
@@ -28,20 +73,20 @@
             <% end %>
           </div>
         </div>
-        <div class="clearfix"></div>
+        <div style="float: none;clear: both;"></div>
       </div>
 
       <% if @where_to_buy_items.count != 0 %>
           <div class="divshadow">
-            <ul id="foo3" height="190px;">
+            <ul id="foo3" height="190px;" style="margin:0px;text-indent:0;padding:0px;list-style-type:none;">
               <% @where_to_buy_items.each_with_index do |item_detail, indx| %>
                   <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
                   <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
-                  <li class="item_details" id="item_detail_<%= indx + 1 %>">
+                  <li class="item_details" id="item_detail_<%= indx + 1 %>" style="list-style-position:outside;margin: 0px;list-style-type:none;">
                     <div class="advt-box">
-                      <div class="product-container">
-                        <div class="product-img-left">
+                      <div class="product-container" style="padding:0px;">
+                        <div class="product-img-left" style="height:145px;">
                           <a href="<%= shop_now_url %>" target="_blank">
                             <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                             <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 132, '').html_safe %>
@@ -50,7 +95,7 @@
                         </div>
                         <div class="product-txt-right">
                           <a href="<%= shop_now_url %>" target="_blank" class="">
-                            <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3>
+                            <h3 style="font-family:Arial!important;line-height:20px;font-size:14px!important;margin:5px 0px 0px 0px"><%= item_detail.ItemName.to_s.truncate(62) %></h3>
 
                             <p class="price"><%= prettify(item_detail) %></p>
                           </a>
@@ -75,7 +120,7 @@
               <% end %>
             </ul>
           </div>
-          <div class="clearfix"></div>
+          <div style="float: none;clear: both;"></div>
           <!--<a id="prev3" class="prev" href="#">&lt;</a>
           <a id="next3" class="next" href="#">&gt;</a>
          -->
@@ -106,34 +151,13 @@
 </html>
 
 <style type="text/css">
-    .main_div {
-        width: <%= @iframe_width %>px !important;
-        height: <%= @iframe_height %>px !important;
-        overflow: hidden;
-    }
-
-    h3.product-title {word-break: break-all;}
-
+   
+   
     .product-txt-desc p a {text-decoration: none;}
 
-    a#offer_ad {
-        color:#222 !important;
-        font-family: Arial !important;
-        font-size: 10px !important;
-        margin: 0;
-        padding: 0;
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    a#offer_ad:hover
-    {
-        color: #009CC4 !important;
-
-    }
 
     .ad_img_tag {
-        max-height: 180px;
+        max-height: 140px;
     }
 </style>
 
@@ -205,53 +229,8 @@
 
         <% end %>
 
-        jQuery(".next").click(function () {
-            var current_div = jQuery(".item_details.active")
-            jQuery(".item_details").hide();
-            jQuery(".item_details").removeClass('active')
-            jQuery("#pager2 a").removeClass('selected')
 
-            var splited_val = jQuery(current_div).attr("id").split('_')
-
-            if (parseInt(splited_val[splited_val.length - 1]) < jQuery(".item_details").length) {
-                jQuery(current_div).next().show().addClass('active')
-                set_logo_url(jQuery(current_div).next(), "shop-now")
-
-                split_div = jQuery(current_div).next().attr("id").split('_')
-                jQuery("#" + split_div[split_div.length - 1]).addClass('selected')
-            }
-            else {
-                jQuery(".item_details").first().show().addClass('active')
-                set_logo_url(jQuery(".item_details").first(), "shop-now")
-
-                jQuery("#1").addClass('selected')
-            }
-        });
-
-
-        jQuery(".prev").click(function () {
-            var current_div = jQuery(".item_details.active")
-            jQuery(".item_details").hide();
-            jQuery(".item_details").removeClass('active')
-            jQuery("#pager2 a").removeClass('selected')
-
-            var splited_val = jQuery(current_div).attr("id").split('_')
-
-            if (parseInt(splited_val[splited_val.length - 1]) > 1) {
-                jQuery(current_div).prev().show().addClass('active')
-                set_logo_url(jQuery(current_div).prev(), "shop-now")
-
-                split_div = jQuery(current_div).prev().attr("id").split('_')
-                jQuery("#" + split_div[split_div.length - 1]).addClass('selected')
-            }
-            else {
-                jQuery(".item_details").last().show().addClass('active')
-                set_logo_url(jQuery(".item_details").last(), "shop-now")
-
-                last = jQuery(".item_details").length
-                jQuery("#" + last).addClass('selected')
-            }
-        });
+      
 
         jQuery("#pager2 a").click(function () {
             var that = this
@@ -318,13 +297,7 @@
             }
         });
 
-        jQuery(".car_extra_link_ad").click(function()
-        {
-            var href = jQuery(this).attr("href")
-
-            window.open(href, "_blank")
-            return false;
-        })
+     
 
     });
 
