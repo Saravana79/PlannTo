@@ -40,7 +40,7 @@
 
                   <li class="item_details" id="item_detail_<%= indx + 1 %>" style="list-style-position:outside;margin: 0px;">
                     <div class="advt-box">
-                      <div class="product-container">
+                      <div class="product-container" style="padding:0px;">
                         <div class="product-img-left" style="height:145px;">
                           <a href="<%= shop_now_url %>" target="_blank">
                             <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="product-txt-right">
                           <a href="<%= shop_now_url %>" target="_blank" class="">
-                            <h3 style="font-family:Arial;line-height:20px;"><%= item_detail.ItemName.to_s.truncate(62) %></h3>
+                            <h3 style="font-family:Arial;line-height:20px;font-size:13px!important;margin:5px 0px 0px 0px"><%= item_detail.ItemName.to_s.truncate(62) %></h3>
 
                             <p class="price"><%= prettify(item_detail) %></p>
                           </a>
@@ -133,7 +133,7 @@
     }
 
     .ad_img_tag {
-        max-height: 180px;
+        max-height: 140px;
     }
 </style>
 
