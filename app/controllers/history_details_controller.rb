@@ -4,6 +4,7 @@ class HistoryDetailsController < ApplicationController
 
   def index
     params[:is_test] ||= 'false'
+    skip_default_tagging = false
     if cookies[:plan_to_temp_user_id].blank? && cookies[:plannto_optout].blank?
       cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now}
     end
@@ -30,7 +31,7 @@ class HistoryDetailsController < ApplicationController
       @ad = Advertisement.where("id = ?", params[:ads_id]).first
     end
 
-    #req_url = "http://www.bgr.in/gadgets/mobile-phones/xiaomi/mi-4i-limited-edition-32-gb"
+    # req_url = "http://www.bgr.in/gadgets/mobile-phones/xiaomi/mi-4i-limited-edition-32-gb"
 
     publisher = Publisher.getpublisherfromdomain(req_url)
 
@@ -242,6 +243,12 @@ class HistoryDetailsController < ApplicationController
           vendor = Item.find(@vd[0].item_id)
         end
 
+        if !publisher.blank? && publisher.publisher_url.include?("bgr")
+          skip_default_tagging = true
+          publisher_vendor = PublisherVendor.where(:publisher_id => publisher.id, :geo => params[:geo]).first
+          url = Click.update_url_tag_and_subtag(url, publisher_vendor, @impression_id) if !publisher_vendor.blank?
+        end
+
         vendor_id = vendor.blank? ? "" : vendor.id
 
         vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
@@ -268,7 +275,7 @@ class HistoryDetailsController < ApplicationController
     #if !@ad.blank? && (@ad.id == 1 || @ad.id == 10)
     #  url = url + "&cmpid=content_plannto_contextual"
     # else
-      unless vendor.nil?
+      if !vendor.blank? && !skip_default_tagging
         vendor_detail = vendor.vendor_detail
         if !vendor_detail.blank? && !vendor_detail.params.blank?
           url = vendor.vendor_detail.params.gsub(/\{url}/, url)
@@ -302,6 +309,7 @@ class HistoryDetailsController < ApplicationController
           url= url.gsub(/\{trackid}/, "")
         end
       end
+
       url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
     # end  #TODO: temporary fix for flipkart end
       # if ((vendor.id == 9874 || vendor.id == 9858 ) && (item_id == 22988|| item_id ==22800 || item_id == 15404 || item_id == 15434 || item_id == 21986))
