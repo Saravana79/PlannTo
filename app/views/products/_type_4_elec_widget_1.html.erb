@@ -81,6 +81,7 @@
             <ul id="foo3" height="190px;" style="margin:0px;text-indent:0;padding:0px;list-style-type:none;">
               <% @where_to_buy_items.each_with_index do |item_detail, indx| %>
                   <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
+                  <% params[:tag] = "bgrarticles-21" %>
                   <% ad_url = get_update_with_tag_and_ascsubtag(ad_url) %>
                   <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
