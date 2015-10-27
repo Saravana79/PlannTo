@@ -243,24 +243,12 @@ class HistoryDetailsController < ApplicationController
           vendor = Item.find(@vd[0].item_id)
         end
 
-        if !publisher.blank? && publisher.publisher_url.include?("bgr") && !params[:tag].blank?
-          if url.include?("tag")
-            tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-
-            if tag_val.blank?
-              url = URI.unescape(url)
-              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>", "<tag_val>") if tag_val.blank?
-            end
-
-            url = url.gsub("tag=#{tag_val}", "tag=#{params[:tag]}") if tag_val.blank?
-          else
+        if !params[:tag].blank?
             if url.include?("?")
               url = url + "&tag=#{params[:tag]}&ascsubtag=#{@impression_id}"
             else
               url = url + "?tag=#{params[:tag]}&ascsubtag=#{@impression_id}"
             end
-          end
           skip_default_tagging = true
         end
 
