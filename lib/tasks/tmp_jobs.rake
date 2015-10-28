@@ -620,8 +620,13 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
     item_details = Itemdetail.paginate_by_sql(query_for_amazon, :page => page, :per_page => 1000)
 
     item_details.each do |item_detail|
-      p add_id = Itemdetail.get_vendor_product_id(item_detail.url)
-      item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+      begin
+        p "amazon"
+        p add_id = Itemdetail.get_vendor_product_id(item_detail.url)
+        item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+      rescue Exception => e
+        p "Error amazon"
+      end
     end
 
     page += 1
@@ -633,8 +638,13 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
     item_details = Itemdetail.paginate_by_sql(query_for_flipkart, :page => page, :per_page => 1000)
 
     item_details.each do |item_detail|
-      add_id = Itemdetail.get_vendor_product_id(item_detail.url)
-      item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+      begin
+        p "flipkart"
+        p add_id = Itemdetail.get_vendor_product_id(item_detail.url)
+        item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+      rescue Exception => e
+        p "Error flipkart"
+      end
     end
     page += 1
   end while !item_details.empty?
@@ -645,8 +655,13 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
     item_details = Itemdetail.paginate_by_sql(query_for_snapdeal, :page => page, :per_page => 1000)
 
     item_details.each do |item_detail|
-      add_id = Itemdetail.get_vendor_product_id(item_detail.url)
-      item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+      begin
+        p "Snapdeal"
+        p add_id = Itemdetail.get_vendor_product_id(item_detail.url)
+        item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+      rescue Exception => e
+        p "Error Snapdeal"
+      end
     end
     page += 1
   end while !item_details.empty?
@@ -657,8 +672,13 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
     item_external_urls = Itemexternalurl.paginate_by_sql(query_for_item_external_url, :page => page, :per_page => 1000)
 
     item_external_urls.each do |item_external_url|
-      add_id = Itemdetail.get_vendor_product_id(item_external_url.URL.to_s)
-      item_external_url.update_attributes(:additional_details => add_id) if !add_id.blank?
+      begin
+        p "item external url"
+        p add_id = Itemdetail.get_vendor_product_id(item_external_url.URL.to_s)
+        item_external_url.update_attributes(:additional_details => add_id) if !add_id.blank?
+      rescue Exception => e
+        p "Error item external url"
+      end
     end
     page += 1
   end while !item_external_urls.empty?
