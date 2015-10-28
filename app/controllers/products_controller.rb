@@ -1367,6 +1367,7 @@ class ProductsController < ApplicationController
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
+    @ref_url = params[:ref_url]
     params[:ref_url] = "" if params[:ref_url].blank?
     params[:vendor_ids] ||= ""
     params[:ret_format] ||= ""

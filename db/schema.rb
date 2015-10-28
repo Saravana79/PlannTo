@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151023075752) do
+ActiveRecord::Schema.define(:version => 20151028130542) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -927,13 +927,14 @@ ActiveRecord::Schema.define(:version => 20151023075752) do
   add_index "itemdetails_archive", ["itemid"], :name => "itemdetails_items"
 
   create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
-    t.integer  "ItemID",                                          :null => false
-    t.text     "URL",                                             :null => false
-    t.string   "URLSource",    :limit => 2000,                    :null => false
-    t.boolean  "is_verified",                  :default => false
+    t.integer  "ItemID",                                                :null => false
+    t.text     "URL",                                                   :null => false
+    t.string   "URLSource",          :limit => 2000,                    :null => false
+    t.boolean  "is_verified",                        :default => false
     t.integer  "itemtype_id"
     t.datetime "last_updated"
-    t.integer  "status",                       :default => 0
+    t.integer  "status",                             :default => 0
+    t.string   "additional_details"
   end
 
   add_index "itemexternalurls", ["URL"], :name => "url", :length => {"URL"=>255}

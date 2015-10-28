@@ -612,3 +612,60 @@ task :update_item_beauty_detail_from_xml_feed => :environment do
 end
 
 
+desc "update additional details in item details and itemexternalurls"
+task :update_additional_details_in_item_details_and_itemexternalurls => :environment do
+  query_for_amazon = "select * from itemdetails where site=9882"
+  page = 1
+  begin
+    item_details = Itemdetail.paginate_by_sql(query_for_amazon, :page => page, :per_page => 1000)
+
+    item_details.each do |item_detail|
+      p add_id = Itemdetail.get_vendor_product_id(item_detail.url)
+      item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+    end
+
+    page += 1
+  end while !item_details.empty?
+
+  query_for_flipkart = "select * from itemdetails where site=9861"
+  page = 1
+  begin
+    item_details = Itemdetail.paginate_by_sql(query_for_flipkart, :page => page, :per_page => 1000)
+
+    item_details.each do |item_detail|
+      add_id = Itemdetail.get_vendor_product_id(item_detail.url)
+      item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+    end
+    page += 1
+  end while !item_details.empty?
+
+  query_for_snapdeal = "select * from itemdetails where site=9874"
+  page = 1
+  begin
+    item_details = Itemdetail.paginate_by_sql(query_for_snapdeal, :page => page, :per_page => 1000)
+
+    item_details.each do |item_detail|
+      add_id = Itemdetail.get_vendor_product_id(item_detail.url)
+      item_detail.update_attributes(:additional_details => add_id) if !add_id.blank?
+    end
+    page += 1
+  end while !item_details.empty?
+
+  query_for_item_external_url = "select * from itemexternalurls"
+  page = 1
+  begin
+    item_external_urls = Itemexternalurl.paginate_by_sql(query_for_item_external_url, :page => page, :per_page => 1000)
+
+    item_external_urls.each do |item_external_url|
+      add_id = Itemdetail.get_vendor_product_id(item_external_url.URL.to_s)
+      item_external_url.update_attributes(:additional_details => add_id) if !add_id.blank?
+    end
+    page += 1
+  end while !item_external_urls.empty?
+end
+
+
+desc "destroy duplicate items in item details and itemexternalurls"
+task :destroy_duplicate_items_in_item_details_and_itemexternalurls => :environment do
+
+end
