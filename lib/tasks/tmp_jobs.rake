@@ -687,5 +687,30 @@ end
 
 desc "destroy duplicate items in item details and itemexternalurls"
 task :destroy_duplicate_items_in_item_details_and_itemexternalurls => :environment do
+  grouped = Itemdetail.where(:site => 9861).group_by{|model| [model.additional_details] } rescue []
+  grouped.values.each do |duplicates|
+    # the last one we want to keep right?
+    last_one = duplicates.pop # pop for last one
+    # if there are any more left, they are duplicates
+    # so delete all of them
+    duplicates.each{|double| double.destroy} # duplicates can now be destroyed
+  end
 
+  grouped = Itemdetail.where(:site => 9882).group_by{|model| [model.additional_details] } rescue []
+  grouped.values.each do |duplicates|
+    # the last one we want to keep right?
+    last_one = duplicates.pop # pop for last one
+    # if there are any more left, they are duplicates
+    # so delete all of them
+    duplicates.each{|double| double.destroy} # duplicates can now be destroyed
+  end
+
+  grouped = Itemdetail.where(:site => 9874).group_by{|model| [model.additional_details] } rescue []
+  grouped.values.each do |duplicates|
+    # the last one we want to keep right?
+    last_one = duplicates.pop # pop for last one
+    # if there are any more left, they are duplicates
+    # so delete all of them
+    duplicates.each{|double| double.destroy} # duplicates can now be destroyed
+  end
 end
