@@ -753,7 +753,7 @@ task :update_mouthshut_details_to_feed_url => :environment do
 
       category = sources_list[source]["categories"]
 
-      new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,
+      new_feed_url = FeedUrl.new(feed_id: 41, url: url_for_save, title: title.to_s.strip, category: category,
                                  status: status, source: source, summary: description, :images => images,
                                  :published_at => Time.now, :priorities => 1, :additional_details => page_category)
 
