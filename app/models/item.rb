@@ -2151,6 +2151,7 @@ end
   end
 
   def self.get_loop_items_from_amazon_api(keyword, geo, browse_node, sort, valid_item_names)
+    valid_product_groups = ["beauty", "health", "personal care"]
     loop_items = []
     search_url = ""
     [*1..10].each do |each_page|
@@ -2172,10 +2173,14 @@ end
 
             items.each do |each_item|
               name = each_item.get_element("ItemAttributes").get("Title").to_s rescue ""
+              manufacturer = each_item.get_element("ItemAttributes").get("Manufacturer").to_s.downcase rescue ""
+              product_group = each_item.get_element("ItemAttributes").get("ProductGroup").to_s.downcase rescue ""
 
-              if !valid_item_names.select {|each_m| name.to_s.downcase.include?(each_m)}.blank?
-                loop_items << each_item
-                break if loop_items.count >= 8
+              if !valid_item_names.select {|each_m| manufacturer.to_s.downcase.include?(each_m)}.blank?
+                if valid_product_groups.select {|each_g| product_group.to_s.downcase.include?(each_g)}.blank?
+                  loop_items << each_item
+                  break if loop_items.count >= 8
+                end
               end
             end
             break if items.count < 10
