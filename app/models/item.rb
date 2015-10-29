@@ -2177,10 +2177,12 @@ end
               product_group = each_item.get_element("ItemAttributes").get("ProductGroup").to_s.downcase rescue ""
 
               if !valid_item_names.select {|each_m| manufacturer.to_s.downcase.include?(each_m)}.blank?
-                if valid_product_groups.select {|each_g| product_group.to_s.downcase.include?(each_g)}.blank?
-                  loop_items << each_item
-                  break if loop_items.count >= 8
-                end
+                # if valid_product_groups.select {|each_g| product_group.to_s.downcase.include?(each_g)}.blank?
+                #   loop_items << each_item
+                #   break if loop_items.count >= 8
+                # end
+                loop_items << each_item
+                break if loop_items.count >= 8
               end
             end
             break if items.count < 10
