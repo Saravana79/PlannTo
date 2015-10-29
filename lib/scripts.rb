@@ -1036,3 +1036,53 @@ jockey_hash.each do |int_key, int_val|
     p "--------------------------------------------- Processed Count #{processed_count} ---------------------------------------------"
   end
 end
+
+
+sources_list = JSON.parse($redis.get("sources_list_details"))
+sources_list.default = "Others"
+
+url = "http://planntonew.s3.amazonaws.com/test_folder/mobile_products_catalog.csv"
+csv_details = CSV.read(url)
+
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  url = csv_detail[2]
+  check_exist_feed_url = FeedUrl.where(:url => url).first
+  if check_exist_feed_url.blank?
+    source = ""
+    begin
+      source = URI.parse(URI.encode(URI.decode(url))).host.gsub("www.", "")
+    rescue Exception => e
+      source = Addressable::URI.parse(url).host.gsub("www.", "")
+    end
+    article_content = ArticleContent.find_by_url(url)
+    status = 0
+    status = 1 unless article_content.blank?
+
+    title, description, images, page_category = Feed.get_feed_url_values(url)
+
+    url_for_save = url
+    if url_for_save.include?("youtube.com")
+      url_for_save = url_for_save.gsub("watch?v=", "video/")
+    end
+
+    # remove characters after come with space + '- or |' symbols
+    title = title.to_s.gsub(/\s(-|\|).+/, '')
+    title = title.blank? ? "" : title.to_s.strip
+
+    category = sources_list[source]["categories"]
+
+    new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,
+                               status: status, source: source, summary: description, :images => images,
+                               :published_at => Time.now, :priorities => 1, :additional_details => page_category)
+
+    begin
+      new_feed_url.save!
+      feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
+      feed_url.auto_save_feed_urls(false,0,"auto") if feed_url.status == 0
+    rescue Exception => e
+      p e
+    end
+  end
+end
