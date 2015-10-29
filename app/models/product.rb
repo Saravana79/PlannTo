@@ -392,7 +392,9 @@ has_one :manufacturer,
 
       results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2))}
 
-      return results, new_selected_list_ids, list_scores, auto_save
+      if !new_selected_list_ids.blank?
+        return results, new_selected_list_ids, list_scores, auto_save
+      end
     end
 
     selected_list = sorted_hash.keys.first(2)
