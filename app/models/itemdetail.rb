@@ -486,7 +486,7 @@ class Itemdetail < ActiveRecord::Base
         else
           source_item = Sourceitem.find_or_initialize_by_url(url)
           if source_item.new_record?
-            source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+            source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => id)
           elsif source_item.verified && !source_item.matchitemid.blank?
             status = [6, 13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
             @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
@@ -628,7 +628,7 @@ class Itemdetail < ActiveRecord::Base
               s_url = url.split("flipkart.com").last
               source_item = Sourceitem.find_or_initialize_by_url_and_urlsource(s_url, "Flipkart")
               if source_item.new_record?
-                source_item.update_attributes(:name => title, :status => 1, :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+                source_item.update_attributes(:name => title, :status => 1, :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => id)
               elsif source_item.verified && !source_item.matchitemid.blank?
                 @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 9861, :iscashondeliveryavailable => cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
                 have_to_create_image = true
