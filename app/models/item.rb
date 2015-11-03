@@ -3115,6 +3115,10 @@ end
 
       status_details = page_type == "type_3" ? [1,2,3] : [1]
 
+      if(page_type == "type_4")
+        status_details = [1,2,3]
+      end
+
       unless @articles.empty?
         @items = @articles[0].allitems.select{|a| a.is_a? Product}
         article_items_ids = @items.map(&:id)
