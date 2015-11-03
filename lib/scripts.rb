@@ -635,7 +635,7 @@ items.each do |item|
 
   source_item = Sourceitem.find_or_initialize_by_url(url)
   if source_item.new_record?
-    source_item.update_attributes(:name => title, :status => 1, :urlsource => "Autoportal", :itemtype_id => 1, :created_by => "System", :verified => false)
+    source_item.update_attributes(:name => title, :status => 1, :urlsource => "Autoportal", :itemtype_id => 1, :created_by => "System", :verified => false, :additional_details => pid)
   elsif source_item.verified && !source_item.matchitemid.blank?
     item_detail = Itemdetail.find_or_initialize_by_url(url)
     if item_detail.new_record?
@@ -743,7 +743,7 @@ each_node_list.each_with_index do |each_node, index|
 
         source_item = Sourceitem.find_or_initialize_by_url(url)
         if source_item.new_record?
-          source_item.update_attributes(:name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+          source_item.update_attributes(:name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => mpn)
         elsif source_item.verified && !source_item.matchitemid.blank?
           item_detail = Itemdetail.find_or_initialize_by_url(url)
           if item_detail.new_record?
