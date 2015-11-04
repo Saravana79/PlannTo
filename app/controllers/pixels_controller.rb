@@ -18,10 +18,9 @@ class PixelsController < ApplicationController
     redirect_to redirect_val
   end
 
- def conv_track_pixel
- 
- render :nothing => true
- end
+  def conv_track_pixel
+    render :nothing => true
+  end
 
 
   def vendor_page

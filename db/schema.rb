@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151028130542) do
+ActiveRecord::Schema.define(:version => 20151104043833) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -96,6 +96,16 @@ ActiveRecord::Schema.define(:version => 20151028130542) do
     t.integer  "id",                            :null => false
     t.datetime "impression_time",               :null => false
     t.string   "value",           :limit => 45
+  end
+
+  create_table "adv_details", :force => true do |t|
+    t.integer  "advertisement_id"
+    t.string   "ad_type"
+    t.string   "expanded_type"
+    t.boolean  "expanded",         :default => false
+    t.boolean  "only_flash",       :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "advertisements", :force => true do |t|
@@ -1293,21 +1303,22 @@ ActiveRecord::Schema.define(:version => 20151028130542) do
   end
 
   create_table "sourceitems", :force => true do |t|
-    t.string   "name",            :limit => 100, :null => false
-    t.string   "url",             :limit => 500, :null => false
-    t.string   "urlsource",       :limit => 100, :null => false
-    t.integer  "status",                         :null => false
+    t.string   "name",               :limit => 100, :null => false
+    t.string   "url",                :limit => 500, :null => false
+    t.string   "urlsource",          :limit => 100, :null => false
+    t.integer  "status",                            :null => false
     t.integer  "matchfoundby"
     t.integer  "matchitemid"
-    t.string   "matchitemname",   :limit => 100
-    t.boolean  "verified",                       :null => false
-    t.integer  "itemtype_id",                    :null => false
-    t.string   "created_by",      :limit => 50,  :null => false
-    t.string   "updated_by",      :limit => 50
-    t.datetime "created_at",                     :null => false
+    t.string   "matchitemname",      :limit => 100
+    t.boolean  "verified",                          :null => false
+    t.integer  "itemtype_id",                       :null => false
+    t.string   "created_by",         :limit => 50,  :null => false
+    t.string   "updated_by",         :limit => 50
+    t.datetime "created_at",                        :null => false
     t.datetime "updated_at"
     t.integer  "suggestion_id"
     t.string   "suggestion_name"
+    t.string   "additional_details", :limit => 45
   end
 
   add_index "sourceitems", ["matchitemid"], :name => "matchitemid_itemid"
