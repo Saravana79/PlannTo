@@ -17,6 +17,7 @@ class Advertisement < ActiveRecord::Base
   belongs_to :user
   belongs_to :vendor
   has_one :ad_video_detail
+  has_one :adv_detail
   has_many :aggregated_details, :as => :entity
   has_many :ad_reports
 
@@ -1075,8 +1076,8 @@ class Advertisement < ActiveRecord::Base
 
                 current_hash.merge!("agg_date" => "#{date}", "ad_id" => imp_advertisement_id)
 
-                visited = obj_params[:visited].to_i == 1
-                expanded = obj_params[:expanded].to_i == 1
+                visited = obj_params[:visited].to_i == "true"
+                expanded = obj_params[:expanded].to_i == "true"
 
                 if visited == true
                   current_hash["visited"] = {} if current_hash["visited"].blank?

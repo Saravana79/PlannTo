@@ -15,10 +15,10 @@
     temporary disabled
   </div>
   <div id="normal_view">
-    <% if @ad.advertisement_type == "flash" %>
+    <% if @adv_detail.ad_type == "flash" %>
         <!--<%# shop_now_url = "http://www.plannto.com/tst" %>-->
 
-        <% if params[:only_flash] == "true" %>
+        <% if @adv_detail.only_flash %>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_width %>" height="<%= @iframe_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
               <param name="MOVIE" value="http://www.gaadicdn.com/campaign_images/uploads/fixed__Chevrolet_Sail_Awareness_1000x90.swf">
               <param name="PLAY" value="false">

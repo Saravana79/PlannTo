@@ -43,6 +43,8 @@
             <%= f.radio_button :advertisement_type, 'fashion', :class => "ad_type", :checked => @advertisement.advertisement_type == "fashion" ? "checked" : "" %>Fashion
             <%= f.radio_button :advertisement_type, 'jockey_fashion', :class => "ad_type", :checked => @advertisement.advertisement_type == "jockey_fashion" ? "checked" : "" %>Jockey Fashion
             <%= f.radio_button :advertisement_type, 'housing_dynamic', :class => "ad_type", :checked => @advertisement.advertisement_type == "housing_dynamic" ? "checked" : "" %>Housing Dynamic
+            <%= f.radio_button :advertisement_type, 'display_ads', :class => "ad_type", :checked => @advertisement.advertisement_type == "display_ads" ? "checked" : "" %>Display Ads
+            <%= f.radio_button :advertisement_type, 'in_image_ads', :class => "ad_type", :checked => @advertisement.advertisement_type == "in_image_ads" ? "checked" : "" %>In Image Ads
         <% end %>
       </div>
     </div>
@@ -69,7 +71,43 @@
 
     <div class="fields-div">
       <div class="title_header float_lft">Name :</div>
-      <div class="float_lft"> <%= f.text_field :name %> </div>
+      <div class=""> <%= f.text_field :name %> </div>
+    </div>
+
+    <div class="in_image_ads_details additional_details">
+      <div class="fields-div">
+        <div class="title_header float_lft">Ad Type :</div>
+        <div>
+          <%= radio_button_tag "adv_detail[ad_type]", 'static', @adv_detail.ad_type == "static", :class => "adv_detail_ad_type"%>Static
+          <%= radio_button_tag "adv_detail[ad_type]", 'dynamic', @adv_detail.ad_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic
+          <%= radio_button_tag "adv_detail[ad_type]", 'flash', @adv_detail.ad_type == "flash", :class => "adv_detail_ad_type" %>Flash
+        </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Expanded Type :</div>
+        <div>
+          <%= radio_button_tag "adv_detail[expand_type]", 'static', @adv_detail.expand_type == "static", :class => "adv_detail_ad_type"%>Static
+          <%= radio_button_tag "adv_detail[expand_type]", 'dynamic', @adv_detail.expand_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic
+          <%= radio_button_tag "adv_detail[expand_type]", 'flash', @adv_detail.expand_type == "flash", :class => "adv_detail_ad_type" %>Flash
+        </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Need to Expand Ad :</div>
+        <div>
+          <%= radio_button_tag "adv_detail[expanded]", true, @adv_detail.expanded == true, :class => "adv_detail_ad_type"%>True
+          <%= radio_button_tag "adv_detail[expanded]", false, @adv_detail.expanded == false, :class => "adv_detail_ad_type" %>False
+        </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Only Flash :</div>
+        <div>
+          <%= radio_button_tag "adv_detail[only_flash]", true, @adv_detail.only_flash == true, :class => "adv_detail_ad_type"%>True
+          <%= radio_button_tag "adv_detail[only_flash]", false, @adv_detail.only_flash == false, :class => "adv_detail_ad_type" %>False
+        </div>
+      </div>
     </div>
 
     <div class="fields-div">
@@ -256,7 +294,7 @@
     <div class="div_values add_details" style="display: none;">
 
       <h3>Additional Details</h3>
-      <div class="additional_details static_details flash_details" id="static_details">
+      <div class="additional_details in_image_ads_details static_details flash_details" id="static_details">
         <div class="files-div">
           <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
           <% if @advertisement.new_record? %>
@@ -264,7 +302,7 @@
                 <div>
                   <div class="title_header float_lft">Advertisement Size :</div>
                   <div class="float_lft">
-                <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["300x60", "300x60"], ["468x60", "468x60"], ["728x90", "728x90"], ["120x600", "120x600"],["160x600", "160x600"], ["200x200", "200x200"],["250x250", "250x250"], ["300x600", "300x600"], ["336x280", "336x280"]]), :placeholder => "" %>
+                    <%= select_tag 'ad_size[]', options_for_select([["normal_view", "normal_view"], ["expanded_view", "expanded_view"], ["300x250", "300x250"], ["300x60", "300x60"], ["468x60", "468x60"], ["728x90", "728x90"], ["120x600", "120x600"],["160x600", "160x600"], ["200x200", "200x200"],["250x250", "250x250"], ["300x600", "300x600"], ["336x280", "336x280"]]), :placeholder => "" %>
                   </div>
                   <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
                 </div>
@@ -279,7 +317,7 @@
 
               <% @advertisement && @advertisement.images.each do |a| %>
                   <div class="existing_images" id="<%= a.id %>">
-                    <%= image_tag(a.avatar, :size => a.ad_size.to_s.gsub("*", "x")) %>
+                    <%= image_tag(a.avatar) %>
 
                     <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, :confirm => 'Are you sure you want to delete this?'  %>
                   </div>
@@ -289,7 +327,7 @@
                 <div>
                   <div class="title_header float_lft">Advertisement Size :</div>
                   <div class="float_lft">
-                    <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["300x60", "300x60"], ["468x60", "468x60"], ["728x90", "728x90"], ["120x600", "120x600"],["160x600", "160x600"], ["200x200", "200x200"],["250x250", "250x250"], ["300x600", "300x600"], ["336x280", "336x280"]]), :placeholder => "" %>
+                    <%= select_tag 'ad_size[]', options_for_select([["normal_view", "normal_view"], ["expanded_view", "expanded_view"], ["300x250", "300x250"], ["300x60", "300x60"], ["468x60", "468x60"], ["728x90", "728x90"], ["120x600", "120x600"],["160x600", "160x600"], ["200x200", "200x200"],["250x250", "250x250"], ["300x600", "300x600"], ["336x280", "336x280"]]), :placeholder => "" %>
                   </div>
                   <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
                 </div>
@@ -588,7 +626,7 @@
         position: absolute;
     }
 
-    .ad_type, .template_type, .bid_radio_button {
+    .ad_type, .template_type, .bid_radio_button, .adv_detail_ad_type {
         width: 10px !important;
     }
 

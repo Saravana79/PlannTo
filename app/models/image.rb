@@ -3,7 +3,13 @@ class Image < ActiveRecord::Base
   has_attached_file :avatar,
       :storage => :s3,
       :s3_credentials => "#{Rails.root}/config/s3.yml",
-      :styles => lambda { |a| a.instance.set_styles },
+      :styles => lambda { |a|
+        if a.instance.is_image?
+          a.instance.set_styles
+        else
+          {}
+        end
+      },
       :path => ":image_prefix_path/:style/:filename",
       :url  => ":s3_sg_url",
       :convert_options => { :medium => "-gravity center -extent 176x132", :small => "-gravity center -extent 40x30"}
@@ -13,15 +19,19 @@ class Image < ActiveRecord::Base
   after_save :update_item_imageurl
 
   def self.file_dimensions(image)
-    hieght_width = image.ad_size.split("x")
-    dimensions = Paperclip::Geometry.from_file(image.avatar.queued_for_write[:original].path)
-    logger.info "===========================================#{dimensions.width} +++++++++++++++#{dimensions.height}"
-    return_val = true
-    if dimensions.width.to_i.to_s != hieght_width[0] || dimensions.height.to_i.to_s != hieght_width[1]
-      #errors.add :file, "Width must be #{hieght_width[0]}px and height must be #{hieght_width[1]}px"
-      return_val = false
+    if image.ad_size.include?("x")
+      hieght_width = image.ad_size.split("x")
+      dimensions = Paperclip::Geometry.from_file(image.avatar.queued_for_write[:original].path)
+      logger.info "===========================================#{dimensions.width} +++++++++++++++#{dimensions.height}"
+      return_val = true
+      if dimensions.width.to_i.to_s != hieght_width[0] || dimensions.height.to_i.to_s != hieght_width[1]
+        #errors.add :file, "Width must be #{hieght_width[0]}px and height must be #{hieght_width[1]}px"
+        return_val = false
+      end
+      return return_val
+    else
+      return true
     end
-    return return_val
   end
 
   def base_url
@@ -49,6 +59,12 @@ class Image < ActiveRecord::Base
     end
   end
 
+  def is_image?
+    return false unless self.avatar_content_type
+    return_val = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png', 'image/jpg'].include?(self.avatar_content_type)
+    return_val
+  end
+
   private
 
   def update_item_imageurl
@@ -68,7 +84,7 @@ class Image < ActiveRecord::Base
   end
 
   def update_avatar_file_name
-    if !self.avatar_content_type.include?("gif")
+    if !self.avatar_content_type.include?("gif") && is_image?
       name = self.avatar_file_name.to_s.split(".")
       name = name[0...name.size-1]
       name = name.join(".") + ".jpeg"

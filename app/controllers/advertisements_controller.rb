@@ -1049,6 +1049,14 @@ class AdvertisementsController < ApplicationController
     @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     @ad = Advertisement.where(:id => params[:ads_id]).first
+    @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
+    if @adv_detail.blank?
+      @adv_detail = AdvDetail.new
+    else
+      params[:expanded] = @adv_detail.expanded.to_s
+      params[:expand_type] = @adv_detail.expand_type
+      params[:visited] = "true" if params[:expanded] == "true"
+    end
 
     if !@ad.blank? && @ad.advertisement_type == "housing_dynamic"
       params[:hou_dynamic_l] = "l_#{params[:l]}"

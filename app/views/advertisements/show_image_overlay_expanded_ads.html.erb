@@ -8,9 +8,9 @@
 <% shop_now_url = "http://www.plannto.com" %>
 <div class="main_div">
   <div class="static_plannto_ad">
-    <% if params[:expand_type] == "flash" %>
+    <% if @adv_detail.expand_type == "flash" %>
 
-        <% if params[:only_flash] == "true" %>
+        <% if @adv_detail.only_flash %>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="1000" height="90" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
               <param name="MOVIE" value="http://www.gaadicdn.com/campaign_images/uploads/fixed__Chevrolet_Sail_Awareness_1000x90.swf?clickTag=http://www.gaadi.com/redirect_campaign.php?campaign%3DChevrolet_Sail_Awareness_1000x90%26origin%3Dfixed%26landing_page%3Dhttps%253A%252F%252Fad.doubleclick.net%252Fddm%252Fclk%252F290916835%253B121165608%253Bi">
               <param name="PLAY" value="true">
