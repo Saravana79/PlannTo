@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151104043833) do
+ActiveRecord::Schema.define(:version => 20151104115909) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(:version => 20151104043833) do
   create_table "adv_details", :force => true do |t|
     t.integer  "advertisement_id"
     t.string   "ad_type"
-    t.string   "expanded_type"
+    t.string   "expand_type"
     t.boolean  "expanded",         :default => false
     t.boolean  "only_flash",       :default => false
     t.datetime "created_at"

@@ -1054,7 +1054,7 @@ class AdvertisementsController < ApplicationController
       @adv_detail = AdvDetail.new
     else
       params[:expanded] = @adv_detail.expanded.to_s
-      params[:expand_type] = @adv_detail.expanded_type
+      params[:expand_type] = @adv_detail.expand_type
       params[:visited] = "true" if params[:expanded] == "true"
     end
 
