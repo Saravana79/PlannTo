@@ -1429,6 +1429,7 @@ class ProductsController < ApplicationController
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
     params[:ref_url] ||= ""
+    params[:ascsubtag] ||= ""
 
     cache_params = ""
     if !params[:item_ids].blank?
@@ -1450,6 +1451,12 @@ class ProductsController < ApplicationController
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
           cache = cache.gsub(old_iid, @impression_id)
+
+          if !params[:ascsubtag].blank?
+            old_sub_tag = FeedUrl.get_value_from_pattern(cache, "ascsubtag%3D<subtag>>", "<subtag>")
+            old_sub_tag = "ascsubtag%3D" + old_sub_tag.to_s
+            cache = cache.gsub(old_sub_tag, "ascsubtag%3D#{params[:ascsubtag]}")
+          end
         end
         return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)

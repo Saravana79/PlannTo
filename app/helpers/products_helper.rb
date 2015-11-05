@@ -73,7 +73,7 @@ module ProductsHelper
   end
 
   def get_url_with_key(key_name, key_val, url)
-    if !key_val.blank?
+    # if !key_val.blank?
       new_tag_val = key_val.to_s
       url = URI.unescape(url)
       if url.include?(key_name)
@@ -104,7 +104,7 @@ module ProductsHelper
           url = url + "?#{key_name}=#{new_tag_val}"
         end
       end
-    end
+    # end
     url
   end
 
