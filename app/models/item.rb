@@ -3102,8 +3102,8 @@ end
         tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
       end
 
-      if url.include?("m.mouthshut.com")
-        url = url.gsub("m.mouthshut", "www.mouthshut")
+      if tempurl.include?("m.mouthshut.com")
+        tempurl = tempurl.gsub("m.mouthshut", "www.mouthshut")
       end
 
       @articles = ArticleContent.where(url: tempurl)
