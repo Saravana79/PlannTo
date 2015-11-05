@@ -3113,6 +3113,17 @@ end
         end
       end
 
+      if @articles.blank?
+        if tempurl.include?("-Photos-")
+          tempurl = tempurl.gsub("-Photos-", "-reviews-")
+        elsif tempurl.include?("-discussion-")
+          tempurl = tempurl.gsub("-discussion-", "-reviews-")
+        elsif tempurl.include?("-page-")
+          tempurl = tempurl.gsub(/-page-.*/, "")
+        end
+        @articles = ArticleContent.where(url: tempurl)
+      end
+
       status_details = page_type == "type_3" ? [1,2,3] : [1]
 
       if(page_type == "type_4")
