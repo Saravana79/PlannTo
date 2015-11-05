@@ -751,7 +751,7 @@ class ProductsController < ApplicationController
     @itemdetail = Item.get_price_text_from_url(url, @publisher, params[:page_type])
     @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
 
-    if params[:page_type] == "type_3" || params[:page_type] == "type_4"
+    if ["type_3", "type_4", "type_5"].include?(params[:page_type])
       return price_widget_type_3(url, itemsaccess, url_params)
     end
 
@@ -936,6 +936,8 @@ class ProductsController < ApplicationController
 
     if params[:page_type] == "type_4"
       return_url = "products/price_widget_type_4.html.erb"
+    elsif params[:page_type] == "type_5"
+      return_url = "products/price_widget_type_5.html.erb"
     end
 
     respond_to do |format|

@@ -1,0 +1,35 @@
+<% if !@itemdetail.blank? %>
+    <% red_url = get_update_with_tag_and_ascsubtag(@itemdetail.url) %>
+    <% red_url = CGI.escape(red_url) %>
+    <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{red_url}" %>
+
+    <div class="plannto_book_price_div" style="min-width:300px;padding: 10px 2px 0px 2px;border: 1px solid #D8D8D8;font-size:12px;font-family: Arial,Helvetica,sans-serif;text-align:center;">
+      <div style="float: left;width:200px;">
+        <p style="font-weight: 600 !important;">Buy this Product @</p><img src="https://cdn1.plannto.com/items/vendor/medium/amazon.jpeg" width="70px" style="padding-top: 6px;">
+      </div>
+      <p style="font-weight: bold;margin:0px;font-size:14px;color:#3B3B3B">
+        <% if @itemdetail.mrpprice.to_i != 0 %>
+          <span style="text-decoration:line-through;">
+             Rs <%= @itemdetail.mrpprice %>
+          </span>
+        <% end %>
+        <span style="color:#b12704;font-weight:bold;font-size:15px;">
+          Rs. <%= number_with_delimiter(@itemdetail.price.to_i) %>
+        </span>
+      </p>
+      <span>
+        <p class="" style="margin:6px 0px;">
+          <a style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href=<%= shop_now_url %>>
+            <img src="<%= configatron.root_image_path %>static/images/amazon_buynow.png" width="96px"/>
+          </a>
+        </p>
+      </span>
+    </div>
+<% end %>
+
+<style type="text/css">
+    a {
+        outline: none;
+        text-decoration: none;
+    }
+</style>
