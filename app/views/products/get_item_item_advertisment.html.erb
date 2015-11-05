@@ -60,7 +60,7 @@ pre {
                                               <!--
                                               <td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
                                               <div id="plannto_incol2" width="25%" style="font-weight:normal;"><%=display_shipping_detail(item)%></div>
-                                              <div width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </div>
+                                              <div width="15%" id="plannto_incol3"><a rel="nofollow" href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </div>
                                             <%#end%>
                                          </li>
                         <% end %>

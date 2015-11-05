@@ -17,14 +17,14 @@
   -->
       <div class="logo" style="border-bottom:1px solid #F1F0F0;">
         <div style="float:left;width:110px;">
-          <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
+          <a rel="nofollow" class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
           </a>
         </div>
         <div class="list_carousel">
           <div id="pager2" class="pager">
             <%if @item_details.count > 1 %>
                 <% [*1..@item_details.count].each do |each_loop| %>
-                    <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+                    <a rel="nofollow" href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
                 <% end %>
             <% end %>
           </div>
@@ -43,7 +43,7 @@
                     <div class="advt-box">
                       <div class="product-container">
                         <div class="product-img-left">
-                          <a href="<%= shop_now_url %>" target="_blank">
+                          <a rel="nofollow" href="<%= shop_now_url %>" target="_blank">
                             <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                             <span style="  display: inline-block;vertical-align: middle;">
                             <%= get_image_tag_using_src(item_detail.image_url.to_s, '', '').html_safe %>
@@ -52,14 +52,14 @@
                           </a>
                         </div>
                         <div class="product-txt-right">
-                          <a href="<%= shop_now_url %>" target="_blank" class="">
+                          <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
                             <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(52) %></p>
 
                             <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
                           </a>
 
                           <p class="btn">
-                            <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
+                            <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="shop-now">
                               <%= "Shop Now" %>
                             </a>
                           </p>

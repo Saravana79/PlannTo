@@ -64,14 +64,14 @@
       <div>
         <ul class="shadetabs">
           <li class="selected">
-            <a href="javascript:void(0)" id="where_to_buy_items_a" >Recommended Products For You</a>
+            <a  rel="nofollow" href="javascript:void(0)" id="where_to_buy_items_a" >Recommended Products For You</a>
           </li>
         </ul>
       </div>
       <% search_url = !@search_url.blank? ? "#{configatron.hostname}/history_details?item_id=&geo=#{params[:geo]}&red_url=#{@search_url}&iid=#{@impression_id}" : "" %>
       <div id="productdiv">
         <div class="planntocarosel-left">
-          <a  title="Prev" href="<%= search_url %>" target="_blank">
+          <a   rel="nofollow" title="Prev" href="<%= search_url %>" target="_blank">
             <span></span>
           </a>
         </div>
@@ -118,7 +118,7 @@
             </div>
         <% end %>
         <div class="planntocarosel-right">
-          <a  title="Next" href="<%= search_url %>" target="_blank">
+          <a   rel="nofollow" title="Next" href="<%= search_url %>" target="_blank">
             <span></span>
           </a>
         </div>

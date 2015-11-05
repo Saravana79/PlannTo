@@ -2,7 +2,7 @@
 
     <% if params[:page_type] == "type_1" %>
         <div id="planntowidget1">
-          <a style="color:#4A4A4A;font-weight:500;" target="_blank" href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= @itemdetail.id %>">
+          <a rel="nofollow" style="color:#4A4A4A;font-weight:500;" target="_blank" href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= @itemdetail.id %>">
             Price: <span style="font-family:arial;color:#4A4A4A;font-weight:500;"><!--<span class="rupee">R<span>s.</span></span>--><%= display_price_detail(@itemdetail) %></span> Buy Now
           </a>
         </div>

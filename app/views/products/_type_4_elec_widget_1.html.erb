@@ -61,14 +61,14 @@
   -->
       <div class="logo">
         <div style="float:left;width:110px;">
-          <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="">
+          <a rel="nofollow" class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="">
           </a>
         </div>
         <div class="list_carousel">
           <div id="pager2" class="pager">
             <%if @where_to_buy_items.count > 1 %>
                 <% [*1..@where_to_buy_items.count].each do |each_loop| %>
-                    <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+                    <a rel="nofollow" href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
                 <% end %>
             <% end %>
           </div>
@@ -89,21 +89,21 @@
                     <div class="advt-box">
                       <div class="product-container" style="padding:0px;">
                         <div class="product-img-left" style="height:145px;">
-                          <a href="<%= shop_now_url %>" target="_blank">
+                          <a rel="nofollow" href="<%= shop_now_url %>" target="_blank">
                             <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                             <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 132, '').html_safe %>
                             <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                           </a>
                         </div>
                         <div class="product-txt-right">
-                          <a href="<%= shop_now_url %>" target="_blank" class="">
+                          <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
                             <h3 style="font-family:Arial!important;line-height:20px;font-size:14px!important;margin:5px 0px 0px 0px"><%= item_detail.ItemName.to_s.truncate(62) %></h3>
 
                             <p class="price"><%= prettify(item_detail) %></p>
                           </a>
 
                           <p class="btn">
-                            <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
+                            <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="shop-now">
                               <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
                             </a>
                           </p>
