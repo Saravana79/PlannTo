@@ -3127,11 +3127,18 @@ end
           tempurl = tempurl.gsub(/-page-.*/, "")
         end
         @articles = ArticleContent.where(url: tempurl)
+
+        if @articles.blank?
+          last_word = tempurl.to_s.split("/").last
+          last_word = last_word.to_s.gsub(/-review.*/, "-review%")
+          tempurl = "http://www.mouthshut.com/%/#{last_word}"
+          @articles = ArticleContent.where("url like '#{tempurl}'")
+        end
       end
 
       status_details = page_type == "type_3" ? [1,2,3] : [1]
 
-      if(page_type == "type_4")
+      if(["type_4", "type_5"].include?(page_type))
         status_details = [1,2,3]
       end
 
