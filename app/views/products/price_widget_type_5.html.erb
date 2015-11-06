@@ -3,11 +3,11 @@
     <% red_url = CGI.escape(red_url) %>
     <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{red_url}" %>
 
-    <div class="plannto_book_price_div" style="width:278px;padding: 10px 2px 10px 20px;border-top: 1px solid #D8D8D8;border-bottom: 1px solid #D8D8D8;font-size:12px;font-family: Arial,Helvetica,sans-serif;">
+    <div class="plannto_book_price_div" style="padding: 10px 2px 10px 20px;border-top: 1px solid #D8D8D8;border-bottom: 1px solid #D8D8D8;font-size:12px;font-family: Arial,Helvetica,sans-serif;">
       <div style="float: left;width:180px;">
         <span style="font-weight: 600 !important;font-size: 11px;">Buy this product @</span><img src="https://cdn1.plannto.com/items/vendor/medium/amazon.jpeg" width="70px" style="position: relative;top: 10px;padding-left: 3px;">
       </div>
-      <div style="float:right;text-align:center;width:90px;">
+      <div style="float:left;text-align:center;width:90px;">
       <div>
       <p style="font-weight: bold;margin:0px;font-size:14px;color:#3B3B3B">
         <% if @itemdetail.mrpprice.to_i != 0 %>
