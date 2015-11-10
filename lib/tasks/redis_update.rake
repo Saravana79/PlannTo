@@ -23,13 +23,23 @@ namespace :redis_update do
     page = 1
     begin
       contents = Content.paginate_by_sql(query, :page => page, :per_page => batch_size)
+      redis_values_arr = []
       contents.each do |each_content|
         if !each_content.url.blank?
           rel_item_ids = each_content.rel_item_ids.split(',')
           rel_item_ids = rel_item_ids.first(50)
           # create content hash in redis-2
           #$redis.HMSET("url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
-          Resque.enqueue(UpdateRedis, "url:#{each_content.url}", "item_ids", rel_item_ids.join(','), "id", each_content.id, "article_type", each_content.sub_type, "itemtype", each_content.itemtype_id, "count", 0)
+          redis_key = "url:#{each_content.url}"
+          redis_values = ["item_ids", rel_item_ids.join(','), "id", each_content.id, "article_type", each_content.sub_type, "itemtype", each_content.itemtype_id, "count", 0]
+
+          redis_values_arr << [redis_key, redis_values]
+        end
+      end
+
+      $redis_rtb.pipelined do
+        redis_values_arr.each do |arr_val|
+          $redis_rtb.HMSET(arr_val[0], arr_val[1])
         end
       end
 
