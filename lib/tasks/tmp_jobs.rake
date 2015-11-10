@@ -513,34 +513,46 @@ end
 
 desc "update items mapping to redis rtb"
 task :update_item_mapping_to_redis_rtb => :environment do
-  items_sql = "select * from items where (updated_at > '2015-08-30')"
+  items_sql = "select * from items where (updated_at > '2011-01-1')"
 
   page = 1
+  count = 0
   begin
     items = Item.paginate_by_sql(items_sql, :page => page, :per_page => 1000)
 
     items.each do |each_item|
-      each_item.update_redis_with_item_manual()
+      begin
+        count += 1
+        each_item.update_redis_with_item_manual()
+        p "---------#{count}-----------"
+      rescue Exception => e
+        p "Errors in item mapping"
+      end
     end
     page += 1
-    break
   end while !items.empty?
 end
 
 
 desc "update content mapping to redis rtb"
 task :update_content_mapping_to_redis_rtb => :environment do
-  content_sql = "SELECT `view_article_contents`.* FROM `view_article_contents` WHERE `view_article_contents`.`type` IN ('ArticleContent', 'VideoContent') AND (updated_at > '2015-08-30')"
+  content_sql = "SELECT `view_article_contents`.* FROM `view_article_contents` WHERE `view_article_contents`.`type` IN ('ArticleContent', 'VideoContent') AND (updated_at > '2011-01-1')"
 
   page = 1
+  count = 0
   begin
     contents = Content.paginate_by_sql(content_sql, :page => page, :per_page => 1000)
 
     contents.each do |each_content|
-      each_content.update_item_contents_relations_cache(each_content)
+      count += 1
+      begin
+        each_content.update_item_contents_relations_cache(each_content)
+        p "---------#{count}-----------"
+      rescue Exception => e
+        p "Error in content update"
+      end
     end
     page += 1
-    break
   end while !contents.empty?
 end
 
