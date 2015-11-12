@@ -55,6 +55,8 @@ class PixelsController < ApplicationController
       else
         @img_src = nil
       end
+    else
+      @img_src = nil
     end
 
     respond_to do |format|
