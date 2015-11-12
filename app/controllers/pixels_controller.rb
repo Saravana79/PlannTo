@@ -1,5 +1,5 @@
 class PixelsController < ApplicationController
-
+  include Admin::AdvertisementsHelper
   skip_before_filter :cache_follow_items, :store_session_url
   before_filter :generate_cookie_if_not_exist, :except => [:pixel_matching]
 
@@ -25,29 +25,36 @@ class PixelsController < ApplicationController
 
   def vendor_page
     params[:source] ||= "google"
+    ref_url = request.referer
 
-    if params[:source] != "mysmartprice"
-      ref_url = request.referer
-
-      @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
-      if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-        @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
-      else
-        google_ula_vendor = case params[:source]
-                              when "mysmartprice"
-                                "&google_ula=8365600"
-                              when "housing"
-                                "&google_ula=8423560"
-                              when "cardekho"
-                                "&google_ula=57128440"
-                              else
-                                ""
-                            end
-
-        @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}"
-      end
-    else
+    if params[:type].to_s == "conversion"
       @img_src = nil
+      url_params = set_cookie_for_temp_user_and_url_params_process(params)
+
+      conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
+    else
+      if params[:source] != "mysmartprice"
+
+        @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+        if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+          @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
+        else
+          google_ula_vendor = case params[:source]
+                                when "mysmartprice"
+                                  "&google_ula=8365600"
+                                when "housing"
+                                  "&google_ula=8423560"
+                                when "cardekho"
+                                  "&google_ula=57128440"
+                                else
+                                  ""
+                              end
+
+          @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}"
+        end
+      else
+        @img_src = nil
+      end
     end
 
     respond_to do |format|
