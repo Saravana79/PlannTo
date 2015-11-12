@@ -26,7 +26,7 @@ class PixelsController < ApplicationController
   def vendor_page
     params[:source] ||= "google"
 
-    if params[:source] != "mysmartprice"
+    if params[:source] != "mysmartprice" && params[:source] != 'manipal'
       ref_url = request.referer
 
       @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
@@ -48,6 +48,9 @@ class PixelsController < ApplicationController
       end
     else
       @img_src = nil
+      if params[:source] == 'manipal'
+         @img_src = "https://www.plannto.com/pixels?source=#{params[:source]}&ref_url=#{ref_url}"
+      end
     end
 
     respond_to do |format|
