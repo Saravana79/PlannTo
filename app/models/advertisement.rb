@@ -88,7 +88,7 @@ class Advertisement < ActiveRecord::Base
       new_image = self.images.build
       new_image.avatar = image[:avatar]
       new_image.ad_size = image[:ad_size]
-      if ad_type != "flash" && Image.file_dimensions(new_image)
+      if !["flash", "in_image_ads"].include?(ad_type) && Image.file_dimensions(new_image)
         new_image.save
       else
         new_image.save
