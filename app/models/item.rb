@@ -1129,8 +1129,8 @@ end
 
   def self.update_item_details(log, batch_size=2000)
     date_range = 1.day.ago
-    if Date.today.to_s == "2015-11-10"
-      date_range = 1.month.ago
+    if Date.today.to_s == "2015-11-13"
+      date_range = 2.month.ago
     end
     # query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type from
     #                                     itemdetails id inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
@@ -1160,9 +1160,9 @@ end
 
         redis_values = redis_values.flatten
 
-        log.debug "Hash Key => #{redis_key}"
-        log.debug "Hash value => #{redis_values}"
-        log.debug "\n"
+       # log.debug "Hash Key => #{redis_key}"
+       # log.debug "Hash value => #{redis_values}"
+       # log.debug "\n"
 
         # redis_values = val_hash.flatten
         redis_values_arr << [redis_key, redis_values]
