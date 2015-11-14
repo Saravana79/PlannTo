@@ -76,20 +76,18 @@
 
     <div class="in_image_ads_details additional_details">
       <div class="fields-div">
-        <div class="title_header float_lft">Ad Type :</div>
+        <div class="title_header float_lft">Normal View :</div>
         <div>
           <%= radio_button_tag "adv_detail[ad_type]", 'static', @adv_detail.ad_type == "static", :class => "adv_detail_ad_type"%>Static
           <%= radio_button_tag "adv_detail[ad_type]", 'dynamic', @adv_detail.ad_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic
-          <%= radio_button_tag "adv_detail[ad_type]", 'flash', @adv_detail.ad_type == "flash", :class => "adv_detail_ad_type" %>Flash
         </div>
       </div>
 
       <div class="fields-div">
-        <div class="title_header float_lft">Expanded Type :</div>
+        <div class="title_header float_lft">Expanded View :</div>
         <div>
           <%= radio_button_tag "adv_detail[expand_type]", 'static', @adv_detail.expand_type == "static", :class => "adv_detail_ad_type"%>Static
           <%= radio_button_tag "adv_detail[expand_type]", 'dynamic', @adv_detail.expand_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic
-          <%= radio_button_tag "adv_detail[expand_type]", 'flash', @adv_detail.expand_type == "flash", :class => "adv_detail_ad_type" %>Flash
         </div>
       </div>
 

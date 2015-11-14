@@ -159,11 +159,11 @@ class AdvertisementsController < ApplicationController
 
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
 
-    if( params[:only_flash] == "true" && params[:expanded].to_i == 1)
+    if (params[:only_flash] == "true" && params[:expanded].to_i == 1)
       return return_expanded_html()
       return_exp_path = ""
     else
-      return_exp_path = "advertisements/show_image_overlay_expanded_ads.html.erb"
+      return_exp_path = "advertisements/image_overlay_ads_expanded.html.erb"
 
       @ad_video_detail = @ad.ad_video_detail
       expanded = params[:expanded].to_s
@@ -235,12 +235,21 @@ class AdvertisementsController < ApplicationController
       end
     end
 
-    return_path = "advertisements/show_image_overlay_ads.html.erb"
+    # return_path = "advertisements/show_image_overlay_ads.html.erb"
+    return_path = "advertisements/image_overlay_ads_normal.html.erb"
     @iframe_width = params[:width].blank? ? "" : params[:width] if @iframe_width.blank?
     @iframe_height = params[:height].blank? ? "" : params[:height] if @iframe_height.blank?
     @ad_template_type = "type_1"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+
+    if @normal_view_ratio.to_f != 0.0 && !@iframe_width.blank?
+      @iframe_height = (@iframe_width.to_f / @normal_view_ratio).to_s
+    end
+
+    if @expanded_view_ratio.to_f != 0.0 && !@iframe_exp_width.blank?
+      @iframe_exp_height = (@iframe_exp_width.to_f / @expanded_view_ratio).to_s
+    end
 
     @item_type = "mobile"
 
@@ -254,7 +263,7 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => true, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
+          render :json => {:success => true, :n_ratio => @normal_view_ratio.to_f, :e_ratio => @expanded_view_ratio.to_f, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
         end
       }
       format.html {
@@ -268,7 +277,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def return_expanded_html()
-    return_path = "advertisements/show_image_overlay_expanded_ads.html.erb"
+    return_path = "advertisements/image_overlay_ads_expanded.html.erb"
 
     @ad_video_detail = @ad.ad_video_detail
     expanded = params[:expanded].to_s
@@ -1049,6 +1058,13 @@ class AdvertisementsController < ApplicationController
     @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     @ad = Advertisement.where(:id => params[:ads_id]).first
+
+    if !@ad.blank?
+      @normal_view_src, @normal_view_src_2, @normal_view_type, @normal_view_ratio = @ad.get_file_based_on_type("normal_view")
+      @expanded_view_src, @expanded_view_src_2, @expanded_view_type, @expanded_view_ratio = @ad.get_file_based_on_type("expanded_view")
+      # @expanded_file = @ad.images.where(:ad_size => "expanded_view").last
+    end
+
     @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
     if @adv_detail.blank?
       @adv_detail = AdvDetail.new

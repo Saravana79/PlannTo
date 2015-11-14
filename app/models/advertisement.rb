@@ -2990,6 +2990,33 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     item_ids
   end
 
+  def get_file_based_on_type(file_type)
+    view_type = ""
+    view_src_2 = ""
+    view_ratio = 0
+    file_based_type = self.images.where(:ad_size => file_type).last
+    extname = file_based_type.blank? ? nil : File.extname(file_based_type.base_url)
+    if extname.blank?
+      view_type = "video"
+      ad_video_detail = self.ad_video_detail
+      if !ad_video_detail.blank?
+        view_src = "#{configatron.root_image_path}static/video_ads/#{@ad_video_detail.mp4}"
+        view_src_2 = "#{configatron.root_image_path}static/video_ads/#{@ad_video_detail.webm}"
+      end
+    else
+      if ['.jpeg', '.pjpeg', '.gif', '.png', '.x-png', '.jpg'].include?(extname)
+        view_type = "image"
+        view_src = file_based_type.base_url rescue ""
+        geo = Paperclip::Geometry.from_file(file_based_type.base_url)
+        view_ratio = geo.width/geo.height
+      elsif [".swf"].include?(extname)
+        view_type = "flash"
+        view_src = file_based_type.base_url rescue ""
+      end
+    end
+    return view_src, view_src_2, view_type, view_ratio
+  end
+
   private
 
   def file_dimensions

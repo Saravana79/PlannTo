@@ -20,13 +20,13 @@
 
         <% if @adv_detail.only_flash %>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_width %>" height="<%= @iframe_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
-              <param name="MOVIE" value="http://www.gaadicdn.com/campaign_images/uploads/fixed__Chevrolet_Sail_Awareness_1000x90.swf">
+              <param name="MOVIE" value="<%= @normal_file.base_url rescue "" %>">
               <param name="PLAY" value="false">
               <param name="LOOP" value="false">
               <param name="QUALITY" value="high">
               <param name="SCALE" value="SHOWALL">
               <param name="wmode" value="transparent">
-              <embed name="fixed_flash_1408" wmode="transparent" src="http://www.gaadicdn.com/campaign_images/uploads/fixed__Chevrolet_Sail_Awareness_1000x90.swf" width="<%= @iframe_width %>" height="<%= @iframe_height %>" play="false" loop="false" quality="high" scale="SHOWALL" swliveconnect="true" pluginspage="http://www.macromedia.com/go/flashplayer/" title="Adobe Flash Player">
+              <embed name="fixed_flash_1408" wmode="transparent" src="<%= @normal_file.base_url rescue "" %>" width="<%= @iframe_width %>" height="<%= @iframe_height %>" play="false" loop="false" quality="high" scale="SHOWALL" swliveconnect="true" pluginspage="http://www.macromedia.com/go/flashplayer/" title="Adobe Flash Player">
 
             </object>
         <% else %>
@@ -46,7 +46,7 @@
 <!--//                stage.start();-->
             <!--</script>-->
 
-            <img class="img_overlay_img" width="<%= @iframe_width %>" height="<%= @iframe_height %>" src="http://planntonew.s3.amazonaws.com/test_folder/renalt_kwid_img.jpg">
+            <img class="img_overlay_img" width="<%= @iframe_width %>" height="<%= @iframe_height %>" src="<%= @normal_file.base_url rescue "" %>">
         <% end %>
 
         <!--<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"-->
@@ -62,7 +62,7 @@
           <!--</object>-->
         <!--</object>-->
     <% else %>
-        <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>
+        <%#= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>
         <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>
     <% end %>
     <%= hidden_field_tag :visited, "true" %>

@@ -1127,9 +1127,9 @@ end
    [['Select Product','']] + Item.all.map{|i|[ i.name, i.id]}
   end
 
-  def self.update_item_details(log, batch_size=2000)
+  def self.update_item_details(log, batch_size=2000, for_one_month="false")
     date_range = 1.day.ago
-    if Date.today.to_s == "2015-11-10"
+    if for_one_month == "true"
       date_range = 1.month.ago
     end
     # query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type from

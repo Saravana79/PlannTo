@@ -1,11 +1,13 @@
 namespace :redis_update do
   desc 'update redis for items, advertismenets and article_content'
-  task :all, [:batch_size] => :environment do |t, args|
+  task :all, [:batch_size, :for_one_month] => :environment do |t, args|
     args.with_defaults(:batch_size => 2000)
+    args.with_defaults(:for_one_month => "false")
     batch_size = args[:batch_size].to_i
+    for_one_month = args[:for_one_month].to_s
     # Item update
     log = Logger.new 'log/item_update_redis.log'
-    Item.update_item_details(log, batch_size)
+    Item.update_item_details(log, batch_size, for_one_month)
 
     # advertisements update
     Advertisement.find_in_batches(:batch_size => batch_size) do |advertisements|
