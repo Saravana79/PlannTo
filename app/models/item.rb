@@ -3158,9 +3158,9 @@ end
     if !@items.blank?
       item = @items.first
       if !publisher.blank? && !publisher.vendor_ids.blank?
-        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(","), :IsError => false, :status => status_details).order("sort_priority desc, price").first
+        @itemdetail = item.itemdetails.where("site in #{publisher.vendor_ids.to_s.split(",").map(&:inspect).join(',')} and IsError=false and status in (#{status_details.map(&:inspect).join(',')}) and price != 0").order("sort_priority desc, price").first
       else
-        @itemdetail = item.itemdetails.where(:IsError => false, :status => status_details).order("sort_priority desc, price").first
+        @itemdetail = item.itemdetails.where("IsError=false and status in (#{status_details.map(&:inspect).join(',')}) and price != 0").order("sort_priority desc, price").first
       end
     end
     @itemdetail
