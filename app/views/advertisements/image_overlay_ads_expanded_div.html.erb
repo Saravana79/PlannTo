@@ -3,8 +3,8 @@
   <div id="expanded_view">
     <% if @adv_detail.expand_type == "static" %>
         <% if @expanded_view_type == "image" %>
-            <a src="<%= shop_now_url %>">
-            <img class="img_overlay_img" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" src="<%= @expanded_view_src %>">
+            <a href="<%= shop_now_url %>" target="_blank">
+              <img class="img_overlay_img" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" src="<%= @expanded_view_src %>">
             </a>
         <% elsif @expanded_view_type == "flash" %>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
