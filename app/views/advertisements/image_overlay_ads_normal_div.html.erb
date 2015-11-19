@@ -1,0 +1,32 @@
+<%#= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+<link href="http://localhost:3000/stylesheets/ads/image_overlay_ads/<%= @ad_template_type %>/<%= @item_type %>/style.css" type="text/css" rel="stylesheet" media="all"/>
+<%= javascript_include_tag "http://localhost:3000/javascripts/ads/image_overlay_ads/#{@item_type}/plannto_image_overlay.js" %>
+<div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_height %>px !important;">
+  <div id="normal_view">
+    <% if @adv_detail.ad_type == "static" %>
+        <% if @normal_view_type == "image" %>
+            <img class="img_overlay_img" width="<%= @iframe_width %>" height="<%= @iframe_height %>" src="<%= @normal_view_src %>">
+        <% elsif @normal_view_type == "flash" %>
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_width %>" height="<%= @iframe_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
+              <param name="MOVIE" value="<%= @normal_view_src %>">
+              <param name="PLAY" value="false">
+              <param name="LOOP" value="false">
+              <param name="QUALITY" value="high">
+              <param name="SCALE" value="SHOWALL">
+              <param name="wmode" value="transparent">
+              <embed name="fixed_flash_1408" wmode="transparent" src="<%= @normal_view_src %>" width="<%= @iframe_width %>" height="<%= @iframe_height %>" play="false" loop="false" quality="high" scale="SHOWALL" swliveconnect="true" pluginspage="http://www.macromedia.com/go/flashplayer/" title="Adobe Flash Player">
+            </object>
+        <% elsif @normal_view_type == "video" %>
+            <video controls autoplay>
+              <source src="<%= @normal_view_src %>" type="video/mp4">
+              <source src="<%= @normal_view_src_2 %>" type="video/webm">
+              Your browser does not support the video tag.
+            </video>
+        <% end %>
+    <% else %>
+        <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>
+    <% end %>
+    <%= hidden_field_tag :visited, "true" %>
+  </div>
+</div>
+<%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>

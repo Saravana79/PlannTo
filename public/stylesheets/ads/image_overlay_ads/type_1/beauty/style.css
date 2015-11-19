@@ -12,9 +12,6 @@
 .planntocarosel-left a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) 5px 0; right: 0;float: left;height: 50px;width:30px;}
 .bottompan{border-top:1px solid #E5E5E5;display:block;text-align: right;padding: 5px 10px;text-decoration:none;font-size:14px;}
 
-
-
-
 @media (max-width: 600px) {
     .product-container{width:100%;border-bottom:1px solid #E5E5E5;}
     .product-container-top{width:76%;float:left;border-bottom:1px solid #E5E5E5;}

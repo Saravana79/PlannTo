@@ -163,14 +163,15 @@ class AdvertisementsController < ApplicationController
       return return_expanded_html()
       return_exp_path = ""
     else
-      return_exp_path = "advertisements/image_overlay_ads_expanded.html.erb"
+      return_exp_path = "advertisements/image_overlay_ads_expanded_div.html.erb"
 
       @ad_video_detail = @ad.ad_video_detail
       expanded = params[:expanded].to_s
       # AddImpression.add_impression_to_update_visible(params[:impression_id], "", expanded)
     end
 
-    if 1 != 1
+    if !@adv_detail.blank? && @adv_detail.ad_type == "dynamic"
+      @normal_view_ratio = 0.0
       @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
 
       included_beauty = @items.map {|d| d.is_a?(Beauty) || d.is_a?(Apparel)}.include?(true) rescue false
@@ -236,9 +237,12 @@ class AdvertisementsController < ApplicationController
     end
 
     # return_path = "advertisements/show_image_overlay_ads.html.erb"
-    return_path = "advertisements/image_overlay_ads_normal.html.erb"
+    return_path = "advertisements/image_overlay_ads_normal_div.html.erb"
     @iframe_width = params[:width].blank? ? "" : params[:width] if @iframe_width.blank?
     @iframe_height = params[:height].blank? ? "" : params[:height] if @iframe_height.blank?
+
+    @iframe_height = 162 if !@adv_detail.blank? && @adv_detail.ad_type == "dynamic"
+
     @ad_template_type = "type_1"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
@@ -247,14 +251,22 @@ class AdvertisementsController < ApplicationController
       @iframe_height = (@iframe_width.to_f / @normal_view_ratio).to_s
     end
 
+    p @expanded_view_ratio
     if @expanded_view_ratio.to_f != 0.0 && !@iframe_exp_width.blank?
-      @iframe_exp_height = (@iframe_exp_width.to_f / @expanded_view_ratio).to_s
+      p @iframe_exp_height = (@iframe_exp_width.to_f / @expanded_view_ratio).to_s
     end
 
     @item_type = "mobile"
+    p @item
 
     if (!@item.blank? && ["Beauty", "Apparel"].include?(@item.type))
       @item_type = "beauty"
+    end
+
+    @expand_type = @adv_detail.expand_type.to_s rescue "none"
+
+    if !@adv_detail.blank? && @adv_detail.ad_type == "dynamic"
+      @expanded_view_ratio = 0.0
     end
 
     respond_to do |format|
@@ -263,7 +275,7 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => true, :n_ratio => @normal_view_ratio.to_f, :e_ratio => @expanded_view_ratio.to_f, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
+          render :json => {:success => true, :n_ratio => @normal_view_ratio.to_f, :e_ratio => @expanded_view_ratio.to_f, :n_ad_height => @iframe_height.to_f, :e_ad_height => @iframe_exp_height.to_f, :expand_type => @expand_type, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
         end
       }
       format.html {
@@ -277,7 +289,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def return_expanded_html()
-    return_path = "advertisements/image_overlay_ads_expanded.html.erb"
+    return_path = "advertisements/image_overlay_ads_expanded_div.html.erb"
 
     @ad_video_detail = @ad.ad_video_detail
     expanded = params[:expanded].to_s
