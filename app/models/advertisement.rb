@@ -3017,6 +3017,15 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     return view_src, view_src_2, view_type, view_ratio
   end
 
+  def self.get_ad_from_ref_url_for_image_ads(param)
+    items, tempurl, from_article_field = Item.get_items_from_url(param[:ref_url], param[:item_ids])
+    item = items.first
+    item_id = item.id rescue ""
+    itemtype_id = item.itemtype_id rescue ""
+    advertisement = Advertisement.joins(:content => :item_contents_relations_cache).where("advertisements.advertisement_type='in_image_ads' and (item_contents_relations_cache.item_id = #{item_id} or item_contents_relations_cache.item_id = #{itemtype_id})").order("ecpm desc").first
+    advertisement
+  end
+
   private
 
   def file_dimensions
