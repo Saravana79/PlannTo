@@ -19,7 +19,9 @@ class PixelsController < ApplicationController
   end
 
   def conv_track_pixel
-    conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
+    ref_url = request.referer
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:ref], :conversion_time => Time.now, :params => url_params)
     render :nothing => true
   end
 
