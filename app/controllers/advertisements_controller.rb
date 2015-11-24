@@ -6,7 +6,7 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
-  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded", "expand_type") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded", "expand_type") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type") : params.slice("item_id", "ads_id", "protocol_type") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
@@ -1067,6 +1067,7 @@ class AdvertisementsController < ApplicationController
     # params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
 
     @ad = Advertisement.get_ad_from_ref_url_for_image_ads(params)
+    @ad = Advertisement.find 7
 
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
@@ -1076,6 +1077,7 @@ class AdvertisementsController < ApplicationController
     # @ad = Advertisement.where(:id => params[:ads_id]).first
 
     if !@ad.blank?
+      params[:ads_id] = @ad.id
       @normal_view_src, @normal_view_src_2, @normal_view_type, @normal_view_ratio = @ad.get_file_based_on_type("normal_view")
       @expanded_view_src, @expanded_view_src_2, @expanded_view_type, @expanded_view_ratio = @ad.get_file_based_on_type("expanded_view")
       # @expanded_file = @ad.images.where(:ad_size => "expanded_view").last
@@ -1132,9 +1134,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded", "expand_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format", "expanded", "expand_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type"))
     end
 
     cache_params = CGI::unescape(cache_params)

@@ -1112,7 +1112,7 @@ end
        return configatron.root_level_bike_id
     when "Camera"
        return configatron.root_level_camera_id
-    when "Games"
+    when "Game"
        return configatron.root_level_game_id
     when "Apps"
        return configatron.root_level_app_id
@@ -1120,6 +1120,12 @@ end
        return configatron.root_level_gaming_console_id
     when "Laptop"
        return configatron.root_level_laptop_id
+    when "WearableGadget"
+       return configatron.root_level_wearable_gadget_id
+    when "Television"
+       return configatron.root_level_television_id
+    when "Lens"
+       return configatron.root_level_lens_id
     end
   end
    
