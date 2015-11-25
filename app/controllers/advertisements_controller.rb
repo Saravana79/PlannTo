@@ -52,7 +52,8 @@ class AdvertisementsController < ApplicationController
       return housing_dynamic_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
     end
 
-    sort_disable = params[:r].to_i == 1 ? "true" : "false"
+    # sort_disable = params[:r].to_i == 1 ? "true" : "false"
+    sort_disable = "false"
 
     if item_ids.include?(configatron.root_level_laptop_id.to_s)
       original_ids = $redis.get("amazon_top_laptops").to_s.split(",")
@@ -158,7 +159,8 @@ class AdvertisementsController < ApplicationController
       p_item_ids = item_ids = []
       p_item_ids = item_ids = params[:item_id].to_s.split(",") unless params[:item_id].blank?
 
-      sort_disable = params[:r].to_i == 1 ? "true" : "false"
+      # sort_disable = params[:r].to_i == 1 ? "true" : "false"
+      sort_disable = "false"
 
       if (params[:only_flash] == "true" && params[:expanded].to_i == 1)
         return return_expanded_html()
