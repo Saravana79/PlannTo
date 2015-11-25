@@ -207,7 +207,7 @@ var PlannTo = (function(window,undefined) {
 
             jQuery(window).bind('resize', reposition);
 
-//            sto = setInterval(reposition, 1000);
+            sto = setInterval(reposition, 1000);
 
             valid_images = []
 
