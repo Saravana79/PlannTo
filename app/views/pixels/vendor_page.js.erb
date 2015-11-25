@@ -7,4 +7,12 @@ var plannto_pixel = {
         plannto_pixel_img.src = plannto_pixel.pixel_src
     }
 }
+var pixelPlanntoAutoportal = {
+    pixel_src:"<%= @img_src.html_safe %>",
+    parse: function(a){
+        var plannto_pixel_img = new Image();
+        plannto_pixel_img.onload = function() {};
+        plannto_pixel_img.src = plannto_pixel.pixel_src
+    }
+}
 <% end %>
