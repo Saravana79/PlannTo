@@ -183,6 +183,24 @@ class CookieMatch < ActiveRecord::Base
               item_ids = ""
               redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id)
               plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+            elsif user_access_detail["source"] == "autoportal"
+              user_id = new_user_access_detail.plannto_user_id
+              type = "Reviews"
+              par_url = ref_url.to_s.split("/")- [ref_url.to_s.split("/").last]
+              par_url = par_url.join("/") + "/" + "%"
+
+              # item_details = Itemdetail.where("url like '#{par_url}' and site=75798")
+
+              item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{par_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
+
+              item_details_by_itemtype_ids = item_details.group_by {|x| x.itemtype_id}
+
+              item_details_by_itemtype_ids.each do |key, val|
+                itemtype_id = key
+                item_ids = val.map(&:itemid).join(",")
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id)
+                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+              end
             elsif !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
               item_detail = Itemdetail.find_by_sql("SELECT itemid,i.itemtype_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.additional_details = '#{msp_id}' #{site_condition} ORDER BY itemdetails.item_details_id DESC LIMIT 1").first

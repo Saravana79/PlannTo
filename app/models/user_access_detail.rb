@@ -95,6 +95,24 @@ class UserAccessDetail < ActiveRecord::Base
             end
           end
 
+
+          if url.to_s.include?("autoportal")
+            click_item_ids = m_item_type.click_item_ids
+            click_item_ids = click_item_ids.blank? ? item_ids : (click_item_ids + item_ids)
+            click_item_ids = click_item_ids.map(&:to_i).compact.uniq
+            m_item_type.click_item_ids = click_item_ids
+            m_item_type.lcd = Date.today
+            m_item_type.source = "autoportal"
+            m_item_type.save!
+
+            # ubl:pl:<userid>:<itemtye>
+            autoportal_key = "ubl:pl:#{plannto_user_detail.plannto_user_id}:#{itemtype_id}"
+            $redis_rtb.pipelined do
+              $redis_rtb.hmset(autoportal_key, ["source", "autoportal", "click_item_ids", click_item_ids.join(",")])
+              $redis_rtb.expire(autoportal_key, 2.weeks)
+            end
+          end
+
           plannto_user_detail_hash_new, resale_val = plannto_user_detail.update_additional_details(url)
           plannto_user_detail_hash_new.values.first.merge!(agg_info) if !agg_info.blank? && !plannto_user_detail_hash_new.blank?
           plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
