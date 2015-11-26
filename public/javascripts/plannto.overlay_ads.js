@@ -237,7 +237,7 @@ var PlannTo = (function(window,undefined) {
 
             get_valid_images = function()
             {
-                var images = jQuery("img")
+                images = jQuery("img")
                 valid_images = []
                 jQuery.each(images, function(inx, val){
                     console.log(val)
