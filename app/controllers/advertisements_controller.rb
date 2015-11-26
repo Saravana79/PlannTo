@@ -148,6 +148,7 @@ class AdvertisementsController < ApplicationController
       #TODO: everything is clickable is only updated for type1 have to update for type2
       impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
       @sid = sid = params[:sid] ||= ""
+      # @item_details = []
 
       # TODO: hot coded values, have to change in feature
       if @suitable_ui_size == "120" && params[:page_type] != "type_4" && params[:page_type] != "type_6"
@@ -1221,7 +1222,7 @@ class AdvertisementsController < ApplicationController
         p "*************************** Cache process success ***************************"
         logger.info "*************************** Cache process success ***************************"
 
-        set_access_control_headers()
+        # set_access_control_headers()
         if params[:format].to_s == "json"
           return render :json => cache_json.to_json
         else
@@ -1305,7 +1306,7 @@ class AdvertisementsController < ApplicationController
   def set_access_control_headers
     uri = URI.parse(request.referer) rescue ""
     headerdetails = "*"
-    if (uri != "")
+    if !uri.blank?
      headerdetails = uri.scheme+ "://" + uri.host rescue "*"
     end
     headers['Access-Control-Allow-Origin'] = headerdetails
