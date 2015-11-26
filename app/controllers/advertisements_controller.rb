@@ -1306,7 +1306,7 @@ class AdvertisementsController < ApplicationController
     uri = URI.parse(request.referer) rescue ""
     headerdetails = "*"
     if (uri != "")
-     headerdetails = uri.scheme+ "://" + uri.host
+     headerdetails = uri.scheme+ "://" + uri.host rescue "*"
     end
     headers['Access-Control-Allow-Origin'] = headerdetails
     headers['Access-Control-Request-Method'] = headerdetails
