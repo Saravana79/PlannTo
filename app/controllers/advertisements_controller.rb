@@ -244,7 +244,7 @@ class AdvertisementsController < ApplicationController
       @iframe_width = params[:width].blank? ? "" : params[:width] if @iframe_width.blank?
       @iframe_height = params[:height].blank? ? "" : params[:height] if @iframe_height.blank?
 
-      @iframe_height = 162 if !@adv_detail.blank? && @adv_detail.ad_type == "dynamic"
+      @iframe_height = @adv_detail.dynamic_ad_height.to_i == 0 ? 162 : @adv_detail.dynamic_ad_height.to_i if !@adv_detail.blank? && @adv_detail.ad_type == "dynamic"
 
       @ad_template_type = "type_1"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
@@ -272,6 +272,7 @@ class AdvertisementsController < ApplicationController
         @expanded_view_ratio = 0.0
       end
     end
+    p @adv_detail
 
     respond_to do |format|
       format.json {
@@ -279,7 +280,7 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => true, :n_ratio => @normal_view_ratio.to_f, :e_ratio => @expanded_view_ratio.to_f, :n_ad_height => @iframe_height.to_f, :e_ad_height => @iframe_exp_height.to_f, :expand_type => @expand_type, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
+          render :json => {:success => true, :n_ratio => @normal_view_ratio.to_f, :e_ratio => @expanded_view_ratio.to_f, :n_ad_height => @iframe_height.to_f, :e_ad_height => @iframe_exp_height.to_f, :expand_type => @expand_type, :need_close_btn => @adv_detail.need_close_btn, :expand_on => @adv_detail.expand_on.to_s, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
         end
       }
       format.html {

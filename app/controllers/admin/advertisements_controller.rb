@@ -144,11 +144,11 @@ class Admin::AdvertisementsController < ApplicationController
         Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
       end
       @advertisement.build_images(image_array, @advertisement.advertisement_type) if ["static", "flash", "display_ads", "in_image_ads"].include?(@advertisement.advertisement_type)
-      @adv_detail = @advertisement.build_adv_detail
+      @adv_detail = @advertisement.adv_detail
       @adv_detail.update_attributes(params[:adv_detail])
       redirect_to admin_advertisements_path
     else
-      @adv_detail = @advertisement.build_adv_detail(params[:adv_detail])
+      @adv_detail = @advertisement.adv_detail
       @advertisement.device = @advertisement.device.to_a.join(",")
       render :edit
     end

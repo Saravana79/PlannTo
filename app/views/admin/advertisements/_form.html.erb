@@ -17,6 +17,7 @@
       <li class="" id="offers"> <a href="javascript:void(0)" >Offers</a> </li>
       <li class="" id="schedule_details"> <a href="javascript:void(0)" >Schedule Details</a> </li>
       <li class="" id="add_details"> <a href="javascript:void(0)" >Add Details</a> </li>
+      <li class="" id="image_ad_details"> <a href="javascript:void(0)">Image Ad Details</a> </li>
     </ul>
 
     <div class="main_form">
@@ -72,33 +73,6 @@
     <div class="fields-div">
       <div class="title_header float_lft">Name :</div>
       <div class=""> <%= f.text_field :name %> </div>
-    </div>
-
-    <div class="in_image_ads_details additional_details">
-      <div class="fields-div">
-        <div class="title_header float_lft">Normal View :</div>
-        <div>
-          <%= radio_button_tag "adv_detail[ad_type]", 'static', @adv_detail.ad_type == "static", :class => "adv_detail_ad_type"%>Static
-          <%= radio_button_tag "adv_detail[ad_type]", 'dynamic', @adv_detail.ad_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic
-        </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Expanded View :</div>
-        <div>
-          <%= radio_button_tag "adv_detail[expand_type]", 'static', @adv_detail.expand_type == "static", :class => "adv_detail_ad_type"%>Static
-          <!--<%#= radio_button_tag "adv_detail[expand_type]", 'dynamic', @adv_detail.expand_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic -->
-          <%= radio_button_tag "adv_detail[expand_type]", 'none', @adv_detail.expand_type == "none", :class => "adv_detail_ad_type" %>None
-        </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Need to Expand Ad :</div>
-        <div>
-          <%= radio_button_tag "adv_detail[expanded]", true, @adv_detail.expanded == true, :class => "adv_detail_ad_type"%>True
-          <%= radio_button_tag "adv_detail[expanded]", false, @adv_detail.expanded == false, :class => "adv_detail_ad_type" %>False
-        </div>
-      </div>
     </div>
 
     <div class="fields-div">
@@ -283,7 +257,6 @@
     </div>
 
     <div class="div_values add_details" style="display: none;">
-
       <h3>Additional Details</h3>
       <div class="additional_details in_image_ads_details static_details flash_details" id="static_details">
         <div class="files-div">
@@ -349,6 +322,58 @@
         <div class="title_header float_lft">Valid Hours :</div>
         <div>
           <%= f.text_field :schedule_details %></div>
+      </div>
+    </div>
+
+    <div class="div_values image_ad_details" style="display: none;">
+      <div class="in_image_ads_details additional_details">
+        <div class="fields-div">
+          <div class="title_header float_lft">Normal View :</div>
+          <div>
+            <%= radio_button_tag "adv_detail[ad_type]", 'static', @adv_detail.ad_type == "static", :class => "adv_detail_ad_type"%>Static
+            <%= radio_button_tag "adv_detail[ad_type]", 'dynamic', @adv_detail.ad_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic
+          </div>
+        </div>
+
+        <div class="fields-div">
+          <div class="title_header float_lft">Dynamic Ad Height :</div>
+          <div>
+            <%= text_field_tag "adv_detail[dynamic_ad_height]", @adv_detail.dynamic_ad_height %>
+          </div>
+        </div>
+
+        <div class="fields-div">
+          <div class="title_header float_lft">Expanded View :</div>
+          <div>
+            <%= radio_button_tag "adv_detail[expand_type]", 'static', @adv_detail.expand_type == "static", :class => "adv_detail_ad_type"%>Static
+            <!--<%#= radio_button_tag "adv_detail[expand_type]", 'dynamic', @adv_detail.expand_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic -->
+            <%= radio_button_tag "adv_detail[expand_type]", 'none', @adv_detail.expand_type == "none", :class => "adv_detail_ad_type" %>None
+          </div>
+        </div>
+
+        <div class="fields-div">
+          <div class="title_header float_lft">Need to Expand Ad :</div>
+          <div>
+            <%= radio_button_tag "adv_detail[expanded]", true, @adv_detail.expanded == true, :class => "adv_detail_ad_type"%>True
+            <%= radio_button_tag "adv_detail[expanded]", false, @adv_detail.expanded == false, :class => "adv_detail_ad_type" %>False
+          </div>
+        </div>
+
+        <div class="fields-div">
+          <div class="title_header float_lft">Need Close Button :</div>
+          <div>
+            <%= radio_button_tag "adv_detail[need_close_btn]", true, @adv_detail.need_close_btn == true, :class => "adv_detail_ad_type"%>True
+            <%= radio_button_tag "adv_detail[need_close_btn]", false, @adv_detail.need_close_btn == false, :class => "adv_detail_ad_type" %>False
+          </div>
+        </div>
+
+        <div class="fields-div">
+          <div class="title_header float_lft">Expand On :</div>
+          <div>
+            <%= radio_button_tag "adv_detail[expand_on]", 'click', @adv_detail.expand_on == 'click', :class => "adv_detail_ad_type" %>Click
+            <%= radio_button_tag "adv_detail[expand_on]", 'hover', @adv_detail.expand_on == 'hover', :class => "adv_detail_ad_type"%>Hover
+          </div>
+        </div>
       </div>
     </div>
 
