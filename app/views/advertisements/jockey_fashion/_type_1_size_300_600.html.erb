@@ -19,9 +19,9 @@
                     <div class="product-container">
                       <div style="margin-bottom:10px;width:100%;float:left">
                             <span style="float:left">  
-                            <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:6px;" width="100px">
+                            <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:2px;" height="60px">
                           </span>
-                           <span style="float:right"> 
+                           <span style="float:right;margin:10px 10px 0px 0px;"> 
 
                             <p class="btn">
                               <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
@@ -29,7 +29,7 @@
                               </a>
                             </p>
                           </span>
-                          <div style="font-size: 10px;padding-top: 8px;height: 15px;text-align: center;font-weight: 600;margin-left: 15px;/* float: center; */">Extra 15% Off on HDFC Cards.</div>
+                         <!--  <div style="font-size: 10px;padding-top: 8px;height: 15px;text-align: center;font-weight: 600;margin-left: 15px;/* float: center; */">Extra 15% Off on HDFC Cards.</div> -->
                       </div>
                       <div class="product-img-top" style="white-space:nowrap;">
                         <a href="<%= shop_now_url %>" target="_blank">
@@ -49,7 +49,7 @@
                           <div style="text-align:center;margin-top:2px;">
                             <a href="<%= shop_now_url %>" target="_blank" class="">
                              <!-- <p class="mrpprice" style="text-decoration: line-through;margin-top: 90px;color: #555 !important"><%= prettify_mrpprice(item_detail) %></p>-->
-                             <p style="color: #555;padding: 0px;font-size: 13px;text-decoration: line-through;font-family: Arial;min-height:15px;"><%= prettify_mrpprice(item_detail) %></p>
+                             <p style="color: #555;padding: 0px;font-size: 13px;text-decoration: line-through;font-family: Arial;min-height:10px;"><%= prettify_mrpprice(item_detail) %></p>
                               <p class="price"><%= prettify(item_detail) %></p>
                             </a>
                           </div>

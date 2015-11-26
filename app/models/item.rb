@@ -3060,24 +3060,24 @@ end
     sample_int = [*1..100].sample
 
     if !name.to_s.downcase.include?("women")
-      if item_id == 76609 || sample_int < 20
+      if item_id == 76609 || sample_int < 40
         item_name = "Men Innerwear Bottom"
         item_id = 76609
-      elsif item_id == 76610 || sample_int < 40
+      elsif item_id == 76610 || sample_int < 65
         item_name = "Men Innerwear Top"
         item_id = 76610
-      elsif item_id == 76611 || sample_int < 60
+      elsif item_id == 76611 || sample_int < 80
         item_name = "Men Outwear Bottom"
         item_id = 76611
-      elsif item_id == 75427 || sample_int < 80
+      elsif item_id == 75427 || sample_int < 101
         item_name = "T- Shirts"
         item_id = 75427
-      elsif item_id == 75524 || sample_int < 101
-        item_name = "Socks"
-        item_id = 75524
+      # elsif item_id == 75524 || sample_int < 101
+      #   item_name = "Socks"
+      #   item_id = 75524
       end
     else
-      if item_id == 75520 || sample_int < 20
+      if item_id == 75520 || sample_int < 25
         item_name = "Bra"
         item_id = 75520
       elsif item_id == 75522 || sample_int < 40
@@ -3086,7 +3086,7 @@ end
       elsif item_id == 75438 || sample_int < 60
         item_name = "Tops"
         item_id = 75438
-      elsif item_id == 76607 || sample_int < 80
+      elsif item_id == 76607 || sample_int < 85
         item_name = "Panties"
         item_id = 76607
       elsif item_id == 76608 || sample_int < 101

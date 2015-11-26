@@ -24,20 +24,20 @@
                         </a>
                       </div>
                       <div class="product-txt-right">
-                        <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="100px">
+                        <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-bottom:5px;" width="96px">
                        <div style="padding: 5px 0px;text-transform: capitalize;height:60px;">
                          <a href="<%= shop_now_url %>" target="_blank" class="">
                           <h3><%= item_detail.ItemName.to_s.truncate(52) %></h3></a>
                       </div>
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                         <p style="margin-top: 40px;color: #555;padding: 0px;font-size: 13px;text-decoration: line-through;font-family: Arial;min-height:15px;"><%= prettify_mrpprice(item_detail) %></p>                          
+                         <p style="margin-top: 20px;color: #555;padding: 0px;font-size: 13px;text-decoration: line-through;font-family: Arial;min-height:15px;"><%= prettify_mrpprice(item_detail) %></p>                          
                          <p class="price" style="margin-top: 0px;"><%= prettify(item_detail) %></p>
                         </a>
 
                         <p class="btn">
                           <a href="<%= shop_now_url %>" target="_blank" class="shop-now"> <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %> </a>
                         </p>
-                        <div style="font-size: 9px;padding: 0px;height: 15px;text-align: center;">Extra 10% Off on HDFC Cards.</div>
+                        <!-- <div style="font-size: 9px;padding: 0px;height: 15px;text-align: center;"></div> -->
                       </div>
                     </div>
                   </div>
