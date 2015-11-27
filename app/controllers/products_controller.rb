@@ -1452,8 +1452,7 @@ class ProductsController < ApplicationController
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        cache_json = JSON.parse(cache)
-        valid_html = cache_json["success"]
+        valid_html = cache.include?('"success":true')
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)

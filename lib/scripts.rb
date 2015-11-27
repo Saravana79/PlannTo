@@ -998,7 +998,7 @@ jockey_hash.each do |int_key, int_val|
         image_url = each_product.css(".img_border_details_new_1").at(".img_quickviewLoader").attributes["src"].text rescue ""
         title = each_product.css(".img_border_details_new_1").at(".img_quickviewLoader").attributes["alt"].text  rescue ""
 
-        price = each_product.css(".details_1_new .pricedetailswithstylecode").at(".price_rs").inner_text.to_s.downcase.gsub("rs.", '') rescue ""
+        price = each_product.css(".details_1_new .pricedetailswithstylecode").at(".price_rs").inner_text.to_s.downcase.gsub("rs.", '').gsub(",", "") rescue ""
         style_code = each_product.css(".details_1_new .pricedetailswithstylecode").at(".style_code").inner_text.to_s.downcase.gsub("style # ", '') rescue ""
 
         p item_detail = Itemdetail.find_or_initialize_by_url(url_link)
