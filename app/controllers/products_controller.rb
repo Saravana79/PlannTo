@@ -396,7 +396,8 @@ class ProductsController < ApplicationController
 
     included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
     if url.include?("bebeautiful.in")
-      show_widget_for_bebeautiful(url, itemsaccess)
+      exclude_valid_item_names = params[:type] == 3 ? true : false
+      show_widget_for_bebeautiful(url, itemsaccess, exclude_valid_item_names)
     elsif included_beauty
       get_details_from_beauty_items(url, itemsaccess)
     else
@@ -447,8 +448,12 @@ class ProductsController < ApplicationController
     @ref_url = url
   end
 
-  def show_widget_for_bebeautiful(url, itemsaccess)
-    valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & lovely","hamam","ayush","liril","lux ","pears","pepsodent","rexona","rin ","surf excel","vim "]
+  def show_widget_for_bebeautiful(url, itemsaccess, exclude_valid_item_names=false)
+    if exclude_valid_item_names
+      valid_item_names = []
+    else
+      valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & lovely","hamam","ayush","liril","lux ","pears","pepsodent","rexona","rin ","surf excel","vim "]
+    end
 
     if !@items.blank?
       is_multi_array = @items.first.is_a?(Array)

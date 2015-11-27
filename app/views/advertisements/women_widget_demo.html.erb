@@ -37,6 +37,9 @@
 
             <%= search_form.radio_button :page_type,"type_2", :name => "page_type", :checked => params[:page_type] == "type_2" ? "checked" : "" %>
             <%= search_form.label :page_type, 'Type 2', :name => "page_type" %>
+
+            <%= search_form.radio_button :page_type,"type_3", :name => "page_type", :checked => params[:page_type] == "type_3" ? "checked" : "" %>
+            <%= search_form.label :page_type, 'Type 3', :name => "page_type" %>
           </div>
 
           Url : <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 528px;" %>
