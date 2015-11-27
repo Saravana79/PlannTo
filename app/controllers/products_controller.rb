@@ -945,13 +945,15 @@ class ProductsController < ApplicationController
       return_url = "products/price_widget_type_5.html.erb"
     end
 
+    success_status = @itemdetail.blank? ? false :true
+
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string(return_url, :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => success_status, :html => render_to_string(return_url, :layout => false)}, :callback => params[:callback]
       }
       format.html { return render return_url, :layout => false }
       format.js {
-        return render :json => {:success => true, :html => render_to_string(return_url, :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => success_status, :html => render_to_string(return_url, :layout => false)}, :callback => params[:callback]
       }
     end
   end
@@ -1450,7 +1452,8 @@ class ProductsController < ApplicationController
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        valid_html = cache.match(/_blank/).blank? ? false : true
+        cache_json = JSON.parse(cache)
+        valid_html = cache_json["success"]
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
