@@ -1005,10 +1005,10 @@ jockey_hash.each do |int_key, int_val|
 
         if item_detail.new_record?
           item_detail.update_attributes!(:ItemName => title, :itemid => val, :url => url_link, :price => price, :status => 1, :last_verified_date => Time.now, :site => 76612, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => style_code, :cashback => "", :description => "", :IsError => false, :mrpprice => price, :offer => "")
-          image = item_detail.Image
+          image = item_detail.image
         else
           item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
-          image = item_detail.Image
+          image = item_detail.image
         end
 
         begin

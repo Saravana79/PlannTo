@@ -6,7 +6,7 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
-  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type") : params.slice("item_id", "ads_id", "protocol_type") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format") : params.slice("item_id", "ads_id", "protocol_type", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
@@ -22,7 +22,7 @@ class AdvertisementsController < ApplicationController
     @sid = sid = params[:sid] ||= ""
 
     # TODO: hot coded values, have to change in feature
-    
+
     if @suitable_ui_size == "120" && params[:page_type] != "type_4" && params[:page_type] != "type_6"
       @ad_template_type = ad_id == 21 ? "type_3" : "type_2"
     end
@@ -255,13 +255,11 @@ class AdvertisementsController < ApplicationController
         @iframe_height = (@iframe_width.to_f / @normal_view_ratio).to_s
       end
 
-      p @expanded_view_ratio
       if @expanded_view_ratio.to_f != 0.0 && !@iframe_exp_width.blank?
-        p @iframe_exp_height = (@iframe_exp_width.to_f / @expanded_view_ratio).to_s
+        @iframe_exp_height = (@iframe_exp_width.to_f / @expanded_view_ratio).to_s
       end
 
       @item_type = "mobile"
-      p @item
 
       if (!@item.blank? && ["Beauty", "Apparel"].include?(@item.type))
         @item_type = "beauty"
@@ -273,7 +271,6 @@ class AdvertisementsController < ApplicationController
         @expanded_view_ratio = 0.0
       end
     end
-    p @adv_detail
 
     respond_to do |format|
       format.json {
@@ -428,7 +425,7 @@ class AdvertisementsController < ApplicationController
     @ad_height = 400/ratio
 
     if(!params[:exp_size].nil?)
-      @iframe_exp_width, @iframe_exp_height = params[:exp_size].split("x") 
+      @iframe_exp_width, @iframe_exp_height = params[:exp_size].split("x")
     end
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
@@ -484,7 +481,7 @@ class AdvertisementsController < ApplicationController
 
     @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id], @ad)
     @sliced_item_details = @item_details.each_slice(3)
-    
+
     if @is_test != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
       Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
@@ -714,7 +711,7 @@ class AdvertisementsController < ApplicationController
     item_ids = params[:city_id].to_s.split(",") + params[:car_ids].to_s.split(",")
     item_ids = item_ids.compact.uniq.join(",")
     params[:item_id] = item_ids
-    p params[:item_id]
+    params[:item_id]
     render :layout => false
   end
 
@@ -978,7 +975,7 @@ class AdvertisementsController < ApplicationController
             item_id = val.split("=")[1].gsub("#", "")
           end
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
-          
+
           if !cache.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
             if (params[:t].to_i == 1)
               @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
@@ -1139,9 +1136,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type", "format"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type", "format"))
     end
 
     cache_params = CGI::unescape(cache_params)
