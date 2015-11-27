@@ -146,7 +146,7 @@ items.each do |item|
     if image.blank? && !image_url.blank?
       image = item_detail.build_image
       tempfile = open(image_url)
-      avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+      avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
       filename = image_url.split("/").last
       avatar.original_filename = filename
       image.avatar = avatar
@@ -649,7 +649,7 @@ items.each do |item|
       if image.blank? && !image_url.blank?
         image = item_detail.build_image
         tempfile = open(image_url)
-        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
         filename = image_url.split("/").last
         avatar.original_filename = filename
         image.avatar = avatar
@@ -757,7 +757,7 @@ each_node_list.each_with_index do |each_node, index|
             if image.blank? && !image_url.blank?
               image = item_detail.build_image
               tempfile = open(image_url)
-              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
               filename = image_url.split("/").last
               avatar.original_filename = filename
               image.avatar = avatar
@@ -821,7 +821,7 @@ source_items.each do |source_item|
       if image.blank? && !image_url.blank?
         image = item_detail.build_image
         tempfile = open(image_url)
-        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
         # filename = image_url.split("/").last
         filename = "#{item_detail.id}.jpeg"
         avatar.original_filename = filename
@@ -955,7 +955,7 @@ products.each do |each_product|
       if image.blank? && !image_url.blank?
         image = item_beauty_detail.build_image
         tempfile = open(image_url)
-        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
         # filename = image_url.split("/").last
         filename = "#{item_beauty_detail.id}.jpeg"
         avatar.original_filename = filename
@@ -1015,7 +1015,7 @@ jockey_hash.each do |int_key, int_val|
           if image.blank? && !image_url.blank?
             image = item_detail.build_image
             tempfile = open(image_url)
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
             # filename = image_url.split("/").last
             filename = "#{item_detail.id}.jpeg"
             avatar.original_filename = filename

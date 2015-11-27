@@ -62,7 +62,7 @@ class Sourceitem < ActiveRecord::Base
           if image.blank? && !image_url.blank?
             image = item_detail.build_image
             tempfile = open(image_url)
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
             filename = image_url.split("/").last
             avatar.original_filename = filename
             image.avatar = avatar
@@ -134,7 +134,7 @@ class Sourceitem < ActiveRecord::Base
             if image.blank? && !image_url.blank?
               image = item_detail.build_image
               tempfile = open(image_url)
-              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
               # filename = image_url.split("/").last
               filename = "#{item_detail.id}.jpeg"
               avatar.original_filename = filename

@@ -2248,7 +2248,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   end
                   file.rewind
 
-                  avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+                  avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
                   avatar.original_filename = filename
 
                   @image.avatar = avatar
@@ -2520,7 +2520,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   end
                   file.rewind
 
-                  avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+                  avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
                   avatar.original_filename = filename
 
                   @image.avatar = avatar
@@ -2740,7 +2740,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   end
                   file.rewind
 
-                  avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+                  avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
                   avatar.original_filename = filename
 
                   @image.avatar = avatar

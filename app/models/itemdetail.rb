@@ -511,7 +511,7 @@ class Itemdetail < ActiveRecord::Base
           end
           file.rewind
 
-          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
           avatar.original_filename = filename
 
           @image.avatar = avatar
@@ -652,7 +652,7 @@ class Itemdetail < ActiveRecord::Base
               end
               file.rewind
 
-              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
               avatar.original_filename = filename
 
               @image.avatar = avatar
@@ -886,7 +886,7 @@ class Itemdetail < ActiveRecord::Base
           end
           file.rewind
 
-          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
           avatar.original_filename = filename
 
           @image.avatar = avatar
@@ -1022,7 +1022,7 @@ class Itemdetail < ActiveRecord::Base
           end
           file.rewind
 
-          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
           avatar.original_filename = filename
 
           @image.avatar = avatar

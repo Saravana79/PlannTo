@@ -225,7 +225,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
             end
             file.rewind
 
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
             avatar.original_filename = filename
 
             @image.avatar = avatar
@@ -290,7 +290,7 @@ task :image_upload_for_item_detail_other => :environment do
         end
         file.rewind
 
-        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
         avatar.original_filename = filename
 
         @image.avatar = avatar
@@ -603,7 +603,7 @@ task :update_item_beauty_detail_from_xml_feed => :environment do
         if image.blank? && !image_url.blank?
           image = item_beauty_detail.build_image
           tempfile = open(image_url)
-          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
           # filename = image_url.split("/").last
           filename = "#{item_beauty_detail.id}.jpeg"
           avatar.original_filename = filename
