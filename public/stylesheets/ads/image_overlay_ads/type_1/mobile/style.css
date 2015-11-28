@@ -7,7 +7,7 @@
 .advt-728 .logo a{vertical-align: middle;padding-top: 0px;}
 
 
-.product-container{ margin:0; padding:0px 5px; float:left; width:100%; height:78px;border-right:1px solid #F1F0F0;}
+.product-container{ margin:0; padding:0px 0px; float:left; width:100%; height:78px;border-right:0px solid #F1F0F0;}
 .product-container:after { clear:both;}
 
 .product-container h3{ margin:0 auto; padding:3px 0 0 0; font-size:14px; color:#222; font-weight:bold;  float:left; font-family:Arial;word-break:break-word;min-height: 35px;line-height: 15px;}
