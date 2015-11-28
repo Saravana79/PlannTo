@@ -163,7 +163,7 @@ class AdvertisementsController < ApplicationController
       # sort_disable = params[:r].to_i == 1 ? "true" : "false"
       sort_disable = "false"
 
-      if (params[:only_flash] == "true" && params[:expanded].to_i == 1)
+      if (params[:expanded].to_i == 1)
         return return_expanded_html()
         return_exp_path = ""
       else
@@ -278,7 +278,7 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => true, :n_ratio => @normal_view_ratio.to_f, :e_ratio => @expanded_view_ratio.to_f, :n_ad_height => @iframe_height.to_f, :e_ad_height => @iframe_exp_height.to_f, :expand_type => @expand_type, :need_close_btn => @adv_detail.need_close_btn, :expand_on => @adv_detail.expand_on.to_s, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
+          render :json => {:success => true, :n_ad_height => @iframe_height.to_f, :e_ad_height => @iframe_exp_height.to_f, :expand_type => @expand_type, :need_close_btn => @adv_detail.need_close_btn, :expand_on => @adv_detail.expand_on.to_s, :viewable => @adv_detail.viewable, :expanded => @adv_detail.expanded, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
         end
       }
       format.html {
@@ -1059,7 +1059,7 @@ class AdvertisementsController < ApplicationController
     params[:visited] ||= ""
     format = request.format.to_s.split("/")[1]
     params[:format] = format
-    params[:expanded] ||= ""
+    params[:viewable] ||= ""
     params[:expand_type] ||= ""
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
@@ -1068,9 +1068,9 @@ class AdvertisementsController < ApplicationController
     @ad = Advertisement.get_ad_from_ref_url_for_image_ads(params)
 
     #TODO: temporary changes
-    params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
-    @ad = Advertisement.find 7
-
+    # params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
+    # @ad = Advertisement.find 7
+    #
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
@@ -1085,11 +1085,11 @@ class AdvertisementsController < ApplicationController
       # @expanded_file = @ad.images.where(:ad_size => "expanded_view").last
     end
 
-    @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
+    p @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
     if @adv_detail.blank?
       @adv_detail = AdvDetail.new
     else
-      params[:expanded] = @adv_detail.expanded.to_s
+      params[:viewable] = @adv_detail.viewable.to_s
       params[:expand_type] = @adv_detail.expand_type
       params[:visited] = "true" if params[:expanded] == "true"
     end

@@ -352,7 +352,15 @@
         </div>
 
         <div class="fields-div">
-          <div class="title_header float_lft">Need to Expand Ad :</div>
+          <div class="title_header float_lft">Ad as Viewable :</div>
+          <div>
+            <%= radio_button_tag "adv_detail[viewable]", true, @adv_detail.viewable == true, :class => "adv_detail_ad_type"%>True
+            <%= radio_button_tag "adv_detail[viewable]", false, @adv_detail.viewable == false, :class => "adv_detail_ad_type" %>False
+          </div>
+        </div>
+
+        <div class="fields-div">
+          <div class="title_header float_lft">Ad as Expanded :</div>
           <div>
             <%= radio_button_tag "adv_detail[expanded]", true, @adv_detail.expanded == true, :class => "adv_detail_ad_type"%>True
             <%= radio_button_tag "adv_detail[expanded]", false, @adv_detail.expanded == false, :class => "adv_detail_ad_type" %>False

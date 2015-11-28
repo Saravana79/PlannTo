@@ -1,6 +1,7 @@
 <%#= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 <link href="http://localhost:3000/stylesheets/ads/image_overlay_ads/<%= @ad_template_type %>/<%= @item_type %>/style.css" type="text/css" rel="stylesheet" media="all"/>
 <%= javascript_include_tag "http://localhost:3000/javascripts/ads/image_overlay_ads/#{@item_type}/plannto_image_overlay.js" %>
+<%#= javascript_include_tag "http://cdn1.plannto.com/static/javascripts/owl.carousel.min.js" %>
 <div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_height %>px !important;">
   <div id="normal_view">
     <% if @adv_detail.ad_type == "static" %>
