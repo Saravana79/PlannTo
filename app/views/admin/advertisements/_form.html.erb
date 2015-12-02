@@ -360,14 +360,6 @@
         </div>
 
         <div class="fields-div">
-          <div class="title_header float_lft">Ad as Expanded :</div>
-          <div>
-            <%= radio_button_tag "adv_detail[expanded]", true, @adv_detail.expanded == true, :class => "adv_detail_ad_type"%>True
-            <%= radio_button_tag "adv_detail[expanded]", false, @adv_detail.expanded == false, :class => "adv_detail_ad_type" %>False
-          </div>
-        </div>
-
-        <div class="fields-div">
           <div class="title_header float_lft">Need Close Button :</div>
           <div>
             <%= radio_button_tag "adv_detail[need_close_btn]", true, @adv_detail.need_close_btn == true, :class => "adv_detail_ad_type"%>True
