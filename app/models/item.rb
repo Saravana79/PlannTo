@@ -2476,7 +2476,7 @@ end
       end
     end
 
-    if (items.blank? || (!valid_item_names.blank? && items.count < 4))
+    if (items.blank? || (!valid_item_names.blank? && items.count < 5))
       excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
       keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
       keyword = keywords.sample(1)[0]
@@ -2485,7 +2485,7 @@ end
 
       items = items.blank? ? new_items : (items + new_items).flatten
 
-      if (items.blank? || (!valid_item_names.blank? && items.count < 4))
+      if (items.blank? || (!valid_item_names.blank? && items.count < 5))
         keyword = keywords.sample(1)[0]
         new_items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
 

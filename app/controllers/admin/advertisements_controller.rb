@@ -27,6 +27,7 @@ class Admin::AdvertisementsController < ApplicationController
     vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
     @vendor = Vendor.find_by_id(vendor_id)
     @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25, :schedule_details => [*0..23].join(","), :device => "pc,mobile")
+    @adv_detail = AdvDetail.new
     @advertisements = [@advertisement]
   end
 

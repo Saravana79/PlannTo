@@ -395,11 +395,11 @@ class ProductsController < ApplicationController
     url =  @url
 
     included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
-    if url.include?("bebeautiful.in")
-      exclude_valid_item_names = params[:type] == 3 ? true : false
+    if (url.include?("bebeautiful.in") || included_beauty || params[:page_type] == "type_3")
+      exclude_valid_item_names = params[:page_type] == "type_3" ? true : false
       show_widget_for_bebeautiful(url, itemsaccess, exclude_valid_item_names)
-    elsif included_beauty
-      get_details_from_beauty_items(url, itemsaccess)
+    # elsif included_beauty
+    #   get_details_from_beauty_items(url, itemsaccess)
     else
       get_details_from_fashion_ads()
     end
@@ -470,7 +470,8 @@ class ProductsController < ApplicationController
             @items << new_items
           end
 
-          break if @items.flatten.count >= 4
+          @items = @items.flatten
+          break if @items.count >= 5
         end
         @items = @items.flatten
       else
@@ -489,7 +490,7 @@ class ProductsController < ApplicationController
       @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
     end
 
-    @items = @items.uniq
+    @items = @items.flatten.uniq
 
     @search_url = CGI.escape(@search_url)
     url_params = Advertisement.make_url_params(params)

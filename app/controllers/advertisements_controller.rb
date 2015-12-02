@@ -1219,7 +1219,7 @@ class AdvertisementsController < ApplicationController
         p "*************************** Cache process success ***************************"
         logger.info "*************************** Cache process success ***************************"
 
-        # set_access_control_headers()
+        set_access_control_headers()
         if params[:format].to_s == "json"
           return render :json => cache_json.to_json
         else
