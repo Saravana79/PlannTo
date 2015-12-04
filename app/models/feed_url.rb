@@ -136,7 +136,7 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def self.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list={}, valid_categories, feed, admin_user, verticals="")
+  def self.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user, verticals="")
     if feed_url_id.blank?
       missing_url = each_url_key.split("missingurl:")[1]
 

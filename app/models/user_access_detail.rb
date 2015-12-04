@@ -13,7 +13,7 @@ class UserAccessDetail < ActiveRecord::Base
   #   end
   # end
 
-  def self.update_buying_list(user_id, url, type, item_ids,source_categories={}, source="google", itemtype_id=nil)
+  def self.update_buying_list(user_id, url, type, item_ids,source_categories, source="google", itemtype_id=nil)
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     agg_info = {}
     base_item_ids = Item.get_base_items_from_config()
