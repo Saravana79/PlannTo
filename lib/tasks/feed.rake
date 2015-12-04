@@ -33,9 +33,12 @@ namespace :feed do
       end
 
       # sources_list = Rails.cache.read("sources_list_details")
-      sources_list = JSON.parse($redis.get("sources_list_details"))
-      sources_list.default = "Others"
-      category = sources_list[source]
+      # sources_list = JSON.parse($redis.get("sources_list_details"))
+      # sources_list.default = "Others"
+      # category = sources_list[source]
+
+      category = SourceCategory.source(source).select("categories").last.categories rescue ""
+      category = "Others" if category.blank?
 
       check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
 

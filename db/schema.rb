@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151202091256) do
+ActiveRecord::Schema.define(:version => 20151203110644) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -1313,6 +1313,8 @@ ActiveRecord::Schema.define(:version => 20151202091256) do
     t.text     "check_details"
     t.boolean  "site_status",   :default => true
   end
+
+  add_index "source_categories", ["source"], :name => "index_source_categories_on_source"
 
   create_table "sourceitems", :force => true do |t|
     t.string   "name",               :limit => 100, :null => false

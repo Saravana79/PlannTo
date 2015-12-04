@@ -44,8 +44,8 @@ class Feed < ActiveRecord::Base
         latest_feeds = latest_feeds.select { |each_val| each_val.published > self.last_updated_at }
       end
 
-      sources_list = JSON.parse($redis.get("sources_list_details"))
-      sources_list.default = "Others"
+      # sources_list = JSON.parse($redis.get("sources_list_details"))
+      # sources_list.default = "Others"
 
       latest_feeds = latest_feeds.last(200)
 
@@ -73,7 +73,10 @@ class Feed < ActiveRecord::Base
             title = title.to_s.gsub(/\s(-|\|).+/, '')
             title = title.blank? ? "" : title.to_s.strip
 
-            category = sources_list[source]["categories"]
+            # category = sources_list[source]["categories"]
+
+            category = SourceCategory.source(source).select("categories").last.categories rescue ""
+            category = "Others" if category.blank?
 
             new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
                                        status: status, source: source, summary: description, :images => images,
@@ -101,8 +104,8 @@ class Feed < ActiveRecord::Base
     @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.zone.now-2.days : self.last_updated_at), 5)
     admin_user = User.where(:is_admin => true).first
 
-    sources_list = JSON.parse($redis.get("sources_list_details"))
-    sources_list.default = "Others"
+    # sources_list = JSON.parse($redis.get("sources_list_details"))
+    # sources_list.default = "Others"
 
     @impression_missing.each do |each_record|
       begin
@@ -128,7 +131,10 @@ class Feed < ActiveRecord::Base
         end
 
         # sources_list = Rails.cache.read("sources_list_details")
-        category = sources_list[source]["categories"]
+        # category = sources_list[source]["categories"]
+
+        category = SourceCategory.source(source).select("categories").last.categories rescue ""
+        category = "Others" if category.blank?
 
         check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
 

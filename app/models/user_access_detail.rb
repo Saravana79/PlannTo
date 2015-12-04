@@ -13,7 +13,7 @@ class UserAccessDetail < ActiveRecord::Base
   #   end
   # end
 
-  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil, source="google", itemtype_id=nil)
+  def self.update_buying_list(user_id, url, type, item_ids,source_categories={}, source="google", itemtype_id=nil)
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     agg_info = {}
     base_item_ids = Item.get_base_items_from_config()
@@ -21,7 +21,7 @@ class UserAccessDetail < ActiveRecord::Base
     redis_rtb_hash = {}
     plannto_user_detail_hash = {}
 
-    already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
+    already_exist = Item.check_if_already_exist_in_user_visits(source_categories={}, user_id, url, url_prefix="users:last_visits:plannto")
     ranking = 0
     cookie_matches_plannto_ids = []
 

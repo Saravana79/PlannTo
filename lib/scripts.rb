@@ -302,9 +302,9 @@ def process_category_lists(category_list)
   end
 
   p article_urls.count
-  sources_list = JSON.parse($redis.get("sources_list_details"))
-  sources_list.default = "Others"
-  process_url_to_feed_url(article_urls, sources_list)
+  # sources_list = JSON.parse($redis.get("sources_list_details"))
+  # sources_list.default = "Others"
+  process_url_to_feed_url(article_urls, sources_list={})
 end
 
 def process_url_to_feed_url(article_urls, sources_list)
@@ -333,7 +333,10 @@ def process_url_to_feed_url(article_urls, sources_list)
       title = title.to_s.gsub(/\s(-|\|).+/, '')
       title = title.blank? ? "" : title.to_s.strip
 
-      category = sources_list[source]["categories"]
+      # category = sources_list[source]["categories"]
+
+      category = SourceCategory.source(source).select("categories").last.categories rescue ""
+      category = "Others" if category.blank?
 
       new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,
                                  status: status, source: source, summary: description, :images => images,
@@ -1038,8 +1041,8 @@ jockey_hash.each do |int_key, int_val|
 end
 
 
-sources_list = JSON.parse($redis.get("sources_list_details"))
-sources_list.default = "Others"
+# sources_list = JSON.parse($redis.get("sources_list_details"))
+# sources_list.default = "Others"
 
 url = "http://planntonew.s3.amazonaws.com/test_folder/mobile_products_catalog.csv"
 csv_details = CSV.read(url)
@@ -1071,7 +1074,10 @@ csv_details.each_with_index do |csv_detail, index|
     title = title.to_s.gsub(/\s(-|\|).+/, '')
     title = title.blank? ? "" : title.to_s.strip
 
-    category = sources_list[source]["categories"]
+    # category = sources_list[source]["categories"]
+
+    category = SourceCategory.source(source).select("categories").last.categories rescue ""
+    category = "Others" if category.blank?
 
     new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,
                                status: status, source: source, summary: description, :images => images,

@@ -84,9 +84,8 @@ class FeedUrl < ActiveRecord::Base
     missingurl_keys = [] if missingurl_keys.blank?
     t_count = missingurl_keys.count
 
-
-    sources_list = JSON.parse($redis.get("sources_list_details"))
-    sources_list.default = "Others"
+    # sources_list = JSON.parse($redis.get("sources_list_details"))
+    # sources_list.default = "Others"
 
     valid_missing_url_keys = []
     missingurl_keys.each do |each_url_key|
@@ -113,7 +112,7 @@ class FeedUrl < ActiveRecord::Base
       p each_url_key
       logger.info each_url_key if Rails.env == "production"
       begin
-        FeedUrl.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user, verticals)
+        FeedUrl.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list={}, valid_categories, feed, admin_user, verticals)
       rescue Exception => e
         p "Error while processing missingurl process top list"
       end
@@ -137,7 +136,7 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def self.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user, verticals="")
+  def self.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list={}, valid_categories, feed, admin_user, verticals="")
     if feed_url_id.blank?
       missing_url = each_url_key.split("missingurl:")[1]
 
@@ -156,7 +155,10 @@ class FeedUrl < ActiveRecord::Base
         end
 
         # sources_list = Rails.cache.read("sources_list_details")
-        category = sources_list[source]["categories"] rescue ""
+        # category = sources_list[source]["categories"] rescue ""
+
+        category = SourceCategory.source(source).select("categories").last.categories rescue ""
+        category = "Others" if category.blank?
 
         # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
         # if check_exist_feed_url.blank?
@@ -261,8 +263,8 @@ class FeedUrl < ActiveRecord::Base
     missingurl_keys = [] if missingurl_keys.blank?
     t_count = missingurl_keys.count
 
-    sources_list = JSON.parse($redis.get("sources_list_details"))
-    sources_list.default = "Others"
+    # sources_list = JSON.parse($redis.get("sources_list_details"))
+    # sources_list.default = "Others"
 
     valid_missing_url_keys = []
     missingurl_keys.each do |each_url_key|
@@ -287,7 +289,7 @@ class FeedUrl < ActiveRecord::Base
       verticals = redis_value["verticals"]
 
       begin
-        FeedUrl.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category, verticals)
+        FeedUrl.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list={}, valid_categories, feed, admin_user, process_category, verticals)
       rescue Exception => e
         p "Error while processing missingurl process"
       end
@@ -314,7 +316,10 @@ class FeedUrl < ActiveRecord::Base
           end
 
           # sources_list = Rails.cache.read("sources_list_details")
-          category = sources_list[source]["categories"] rescue ""
+          # category = sources_list[source]["categories"] rescue ""
+
+          category = SourceCategory.source(source).select("categories").last.categories rescue ""
+          category = "Others" if category.blank?
 
           # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
           # if check_exist_feed_url.blank?
@@ -608,17 +613,20 @@ class FeedUrl < ActiveRecord::Base
     host = Addressable::URI.parse(self.url).host.downcase
     updated_host = host.start_with?('www.') ? host[4..-1] : host
 
-    source_hash = $redis.get("sources_list_details")
-    if !source_hash.blank?
-      source_list = JSON.parse(source_hash)
-      if source_list.blank?
-        new_title = get_term_from_feed_url(updated_host)
-        return_title = new_title.to_s.strip.blank? ? article.title : new_title
-        return nil, return_title
-      end
-      source_details = source_list[updated_host]
-      if !source_details.blank? && !source_details["check_details"].blank?
-        check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
+    # source_hash = $redis.get("sources_list_details")
+    # if !source_hash.blank?
+    #   source_list = JSON.parse(source_hash)
+    #   if source_list.blank?
+    #     new_title = get_term_from_feed_url(updated_host)
+    #     return_title = new_title.to_s.strip.blank? ? article.title : new_title
+    #     return nil, return_title
+    #   end
+      # source_details = source_list[updated_host]
+
+      source_details = SourceCategory.source(updated_host).last rescue ""
+
+      if !source_details.blank? && !source_details.check_details.blank?
+        check_details = source_details.check_details.to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
         check_details = Hash[*check_details] rescue {}
         title = article.title.to_s.downcase
         return_val = ""
@@ -643,12 +651,16 @@ class FeedUrl < ActiveRecord::Base
         new_title = get_term_from_feed_url(updated_host)
         changed_title = new_title.to_s.strip.blank? ? article.title : new_title
         return return_val, changed_title
+      else
+        new_title = get_term_from_feed_url(updated_host)
+        return_title = new_title.to_s.strip.blank? ? article.title : new_title
+        return nil, return_title
       end
-    end
+    # end
 
-    new_title = get_term_from_feed_url(updated_host)
-    return_title = new_title.to_s.strip.blank? ? article.title : new_title
-    return nil, return_title
+    # new_title = get_term_from_feed_url(updated_host)
+    # return_title = new_title.to_s.strip.blank? ? article.title : new_title
+    # return nil, return_title
   end
 
   def get_term_from_feed_url(updated_host)
@@ -811,8 +823,11 @@ class FeedUrl < ActiveRecord::Base
       end
     end
     if selected_values.blank?
-      sources_list = JSON.parse($redis.get("sources_list_details"))
-      categories = sources_list[host_without_www]["categories"] rescue ""
+      # sources_list = JSON.parse($redis.get("sources_list_details"))
+      # categories = sources_list[host_without_www]["categories"] rescue ""
+
+      categories = SourceCategory.source(host_without_www).select("categories").last.categories rescue ""
+
       splt_categories = categories.split(",").map(&:strip)
       selected_values = splt_categories.map {|d| Item.get_root_level_id(d)}
     end
@@ -823,8 +838,8 @@ class FeedUrl < ActiveRecord::Base
     $redis.set("automated_feed_process_is_running", 1)
     $redis.expire("automated_feed_process_is_running", 40.minutes)
 
-    SourceCategory.update_all_to_cache()
-    sources_list = JSON.parse($redis.get("sources_list_details"))
+    # SourceCategory.update_all_to_cache()
+    # sources_list = JSON.parse($redis.get("sources_list_details"))
 
     page = 1
     begin
@@ -834,7 +849,8 @@ class FeedUrl < ActiveRecord::Base
         begin
           total_count -= 1
           host = Item.get_host_without_www(feed_url.url)
-          if sources_list[host]["site_status"] == false
+          source_category = SourceCategory.source(host).last rescue ""
+          if !source_category.blank? && source_category.site_status == false
             feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
           else
             feed_url.auto_save_feed_urls(false,0, "auto")

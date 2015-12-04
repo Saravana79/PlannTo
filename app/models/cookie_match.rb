@@ -69,8 +69,8 @@ class CookieMatch < ActiveRecord::Base
       skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/out/sendtostore.php?top_category=", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/", "/pricelist/", "http://coupons.mysmartprice.com/", "http://www.mysmartprice.com/m/custom_list.php?", "http://www.mysmartprice.com/deals/", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/out/sendtostore.php?dealid=", "http://www.mysmartprice.com/care/", "http://www.mysmartprice.com/m/search.php"]
       existing_pattern = ["mspid=<pattern_val>", "-msp=<pattern_val>", "-mst<pattern_val>-other"]
 
-      source_categories = JSON.parse($redis.get("source_categories_pattern"))
-      source_categories.default = {"pattern" => ""}
+      # source_categories = JSON.parse($redis.get("source_categories_pattern"))
+      # source_categories.default = {"pattern" => ""}
 
       begin
         cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 2000)
@@ -158,7 +158,7 @@ class CookieMatch < ActiveRecord::Base
                 itemtype_id = item_detail_other.itemtype_id rescue ""
 
                 item_ids = item_detail_other.item_detail_other_mappings.map(&:item_id).join(",").to_s rescue ""
-                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               else
@@ -170,7 +170,7 @@ class CookieMatch < ActiveRecord::Base
                 itemtype_id = item_detail_other.itemtype_id rescue ""
 
                 item_ids = item_detail_other.item_detail_other_mappings.map(&:item_id).join(",").to_s rescue ""
-                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end
@@ -181,7 +181,7 @@ class CookieMatch < ActiveRecord::Base
               itemtype_id = item_detail_other.itemtype_id rescue ""
 
               item_ids = ""
-              redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id)
+              redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, user_access_detail["source"], itemtype_id)
               plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
             elsif user_access_detail["source"] == "autoportal"
               user_id = new_user_access_detail.plannto_user_id
@@ -198,7 +198,7 @@ class CookieMatch < ActiveRecord::Base
               item_details_by_itemtype_ids.each do |key, val|
                 itemtype_id = key
                 item_ids = val.map(&:itemid).join(",")
-                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, user_access_detail["source"], itemtype_id)
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end
             elsif !msp_id.blank?
@@ -216,7 +216,7 @@ class CookieMatch < ActiveRecord::Base
                 itemtype_id = item_detail.itemtype_id rescue ""
 
                 item_ids = item_detail.itemid.to_s rescue ""
-                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end
@@ -234,7 +234,7 @@ where url = '#{ref_url}' group by ac.id").first
                 #plannto user details
                 itemtype_id = article_content.itemtype_id
 
-                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end

@@ -1649,8 +1649,8 @@ end
 
   def self.buying_list_process_in_redis(user_vals)
     base_item_ids = Item.get_base_items_from_config()
-    source_categories = JSON.parse($redis.get("source_categories_pattern"))
-    source_categories.default = ""
+    # source_categories = JSON.parse($redis.get("source_categories_pattern"))
+    # source_categories.default = ""
     google_geo_targeting_hash = {}
 
     google_geo_targetings = GoogleGeoTargeting.where("location_id is not null")
@@ -1708,7 +1708,7 @@ end
             end
 
             if !user_id.blank? && !url.blank?
-              already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
+              already_exist = Item.check_if_already_exist_in_user_visits(source_categories={}, user_id, url, "users:last_visits")
               ranking = 0
               itemtype_id = ""
 
@@ -2062,15 +2062,17 @@ end
       begin
         host = Item.get_host_without_www(url)
 
-        if source_categories.blank?
-          source_categories = JSON.parse($redis.get("source_categories_pattern"))
-          source_categories.default = ""
-        end
+        # if source_categories.blank?
+        #   source_categories = JSON.parse($redis.get("source_categories_pattern"))
+        #   source_categories.default = ""
+        # end
 
-        source_category = source_categories[host]
+        source_category = SourceCategory.source(host).last rescue ""
 
-        if !source_category.blank? && !source_category["pattern"].blank?
-          pattern = source_category["pattern"]
+        # source_category = source_categories[host]
+
+        if !source_category.blank? && !source_category.pattern.blank?
+          pattern = source_category.pattern
           str1, str2 = pattern.split("<page>")
           str2 = str2.blank? ? "$" : Regexp.escape(str2.to_s)
           exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{str2}/m, 1]

@@ -730,8 +730,8 @@ end
 desc "Update mouthshut details to feed url"
 task :update_mouthshut_details_to_feed_url => :environment do
   admin_user = User.first
-  sources_list = JSON.parse($redis.get("sources_list_details"))
-  sources_list.default = "Others"
+  # sources_list = JSON.parse($redis.get("sources_list_details"))
+  # sources_list.default = "Others"
 
   url = "http://planntonew.s3.amazonaws.com/test_folder/mobile_products_catalog.csv"
   csv_details = CSV.read(open(url))
@@ -763,7 +763,10 @@ task :update_mouthshut_details_to_feed_url => :environment do
       title = title.to_s.gsub(/\s(-|\|).+/, '')
       title = title.blank? ? "" : title.to_s.strip
 
-      category = sources_list[source]["categories"]
+      # category = sources_list[source]["categories"]
+
+      category = SourceCategory.source(source).select("categories").last.categories rescue ""
+      category = "Others" if category.blank?
 
       new_feed_url = FeedUrl.new(feed_id: 41, url: url_for_save, title: title.to_s.strip, category: category,
                                  status: status, source: source, summary: description, :images => images,
