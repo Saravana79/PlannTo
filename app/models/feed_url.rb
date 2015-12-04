@@ -931,7 +931,16 @@ class FeedUrl < ActiveRecord::Base
       second_str = type[1]
 
       uri = URI.parse(URI.encode(url.to_s.strip))
-      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+      # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      begin
+        Timeout.timeout(20) do
+          response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+        end
+      rescue Exception => e
+        response_page = ""
+      end
+      doc = Nokogiri::HTML(response_page)
 
       if second_str.match(/P\d+/).blank?
         project_details = doc.at("#projectDetails ul").elements
@@ -998,7 +1007,16 @@ class FeedUrl < ActiveRecord::Base
       type = url.gsub("http://", "").split("/")
 
       uri = URI.parse(URI.encode(url.to_s.strip))
-      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+      # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      begin
+        Timeout.timeout(20) do
+          response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+        end
+      rescue Exception => e
+        response_page = ""
+      end
+      doc = Nokogiri::HTML(response_page)
 
       property_header = doc.at("#MainContent_rep_SearchProperty_hyplink_PropertyHeader_0")
       property_header_val = property_header.content
@@ -1026,7 +1044,16 @@ class FeedUrl < ActiveRecord::Base
       location = ""
 
       uri = URI.parse(URI.encode(url.to_s.strip))
-      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+      # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      begin
+        Timeout.timeout(20) do
+          response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+        end
+      rescue Exception => e
+        response_page = ""
+      end
+      doc = Nokogiri::HTML(response_page)
 
       property_header = doc.at(".title-container span.tags.tax")
       elements = property_header.elements
@@ -1060,7 +1087,16 @@ class FeedUrl < ActiveRecord::Base
       location = ""
 
       uri = URI.parse(URI.encode(url.to_s.strip))
-      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+      # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      begin
+        Timeout.timeout(20) do
+          response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+        end
+      rescue Exception => e
+        response_page = ""
+      end
+      doc = Nokogiri::HTML(response_page)
 
       header_menu = doc.at("#breadcrumb ul")
       elements = header_menu.elements

@@ -274,7 +274,16 @@ results = CategoryItemDetail.import(category_item_details)
 
 def get_article_urls(url, article_urls)
   uri = URI.parse(URI.encode(url.to_s.strip))
-  doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+  # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+  begin
+    Timeout.timeout(20) do
+      response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+    end
+  rescue Exception => e
+    response_page = ""
+  end
+  doc = Nokogiri::HTML(response_page)
 
   articles = doc.xpath(".//article")
 
@@ -940,7 +949,16 @@ products.each do |each_product|
     if item_beauty_detail.new_record?
       begin
         uri = URI.parse(URI.encode(url.to_s.strip))
-        doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
+        # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
+
+        begin
+          Timeout.timeout(20) do
+            response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+          end
+        rescue Exception => e
+          response_page = ""
+        end
+        doc = Nokogiri::HTML(response_page)
 
         color_label = doc.at_css("#selected_color_label").content.to_s.downcase rescue ""
       rescue Exception => e
