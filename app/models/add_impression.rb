@@ -20,61 +20,61 @@ class AddImpression < ActiveRecord::Base
    unless obj_params.is_a?(Hash)
      obj_params = JSON.parse(obj_params)
    end
-   obj_params = obj_params.symbolize_keys
+   # obj_params = obj_params.symbolize_keys
 
    ai = AddImpression.new
-   ai.id = obj_params[:imp_id]
+   ai.id = obj_params["imp_id"]
    p "Creating Impression - #{ai.id}"
-   ai.impression_id = obj_params[:impression_id]
-   ai.item_id = obj_params[:itemid]
-   ai.hosted_site_url = obj_params[:request_referer]
-   ai.impression_time = obj_params[:time]
-   unless obj_params[:user].nil?
-     ai.user_id = obj_params[:user]
+   ai.impression_id = obj_params["impression_id"]
+   ai.item_id = obj_params["itemid"]
+   ai.hosted_site_url = obj_params["request_referer"]
+   ai.impression_time = obj_params["time"]
+   unless obj_params["user"].nil?
+     ai.user_id = obj_params["user"]
    end
-   ai.temp_user_id = obj_params[:temp_user_id]
-   ai.ip_address = obj_params[:remote_ip]
-   ai.itemsaccess = obj_params[:itemsaccess]
-   ai.params = obj_params[:params]
-   publisher = Publisher.getpublisherfromdomain(obj_params[:request_referer])
+   ai.temp_user_id = obj_params["temp_user_id"]
+   ai.ip_address = obj_params["remote_ip"]
+   ai.itemsaccess = obj_params["itemsaccess"]
+   ai.params = obj_params["params"]
+   publisher = Publisher.getpublisherfromdomain(obj_params["request_referer"])
    if !publisher.blank?
      ai.publisher_id = publisher.id
    else
-     ai.publisher_id = obj_params[:publisher]
+     ai.publisher_id = obj_params["publisher"]
    end
 
    # save advertisement id
-   if obj_params[:ad_id].blank?
-     ad_id = obj_params[:advertisement_id]
+   if obj_params["ad_id"].blank?
+     ad_id = obj_params["advertisement_id"]
    else
-     ad_id = obj_params[:ad_id]
+     ad_id = obj_params["ad_id"]
    end
    ai.advertisement_id = ad_id
 
-   ai.advertisement_type = ad_id.blank? ? obj_params[:type] : 'advertisement'
+   ai.advertisement_type = ad_id.blank? ? obj_params["type"] : 'advertisement'
    # ai.winning_price_enc = obj_params[:winning_price_enc] # removed from db
    begin
-     winning_price = obj_params[:winning_price_enc].blank? ? 0.0 : get_winning_price_value(obj_params[:winning_price_enc])
+     winning_price = obj_params["winning_price_enc"].blank? ? 0.0 : get_winning_price_value(obj_params["winning_price_enc"])
      ai.winning_price = winning_price.to_f
    rescue
      ai.winning_price = 0.0
    end
 
-   ai.sid = obj_params[:sid]
-   ai.created_at = obj_params[:time]
-   ai.updated_at = obj_params[:time]
+   ai.sid = obj_params["sid"]
+   ai.created_at = obj_params["time"]
+   ai.updated_at = obj_params["time"]
 
-   ai.t = obj_params[:t].to_i
-   ai.r = obj_params[:r].to_i
-   ai.a = obj_params[:a].to_s
+   ai.t = obj_params["t"].to_i
+   ai.r = obj_params["r"].to_i
+   ai.a = obj_params["a"].to_s
    url_params = Advertisement.reverse_make_url_params(ai.params)
-   url_params.symbolize_keys!
-   ai.device = url_params[:device].to_s
-   ai.video = obj_params[:video].to_s
-   ai.video_impression_id = obj_params[:video_impression_id].to_s
-   ai.geo = obj_params[:geo]
+   # url_params.symbolize_keys!
+   ai.device = url_params["device"].to_s
+   ai.video = obj_params["video"].to_s
+   ai.video_impression_id = obj_params["video_impression_id"].to_s
+   ai.geo = obj_params["geo"]
    ai.having_related_items = ai.advertisement.having_related_items rescue false
-   ai.visited = obj_params[:visited]
+   ai.visited = obj_params["visited"]
 
    return ai
  end

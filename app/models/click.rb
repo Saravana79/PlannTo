@@ -11,39 +11,38 @@ class Click < ActiveRecord::Base
     unless obj_params.is_a?(Hash)
       obj_params = JSON.parse(obj_params)
     end
-    obj_params = obj_params.symbolize_keys
+    # obj_params = obj_params.symbolize_keys
 
-    last_click_details = "#{obj_params[:url]}-#{obj_params[:request_referer]}-#{obj_params[:remote_ip]}"
+    last_click_details = "#{obj_params["url"]}-#{obj_params["request_referer"]}-#{obj_params["remote_ip"]}"
 
     last_20_clicks = $redis_rtb.lrange("ads_last_20_clicks", 0, 19)
     click = nil
     unless last_20_clicks.include?(last_click_details)
       click = Click.new
-      click.impression_id = obj_params[:impression_id]
-      click.click_url = obj_params[:url]
-      click.hosted_site_url = obj_params[:request_referer]
-      click.timestamp = obj_params[:time]
-      click.item_id = obj_params[:item_id]
-      click.vendor_id = obj_params[:vendor_id]
-      click.source_type = obj_params[:source_type]
-      unless obj_params[:user].nil?
-        click.user_id = obj_params[:user]
+      click.impression_id = obj_params["impression_id"]
+      click.click_url = obj_params["url"]
+      click.hosted_site_url = obj_params["request_referer"]
+      click.timestamp = obj_params["time"]
+      click.item_id = obj_params["item_id"]
+      click.vendor_id = obj_params["vendor_id"]
+      click.source_type = obj_params["source_type"]
+      unless obj_params["user"].nil?
+        click.user_id = obj_params["user"]
       end
-      click.temp_user_id = obj_params[:temp_user_id]
-      click.publisher_id = obj_params[:publisher]
-      click.ipaddress = obj_params[:remote_ip]
-      click.advertisement_id = obj_params[:advertisement_id]
-      click.sid = obj_params[:sid]
-      click.created_at = obj_params[:time]
-      click.updated_at = obj_params[:time]
-
+      click.temp_user_id = obj_params["temp_user_id"]
+      click.publisher_id = obj_params["publisher"]
+      click.ipaddress = obj_params["remote_ip"]
+      click.advertisement_id = obj_params["advertisement_id"]
+      click.sid = obj_params["sid"]
+      click.created_at = obj_params["time"]
+      click.updated_at = obj_params["time"]
 
       # extra params
-      click.t = obj_params[:t]
-      click.r = obj_params[:r]
-      click.ic = obj_params[:ic]
-      click.a = obj_params[:a]
-      click.video_impression_id = obj_params[:video_impression_id].to_s
+      click.t = obj_params["t"]
+      click.r = obj_params["r"]
+      click.ic = obj_params["ic"]
+      click.a = obj_params["a"]
+      click.video_impression_id = obj_params["video_impression_id"].to_s
 
       Click.redis_push(last_click_details)
       push_to_redis(click.temp_user_id, click.advertisement_id) if (!click.temp_user_id.blank? && !click.advertisement_id.blank?)
