@@ -469,8 +469,8 @@ class FeedUrl < ActiveRecord::Base
     start = 0
     total_length = $redis_rtb.scard(redis_key)
     begin
-      redis_val = $redis_rtb.sscan(redis_key, next_val, count: 300)
-      total_length = total_length - 300
+      redis_val = $redis_rtb.sscan(redis_key, next_val, count: 200)
+      total_length = total_length - 200
       next_val = redis_val[0].to_i
       val = redis_val[1]
       invalid_urls.each do |each_invalid_url|
@@ -478,7 +478,7 @@ class FeedUrl < ActiveRecord::Base
       end
       # process_missing_url(val, count)
       FeedUrl.send(method, val, count)
-      p "started count: #{start} - #{start * 300}"
+      p "started count: #{start} - #{start * 200}"
       start += 1
       break if total_length < 0
     end while next_val != 0
@@ -934,7 +934,7 @@ class FeedUrl < ActiveRecord::Base
       # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
 
       begin
-        Timeout.timeout(20) do
+        Timeout.timeout(30) do
           response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
         end
       rescue Exception => e
@@ -1010,7 +1010,7 @@ class FeedUrl < ActiveRecord::Base
       # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
 
       begin
-        Timeout.timeout(20) do
+        Timeout.timeout(30) do
           response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
         end
       rescue Exception => e
@@ -1047,7 +1047,7 @@ class FeedUrl < ActiveRecord::Base
       # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
 
       begin
-        Timeout.timeout(20) do
+        Timeout.timeout(30) do
           response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
         end
       rescue Exception => e
@@ -1090,7 +1090,7 @@ class FeedUrl < ActiveRecord::Base
       # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
 
       begin
-        Timeout.timeout(20) do
+        Timeout.timeout(30) do
           response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
         end
       rescue Exception => e

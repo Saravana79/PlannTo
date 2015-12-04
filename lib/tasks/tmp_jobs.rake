@@ -588,7 +588,7 @@ task :update_item_beauty_detail_from_xml_feed => :environment do
           # doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
 
           begin
-            Timeout.timeout(20) do
+            Timeout.timeout(30) do
               response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
             end
           rescue Exception => e
