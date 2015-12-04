@@ -335,7 +335,7 @@ def process_url_to_feed_url(article_urls, sources_list)
 
       # category = sources_list[source]["categories"]
 
-      category = SourceCategory.source(source).select("categories").last.categories rescue ""
+      SourceCategory.find_by_source(source).categories rescue ""
       category = "Others" if category.blank?
 
       new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,
@@ -1076,7 +1076,7 @@ csv_details.each_with_index do |csv_detail, index|
 
     # category = sources_list[source]["categories"]
 
-    category = SourceCategory.source(source).select("categories").last.categories rescue ""
+    SourceCategory.find_by_source(source).categories rescue ""
     category = "Others" if category.blank?
 
     new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,

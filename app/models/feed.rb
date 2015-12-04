@@ -75,7 +75,7 @@ class Feed < ActiveRecord::Base
 
             # category = sources_list[source]["categories"]
 
-            category = SourceCategory.source(source).select("categories").last.categories rescue ""
+            SourceCategory.find_by_source(source).categories rescue ""
             category = "Others" if category.blank?
 
             new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
@@ -133,7 +133,7 @@ class Feed < ActiveRecord::Base
         # sources_list = Rails.cache.read("sources_list_details")
         # category = sources_list[source]["categories"]
 
-        category = SourceCategory.source(source).select("categories").last.categories rescue ""
+        SourceCategory.find_by_source(source).categories rescue ""
         category = "Others" if category.blank?
 
         check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
@@ -238,7 +238,15 @@ class Feed < ActiveRecord::Base
     begin
       url = url.to_s.gsub("/articleslider/","/articleshow/") if url.include?("gizmodo.in")
       uri = URI.parse(URI.encode(url.to_s.strip))
-      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      begin
+        Timeout.timeout(15) do
+          response = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+        end
+      rescue Exception => e
+        response = ""
+      end
+      doc = Nokogiri::HTML(response)
       title_info = doc.xpath('.//title').to_s.strip
       rating_value = 0
       meta_description = ''

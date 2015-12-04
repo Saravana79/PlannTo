@@ -157,7 +157,7 @@ class FeedUrl < ActiveRecord::Base
         # sources_list = Rails.cache.read("sources_list_details")
         # category = sources_list[source]["categories"] rescue ""
 
-        category = SourceCategory.source(source).select("categories").last.categories rescue ""
+        SourceCategory.find_by_source(source).categories rescue ""
         category = "Others" if category.blank?
 
         # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -193,7 +193,7 @@ class FeedUrl < ActiveRecord::Base
 
         begin
           vertical_ids = verticals.to_s.split(",").compact.select {|d| !d.blank? && d.to_s != "nil" && d.to_s != "0"}
-          google_content_categories = GoogleContentCategory.where(:category_id => vertical_ids)
+          google_content_categories = vertical_ids.blank? ? [] : GoogleContentCategory.where(:category_id => vertical_ids)
 
           plannto_categories = []
           google_content_categories.each do |google_content_category|
@@ -318,7 +318,7 @@ class FeedUrl < ActiveRecord::Base
           # sources_list = Rails.cache.read("sources_list_details")
           # category = sources_list[source]["categories"] rescue ""
 
-          category = SourceCategory.source(source).select("categories").last.categories rescue ""
+          SourceCategory.find_by_source(source).categories rescue ""
           category = "Others" if category.blank?
 
           # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -826,7 +826,7 @@ class FeedUrl < ActiveRecord::Base
       # sources_list = JSON.parse($redis.get("sources_list_details"))
       # categories = sources_list[host_without_www]["categories"] rescue ""
 
-      categories = SourceCategory.source(host_without_www).select("categories").last.categories rescue ""
+      SourceCategory.find_by_source(host_without_www).categories rescue ""
 
       splt_categories = categories.split(",").map(&:strip)
       selected_values = splt_categories.map {|d| Item.get_root_level_id(d)}
