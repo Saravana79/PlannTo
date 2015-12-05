@@ -1022,7 +1022,7 @@ class AdvertisementsController < ApplicationController
             new_click_url = FeedUrl.get_value_from_pattern(click_url, "http://adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
 
             old_click_url = FeedUrl.get_value_from_pattern(cache, "http://adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
-            cache = cache.gsub(old_click_url, new_click_url)
+            cache = cache.gsub(old_click_url, new_click_url) if !old_click_url.blank? && !new_click_url.blank?
 
             new_ref_url = CGI.escape(params[:ref_url].to_s)
 
@@ -1149,7 +1149,7 @@ class AdvertisementsController < ApplicationController
     end
 
     # p cache_key
-
+    cache_json = {}
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       # p JSON.parse(cache)
@@ -1218,13 +1218,14 @@ class AdvertisementsController < ApplicationController
         end
         p "*************************** Cache process success ***************************"
         logger.info "*************************** Cache process success ***************************"
-
+        
         set_access_control_headers()
         if params[:format].to_s == "json"
           return render :json => cache_json.to_json
         else
           return render :text => cache.html_safe
         end
+        cache_json.clear
         # Rails.cache.write(cache_key, cache)
       end
     end
