@@ -1637,7 +1637,7 @@ end
       length = $redis.llen("resque:queue:buying_list_process")
       if length < 50
         [*length...50].each do |each_count|
-          user_vals = $redis_rtb.lrange("users:visits", 0, 10000)
+          user_vals = $redis_rtb.lrange("users:visits", 0, 5000)
           Resque.enqueue(BuyingListProcess, "buying_list_process_in_redis", Time.zone.now.utc, user_vals)
           $redis_rtb.ltrim("users:visits", user_vals.count, -1)
         end
