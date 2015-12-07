@@ -792,3 +792,92 @@ task :update_mouthshut_details_to_feed_url => :environment do
     end
   end
 end
+
+
+task :update_feed_url_with_title_desc => :environment do
+
+  query = "select * from feed_urls where created_at > '#{Date.today - 2}' and title =''"
+
+  page = 1
+  begin
+    feed_urls = FeedUrl.paginate_by_sql(query, :page => page, :per_page => 1000)
+
+    feed_urls.each do |feed_url|
+      begin
+        valid_categories=["science & technology","Autos & Vehicles","Science & Tech"]
+        SourceCategory.find_by_source(feed_url.source).categories rescue ""
+        category = "Others" if category.blank?
+        url = feed_url.url.to_s
+        title, description, images, page_category = Feed.get_feed_url_values(url)
+
+        images = images.to_s.split(",").uniq.join(",")
+
+        if category.to_s.split(",").include?("ApartmentType")
+          begin
+            page_category = FeedUrl.get_additional_details_for_housing(url)
+          rescue Exception => e
+            p "error message"
+          end
+        end
+
+        url_for_save = url
+        if url_for_save.include?("youtube.com")
+          url_for_save = url_for_save.gsub("watch?v=", "video/")
+        end
+
+        if !page_category.blank?
+          if !valid_categories.include?(page_category.downcase)
+            status = 3
+          elsif page_category.downcase == 'science & technology'
+            category = "Mobile,Tablet,Camera,Laptop"
+          end
+        end
+
+        begin
+          verticals = feed_url.article_category
+          vertical_ids = verticals.to_s.split(",").compact.select {|d| !d.blank? && d.to_s != "nil" && d.to_s != "0"}
+          google_content_categories = vertical_ids.blank? ? [] : GoogleContentCategory.where(:category_id => vertical_ids)
+
+          plannto_categories = []
+          google_content_categories.each do |google_content_category|
+            plannto_category  = google_content_category.plannto_category
+            if plannto_category.blank?
+              parent = google_content_category.parent
+              begin
+                break if parent.blank?
+                plannto_category  = parent.plannto_category
+                parent  = parent.parent
+              end while plannto_category.blank? && !parent.blank?
+            end
+            plannto_categories << plannto_category
+          end
+
+          new_categories = plannto_categories.compact.uniq
+
+          if new_categories.count <= 4
+            new_category = new_categories.join(",")
+          else
+            new_category = ""
+          end
+        rescue Exception => e
+          new_category = ""
+        end
+
+        category = new_category if !new_category.blank?
+
+        # remove characters after come with space + '- or |' symbols
+        # title = title.to_s.gsub(/\s(-|\|).+/, '')
+        title = title.blank? ? "" : title.to_s.strip
+
+        new_feed_url = feed_url.update_attributes(title: title.to_s.strip, category: category,
+                                                  status: status, summary: description, :images => images,
+                                                  :additional_details => page_category)
+      rescue Exception => e
+        p "problem in update"
+      end
+    end
+
+    page += 1
+  end while !feed_urls.empty?
+
+end
