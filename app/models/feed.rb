@@ -239,14 +239,15 @@ class Feed < ActiveRecord::Base
       url = url.to_s.gsub("/articleslider/","/articleshow/") if url.include?("gizmodo.in")
       uri = URI.parse(URI.encode(url.to_s.strip))
 
+      response_page = ""
       begin
-        Timeout.timeout(25) do
-          response = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
+        Timeout.timeout(30) do
+          response_page = open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all)
         end
       rescue Exception => e
-        response = ""
+        response_page = ""
       end
-      doc = Nokogiri::HTML(response)
+      doc = Nokogiri::HTML(response_page)
       title_info = doc.xpath('.//title').to_s.strip
       rating_value = 0
       meta_description = ''
