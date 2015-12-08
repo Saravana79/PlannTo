@@ -31,7 +31,7 @@ class FeedsController < ApplicationController
     params[:feed_urls_order_by] ||= "desc"
 
     title = ""
-    unless params[:search].blank?
+    if !params[:search].blank?
       title = params[:search][:title]
       begin
         title = eval(title)
@@ -43,7 +43,7 @@ class FeedsController < ApplicationController
     # sort =
     condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
     initial_condition = condition
-    unless params[:search].blank?
+    if !params[:search].blank?
       #condition = "1=1"
       condition = condition + " and category like '%#{params[:search][:category]}%'" unless params[:search][:category].blank?
       condition = condition + " and status = #{params[:search][:status]}" unless params[:search][:status].blank?
@@ -60,6 +60,11 @@ class FeedsController < ApplicationController
     elsif params[:commit] != "Filter"
       params[:search] ||= {:status => 0}
       condition = condition == initial_condition ? "created_at < '#{params[:page_loaded_time]}' and status = 0" : condition
+    end
+
+    if params[:search][:from_date].blank?
+      params[:search][:from_date] = Date.today - 1.month
+      condition = condition + " and created_at > '#{params[:search][:from_date].to_time.beginning_of_day + 5.5.hours}'" unless params[:search][:from_date].blank?
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25, :total_entries => 5000)
@@ -114,6 +119,8 @@ class FeedsController < ApplicationController
     condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
     initial_condition = condition
     unless params[:search].blank?
+      condition = condition + " and created_at > '#{params[:search][:from_date].to_time.beginning_of_day + 5.5.hours}'" unless params[:search][:from_date].blank?
+      condition = condition + " and created_at < '#{params[:search][:to_date].to_time.end_of_day - 5.5.hours}'" unless params[:search][:to_date].blank?
       condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
       condition = condition + " and title like '%#{title}%'" unless title.blank?
     end
@@ -126,6 +133,11 @@ class FeedsController < ApplicationController
     elsif params[:commit] != "Filter"
       params[:search] ||= {:status => 0}
       condition = condition == initial_condition ? "status = 0" : condition
+    end
+
+    if params[:search][:from_date].blank?
+      params[:search][:from_date] = Date.today - 1.month
+      condition = condition + " and created_at > '#{params[:search][:from_date].to_time.beginning_of_day + 5.5.hours}'" unless params[:search][:from_date].blank?
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50, :total_entries => 5000)

@@ -23,6 +23,9 @@
         <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" class="auto_complete_field" id="search_source_item">
         Title: <%= search_form.text_field :title, :size => 60 %>
 
+        From Date: <%= search_form.text_field :from_date, :style => "padding:2px;width:100px;", :value => params[:search][:from_date].blank? ? "" : params[:search][:from_date].to_date.strftime("%d-%m-%Y"), :class => "search_date_field" %>
+        To Date: <%= search_form.text_field :to_date, :style => "padding:2px;width:100px;", :value => params[:search][:to_date].blank? ? "" : params[:search][:to_date].to_date.strftime("%d-%m-%Y"), :class => "search_date_field" %>
+
         <%= search_form.submit "Filter" %>
         <%= search_form.submit "Clear" %>
     <% end %>
@@ -217,6 +220,9 @@
 <script type="text/javascript">
 
     $("document").ready(function() {
+
+        //datepicker
+        $(".search_date_field").datepicker({ dateFormat: 'dd-mm-yy' });
 
         if (<%= !@feed_urls.blank? && @feed_urls.count > 45 %>) {
             $page_count = $(".pagination a.next_page").prev().text()
