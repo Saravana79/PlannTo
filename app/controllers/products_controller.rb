@@ -115,6 +115,7 @@ class ProductsController < ApplicationController
  end
 
   def index
+    return redirect_to "/"
     @static_page1  = "true"
     @no_custom = "true" 
     @filter_by = params["fl"]
