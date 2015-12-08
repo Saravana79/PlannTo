@@ -125,14 +125,17 @@ class ProductsController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(@type)
     @popular_topics = Item.popular_topics(@type)
     @article_categories = ArticleCategory.get_by_itemtype(@itemtype.id) #ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
-    @followers =  User.get_followers(search_type)
+    # @followers =  User.get_followers(search_type)
+    @followers =  []
     count = @followers.length
     if count < 20
       @followers_count = count
     else
-      @followers_count = User.get_followers_count(search_type) 
-    end    
-    @top_contributors =  User.get_top_contributors
+      # @followers_count = User.get_followers_count(search_type)
+      @followers_count = count
+    end
+    # @top_contributors =  User.get_top_contributors
+    @top_contributors =  []
     #@article_categories = ArticleCategory.get_by_itemtype(0)
  end
 

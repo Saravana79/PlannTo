@@ -1093,11 +1093,12 @@ end
     when "Camera"
        ids = configatron.popular_camera_topics.split(",")
     end  
-     @items = []
-     ids.map{|id| @items << Item.find(id) rescue ""}
-     return @items    
-    
+
+    @items = Item.where(:id => ids) rescue []
+     # ids.map{|id| @items << Item.find(id) rescue ""}
+    return @items
   end
+
   def self.get_root_level_id(item_type)
     case item_type
     when "Car"
