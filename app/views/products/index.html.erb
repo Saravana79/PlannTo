@@ -61,27 +61,28 @@
     <tr>
       <td height="170" valign="top">
         <ul class="imgContributors">
-          <% @top_contributors.each(:as => :hash) do |top_c| %>
-  		<li class="imgfollowers"></li>
-          <% user= User.find(top_c['user_id']) %>
-          <li class="imgContributors">
-            <div style="clear:both;">
-              <div class="float_lft">
-                <a href="<%= user.get_url()%>"><%= image_tag user.get_photo , :class => "userImageSmall"%></a>
-              </div>
-              <div class="contributorname">
-                <a class="txt_black" href="/<%= user.username %>">
-                  <%= user.name %>
-                </a>
-              </div>
-              <div class="contributorpoints">
-                 <%= top_c["sum(points)"].to_i %> Points
-              </div>
-            </div>
+          <% if !@top_contributors.blank? %>
+              <% @top_contributors.each(:as => :hash) do |top_c| %>
+                  <li class="imgfollowers"></li>
+                  <% user= User.find(top_c['user_id']) %>
+                  <li class="imgContributors">
+                    <div style="clear:both;">
+                      <div class="float_lft">
+                        <a href="<%= user.get_url()%>"><%= image_tag user.get_photo , :class => "userImageSmall"%></a>
+                      </div>
+                      <div class="contributorname">
+                        <a class="txt_black" href="/<%= user.username %>">
+                          <%= user.name %>
+                        </a>
+                      </div>
+                      <div class="contributorpoints">
+                        <%= top_c["sum(points)"].to_i %> Points
+                      </div>
+                    </div>
 
-          </li>
-          <%end%>
-         
+                  </li>
+              <%end%>
+          <% end %>
         </ul>
 
 
