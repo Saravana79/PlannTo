@@ -9,6 +9,7 @@ class ItemsController < ApplicationController
 #     },:expires_in => 2.hour
   layout "product"
   before_filter :authenticate_user!, :except => [:index, :compare]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:compare]
 
   include FollowMethods
 #before_filter :authenticate_user!
@@ -245,6 +246,7 @@ class ItemsController < ApplicationController
     end
 
     def compare
+      return render :nothing => true
       @static_page1 = "true"
       @ids = params[:ids].split(',').uniq rescue ""
       p = params[:ids].split(',').uniq rescue ''
