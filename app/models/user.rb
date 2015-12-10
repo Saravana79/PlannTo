@@ -221,12 +221,14 @@ class User < ActiveRecord::Base
   def get_user_follow_item(item_id)
     Struct.new("FollowItem", :follow_type)
     user_item_follow_type = Struct::FollowItem.new("")
-    CACHE_USER_ITEM_HASH.each do |item_type, cache_key|
-      item_ids = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", cache_key)
-      if !item_ids.blank? && item_ids.split(",").include?(item_id.to_s)
-        user_item_follow_type = Struct::FollowItem.new(item_type)
-      end
-    end
+
+    #TODO: temporary commented
+    # CACHE_USER_ITEM_HASH.each do |item_type, cache_key|
+    #   item_ids = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", cache_key)
+    #   if !item_ids.blank? && item_ids.split(",").include?(item_id.to_s)
+    #     user_item_follow_type = Struct::FollowItem.new(item_type)
+    #   end
+    # end
     user_item_follow_type
   end
 

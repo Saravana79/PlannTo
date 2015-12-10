@@ -121,6 +121,6 @@ gem 'streamio-ffmpeg'
 gem 'phantomjs', '~> 1.9.7.1'
 
 gem 'roo', '~> 2.1.1'
-
-#gem to terminate long request
-gem 'rack-timeout', '~> 0.3.2'
+#
+# #gem to terminate long request
+# gem 'rack-timeout', '~> 0.3.2'
