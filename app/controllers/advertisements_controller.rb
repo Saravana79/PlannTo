@@ -278,7 +278,7 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           # render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string(return_path, :layout => false)}, :callback => params[:callback]
-          render :json => {:success => true, :n_ad_height => @iframe_height.to_f, :e_ad_height => @iframe_exp_height.to_f, :expand_type => @expand_type, :need_close_btn => @adv_detail.need_close_btn, :expand_on => @adv_detail.expand_on.to_s, :viewable => @adv_detail.viewable, :expanded => @adv_detail.expanded, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
+          render :json => {:success => true, :n_ad_height => @iframe_height.to_f, :e_ad_height => @iframe_exp_height.to_f, :expand_type => @expand_type, :need_close_btn => @adv_detail.need_close_btn, :expand_on => @adv_detail.expand_on.to_s, :viewable => @adv_detail.viewable, :html => render_to_string(return_path, :layout => false), :expanded_html => render_to_string(return_exp_path, :layout => false), :impression_id => @impression_id}.to_json
         end
       }
       format.html {

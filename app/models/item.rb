@@ -1127,6 +1127,8 @@ end
        return configatron.root_level_television_id
     when "Lens"
        return configatron.root_level_lens_id
+    when "Beauty"
+       return configatron.root_level_beauty_id
     end
   end
    
