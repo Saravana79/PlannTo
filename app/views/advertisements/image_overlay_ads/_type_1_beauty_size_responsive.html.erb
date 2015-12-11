@@ -57,9 +57,9 @@
             <div class="product-container-top" id="<%= indx + 1 %>">
               <% items.each do |item| %>
                   <% if item.itemdetail_id.blank? %>
-                      <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{@item.id}&geo=#{params[:geo]}&red_url=#{item.click_url}&iid=#{@impression_id}" %>
+                      <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{@item.id}&geo=#{params[:geo]}&red_url=#{item.click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
                   <% else %>
-                      <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{@item.id}&geo=#{params[:geo]}&detail_id=#{item.itemdetail_id}&red_url=&iid=#{@impression_id}" %>
+                      <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{@item.id}&geo=#{params[:geo]}&detail_id=#{item.itemdetail_id}&red_url=&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
                   <% end %>
                   <div class="product-container">
                     <div class="product-img">

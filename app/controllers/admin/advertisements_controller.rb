@@ -146,6 +146,7 @@ class Admin::AdvertisementsController < ApplicationController
       end
       @advertisement.build_images(image_array, @advertisement.advertisement_type) if ["static", "flash", "display_ads", "in_image_ads"].include?(@advertisement.advertisement_type)
       @adv_detail = @advertisement.adv_detail
+      @adv_detail = @advertisement.build_adv_detail if @adv_detail.blank?
       @adv_detail.update_attributes(params[:adv_detail])
       redirect_to admin_advertisements_path
     else

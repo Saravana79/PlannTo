@@ -81,7 +81,8 @@ class ProductsController < ApplicationController
 #  caches_action :search_items, :cache_path => Proc.new { |c| c.params.except(:callback).except(:_) },:expires_in => 24.hours
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
-  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
+  # before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
+  skip_before_filter :all_user_follow_item
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
@@ -875,7 +876,8 @@ class ProductsController < ApplicationController
     return_path = "products/deal_widget.html.erb"
 
     if @is_test != "true"
-      @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", @items.first.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+      item_id = @items.first.id rescue ""
+      @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", item_id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                               cookies[:plan_to_temp_user_id], nil, nil, nil)
     end
 

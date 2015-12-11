@@ -1,9 +1,10 @@
-<% shop_now_url = "http://www.plannto.com" %>
 <div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_exp_height %>px !important;">
   <div id="expanded_view">
     <% if @adv_detail.expand_type == "static" %>
         <% if @expanded_view_type == "image" %>
-            <a href="<%= shop_now_url %>" target="_blank">
+            <% item_id = @item.id rescue "" %>
+            <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{item_id}&geo=#{params[:geo]}&red_url=#{@adv_detail.nv_click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
+            <a href="<%= history_detail_path %>" target="_blank">
               <img class="img_overlay_img" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" src="<%= @expanded_view_src %>">
             </a>
         <% elsif @expanded_view_type == "flash" %>

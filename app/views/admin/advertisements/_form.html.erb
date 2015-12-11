@@ -335,43 +335,57 @@
           </div>
         </div>
 
-        <div class="fields-div">
+        <div class="fields-div dynamic_nv_add_details nv_add_details">
           <div class="title_header float_lft">Dynamic Ad Height :</div>
           <div>
             <%= text_field_tag "adv_detail[dynamic_ad_height]", @adv_detail.dynamic_ad_height %>
           </div>
         </div>
 
+        <div class="fields-div static_nv_add_details nv_add_details">
+          <div class="title_header float_lft">Normal View Click Url :</div>
+          <div>
+            <%= text_field_tag "adv_detail[nv_click_url]", @adv_detail.nv_click_url %>
+          </div>
+        </div>
+
         <div class="fields-div">
           <div class="title_header float_lft">Expanded View :</div>
           <div>
-            <%= radio_button_tag "adv_detail[expand_type]", 'static', @adv_detail.expand_type == "static", :class => "adv_detail_ad_type"%>Static
+            <%= radio_button_tag "adv_detail[expand_type]", 'static', @adv_detail.expand_type == "static", :class => "adv_detail_expand_type"%>Static
             <!--<%#= radio_button_tag "adv_detail[expand_type]", 'dynamic', @adv_detail.expand_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic -->
-            <%= radio_button_tag "adv_detail[expand_type]", 'none', @adv_detail.expand_type == "none", :class => "adv_detail_ad_type" %>None
+            <%= radio_button_tag "adv_detail[expand_type]", 'none', @adv_detail.expand_type == "none", :class => "adv_detail_expand_type" %>None
+          </div>
+        </div>
+
+        <div class="fields-div static_ev_add_details ev_add_details">
+          <div class="title_header float_lft">Expanded View Click Url :</div>
+          <div>
+            <%= text_field_tag "adv_detail[ev_click_url]", @adv_detail.ev_click_url %>
           </div>
         </div>
 
         <div class="fields-div">
           <div class="title_header float_lft">Ad as Viewable :</div>
           <div>
-            <%= radio_button_tag "adv_detail[viewable]", true, @adv_detail.viewable == true, :class => "adv_detail_ad_type"%>True
-            <%= radio_button_tag "adv_detail[viewable]", false, @adv_detail.viewable == false, :class => "adv_detail_ad_type" %>False
+            <%= radio_button_tag "adv_detail[viewable]", true, @adv_detail.viewable == true, :class => "adv_detail_viewable"%>True
+            <%= radio_button_tag "adv_detail[viewable]", false, @adv_detail.viewable == false, :class => "adv_detail_viewable" %>False
           </div>
         </div>
 
         <div class="fields-div">
           <div class="title_header float_lft">Need Close Button :</div>
           <div>
-            <%= radio_button_tag "adv_detail[need_close_btn]", true, @adv_detail.need_close_btn == true, :class => "adv_detail_ad_type"%>True
-            <%= radio_button_tag "adv_detail[need_close_btn]", false, @adv_detail.need_close_btn == false, :class => "adv_detail_ad_type" %>False
+            <%= radio_button_tag "adv_detail[need_close_btn]", true, @adv_detail.need_close_btn == true, :class => "adv_detail_need_close_btn"%>True
+            <%= radio_button_tag "adv_detail[need_close_btn]", false, @adv_detail.need_close_btn == false, :class => "adv_detail_need_close_btn" %>False
           </div>
         </div>
 
         <div class="fields-div">
           <div class="title_header float_lft">Expand On :</div>
           <div>
-            <%= radio_button_tag "adv_detail[expand_on]", 'click', @adv_detail.expand_on == 'click', :class => "adv_detail_ad_type" %>Click
-            <%= radio_button_tag "adv_detail[expand_on]", 'hover', @adv_detail.expand_on == 'hover', :class => "adv_detail_ad_type"%>Hover
+            <%= radio_button_tag "adv_detail[expand_on]", 'click', @adv_detail.expand_on == 'click', :class => "adv_detail_expand_on" %>Click
+            <%= radio_button_tag "adv_detail[expand_on]", 'hover', @adv_detail.expand_on == 'hover', :class => "adv_detail_expand_on"%>Hover
           </div>
         </div>
       </div>
@@ -642,7 +656,7 @@
         position: absolute;
     }
 
-    .ad_type, .template_type, .bid_radio_button, .adv_detail_ad_type {
+    .ad_type, .template_type, .bid_radio_button, .adv_detail_ad_type, .adv_detail_expand_type, .adv_detail_viewable, .adv_detail_need_close_btn, .adv_detail_expand_on {
         width: 10px !important;
     }
 
@@ -925,6 +939,40 @@
               $(".related_item_ids").hide()
               $("#advertisement_related_item_ids").val("")
           }
+      })
+
+      $(".nv_add_details").hide()
+      var nv_val = $(".adv_detail_ad_type:checked").val()
+      if (nv_val != undefined)
+      {
+          $("."+nv_val+_nv_add_details).show()
+      }
+
+      $(".adv_detail_ad_type").change(function()
+      {
+          var changed_val = $(this).val()
+          var key = "." + changed_val + "_nv_add_details"
+
+          $(".nv_add_details").hide()
+          $(key).show()
+
+      })
+
+      $(".ev_add_details").hide()
+      var nv_val = $(".adv_detail_expand_type:checked").val()
+      if (nv_val != undefined)
+      {
+          $("."+nv_val+_nv_add_details).show()
+      }
+
+      $(".adv_detail_expand_type").change(function()
+      {
+          var changed_val = $(this).val()
+          var key = "." + changed_val + "_ev_add_details"
+
+          $(".ev_add_details").hide()
+          $(key).show()
+
       })
   })
 </script>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151208090626) do
+ActiveRecord::Schema.define(:version => 20151210151750) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -108,6 +108,8 @@ ActiveRecord::Schema.define(:version => 20151208090626) do
     t.string   "expand_on"
     t.integer  "dynamic_ad_height"
     t.boolean  "viewable",          :default => true
+    t.string   "nv_click_url"
+    t.string   "ev_click_url"
   end
 
   create_table "advertisements", :force => true do |t|

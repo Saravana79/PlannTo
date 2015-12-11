@@ -205,11 +205,6 @@ class AdvertisementsController < ApplicationController
             @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
             @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
             @vendor_ad_details.default = {"vendor_name" => "Amazon"}
-            if @is_test != "true"
-              @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                                      cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
-              Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
-            end
 
             @item_details = @item_details.uniq(&:url)
             @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
@@ -269,6 +264,19 @@ class AdvertisementsController < ApplicationController
 
       if !@adv_detail.blank? && @adv_detail.ad_type == "dynamic"
         @expanded_view_ratio = 0.0
+      end
+
+      # if @is_test != "true"
+      #   @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+      #                                                           cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
+      #   Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
+      # end
+
+      if @is_test != "true"
+        item_id = @item.id rescue item_ids.first
+        @impression_id = AddImpression.add_impression_to_resque(impression_type, item_id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
+        Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
       end
     end
 
@@ -331,11 +339,6 @@ class AdvertisementsController < ApplicationController
       @publisher = Publisher.getpublisherfromdomain(url)
       # Check have to activate tabs for publisher or not
       # @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
-      if @is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque(impression_type, @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                                cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id], params[:visited])
-        Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
-      end
 
       @show_count = Item.get_show_item_count(@items)
     else
@@ -1091,7 +1094,7 @@ class AdvertisementsController < ApplicationController
     else
       params[:viewable] = @adv_detail.viewable.to_s
       params[:expand_type] = @adv_detail.expand_type
-      params[:visited] = "true" if params[:expanded] == "true"
+      params[:visited] = @adv_detail.viewable
     end
 
     if !@ad.blank? && @ad.advertisement_type == "housing_dynamic"
