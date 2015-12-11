@@ -1056,14 +1056,18 @@ class AdvertisementsController < ApplicationController
     params[:a] ||= ""
     params[:fashion_id] ||= ""
     params[:vendor_ids] ||= ""
-    params[:ad_type] ||= ""
     params[:hou_dynamic_l] ||= ""
     params[:l] ||= ""
     params[:visited] ||= ""
     format = request.format.to_s.split("/")[1]
     params[:format] = format
-    params[:viewable] ||= ""
     params[:expand_type] ||= ""
+    params[:ad_type] ||= ""
+    params[:viewable] ||= ""
+    params[:nv_click_url] ||= ""
+    params[:ev_click_url] ||= ""
+    params[:expand_on] ||= ""
+    params[:need_close_btn] ||= ""
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
@@ -1071,8 +1075,8 @@ class AdvertisementsController < ApplicationController
     @ad = Advertisement.get_ad_from_ref_url_for_image_ads(params)
 
     #TODO: temporary changes
-    # params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
-    # @ad = Advertisement.find 7
+    params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
+    @ad = Advertisement.find 7
     #
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
