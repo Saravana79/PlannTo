@@ -8,7 +8,7 @@
         <% if @normal_view_type == "image" %>
             <% item_id = @item.id rescue "" %>
             <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{item_id}&geo=#{params[:geo]}&red_url=#{@adv_detail.nv_click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
-            <a href="<%= history_detail_path %>"><img class="img_overlay_img" width="<%= @iframe_width %>" height="<%= @iframe_height %>" src="<%= @normal_view_src %>"></a>
+            <a href="<%= history_detail_path %>" target="_blank"><img class="img_overlay_img" width="<%= @iframe_width %>" height="<%= @iframe_height %>" src="<%= @normal_view_src %>"></a>
         <% elsif @normal_view_type == "flash" %>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_width %>" height="<%= @iframe_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
               <param name="MOVIE" value="<%= @normal_view_src %>">

@@ -6,7 +6,7 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
-  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format") : params.slice("item_id", "ads_id", "protocol_type", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on") : params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
@@ -1088,12 +1088,17 @@ class AdvertisementsController < ApplicationController
       # @expanded_file = @ad.images.where(:ad_size => "expanded_view").last
     end
 
-    p @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
+    @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
     if @adv_detail.blank?
       @adv_detail = AdvDetail.new
     else
+      params[:ad_type] = @adv_detail.ad_type.to_s
+      params[:nv_click_url] = @adv_detail.nv_click_url.to_s
+      params[:ev_click_url] = @adv_detail.ev_click_url.to_s
+      params[:expand_type] = @adv_detail.expand_type.to_s
+      params[:need_close_btn] = @adv_detail.need_close_btn.to_s
       params[:viewable] = @adv_detail.viewable.to_s
-      params[:expand_type] = @adv_detail.expand_type
+      params[:expand_on] = @adv_detail.expand_on
       params[:visited] = @adv_detail.viewable
     end
 
@@ -1139,9 +1144,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type", "format"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type", "format"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on"))
     end
 
     cache_params = CGI::unescape(cache_params)
