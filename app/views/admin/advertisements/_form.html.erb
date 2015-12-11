@@ -945,7 +945,7 @@
       var nv_val = $(".adv_detail_ad_type:checked").val()
       if (nv_val != undefined)
       {
-          $("."+nv_val+_nv_add_details).show()
+          $("."+nv_val+"_nv_add_details").show()
       }
 
       $(".adv_detail_ad_type").change(function()
@@ -960,9 +960,9 @@
 
       $(".ev_add_details").hide()
       var nv_val = $(".adv_detail_expand_type:checked").val()
-      if (nv_val != undefined)
+      if (nv_val != undefined && nv_val != "none")
       {
-          $("."+nv_val+_nv_add_details).show()
+          $("."+nv_val+"_nv_add_details").show()
       }
 
       $(".adv_detail_expand_type").change(function()
