@@ -8,6 +8,7 @@ ruby '1.9.3'
 gem 'mysql2'
 gem 'uuidtools' 
 gem "configatron", "~> 2.8.4"
+gem 'memcachier'
 gem 'dalli'
 gem 'fb_graph'
 gem "oauth"
