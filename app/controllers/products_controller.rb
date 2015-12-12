@@ -345,8 +345,8 @@ class ProductsController < ApplicationController
         @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
       end
     else
-      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
+      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
     end
 
     @search_url = CGI.escape(@search_url)
@@ -379,7 +379,7 @@ class ProductsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
+      # @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
     end
     @ref_url = url
     jsonp = prepare_response_json()
@@ -448,7 +448,7 @@ class ProductsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+      # @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
     end
     @ref_url = url
   end
@@ -616,10 +616,10 @@ class ProductsController < ApplicationController
 
     @where_to_buy_items = @where_to_buy_items.first(show_count)
 
-    if @where_to_buy_items.blank?
-      itemsaccess = "none"
-      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
-    else
+    if !@where_to_buy_items.blank?
+      # itemsaccess = "none"
+      # @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
+    # else
       if params[:is_test] != "true"
         @impression_id = AddImpression.add_impression_to_resque("elec_widget_1", @item, url, current_user.blank? ? nil : current_user.id, request.remote_ip, nil, itemsaccess, url_params,
                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
