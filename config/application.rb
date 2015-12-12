@@ -57,5 +57,8 @@ module PlanNto
 
     # config.middleware.use Oink::Middleware, :logger => Hodel3000CompliantLogger.new(STDOUT)
 
+    #Enable GC logger for newrelic
+    GC::Profiler.enable
+
   end
 end
