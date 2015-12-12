@@ -125,3 +125,6 @@ gem 'roo', '~> 2.1.1'
 #
 # #gem to terminate long request
 # gem 'rack-timeout', '~> 0.3.2'
+
+#Skylight is a smart profiler for Rails apps
+gem 'skylight', '~> 0.10.0'
