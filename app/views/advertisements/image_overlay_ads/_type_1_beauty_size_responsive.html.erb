@@ -1,8 +1,17 @@
-<% if !@items.blank? %>
-    <style type="text/css">
-        <%if @items.size == 1%>
+<style type="text/css">
+
+    @media (max-width: 499px) {
         .product-container {
             width: 100%;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        .product-img {
+            width: 30%;
+        }
+
+        .product-title-div {
+            width: 70%;
         }
 
         .product-container-top {
@@ -12,104 +21,182 @@
         }
 
         .planntocarosel-left {
-            padding: 107px 3px 0 0px;
+            padding: 100px 1px 0 0px;
+            height: 157px;
         }
 
         .planntocarosel-right {
-            padding: 107px 3px 0 0px;
+            padding: 100px 1px 0 0px;
+            height: 157px;
         }
 
-        <%else%>
+    }
+
+    @media (min-width: 500px) {
         .product-container {
-            width: 50%
+            width: 100%;
+            border-bottom: 1px solid #E5E5E5;
         }
 
-        .product-container-top {
-            width: 86%;
-            float: left;
+        .product-img {
+            width: 30%;
         }
 
-        .planntocarosel-left {
-            padding: 35px 3px 0 0px;
+        .product-title-div {
+            width: 70%;
         }
 
-        .planntocarosel-right {
-            padding: 35px 3px 0 0px;
-        }
+    }
 
-        <%end%>
-    </style>
-    <div id="container">
-      <div>
-        <ul class="shadetabs">
-          <li class="selected">
-            <a href="javascript:void(0)" id="where_to_buy_items_a">Recommended Products For You</a>
-          </li>
-      </div>
-      <% search_url = !@search_url.blank? ? "#{configatron.hostname}/history_details?item_id=&geo=#{params[:geo]}&red_url=#{@search_url}&iid=#{@impression_id}" : "" %>
-      <div id="productdiv">
-        <div class="planntocarosel-left">
-          <a title="Prev" href="<%= search_url %>" target="_blank">
-            <span></span>
-          </a>
-        </div>
-        <% @items.first(8).each_slice(2).each_with_index do |items, indx| %>
-            <div class="product-container-top" id="<%= indx + 1 %>">
-              <% items.each do |item| %>
+    .icon-white {
+    }
+
+    .icon-chevron-left {
+        background-position: -432px -72px;
+    }
+
+    .icon-chevron-right {
+        background-position: -456px -72px;
+    }
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        *margin-right: .3em;
+        line-height: 14px;
+        vertical-align: text-top;
+        background-position: 14px 14px;
+        background-repeat: no-repeat;
+        margin-top: 4px;
+    }
+
+
+</style>
+
+<%= javascript_include_tag "http://cdn1.plannto.com/static/javascripts/owl.carousel.min.js" %>
+<%#= javascript_include_tag "/home/sivakumar/Downloads/owl.carousel/owl-carousel/owl.carousel.js" %>
+
+<link rel="stylesheet" type="text/css" href="http://cdn1.plannto.com/static/stylesheets/owl.carousel.css"/>
+
+<% search_url = !@search_url.blank? ? "#{configatron.hostname}/history_details?item_id=&geo=#{params[:geo]}&red_url=#{@search_url}&iid=#{@impression_id}" : "" %>
+<div class="advt-block" style="width:100%;height:80px;">
+  <div class="advt-728">
+    <div id="owl-demo" class="owl-carousel">
+         <% @items.first(8).each_with_index do |item, indx| %>
                   <% if item.itemdetail_id.blank? %>
                       <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{@item.id}&geo=#{params[:geo]}&red_url=#{item.click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
                   <% else %>
                       <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{@item.id}&geo=#{params[:geo]}&detail_id=#{item.itemdetail_id}&red_url=&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
                   <% end %>
-                  <div class="product-container">
-                    <div class="product-img">
-                      <a href="<%= history_detail_path %>" target="_blank" rel="nofollow">
-                        <% if !item.image_name.blank? %>
-                            <%= get_image_tag_from_image_name(item.image_name, "Amazon", @item.base_item_image_url(:medium), 140, 105).html_safe %>
+              <!--  <div class="item_details" id="item_detail_<%#= indx + 1 %>">
+              <div class="advt-box">
+               <!-- <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
+              -->
+              <div class="product-container">
+                <div class="product-img">
+                  <a href="<%= history_detail_path %>" target="_blank" style="text-decoration:none;">
+                    <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+
+                     <% if !item.image_name.blank? %>
+                            <%= get_image_tag_from_image_name(item.image_name, "Amazon", @item.base_item_image_url(:medium), '', 82).html_safe %>
                         <% else %>
                             <img src="<%= item.image_url %>" alt="" id="item_details">
                         <% end %>
-                      </a>
-
-                    </div>
-                    <div class="product-text">
-                      <p class="product-title" style="height:48px;overflow:hidden;font-size:14px;padding:5px 0px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(58) %></p>
-
-                      <div class="product-price">
-                        <ul style="margin:0px;padding:0px;">
-                          <li class=' <%= item.sale_price.blank? ? "price" : "strike" %>'><%= item.price.blank? ? "" : prettifyforprice(item.price) %> </li>
-                          <li class='price'><%= item.sale_price.blank? ? "" : prettifyforprice(item.sale_price) %></li>
-                        </ul>
-
+       
+                    <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
+                  </a>
+                </div>
+                <div style="float:right;height:78px;" class="product-title-div">
+                  <div style="float:left;">
+                    <a href="<%= history_detail_path %>" target="_blank" class="">
+                      <div style="float:left;width:100%">
+                        <h3 class="product-title"><%= item.name.to_s.truncate(58) %></h3>
                       </div>
-
-
-                      <p class="btn">
-                        <a class="shop-now" href="<%= history_detail_path %>" target="_blank" rel="nofollow">Shop
-                          Now</a>
-                      </p>
-                      </a>
-                      <br clear="both"/>
-
-                    </div>
+                      <div style="float:left;width:100%">
+                        <p class="price"><%= item.sale_price.blank? ? "" : prettifyforprice(item.sale_price) %></p>
+                      </div>
+                      <div style="float:left;">
+                        <p class="btn">
+                          <a href="<%= history_detail_path %>" target="_blank" class="shop-now">
+                            Show Now
+                          </a>
+                        </p>
+                      </div>
+                    </a>
                   </div>
-              <% end %>
-            </div>
-        <% end %>
-        <div class="planntocarosel-right">
-          <a title="Next" href="<%= search_url %>" target="_blank">
-            <span></span>
-          </a>
-        </div>
-      </div>
-      <% if !search_url.blank? %>
-          <div class="bottompan">
-                  <span>
-                                     <a href="<%= search_url %>" id="plannto_go_button" target="_blank" style="text-decoration:none;color: #428BCA!important;" rel="nofollow">View
-                                       All</a>
-                    </span>
-          </div>
-      <% end %>
-    </div>
+                </div>
 
-<% end %>
+              </div>
+
+
+              <!--  </div>
+              <img class="vendor_image_src" src="<%#= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+            </div> -->
+         
+         
+
+      <% end %>
+      </div>
+  <!-- end of advt-300 -->
+</div><!-- end of advt-block -->
+
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+
+    .product-container a {
+        text-decoration: none !important;
+    }
+
+    .advt-728 .advt-box .product-container h3 {
+        word-break: normal;
+        padding: 7px 0 0;
+    }
+
+</style>
+
+<script type="text/javascript">
+    jQuery.noConflict();
+
+    function owl_carousel() {
+        owl.owlCarousel({
+            /*   navigation: true,
+             navigationText: [
+             "<i class='icon-chevron-left icon-white'></i>",
+             "<i class='icon-chevron-right icon-white'></i>"
+             ],*/
+            items: 2, //10 items above 1000px browser width
+            itemsDesktop: [1000, 2], //5 items between 1000px and 901px
+            itemsDesktopSmall: [600, 2], // betweem 900px and 601px
+            itemsTablet: [500, 1], //2 items between 600 and 0
+            itemsMobile: [300, 1]// itemsMobile disabled - inherit from itemsTablet option
+
+        });
+    }
+
+    jQuery(document).ready(function () {
+        console.log(jQuery)
+        console.log(jQuery("#owl-demo"))
+        owl = PlannTo.jQuery("#owl-demo")
+        setTimeout(owl_carousel, 300)
+
+        setTimeout(owl_carousel, 1000)
+
+        setTimeout(owl_carousel, 2000)
+
+        setTimeout(owl_carousel, 5000)
+
+        jQuery('.link').on('click', function (event) {
+            var $this = $(this);
+            if ($this.hasClass('clicked')) {
+                $this.removeAttr('style').removeClass('clicked');
+            } else {
+                $this.css('background', '#7fc242').addClass('clicked');
+            }
+        });
+    })
+</script>
