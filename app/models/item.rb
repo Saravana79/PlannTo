@@ -1422,7 +1422,7 @@ end
         @items = item_ids.collect {|id| @items.detect {|x| x.id == id.to_i}}
         @items.compact!
       else
-        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
         @items = Item.where(:id => item_ids) if @items.blank?
       end
       url = url.blank? ? request.referer : url
@@ -1430,7 +1430,7 @@ end
       unless $redis.get("#{url}ad_or_widget_item_ids").blank?
         # @items = Item.where("id in (?)", $redis.get("#{url}ad_or_widget_item_ids").split(","))
         redis_item_ids = $redis.get("#{url}ad_or_widget_item_ids").split(",")
-        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
       else
         unless url.nil?
           tempurl = url
@@ -1455,7 +1455,7 @@ end
           unless @articles.empty?
             @items = @articles[0].allitems.select{|a| a.is_a? Product}
             article_items_ids = @items.map(&:id)
-            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
             if !new_items.blank?
               @items = new_items
@@ -1481,7 +1481,7 @@ end
         @items = item_ids.collect {|id| @items.detect {|x| x.id == id.to_i}}
         @items.compact!
       else
-        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
         @items = Item.where(:id => item_ids) if @items.blank?
       end
       url = url.blank? ? request.referer : url
@@ -1489,7 +1489,7 @@ end
       unless $redis.get("#{url}ad_or_widget_item_ids").blank?
         # @items = Item.where("id in (?)", $redis.get("#{url}ad_or_widget_item_ids").split(","))
         redis_item_ids = $redis.get("#{url}ad_or_widget_item_ids").split(",")
-        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
       else
         unless url.nil?
           tempurl = url
@@ -1514,7 +1514,7 @@ end
           unless @articles.empty?
             @items = @articles[0].allitems.select{|a| a.is_a? Product}
             article_items_ids = @items.map(&:id)
-            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
             if !new_items.blank?
               @items = new_items
@@ -2349,7 +2349,7 @@ end
     items = articles[0].allitems
 
     article_items_ids = items.map(&:id)
-    new_items = article_items_ids.blank? ? [] : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+    new_items = article_items_ids.blank? ? [] : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
     if !new_items.blank?
       items = new_items
@@ -3158,7 +3158,7 @@ end
       unless @articles.empty?
         @items = @articles[0].allitems.select{|a| a.is_a? Product}
         article_items_ids = @items.map(&:id)
-        new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+        new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
         if !new_items.blank?
           @items = new_items
