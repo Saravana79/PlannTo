@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151210151750) do
+ActiveRecord::Schema.define(:version => 20151213092219) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -756,6 +756,8 @@ ActiveRecord::Schema.define(:version => 20151210151750) do
     t.integer  "vendor_id"
     t.integer  "status"
   end
+
+  add_index "impression_missings", ["hosted_site_url", "req_type"], :name => "index_impression_missings_on_hosted_site_url_and_req_type"
 
   create_table "impressions", :force => true do |t|
     t.string   "impressionable_type"
