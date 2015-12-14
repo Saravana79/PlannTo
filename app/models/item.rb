@@ -2665,7 +2665,7 @@ end
   end
 
   def self.get_amazon_product_product_text_link_from_item_id(asin, page_type)
-    category_item_detail = Item.get_amazon_product_link_from_asin(asin)
+    Item.get_amazon_product_link_from_asin(asin)
   end
 
   def self.remove_duplicate_items_process(item_ids)

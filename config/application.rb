@@ -60,5 +60,8 @@ module PlanNto
     #Enable GC logger for newrelic
     GC::Profiler.enable
 
+    #Removed middleware to optimize performance ref: http://stackoverflow.com/questions/29082744/is-it-safe-to-remove-racklock
+    config.middleware.delete "Rack::Lock"
+
   end
 end
