@@ -2,6 +2,8 @@ class AdvertisementsController < ApplicationController
   include Admin::AdvertisementsHelper
   layout "product"
 
+  newrelic_ignore :only => [:show_ads]
+
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
