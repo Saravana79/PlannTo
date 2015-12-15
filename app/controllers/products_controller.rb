@@ -1364,8 +1364,8 @@ class ProductsController < ApplicationController
           category_item_detail_id = FeedUrl.get_value_from_pattern(cache, "item_id=<item_id>&amp;", "<item_id>")
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "amazon_sports_widget", category_item_detail_id, nil)
 
-          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>") if !old_iid.blank? && !@impression_id.blank?
-          cache = cache.gsub(old_iid, @impression_id)
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
+          cache = cache.gsub(old_iid, @impression_id) if !old_iid.blank? && !@impression_id.blank?
         end
         return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)
@@ -1420,8 +1420,8 @@ class ProductsController < ApplicationController
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
 
-          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>") if !old_iid.blank? && !@impression_id.blank?
-          cache = cache.gsub(old_iid, @impression_id)
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
+          cache = cache.gsub(old_iid, @impression_id) if !old_iid.blank? && !@impression_id.blank?
         end
 
         if extname == "js"
@@ -1466,7 +1466,7 @@ class ProductsController < ApplicationController
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
-          cache = cache.gsub(old_iid, @impression_id)
+          cache = cache.gsub(old_iid, @impression_id) if !old_iid.blank? && !@impression_id.blank?
 
           if !params[:ascsubtag].blank?
             old_sub_tag = FeedUrl.get_value_from_pattern(cache, "ascsubtag%3D<subtag>>", "<subtag>")

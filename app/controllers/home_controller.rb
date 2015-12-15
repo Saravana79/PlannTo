@@ -15,17 +15,8 @@ layout false, only: [:targeting]
       @homepage = "true"
       @static_page = "true"
       @static_page1 = "true"
-     p 77777777777777777777
-     logger.info 77777777777777777777
-     p Symbol.all_symbols.size
-     logger.info Symbol.all_symbols.size
       render :index
     # end
-     p 77777777777777777777
-    logger.info 77777777777777777777
-     p Symbol.all_symbols.size
-     logger.info Symbol.all_symbols.size
-
    end
 
   def terms_conditions
