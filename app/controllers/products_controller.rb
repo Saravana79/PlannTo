@@ -1364,7 +1364,7 @@ class ProductsController < ApplicationController
           category_item_detail_id = FeedUrl.get_value_from_pattern(cache, "item_id=<item_id>&amp;", "<item_id>")
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "amazon_sports_widget", category_item_detail_id, nil)
 
-          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>") if !old_iid.blank? && !@impression_id.blank?
           cache = cache.gsub(old_iid, @impression_id)
         end
         return render :text => cache.html_safe, :content_type => "text/javascript"
@@ -1420,7 +1420,7 @@ class ProductsController < ApplicationController
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
 
-          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>") if !old_iid.blank? && !@impression_id.blank?
           cache = cache.gsub(old_iid, @impression_id)
         end
 

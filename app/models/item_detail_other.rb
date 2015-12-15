@@ -279,11 +279,15 @@ class ItemDetailOther < ActiveRecord::Base
     car_ids = cars.map(&:id)
 
     location_condition = location_ids.blank? ? "and 1=1" : "and location_id in (#{location_ids.map(&:inspect).join(',')})"
-    car_condition = car_ids.blank? ? "1=1" : "select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')})"
+    car_condition = car_ids.blank? ? "" : "select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')})"
 
     order_by_condition = " order by rand() limit 12"
 
-    query = "select * from item_detail_others where id in (#{car_condition}) and itemtype_id in (1) and status = 1  #{location_condition} #{order_by_condition}"
+    if car_condition.blank?
+      query = "select * from item_detail_others where itemtype_id in (1) and status = 1  #{location_condition} #{order_by_condition}"
+    else
+      query = "select * from item_detail_others where id in (#{car_condition}) and itemtype_id in (1) and status = 1  #{location_condition} #{order_by_condition}"
+    end
     item_details = ItemDetailOther.find_by_sql(query)
 
     # if !fashion_id.blank?
@@ -293,7 +297,7 @@ class ItemDetailOther < ActiveRecord::Base
     # end
 
     if item_details.count < 12
-      query = "select * from item_detail_others where itemtype_id in (1) and status = 1 #{location_condition}"
+      query = "select * from item_detail_others where itemtype_id in (1) and status = 1 #{location_condition} limit 10"
       result_item_details = ItemDetailOther.find_by_sql(query)
       new_item_details = result_item_details - item_details
       item_details = item_details + new_item_details

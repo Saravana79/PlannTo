@@ -31,7 +31,7 @@ class Itemdetail < ActiveRecord::Base
       order_by_condition = " order by rand(), sort_priority desc limit 12"
     else
       order_by_condition = "ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
-                 itemdetails.cashback end) asc"
+                 itemdetails.cashback end) asc limit 12"
     end
 
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
@@ -58,28 +58,28 @@ class Itemdetail < ActiveRecord::Base
   end
 
   def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, more_vendors, p_item_ids=[], ad=nil)
-    @item_details = []
+    item_details = []
     if item_ids.count > 1
-      @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad).group_by { |each_rec| each_rec.itemid }
+      item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad).group_by { |each_rec| each_rec.itemid }
     elsif item_ids.count == 1
       items = Item.get_related_items_if_one_item(items, publisher, status) #if (activate_tab && items.count == 1)
       item_ids = items.map(&:id)
-      @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad).group_by { |each_rec| each_rec.itemid }
-      # @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
+      item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad).group_by { |each_rec| each_rec.itemid }
+      # item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
     end
 
     if (more_vendors == "true" || vendor_ids.count > 1)
-      @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
+      item_details = item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(item_details, vendor_ids).flatten.uniq(&:url)
     else
       group_ids = Itemdetail.get_group_ids_from_item_ids(item_ids) rescue {}
 
-      if @item_details.is_a?(Hash)
-        @item_details = Itemdetail.get_sort_by_group(@item_details, group_ids)
+      if item_details.is_a?(Hash)
+        item_details = Itemdetail.get_sort_by_group(item_details, group_ids)
       else
-        @item_details = @item_details.flatten
+        item_details = item_details.flatten
       end
     end
-    @item_details
+    item_details
   end
 
   def self.get_group_ids_from_item_ids(item_ids)
