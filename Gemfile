@@ -1,13 +1,14 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.1'
-ruby '1.9.3'
+gem 'rails', '4.2.0'
+ruby '2.2.3'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 gem 'mysql2'
-gem 'uuidtools' 
-gem "configatron", "~> 2.8.4"
+gem 'uuidtools'
+# gem "configatron"#, "~> 2.8.4"
+gem 'configatron', '~> 4.5'
 gem 'memcachier'
 gem 'dalli'
 gem 'fb_graph'
@@ -17,8 +18,8 @@ gem "omniauth"
 gem "omniauth-facebook"
 gem "omniauth-oauth2"
 gem "hashie"
-gem 'devise', '~> 2.0.0'
-gem "friendly_id", "~> 4.0.1"
+gem 'devise'#, '~> 2.0.0'
+gem "friendly_id"#, "~> 4.0.1"
 gem "koala"
 gem "mogli"
 gem 'will_paginate'
@@ -35,24 +36,29 @@ gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  #please dont change the versionof sass-rails
-  gem 'sass-rails', "3.1.4"
-  gem 'coffee-rails', "~> 3.1.0"
-  gem 'uglifier'
-end
-#gem 'sqlite3'
-gem 'citier', '~>0.1.15'
-gem 'rails_sql_views' , :git=> 'https://github.com/morgz/rails_sql_views.git'
+# group :assets do
+#   #please dont change the versionof sass-rails
+#   gem 'sass-rails'#, "3.1.4"
+#   gem 'coffee-rails'#, "~> 3.1.0"
+#   gem 'uglifier'
+# end
+
+# gem "sass-rails", "~> 5.0.0"
+# gem "uglifier", ">= 1.3.0"
+# gem "coffee-rails", "~> 4.1.0"
+
+# gem 'sqlite3'
+# gem 'citier'#, '~>0.1.15'
+gem 'rails_sql_views' #, :git=> 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
 gem 'jquery-rails'
 gem 'acts-as-taggable-on', '~>2.4.1'
 gem 'acts_as_rateable'
 gem 'remotipart', '~> 1.0'
 gem 'acts_as_commentable'
-gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
+#gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
 #gem 'devise'
-gem 'sunspot_rails', '~>1.3.1'
+gem 'sunspot_rails'#, '~>1.3.1'
 gem 'sunspot_solr'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
@@ -76,7 +82,7 @@ group :test do
 end
 gem 'geocoder'
 gem 'progress_bar'
-gem "feedzirra", '~> 0.1.3'
+gem "feedzirra"#, '~> 0.1.3'
 
 # TO DO the daily jobs to queue
 gem "clockwork", "~> 0.7.2"
@@ -109,7 +115,7 @@ gem 'amazon-ecs', '~> 2.2.5'
 gem 'xml-simple', '~> 1.1.4'
 
 #bulk import active record
-gem 'activerecord-import', '~> 0.3.1'
+gem 'activerecord-import'#, '~> 0.3.1'
 
 gem 'net-http-digest_auth'
 
@@ -127,4 +133,4 @@ gem 'roo', '~> 2.1.1'
 # gem 'rack-timeout', '~> 0.3.2'
 
 #Skylight is a smart profiler for Rails apps
-gem 'skylight', '~> 0.10.0'
+# gem 'skylight', '~> 0.10.0'
