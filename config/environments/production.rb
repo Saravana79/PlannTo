@@ -22,8 +22,6 @@ PlanNto::Application.configure do
 
   config.assets.initialize_on_precompile = false
 
-
-
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
 
@@ -39,9 +37,6 @@ PlanNto::Application.configure do
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
-
-  # Use a different logger for distributed setups
-  # config.logger = SyslogLogger.new
 
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
