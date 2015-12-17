@@ -11,8 +11,8 @@ ActionMailer::Base.smtp_settings = {
     :enable_starttls_auto => true,
     :openssl_verify_mode => 'none'
 }
-# require 'aws/s3'
-Aws::S3::DEFAULT_HOST = "s3-ap-southeast-1.amazonaws.com" # if using sg buckets
+require 'aws/s3'
+AWS::S3::DEFAULT_HOST = "s3-ap-southeast-1.amazonaws.com" # if using sg buckets
 
 # Initialize the rails application
 PlanNto::Application.initialize!

@@ -2,7 +2,7 @@ class SearchAttribute < ActiveRecord::Base
 
   CLICK = "Click"
   
-  self.table_name = "search_display_attributes"
+  set_table_name "search_display_attributes"
   attr_accessor_with_default :primary_key, 'id'
 
   scope :by_itemtype, lambda { |type|

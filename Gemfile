@@ -1,13 +1,13 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2'
-ruby '2.2.3'
+gem 'rails', '3.1.1'
+ruby '1.9.3'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
-gem 'mysql2', "~> 0.3.10"
+gem 'mysql2'
 gem 'uuidtools' 
-gem "configatron", "~> 4.5.0"
+gem "configatron", "~> 2.8.4"
 gem 'memcachier'
 gem 'dalli'
 gem 'fb_graph'
@@ -36,9 +36,10 @@ gem 'therubyracer'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails', "  ~> 3.2.3"
-  gem 'coffee-rails', "~> 3.2.1"
-  gem 'uglifier', '>=1.0.3'
+  #please dont change the versionof sass-rails
+  gem 'sass-rails', "3.1.4"
+  gem 'coffee-rails', "~> 3.1.0"
+  gem 'uglifier'
 end
 #gem 'sqlite3'
 gem 'citier', '~>0.1.15'
@@ -75,10 +76,10 @@ group :test do
 end
 gem 'geocoder'
 gem 'progress_bar'
-# gem "feedzirra"#, '~> 0.1.3'
-# gem 'activerecord-mysql2-adapter'
+gem "feedzirra", '~> 0.1.3'
+
 # TO DO the daily jobs to queue
-gem "clockwork"#, "~> 0.7.2"
+gem "clockwork", "~> 0.7.2"
 
 # gem 'mailcatcher'
 #gem 'exception_notification', '3.0.1'
@@ -86,13 +87,12 @@ gem 'highcharts-rails', '~> 3.0.10'
 gem 'activeuuid'
 gem 'newrelic_rpm'
 gem 'rest-client', '~> 1.7.1'
-gem "facets", :require => false
+gem "facets", require: false
 gem 'addressable', '~> 2.3.6'
 gem 'open_uri_redirections', '~> 0.1.4'
 
 # gem for auto scale up and down workers in heroku
-gem 'heroku'
-gem 'heroku-api'#, '~> 0.3.19'
+gem 'heroku-api'
 
 # Connection for mongodb
 gem 'mongo'
@@ -127,7 +127,4 @@ gem 'roo', '~> 2.1.1'
 # gem 'rack-timeout', '~> 0.3.2'
 
 #Skylight is a smart profiler for Rails apps
-gem 'skylight'#, '~> 0.10.0'
-
-#To fix test-unit issue
-gem 'test-unit'
+gem 'skylight', '~> 0.10.0'

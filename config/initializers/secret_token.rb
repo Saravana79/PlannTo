@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-PlanNto::Application.config.secret_token = 'bb075c76e545792d61fcf081de1d2f94ebcb6b91f6f6a317f068d0d71abd05396068f3806a2be28a59916b2b6bc8a1da8ecf745b3028fd4dfaf4344ee7096757'
+PlanNto::Application.config.secret_token = '345125fb6233413501b7bccd2beab85257153ffe734886ab7eb3b3d854bc542de5035650b722bf13d67e7fc5d2bbf9e3bb9f037ff7525fe7049ad5699371a53b'
