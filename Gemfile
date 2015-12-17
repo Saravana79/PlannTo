@@ -1,11 +1,11 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.2'
-ruby '2.2.3'
+ruby '2.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
-gem 'mysql2', "~> 0.3.20"
+gem 'mysql2', "~> 0.3.11"
 gem 'uuidtools' 
 gem "configatron", "~> 4.5.0"
 gem 'memcachier'
