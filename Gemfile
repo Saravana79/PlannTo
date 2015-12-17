@@ -76,7 +76,7 @@ end
 gem 'geocoder'
 gem 'progress_bar'
 # gem "feedzirra"#, '~> 0.1.3'
-gem 'activerecord-mysql2-adapter'
+# gem 'activerecord-mysql2-adapter'
 # TO DO the daily jobs to queue
 gem "clockwork"#, "~> 0.7.2"
 

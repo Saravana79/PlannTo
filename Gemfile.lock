@@ -37,8 +37,6 @@ GEM
       tzinfo (~> 0.3.29)
     activerecord-import (0.3.1)
       activerecord (~> 3.0)
-    activerecord-mysql2-adapter (0.0.3)
-      mysql2
     activeresource (3.2.0)
       activemodel (= 3.2.0)
       activesupport (= 3.2.0)
@@ -361,7 +359,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import (~> 0.3.1)
-  activerecord-mysql2-adapter
   activeuuid
   acts-as-messageable
   acts-as-taggable-on (~> 2.4.1)
