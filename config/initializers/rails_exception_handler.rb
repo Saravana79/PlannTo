@@ -24,7 +24,15 @@ RailsExceptionHandler.configure do |config|
     'ActionController::RoutingError' => :not_found,
     'AbstractController::ActionNotFound' => :not_found
   }
-  # config.storage_strategies = [:active_record] # Available options: [:active_record, :rails_log, :remote_url => {:target => 'http://example.com'}]
+
+  config.storage_strategies = [:active_record] # Available options: [:active_record, :rails_log, :remote_url => {:target => 'http://example.com'}]
+
+  # Change database/table for the active_record storage strategy
+  config.active_record_store_in = {
+    :database => 'production',
+    :record_table => 'error_messages'
+  }
+
   config.store_request_info do |storage,request|
   
     storage[:target_url] =    request.url
@@ -35,13 +43,9 @@ RailsExceptionHandler.configure do |config|
   end
 
   config.store_exception_info do |storage,exception|
-    if exception.class.to_s == "ActionController::RoutingError"
-      # exit
-    end
      storage[:class_name] =   exception.class.to_s
      storage[:message] =      exception.to_s
      storage[:trace] =        exception.backtrace.join("\n")
-  
   end
 
   config.store_environment_info do |storage,env|
@@ -52,5 +56,5 @@ RailsExceptionHandler.configure do |config|
     storage[:app_name] =     Rails.application.class.parent_name
     storage[:created_at] =   Time.now
   end
-   config.store_user_info = {:method => :current_user, :field => :email} # Helper method for easier access to current_user
+  config.store_user_info = {:method => :current_user, :field => :email} # Helper method for easier access to current_user
 end
