@@ -139,8 +139,8 @@ class SearchController < ApplicationController
       data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating]
       keywords "", :fields => :name
       with(:manufacturer, list) if !params[:manufacturer].blank? #.any_of(@list)
-      with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)
-      with(:status, status) if !status.empty?
+      with(:manufacturer, list) if (!params[:manufacturer].present? && !list.blank?)
+      with(:status, status) if !status.blank?
       # with(:cargroup, cargrouplist) if !params[cargroup[:field_name].parameterize.underscore.to_sym].blank?
       facet :manufacturer
       #facet :cargroup

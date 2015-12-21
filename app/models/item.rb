@@ -794,13 +794,13 @@ def update_ratings()
         complete_shared_reviews.each do |rev|   
           shared_reviews << rev unless (rev.field1.to_i == 0 || rev.field1.nil?)
         end
-        #return 0 if (created_reviews.empty? && shared_reviews.empty?)
-        unless created_reviews.empty?
+        #return 0 if (created_reviews.blank? && shared_reviews.blank?)
+        unless created_reviews.blank?
         created_avg_sum = created_reviews.inject(0){|sum,review| sum += review.rating.to_f} 
         else
             created_avg_sum = 0
         end
-        unless shared_reviews.empty?
+        unless shared_reviews.blank?
         shared_avg_sum = shared_reviews.inject(0){|sum,review| sum += review.field1.to_f}
         else
           shared_avg_sum = 0
@@ -866,13 +866,13 @@ def populate_pro_con
                    # count+=1
                     item_pro = item.item_pro_cons.where(:proorcon => "Pro")
                     item_con = item.item_pro_cons.where(:proorcon => "Con")
-                    unless(content.field2.nil? or content.field2.empty?)
+                    unless(content.field2.nil? or content.field2.blank?)
                       
                       pros = (content.field2.include? ";") ? content.field2.split(/[.]\s|;/) : content.field2.split(/,|[.]\s/) 
                     else
                       pros = []
                     end
-                    unless(content.field3.nil? or content.field3.empty?)
+                    unless(content.field3.nil? or content.field3.blank?)
                       cons =  (content.field3.include? ";") ? content.field3.split(/[.]\s|;/) : content.field3.split(/,|[.]\s/) 
                     else
                       cons = []
@@ -1184,7 +1184,7 @@ end
       end
 
       page += 1
-    end while !p_v_records.empty?
+    end while !p_v_records.blank?
 
     log.debug "********** Completed Updating price and vendor_id for Items **********"
     log.debug "\n"
@@ -1259,7 +1259,7 @@ end
       end
       page += 1
       processed_item_ids << adv_records.map(&:item_id)
-    end while !adv_records.empty?
+    end while !adv_records.blank?
 
     if !item_ids.blank?
       processed_item_ids = processed_item_ids.flatten.map(&:to_i)
@@ -1286,7 +1286,7 @@ end
     items.each do |item|
       @item = item
       unless publisher.nil?
-        unless publisher.vendor_ids.nil? or publisher.vendor_ids.empty?
+        unless publisher.vendor_ids.nil? or publisher.vendor_ids.blank?
           vendor_ids = publisher.vendor_ids ? publisher.vendor_ids.split(",") : []
           exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
           where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
@@ -1304,7 +1304,7 @@ end
       end
       @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
 
-      if(@where_to_buy_items.empty?)
+      if(@where_to_buy_items.blank?)
         @tempitems << @item
       else
         break
@@ -1340,7 +1340,7 @@ end
       end
       @where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
 
-      if(@where_to_buy_items.empty?)
+      if(@where_to_buy_items.blank?)
         @tempitems << @item
       end
     end
@@ -1442,7 +1442,7 @@ end
           end
           @articles = ArticleContent.where(url: tempurl)
 
-          if @articles.empty? || @articles.nil?
+          if @articles.blank? || @articles.nil?
             #for pagination in publisher website. removing /2/
             tempstr = tempurl.split(//).last(3).join
             matchobj = tempstr.match(/^\/\d{1}\/$/)
@@ -1452,7 +1452,7 @@ end
             end
           end
 
-          unless @articles.empty?
+          unless @articles.blank?
             @items = @articles[0].allitems.select{|a| a.is_a? Product}
             article_items_ids = @items.map(&:id)
             new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
@@ -1501,7 +1501,7 @@ end
           end
           @articles = ArticleContent.where(url: tempurl)
 
-          if @articles.empty? || @articles.nil?
+          if @articles.blank? || @articles.nil?
             #for pagination in publisher website. removing /2/
             tempstr = tempurl.split(//).last(3).join
             matchobj = tempstr.match(/^\/\d{1}\/$/)
@@ -1511,7 +1511,7 @@ end
             end
           end
 
-          unless @articles.empty?
+          unless @articles.blank?
             @items = @articles[0].allitems.select{|a| a.is_a? Product}
             article_items_ids = @items.map(&:id)
             new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
@@ -2395,7 +2395,7 @@ end
     end
     @articles = ArticleContent.where(url: tempurl)
 
-    if @articles.empty? || @articles.nil?
+    if @articles.blank? || @articles.nil?
       #for pagination in publisher website. removing /2/
       tempstr = tempurl.split(//).last(3).join
       matchobj = tempstr.match(/^\/\d{1}\/$/)
@@ -3121,7 +3121,7 @@ end
 
       @articles = ArticleContent.where(url: tempurl)
 
-      if @articles.empty? || @articles.nil?
+      if @articles.blank? || @articles.nil?
         #for pagination in publisher website. removing /2/
         tempstr = tempurl.split(//).last(3).join
         matchobj = tempstr.match(/^\/\d{1}\/$/)
@@ -3155,7 +3155,7 @@ end
         status_details = [1,2,3]
       end
 
-      unless @articles.empty?
+      unless @articles.blank?
         @items = @articles[0].allitems.select{|a| a.is_a? Product}
         article_items_ids = @items.map(&:id)
         new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")

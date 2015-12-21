@@ -31,5 +31,5 @@ task :cookie_match_update_mapping => :environment do
       end
     end
     page += 1
-  end while !cookie_matches.empty?
+  end while !cookie_matches.blank?
 end

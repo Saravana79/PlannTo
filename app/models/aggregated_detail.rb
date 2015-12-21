@@ -35,7 +35,7 @@ class AggregatedDetail < ActiveRecord::Base
           aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => winning_price)
         end
         page += 1
-      end while !impressions.empty?
+      end while !impressions.blank?
 
       page = 1
       begin
@@ -46,7 +46,7 @@ class AggregatedDetail < ActiveRecord::Base
           aggregated_detail.update_attributes(:clicks_count => each_click.click_count)
         end
         page += 1
-      end while !clicks.empty?
+      end while !clicks.blank?
       $redis.set("update_aggregated_detail_is_running", 0)
     end
   end

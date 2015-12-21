@@ -486,12 +486,12 @@ def populate_pro_con
     ItemProCon.delete_all(["article_content_id = ?", content.id])
     #item_pro = content.itemtype.pro_con_categories.where(:proorcon => "Pro")
     #item_con = content.itemtype.pro_con_categories.where(:proorcon => "Con")
-    unless(content.field2.nil? or content.field2.empty?)      
+    unless(content.field2.nil? or content.field2.blank?)
       pros = (content.field2.include? ";") ? content.field2.split(/[.]\s|;/) : content.field2.split(/,|[.]\s/) 
     else
       pros = []
     end
-    unless(content.field3.nil? or content.field3.empty?)
+    unless(content.field3.nil? or content.field3.blank?)
       cons =  (content.field3.include? ";") ? content.field3.split(/[.]\s|;/) : content.field3.split(/,|[.]\s/) 
     else
       cons = []

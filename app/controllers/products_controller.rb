@@ -73,9 +73,9 @@ class ProductsController < ApplicationController
 
   caches_action :show,  :cache_path => Proc.new { |c|
     if(current_user)
-      c.params.merge(user: 1)
+      c.params.merge(:user => 1)
     else
-      c.params.merge(user: 0)
+      c.params.merge(:user => 0)
     end
      }
 #  caches_action :search_items, :cache_path => Proc.new { |c| c.params.except(:callback).except(:_) },:expires_in => 24.hours
@@ -1229,7 +1229,7 @@ class ProductsController < ApplicationController
     end
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/where_to_buy_items.js?#{cache_params}.js"
+    cache_key = "views/#{host_name}/where_to_buy_items.js?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -1276,7 +1276,7 @@ class ProductsController < ApplicationController
     end
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/where_to_buy_items_vendor.js?#{cache_params}.js"
+    cache_key = "views/#{host_name}/where_to_buy_items_vendor.js?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -1350,7 +1350,7 @@ class ProductsController < ApplicationController
     end
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/sports_widget.js?#{cache_params}.js"
+    cache_key = "views/#{host_name}/sports_widget.js?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -1389,14 +1389,18 @@ class ProductsController < ApplicationController
     params[:ret_format] ||= ""
     params[:is_test] ||= "false"
 
-    if params[:ret_format] == "html"
+    if request.format.symbol == :html
+      params[:ret_format] = "html"
       params[:format] = "html"
       extname = "html"
-    elsif params[:ret_format] == "xml"
+    elsif request.format.symbol == :xml
+      params[:ret_format] = "xml"
       params[:format] = "xml"
       extname = "xml"
     else
+      params[:ret_format] = "js"
       extname = "js"
+      params[:format] = "js"
     end
 
     params[:is_test] = "false" if params[:ref_url].to_s.include?("gizbot.com")
@@ -1409,7 +1413,7 @@ class ProductsController < ApplicationController
     end
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/elec_widget_1.#{extname}?#{cache_params}.#{extname}"
+    cache_key = "views/#{host_name}/elec_widget_1.#{extname}?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -1454,7 +1458,7 @@ class ProductsController < ApplicationController
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type"))
       cache_params = CGI::unescape(cache_params)
     end
-    cache_key = "views/#{host_name}/price_text_vendor_details.js?#{cache_params}.js"
+    cache_key = "views/#{host_name}/price_text_vendor_details.js?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -1505,11 +1509,12 @@ class ProductsController < ApplicationController
     params[:page_type] ||= ""
     params[:fashion_id] ||= ""
     params[:beauty] ||= "false"
+    params[:geo] ||= "in"
 
     @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
-    params[:ref_url] = url
+    params[:ref_url] = url.to_s
 
     @items, @url, from_article_field = Item.get_items_from_url(url, params[:item_ids])
 
@@ -1555,7 +1560,7 @@ class ProductsController < ApplicationController
     end
 
     cache_params = CGI::unescape(cache_params)
-    cache_key = "views/#{host_name}/widget_for_women.js?#{cache_params}.js"
+    cache_key = "views/#{host_name}/widget_for_women.js?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)

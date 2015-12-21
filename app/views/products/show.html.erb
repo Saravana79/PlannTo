@@ -88,7 +88,7 @@ padding:10px;">
                   <%else%>
                   <td>
                     <%end%>                   
-                    <%if key == "Con" and @items_specification["Con"].empty?%>
+                    <%if key == "Con" and @items_specification["Con"].blank?%>
                     There are no major TradeOffs.
                     <br/>
                     <%end%>
@@ -96,7 +96,7 @@ padding:10px;">
                     <% v[:values].each do |av| %>
                     <%unless av.value.nil? or av.value == ""%>
                     <div><%=v[:title] %>  <span class="txt_brown" style="text-align:inherit;font-size:11px;">
-                      <%= if (v[:description].nil? or v[:description].empty?)                         
+                      <%= if (v[:description].nil? or v[:description].blank?)
                        raw " - " + display_specification_value(av,av.attribute)
                     #else 
                     #v[:description] 

@@ -380,7 +380,7 @@ class ContentsController < ApplicationController
     @article_categories = ArticleCategory.get_by_itemtype(0)
     @items = Array.new
   end  
-  if(@items.empty? && !@item.nil?)
+  if(@items.blank? && !@item.nil?)
     @items << @item
   end    
 end
@@ -536,7 +536,7 @@ end
   
   def get_sub_type(sub_type, itemtype_id)   
     if sub_type =="All"
-      if itemtype_id.empty?
+      if itemtype_id.blank?
         @ac = ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
         # @ac.delete("Others")
         return @ac

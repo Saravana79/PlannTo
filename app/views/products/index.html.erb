@@ -91,7 +91,7 @@
 
   <br/>
 <%=render :partial => "shared/google_adsense_square" %>
-<% unless @followers.empty? %>
+<% unless @followers.blank? %>
    <table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
     <tr>
       <td class="bg_widgethdr txt_white">Followed by - <%= @followers_count rescue 0%></td>

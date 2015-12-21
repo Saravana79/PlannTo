@@ -10,7 +10,7 @@ class AttributeValue < ActiveRecord::Base
     key = "nothing"
     tempValue = getValue
     self.attribute.item_specification_summary_lists.each do |a|
-      unless(tempValue.nil? or tempValue.strip.empty?)
+      unless(tempValue.nil? or tempValue.strip.blank?)
         case a.condition
         when "Not Equal"
           if(a.value1 != "****")

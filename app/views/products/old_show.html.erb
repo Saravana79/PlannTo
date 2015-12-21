@@ -118,7 +118,7 @@
                              <%else%>
                                  <td>
                              <%end%>
-                             <%if key == "Con" and @items_specification["Con"].empty?%>
+                             <%if key == "Con" and @items_specification["Con"].blank?%>
                                  There are no major TradeOffs.
                                  <br/>
                              <%end%>
@@ -126,7 +126,7 @@
                                  <% v[:values].each do |av| %>
                                      <%unless av.value.nil? or av.value == ""%>
                                          <div><%=v[:title] %>  <span class="txt_brown" style="text-align:inherit;font-size:11px;">
-                      <%= if (v[:description].nil? or v[:description].empty?)
+                      <%= if (v[:description].nil? or v[:description].blank?)
                             raw " - " + display_specification_value(av,av.attribute)
                             #else
                             #v[:description]
@@ -238,7 +238,7 @@
     This section summaries the pros/cons based on reviews from experts, please click the items to check the complete review.
   </div>
 </div>
-<% unless (@pro_cons.empty? and @verdicts.empty?) or (!(@item.is_a? Product))%>
+<% unless (@pro_cons.blank? and @verdicts.blank?) or (!(@item.is_a? Product))%>
     <div style="width: 680px;margin-left: 13px;border: 1px solid #E3E3E3;border-bottom: 0px;clear: both;padding:10px;margin-top:20px;min-height:35px; ">
       <h3 class="producttabsubheader" style="width:670px;">Experts Review's Summary<%= link_to "(?)","#",:onclick => "$('#expert_review_help').bPopup({
    closeClass:'Closebut',
@@ -246,7 +246,7 @@
    position: [screen.width / 3, $(window).scrollTop() + 150],
    follow: [false, false]
  });return false;", :title => "Help" , :style => "color: #808080;font-size: 9px;float: right;padding-right: 10px;" %></h3>
-      <% unless @pro_cons.empty? %>
+      <% unless @pro_cons.blank? %>
           <table style="">
             <tr>
               <th style="width: 200px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Pro</p></th>
@@ -281,7 +281,7 @@
       <%end%>
     </div>
 <%end%>
-<% unless (@verdicts.empty?)  or (!(@item.is_a? Product)) %>
+<% unless (@verdicts.blank?)  or (!(@item.is_a? Product)) %>
     <!--    <script src="/javascripts/jquery.jcarousel.js" type="text/javascript"></script>-->
     <%= stylesheet_link_tag "/stylesheets/skininproduct.css" %>
     <div class="container" style="width:700px;">
@@ -395,7 +395,7 @@
   <%end%>
 
 
-  <% unless @item.get_followers.empty? %>
+  <% unless @item.get_followers.blank? %>
 
       <table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
         <tr>
@@ -600,7 +600,7 @@ jQuery(document).ready(function() {
 
 </script>
 -->
-<% unless @verdicts.empty? %>
+<% unless @verdicts.blank? %>
     <script type="text/javascript">
         jQuery(document).ready(function() {
             jQuery('#first-carousel').jcarousel();

@@ -8,11 +8,11 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
-  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on") : params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "ret_format") : params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "ret_format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
-  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :video_ads, :cache_path => proc {|c| params.slice("ads_id", "size", "item_id", "protocol_type", "ret_format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
   skip_before_filter  :verify_authenticity_token, :only => [:ads_visited]
@@ -1063,6 +1063,7 @@ class AdvertisementsController < ApplicationController
     params[:visited] ||= ""
     format = request.format.to_s.split("/")[1]
     params[:format] = format
+    params[:ret_format] = format
     params[:expand_type] ||= ""
     params[:ad_type] ||= ""
     params[:viewable] ||= ""
@@ -1150,17 +1151,17 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "ret_format"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "ret_format"))
     end
 
     cache_params = CGI::unescape(cache_params)
 
     cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}"
-    if params[:format].to_s == "json"
-      cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}.json"
-    end
+    # if params[:format].to_s == "json"
+    #   cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}.json"
+    # end
 
     # p cache_key
     cache_json = {}
@@ -1257,6 +1258,7 @@ class AdvertisementsController < ApplicationController
     params[:type] = "video_advertisement"
     format = request.format.to_s.split("/")[1]
     params[:format] = format
+    params[:ret_format] = format
 
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
@@ -1290,10 +1292,10 @@ class AdvertisementsController < ApplicationController
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
 
     # cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r"))
-    cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "item_id", "format", "protocol_type"))
+    cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "item_id", "protocol_type", "ret_format"))
 
     cache_params = CGI::unescape(cache_params)
-    cache_key = "views/#{host_name}/advertisements/video_ads?#{cache_params}.xml"
+    cache_key = "views/#{host_name}/advertisements/video_ads?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)

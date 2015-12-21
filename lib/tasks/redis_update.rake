@@ -46,7 +46,7 @@ namespace :redis_update do
       end
 
       page += 1
-    end while !contents.empty?
+    end while !contents.blank?
   end
 
   desc "One time task to load item_ids to content"
@@ -68,7 +68,7 @@ namespace :redis_update do
         end
       end
       page += 1
-    end while !contents.empty?
+    end while !contents.blank?
   end
 
 end

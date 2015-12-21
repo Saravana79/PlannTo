@@ -47,7 +47,7 @@ class HistoryDetailsController < ApplicationController
       url = "#{@article_details.url}"
       domain = VendorDetail.getdomain(url)
       @vd = VendorDetail.where(baseurl: domain)
-      unless @vd.empty?
+      unless @vd.blank?
         vendor = Item.find(@vd[0].item_id)
         vendor_id = vendor.id
       end
@@ -166,7 +166,7 @@ class HistoryDetailsController < ApplicationController
 
       domain = VendorDetail.getdomain(url)
       @vd = VendorDetail.where(baseurl: domain)
-      unless @vd.empty?
+      unless @vd.blank?
         vendor = Item.find(@vd[0].item_id)
       end
       vendor = @item_detail.blank? ? nil : @item_detail.vendor if vendor.blank?
@@ -239,7 +239,7 @@ class HistoryDetailsController < ApplicationController
 
         domain = VendorDetail.getdomain(url)
         @vd = VendorDetail.where(baseurl: domain)
-        unless @vd.empty?
+        unless @vd.blank?
           vendor = Item.find(@vd[0].item_id)
         end
 

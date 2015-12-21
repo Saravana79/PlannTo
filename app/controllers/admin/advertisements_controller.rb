@@ -54,7 +54,7 @@ class Admin::AdvertisementsController < ApplicationController
     image_array = []
     unless images.blank?
       images.each_with_index do |image, i|
-        image_array << {avatar: image, ad_size: add_size[i]}
+        image_array << {:avatar => image, :ad_size => add_size[i]}
       end
     end
 
@@ -118,7 +118,7 @@ class Admin::AdvertisementsController < ApplicationController
 
     unless images.blank?
       images.each_with_index do |image, i|
-        image_array << {avatar: image, ad_size: add_size[i]}
+        image_array << {:avatar => image, :ad_size => add_size[i]}
       end
     end
 

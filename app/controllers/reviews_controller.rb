@@ -83,7 +83,7 @@ class ReviewsController < ApplicationController
     new_pros = []
     pros.each do |i|
       pro = Pro.where("title = ?", i)
-      if pro.empty?
+      if pro.blank?
         new_pro = Pro.new
         new_pro.title = i
         new_pro.item = review.item
@@ -101,7 +101,7 @@ class ReviewsController < ApplicationController
 	new_cons = []
 	cons.each do |i|
 		con = Con.where("title = ?", i)
-		if con.empty?
+		if con.blank?
 			new_con = Con.new
 			new_con.title = i
 			new_con.item = review.item
@@ -119,7 +119,7 @@ def best_uses_factory(best_uses,review)
 	new_best_uses = []
 	best_uses.each do |i|
 		best_use = Best_Use.where("title = ?", i)
-		if best_use.empty?
+		if best_use.blank?
 			new_best_use = Best_Use.new
 			new_best_use.title = i
 			new_best_use.item = review.item

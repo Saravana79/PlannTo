@@ -18,7 +18,7 @@ class SidAdDetail < ActiveRecord::Base
         p "Initialize sid: #{s_id}"
       end
       page += 1
-    end while !add_impressions.empty?
+    end while !add_impressions.blank?
 
     log.debug "********** Completed Updating SidAdDetail for AddImpression **********"
     log.debug "\n"
@@ -74,7 +74,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
         end
       end
       page += 1
-    end while !impressions.empty?
+    end while !impressions.blank?
 
     # @impressions = AddImpression.find_by_sql(impression_query)
     #
@@ -107,7 +107,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
         sid_ad_detail.update_attributes(:clicks => each_click.click_count)
       end
       page += 1
-    end while !clicks.empty?
+    end while !clicks.blank?
 
     @orders = OrderHistory.find_by_sql(order_query)
 
@@ -173,6 +173,6 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
           $redis_rtb.HMSET(spottag_key, "ectr", final_ectr)
         end
       end
-    end while !sid_ad_details.empty?
+    end while !sid_ad_details.blank?
   end
 end

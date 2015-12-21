@@ -260,7 +260,7 @@ class Itemdetail < ActiveRecord::Base
         end
       end
 
-      if (where_to_buy_items.empty?)
+      if (where_to_buy_items.blank?)
         itemsaccess = "emptyitems"
       end
       if is_test != "true"
@@ -691,7 +691,7 @@ class Itemdetail < ActiveRecord::Base
       end
 
       page += 1
-    end while !item_details.empty?
+    end while !item_details.blank?
 
     item_details_flipkart_query = "select * from itemdetails where site=9861 and additional_details is null"
 

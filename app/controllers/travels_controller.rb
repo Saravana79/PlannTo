@@ -132,7 +132,7 @@ class TravelsController < ApplicationController
           end
           @articles = ArticleContent.where(url: tempurl)
 
-          if @articles.empty? || @articles.nil?
+          if @articles.blank? || @articles.nil?
             #for pagination in publisher website. removing /2/
             tempstr = tempurl.split(//).last(3).join
             matchobj = tempstr.match(/^\/\d{1}\/$/)
@@ -142,7 +142,7 @@ class TravelsController < ApplicationController
             end
           end
 
-          unless @articles.empty?
+          unless @articles.blank?
             @items = @articles[0].allitems.select{|a| a.is_a? Hotel};
             @items = @items[0..15].reverse
 
@@ -175,7 +175,7 @@ class TravelsController < ApplicationController
 
     @items = @items.select {|a| a.is_a?(Hotel)}
     # include pre order status if we show more details.
-    unless @items.nil? || @items.empty?
+    unless @items.nil? || @items.blank?
       @moredetails = params[:price_full_details]
       @displaycount = 4
       if @moredetails == "true"
@@ -191,7 +191,7 @@ class TravelsController < ApplicationController
       #address = Geocoder.search(request.ip)
 
       # get the country code for checing whether is use is from india.
-      #unless address.nil? || address.empty?
+      #unless address.nil? || address.blank?
       #  country = address[0].data["country_name"]  rescue ""
       #else
       country = ""
@@ -207,7 +207,7 @@ class TravelsController < ApplicationController
           @items.each do |item|
             @item = item
             unless @publisher.nil?
-              unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
+              unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.blank?
                 vendor_ids = @publisher.vendor_ids ? @publisher.vendor_ids.split(",") : []
                 exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""
                 # where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
@@ -225,7 +225,7 @@ class TravelsController < ApplicationController
               where_to_buy_items2 = @item.hotel_vendor_details
             end
             @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
-            if(@where_to_buy_items.empty?)
+            if(@where_to_buy_items.blank?)
               @tempitems << @item
             else
               break
@@ -233,7 +233,7 @@ class TravelsController < ApplicationController
           end
           @items = @items - @tempitems
 
-          if(@where_to_buy_items.empty?)
+          if(@where_to_buy_items.blank?)
             itemsaccess = "emptyitems"
           end
           @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
@@ -327,7 +327,7 @@ class TravelsController < ApplicationController
     end
 
     # include pre order status if we show more details.
-    unless @items.nil? || @items.empty?
+    unless @items.nil? || @items.blank?
       @moredetails = params[:price_full_details]
       @displaycount = 4
       if @moredetails == "true"
@@ -341,7 +341,7 @@ class TravelsController < ApplicationController
       #address = Geocoder.search(request.ip)
 
       # get the country code for checing whether is use is from india.
-      #unless address.nil? || address.empty?
+      #unless address.nil? || address.blank?
       #  country = address[0].data["country_name"]  rescue ""
       #else
       country = ""
@@ -362,7 +362,7 @@ class TravelsController < ApplicationController
       #     @items.each do |item|
       #       @item = item
       #       unless @publisher.nil?
-      #         unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
+      #         unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.blank?
       #           vendor_ids = @publisher.vendor_ids ? @publisher.vendor_ids.split(",") : []
       #           exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""
       #           # where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
@@ -380,7 +380,7 @@ class TravelsController < ApplicationController
       #         where_to_buy_items2 = @item.hotel_vendor_details
       #       end
       #       @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
-      #       if(@where_to_buy_items.empty?)
+      #       if(@where_to_buy_items.blank?)
       #         @tempitems << @item
       #       else
       #         break
@@ -388,7 +388,7 @@ class TravelsController < ApplicationController
       #     end
       #     @items = @items - @tempitems
       #
-      #     if(@where_to_buy_items.empty?)
+      #     if(@where_to_buy_items.blank?)
       #       itemsaccess = "emptyitems"
       #     end
       #     @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)

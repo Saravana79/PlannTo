@@ -32,7 +32,7 @@ class ContentMailer < ActionMailer::Base
     @username = user.username
     @userfullname = user.name
     Follow.where('follower_id =?  and follow_type in (?)',user.id,["owner"]).map{|i| @items << Item.find(i.followable_id) }
-    unless (@items.empty?)
+    unless (@items.blank?)
       subject = "Help others by sharing your knowledge on #{@items[0].name}" 
       mail(:to => 'Saravanak@gmail.com', :subject => subject) 
     end

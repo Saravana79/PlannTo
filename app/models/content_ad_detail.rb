@@ -17,7 +17,7 @@ class ContentAdDetail < ActiveRecord::Base
         content_ad_detail.save!
       end
       page += 1
-    end while !contents.empty?
+    end while !contents.blank?
 
     log.debug "********** Completed Updating ContentAdDetail for Contents **********"
     log.debug "\n"
@@ -50,7 +50,7 @@ where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order b
         content_ad_detail.update_attributes(:impressions => each_imp.impression_count)
       end
       page += 1
-    end while !impressions.empty?
+    end while !impressions.blank?
 
     # @impressions = AddImpression.find_by_sql(impression_query)
     #
@@ -106,7 +106,7 @@ where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order b
         redis_values = "impressions", content_ad_detail.impressions, "clicks", content_ad_detail.clicks, "orders", content_ad_detail.orders
         $redis_rtb.HMSET(redis_key, redis_values)
       end
-    end while !content_ad_details.empty?
+    end while !content_ad_details.blank?
   end
 
 end

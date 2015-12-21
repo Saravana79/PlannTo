@@ -1145,7 +1145,7 @@ class FeedUrl < ActiveRecord::Base
         end
 
         page += 1
-      end while !feed_urls.empty?
+      end while !feed_urls.blank?
 
       $redis.set("auto_save_or_update_score_is_running", 0)
     end

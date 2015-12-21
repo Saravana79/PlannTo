@@ -43,7 +43,7 @@ module ActiveRecord
 				
 				# Calculates the average rating. Calculation based on the already given scores.
 				def average_rating
-					return 0 if rates.empty?
+					return 0 if rates.blank?
 					( rates.inject(0){|total, rate| total += rate.score }.to_f / rates.size )
 				end
 

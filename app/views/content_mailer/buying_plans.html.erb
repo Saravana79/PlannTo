@@ -101,7 +101,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
 
 </table>
 
-        <% if (!@where_to_buy_items.empty?) %>
+        <% if (!@where_to_buy_items.blank?) %>
       <h1><center> Price Comparisons</center></h1>
    <div class="clearboth pad_b29">
   <table  width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -134,7 +134,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
   <%end%>
   <br />
 <br />
-<%if  (!@where_to_buy_items.empty?) %>
+<%if  (!@where_to_buy_items.blank?) %>
 <%= link_to "View Complete List",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/" + "?type=deals"%> 
 <%end%>
 </table>

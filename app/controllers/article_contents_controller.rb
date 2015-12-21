@@ -53,7 +53,7 @@ class ArticleContentsController < ApplicationController
         @item_id = params[:item_id]
         #for bookmark
         @external = params[:external]
-        @item = Item.find(params[:default_item_id]) unless params[:default_item_id].empty?
+        @item = Item.find(params[:default_item_id]) unless params[:default_item_id].blank?
         #for article content create or submit
         @article_create = params[:article_content_create]
         ids = params[:articles_item_id] || params[:article_create_item_id]
@@ -329,7 +329,7 @@ class ArticleContentsController < ApplicationController
 
   def bmark_create
     ids = params[:articles_item_id]
-    @article=ArticleContent.saveContent(params[:article_content], current_user, ids) unless ids.empty?
+    @article=ArticleContent.saveContent(params[:article_content], current_user, ids) unless ids.blank?
     # @article.created_type = "manual"
     Follow.content_follow(@article, current_user) if @article
     flash[:notice]= "Article uploaded"

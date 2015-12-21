@@ -18,7 +18,7 @@
 								<div style="width:100px;float:left;padding-top:20px;">
 									<%domain = VendorDetail.getdomain(@deal.url)%>
 					  				<% @vendor = @vendors.select{|a| a.baseurl == domain}%>
-					  				<% unless @vendor.nil? or @vendor.empty? %>
+					  				<% unless @vendor.nil? or @vendor.blank? %>
 					  				<img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + @vendor[0].imageurl%>"  style="border:0;padding:0;"/>
 					  				<%else%>
 					  					<span style="font-size: 12px;word-wrap: break-word;font-weight:bold;"><%=domain%></span>
@@ -48,7 +48,7 @@
 								<div style="width:100px;float:left;padding-top:20px;">
 									<%domain = VendorDetail.getdomain(@deal.url)%>
 					  				<% @vendor = @vendors.select{|a| a.baseurl == domain}%>
-					  				<% unless @vendor.nil? or @vendor.empty? %>
+					  				<% unless @vendor.nil? or @vendor.blank? %>
 					  				<img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + @vendor[0].imageurl%>"  style="border:0;padding:0;"/>
 					  				<%else%>
 					  					<span style="font-size: 12px;word-wrap: break-word;font-weight:bold;"><%=domain%></span>
@@ -103,7 +103,7 @@
 									<div style="display: inline-block;">
 										<%domain = VendorDetail.getdomain(@deal.url)%>
 						  				<% @vendor = @vendors.select{|a| a.baseurl == domain}%>
-						  				<% unless @vendor.nil? or @vendor.empty? %>
+						  				<% unless @vendor.nil? or @vendor.blank? %>
 						  				<img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + @vendor[0].imageurl%>"  style="border:0;padding:0;"/>
 						  				<%else%>
 						  					<span style="font-size: 12px;word-wrap: break-word;font-weight:bold;"><%=domain%></span>

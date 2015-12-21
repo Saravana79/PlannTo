@@ -22,7 +22,7 @@ class MessagesController < ApplicationController
 
   def create_message
     @ids = params[:message][:email_list].split(",") rescue []
-    if @ids.empty? and params[:method] == 'new'
+    if @ids.blank? and params[:method] == 'new'
       flash[:error] = 'Error in Sending Message. No Receivers'
       return redirect_to :back
     end

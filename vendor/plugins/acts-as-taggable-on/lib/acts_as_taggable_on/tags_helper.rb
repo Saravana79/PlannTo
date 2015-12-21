@@ -4,7 +4,7 @@ module ActsAsTaggableOn
     def tag_cloud(tags, classes)
       tags = tags.all if tags.respond_to?(:all)
 
-      return [] if tags.empty?
+      return [] if tags.blank?
 
       max_count = tags.sort_by(&:count).last.count.to_f
 

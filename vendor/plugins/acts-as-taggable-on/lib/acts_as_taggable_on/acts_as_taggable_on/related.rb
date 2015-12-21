@@ -21,7 +21,7 @@ module ActsAsTaggableOn::Taggable
           )
         end
         
-        unless tag_types.empty?
+        unless tag_types.blank?
           class_eval %(
             def find_matching_contexts(search_context, result_context, options = {})
               matching_contexts_for(search_context.to_s, result_context.to_s, self.class, options)

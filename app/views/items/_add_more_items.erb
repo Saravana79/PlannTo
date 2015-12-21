@@ -8,7 +8,7 @@
     
    <%#if Rails.env == "development" %>
    <%if node == "main" %>
-      <%if @ids.size < 4  && !@related_items.empty?%>
+      <%if @ids.size < 4  && !@related_items.blank?%>
           <% startCount = (count - (@ids.size + 1)) * 2
             endCount =  startCount + 1    %>
 

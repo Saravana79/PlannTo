@@ -409,7 +409,7 @@ task :mapping_fixes => :environment do
     end
 
     page += 1
-  end while !item_details.empty?
+  end while !item_details.blank?
 end
 
 desc "temporary rake task"
@@ -530,7 +530,7 @@ task :update_item_mapping_to_redis_rtb => :environment do
       end
     end
     page += 1
-  end while !items.empty?
+  end while !items.blank?
 end
 
 
@@ -553,7 +553,7 @@ task :update_content_mapping_to_redis_rtb => :environment do
       end
     end
     page += 1
-  end while !contents.empty?
+  end while !contents.blank?
 end
 
 desc "tmp job to update item beauty detail"
@@ -652,7 +652,7 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
     end
 
     page += 1
-  end while !item_details.empty?
+  end while !item_details.blank?
 
   query_for_flipkart = "select * from itemdetails where site=9861"
   page = 1
@@ -669,7 +669,7 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
       end
     end
     page += 1
-  end while !item_details.empty?
+  end while !item_details.blank?
 
   query_for_snapdeal = "select * from itemdetails where site=9874"
   page = 1
@@ -686,7 +686,7 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
       end
     end
     page += 1
-  end while !item_details.empty?
+  end while !item_details.blank?
 
   query_for_item_external_url = "select * from itemexternalurls"
   page = 1
@@ -703,7 +703,7 @@ task :update_additional_details_in_item_details_and_itemexternalurls => :environ
       end
     end
     page += 1
-  end while !item_external_urls.empty?
+  end while !item_external_urls.blank?
 end
 
 
@@ -878,6 +878,6 @@ task :update_feed_url_with_title_desc => :environment do
     end
 
     page += 1
-  end while !feed_urls.empty?
+  end while !feed_urls.blank?
 
 end

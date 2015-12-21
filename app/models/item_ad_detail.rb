@@ -32,7 +32,7 @@ class ItemAdDetail < ActiveRecord::Base
           item_ad_detail.update_attributes(:new_version_id => new_version_id, :related_item_ids => related_item_ids)
         end
         page += 1
-      end while !items.empty?
+      end while !items.blank?
 
       log.debug "********** Completed Updating ItemAdDetail for Items **********"
       log.debug "\n"
@@ -69,7 +69,7 @@ class ItemAdDetail < ActiveRecord::Base
         item_ad_detail.update_attributes(:impressions => each_imp.impression_count)
       end
       page += 1
-    end while !impressions.empty?
+    end while !impressions.blank?
 
     # @impressions = AddImpression.find_by_sql(impression_query)
     #
@@ -178,7 +178,7 @@ class ItemAdDetail < ActiveRecord::Base
         $redis_rtb.HMSET(redis_key, redis_values)
       end
       page += 1
-    end while !items.empty?
+    end while !items.blank?
   end
 
 

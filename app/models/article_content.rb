@@ -231,7 +231,7 @@ class ArticleContent < Content
         @item_id = param['item_id']
         #for bookmark
         @external = param['external']
-        @item = Item.find(param['default_item_id']) unless param['default_item_id'].empty?
+        @item = Item.find(param['default_item_id']) unless param['default_item_id'].blank?
         #for article content create or submit
         @article_create = param['article_content_create']
         ids = param['articles_item_id'] || param['article_create_item_id']

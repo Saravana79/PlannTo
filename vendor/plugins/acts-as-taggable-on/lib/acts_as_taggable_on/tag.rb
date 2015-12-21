@@ -41,7 +41,7 @@ module ActsAsTaggableOn
     def self.find_or_create_all_with_like_by_name(*list)
       list = [list].flatten
 
-      return [] if list.empty?
+      return [] if list.blank?
 
       existing_tags = Tag.named_any(list).all
       new_tag_names = list.reject do |name| 

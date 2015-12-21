@@ -2,7 +2,7 @@
 <div class="specificationcontainer">
   <div class="spacificationdiv">
     <br/>
-    <% unless @items_specification["Pro"].empty? and  @items_specification["Con"].empty? %>
+    <% unless @items_specification["Pro"].blank? and  @items_specification["Con"].blank? %>
         <h3 class="producttabsubheader">Specifications Summary</h3>
         <table style="margin-top: 20px;">
               <tr>
@@ -13,7 +13,7 @@
                 <% @items_specification.each do |key, value| %>
                 <td style="padding-left:50px;">
                    <br/>
-                  <%if key == "Con" and @items_specification["Con"].empty?%>
+                  <%if key == "Con" and @items_specification["Con"].blank?%>
                       There are no major TradeOffs.
                       <br/>
                   <%end%>
@@ -21,7 +21,7 @@
                    <% v[:values].each do |av| %>
                    <h3><%=v[:title] %></h3>
                    <p class="txt_brown" style="text-align:inherit;">
-                    <%= if (v[:description].nil? or v[:description].empty?) 
+                    <%= if (v[:description].nil? or v[:description].blank?)
                      raw display_specification_value(av,av.attribute)
                     else 
                     v[:description] 

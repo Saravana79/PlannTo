@@ -30,7 +30,7 @@ if(window.opener) {
   <%if @display!='false' %>
   $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
   <%end%>
- <%if @reviewcontent.errors.empty? %>
+ <%if @reviewcontent.errors.blank? %>
  $("#review_it").html("");
  <%end%>
 <%end%>

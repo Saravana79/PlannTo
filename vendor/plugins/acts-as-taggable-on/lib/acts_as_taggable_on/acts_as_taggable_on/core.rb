@@ -69,7 +69,7 @@ module ActsAsTaggableOn::Taggable
         tag_list = ActsAsTaggableOn::TagList.from(tags)
         empty_result = scoped(:conditions => "1 = 0")
 
-        return empty_result if tag_list.empty?
+        return empty_result if tag_list.blank?
 
         joins = []
         conditions = []
