@@ -14,7 +14,5 @@ ActionMailer::Base.smtp_settings = {
 # require 'aws/s3'
 Aws::S3::DEFAULT_HOST = "s3-ap-southeast-1.amazonaws.com" # if using sg buckets
 
-ENV["DATABASE_URL"] = "mysql2://planntomain:Ayappa2524@planntonew.cmsyjd0smtse.us-east-1.rds.amazonaws.com/planntouser"
-
 # Initialize the rails application
 PlanNto::Application.initialize!
