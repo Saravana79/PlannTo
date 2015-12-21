@@ -648,7 +648,7 @@ def populate_pro_con
     self.type == "QuestionContent"
   end
 
-  acts_as_rateable
+  # acts_as_rateable
   acts_as_voteable
   acts_as_commentable
 

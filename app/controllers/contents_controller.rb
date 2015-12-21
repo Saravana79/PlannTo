@@ -15,7 +15,7 @@ class ContentsController < ApplicationController
   def log_impression
     @article = Content.find(params[:id])
   # this assumes you have a current_user method in your authentication system
-    @article.impressions.create(ip_address: request.remote_ip,user_id:(current_user.id rescue ''))
+    @article.impressions.create(:ip_address => request.remote_ip, :user_id => (current_user.id rescue ''))
    end
    
    def filter
@@ -482,7 +482,7 @@ end
        filter_params["items_id"] = items  unless params[:search_type] == "admin_feeds"
       
        filter_params["status"] = 1
-       filter_params["created_by"] = params[:search_type] == "admin_feeds" ? User.find(:all).collect(&:id) : User.get_follow_users_id(current_user)
+       filter_params["created_by"] = params[:search_type] == "admin_feeds" ? User.all.collect(&:id) : User.get_follow_users_id(current_user)
        filter_params["page"] = 1
        filter_params["root_items"] = @root_items if params[:search_type] != "admin_feeds"
        filter_params["guide"] = params[:guide] if params[:guide].present?

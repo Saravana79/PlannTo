@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2'
+gem 'rails', '4.0.0'
 ruby '2.2.3'
 
 # Bundle edge Rails instead:
@@ -17,8 +17,8 @@ gem "omniauth"
 gem "omniauth-facebook"
 gem "omniauth-oauth2"
 gem "hashie"
-gem 'devise', '~> 2.0.0'
-gem "friendly_id", "~> 4.0.1"
+gem 'devise', '~> 3.0.0'
+gem "friendly_id", "~> 5.0.0"
 gem "koala"
 gem "mogli"
 gem 'will_paginate'
@@ -26,7 +26,7 @@ gem 'youtube_it'
 gem 'nokogiri'
 gem "haml-rails"
 gem  "haml"
-gem 'tinymce-rails-imageupload', '~> 3.5.6.3'
+gem 'tinymce-rails-imageupload'#, '~> 3.5.8.6'
 gem 'rails_exception_handler', "~> 2"
 gem 'aws-sdk'
 # gem 'record-cache'
@@ -35,23 +35,23 @@ gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  gem 'sass-rails', "  ~> 3.2.3"
-  gem 'coffee-rails', "~> 3.2.1"
-  gem 'uglifier', '>=1.0.3'
-end
+# group :assets do
+  gem 'sass-rails', '~> 4.0.0'
+  gem 'coffee-rails', '~> 4.0.0'
+  gem 'uglifier', '>=1.3.0'
+# end
 #gem 'sqlite3'
-gem 'citier', '~>0.1.15'
+gem 'citier'#, '~>0.1.15'
 gem 'rails_sql_views' , :git=> 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 2.3.0'
 gem 'acts-as-taggable-on', '~>2.4.1'
-gem 'acts_as_rateable'
+# gem 'acts_as_rateable'
 gem 'remotipart', '~> 1.0'
 gem 'acts_as_commentable'
-gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
+gem 'thumbs_up'#, :path => 'vendor/plugins/thumbs_up'
 #gem 'devise'
-gem 'sunspot_rails', '~>1.3.1'
+gem 'sunspot_rails'#, '~>1.3.1'
 gem 'sunspot_solr'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
@@ -82,7 +82,7 @@ gem "clockwork"#, "~> 0.7.2"
 
 # gem 'mailcatcher'
 #gem 'exception_notification', '3.0.1'
-gem 'highcharts-rails', '~> 3.0.10'
+gem 'highcharts-rails'#, '~> 3.0.10'
 gem 'activeuuid'
 gem 'newrelic_rpm'
 gem 'rest-client', '~> 1.7.1'
@@ -96,7 +96,7 @@ gem 'heroku-api'#, '~> 0.3.19'
 
 # Connection for mongodb
 gem 'mongo'
-gem 'mongoid'
+gem 'mongoid', '~> 4'
 gem 'bson_ext'
 
 # gem for check memory usage
@@ -109,7 +109,7 @@ gem 'amazon-ecs', '~> 2.2.5'
 gem 'xml-simple', '~> 1.1.4'
 
 #bulk import active record
-gem 'activerecord-import', '~> 0.3.1'
+gem 'activerecord-import'#, '~> 0.3.1'
 
 gem 'net-http-digest_auth'
 
@@ -131,3 +131,11 @@ gem 'skylight'#, '~> 0.10.0'
 
 #To fix test-unit issue
 gem 'test-unit'
+
+
+#Rails 4.0 changes
+gem 'turbolinks'
+
+gem 'jbuilder', '~> 1.2'
+
+gem 'actionpack-action_caching', '~> 1.1', '>= 1.1.1'

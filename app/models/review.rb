@@ -8,7 +8,7 @@ class Review < ActiveRecord::Base
 
   accepts_nested_attributes_for :pros,:cons,:best_uses
 
-  acts_as_rateable
+  # acts_as_rateable
   acts_as_voteable
   acts_as_commentable
 

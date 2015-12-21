@@ -10,8 +10,8 @@ class User < ActiveRecord::Base
     Follow::ProductFollowType::Follow => "follow_item_ids",
     Follow::ProductFollowType::Buyer => "buyer_item_ids"}
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token, 
-                :avatar, :username, :uid, :token,:description,:my_feeds_email,:location,:profile_view_setting
+  # attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token,
+  #               :avatar, :username, :uid, :token,:description,:my_feeds_email,:location,:profile_view_setting
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower

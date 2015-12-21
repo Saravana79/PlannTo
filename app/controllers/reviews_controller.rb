@@ -27,7 +27,7 @@ class ReviewsController < ApplicationController
 
   def create
     @review = Review.new(params[:review])
-    @review.rate_it(params[:rating],1) unless params[:rating].nil? 
+    # @review.rate_it(params[:rating],1) unless params[:rating].nil?
     #    @pros = Pro.new(params[:pro])
     #    logger.error('Review Details :: ')
     #    logger.error(@pros.inspect)

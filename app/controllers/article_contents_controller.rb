@@ -266,6 +266,7 @@ class ArticleContentsController < ApplicationController
   end
 
   def bmarklet
+    p 7777777777777777
     #@article_content = ArticleContent.new
     unless params[:feed_url_id].blank?
       feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
