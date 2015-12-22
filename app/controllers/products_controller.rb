@@ -3,7 +3,7 @@ require "securerandom"
 class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
-  # before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
+  before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
   before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
   before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
@@ -46,21 +46,21 @@ class ProductsController < ApplicationController
      end
    }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  # caches_action :widget_for_women, :cache_path => proc {|c|
-  #   if params[:beauty] == "true"
-  #     if params[:item_ids].blank?
-  #       params.slice("ref_url", "page_type", "geo", "beauty")
-  #     else
-  #       params.slice("item_ids", "page_type", "geo", "beauty")
-  #     end
-  #   else
-  #     if params[:item_ids].blank?
-  #       params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty")
-  #     else
-  #       params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty")
-  #     end
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :widget_for_women, :cache_path => proc {|c|
+    if params[:beauty] == "true"
+      if params[:item_ids].blank?
+        params.slice("ref_url", "page_type", "geo", "beauty")
+      else
+        params.slice("item_ids", "page_type", "geo", "beauty")
+      end
+    else
+      if params[:item_ids].blank?
+        params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty")
+      else
+        params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty")
+      end
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   caches_action :sports_widget, :cache_path => proc {|c|
     if !params[:item_ids].blank?
@@ -393,27 +393,26 @@ class ProductsController < ApplicationController
   end
 
   def widget_for_women
-    return render :nothing => true
-    # params[:page_type] ||= "type_1" if params[:page_type].blank?
-    # url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
-    # @test_condition = @is_test == "true" ? "&is_test=true" : ""
-    # url =  @url
-    #
-    # included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
-    # if (url.include?("bebeautiful.in") || included_beauty || params[:page_type] == "type_3")
-    #   exclude_valid_item_names = params[:page_type] == "type_3" ? true : false
-    #   show_widget_for_bebeautiful(url, itemsaccess, exclude_valid_item_names)
-    # # elsif included_beauty
-    # #   get_details_from_beauty_items(url, itemsaccess)
-    # else
-    #   get_details_from_fashion_ads()
-    # end
-    # jsonp = prepare_response_json()
-    #
-    # headers["Content-Type"] = "text/javascript; charset=utf-8"
-    # respond_to do |format|
-    #   format.js { render :text => jsonp, :content_type => "text/javascript" }
-    # end
+    params[:page_type] ||= "type_1" if params[:page_type].blank?
+    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
+    url =  @url
+
+    included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
+    if (url.include?("bebeautiful.in") || included_beauty || params[:page_type] == "type_3")
+      exclude_valid_item_names = params[:page_type] == "type_3" ? true : false
+      show_widget_for_bebeautiful(url, itemsaccess, exclude_valid_item_names)
+    # elsif included_beauty
+    #   get_details_from_beauty_items(url, itemsaccess)
+    else
+      get_details_from_fashion_ads()
+    end
+    jsonp = prepare_response_json()
+
+    headers["Content-Type"] = "text/javascript; charset=utf-8"
+    respond_to do |format|
+      format.js { render :text => jsonp, :content_type => "text/javascript" }
+    end
   end
 
   def get_details_from_beauty_items(url, itemsaccess)
