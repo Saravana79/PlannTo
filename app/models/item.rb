@@ -2648,7 +2648,7 @@ end
     sale_price = ""
 
     if !item.blank?
-      category_item_detail.title = item.get_element("ItemAttributes").get("Title").to_s
+      category_item_detail.title = item.get_element("ItemAttributes").get("Title").to_s rescue ""
       category_item_detail.asin = item.get("ASIN").to_s rescue ""
       sale_price = item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
       if sale_price.blank?
