@@ -19,7 +19,7 @@ class AdStatistic < ActiveRecord::Base
       value = redis_values[index]
       if !value.blank?
         event_type = each_key.to_s.split(":").last(2)[0]
-        ad_statistic = AdStatistic.find_or_initialize_by_event_date_and_event_type(:event_date => date, :event_type => event_type)
+        ad_statistic = AdStatistic.find_or_initialize_by_event_date_and_event_type(date, event_type)
         ad_statistic.update_attributes(:count => value)
       end
     end

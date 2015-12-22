@@ -13,7 +13,7 @@ class ContentAdDetail < ActiveRecord::Base
       contents = ArticleContent.paginate_by_sql(query_to_get_article_contents, :page => page, :per_page => batch_size)
 
       contents.each do |each_content|
-        content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_content.url)
+        content_ad_detail = ContentAdDetail.find_or_initialize_by_url(each_content.url)
         content_ad_detail.save!
       end
       page += 1
@@ -46,7 +46,7 @@ where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order b
       impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
       impressions.each do |each_imp|
-        content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_imp.url)
+        content_ad_detail = ContentAdDetail.find_or_initialize_by_url(each_imp.url)
         content_ad_detail.update_attributes(:impressions => each_imp.impression_count)
       end
       page += 1
@@ -62,14 +62,14 @@ where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order b
     @clicks = Click.find_by_sql(click_query)
 
     @clicks.each do |each_click|
-      content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_click.url)
+      content_ad_detail = ContentAdDetail.find_or_initialize_by_url(each_click.url)
       content_ad_detail.update_attributes(:clicks => each_click.click_count)
     end
 
     @orders = OrderHistory.find_by_sql(order_query)
 
     @orders.each do |each_order|
-      content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_order.url)
+      content_ad_detail = ContentAdDetail.find_or_initialize_by_url(each_order.url)
       content_ad_detail.update_attributes(:orders => each_order.count)
     end
 
@@ -98,7 +98,7 @@ where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order b
         end
 
 
-        content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_content.url)
+        content_ad_detail = ContentAdDetail.find_or_initialize_by_url(each_content.url)
         content_ad_detail.update_attributes!(:ectr => ectr)
 
         # Redis url:XXX update with impresssions, clicks and orders

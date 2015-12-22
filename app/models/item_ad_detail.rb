@@ -27,7 +27,7 @@ class ItemAdDetail < ActiveRecord::Base
           related_item_ids = RelatedItem.where('item_id = ?', each_item.item_id).order('variance desc').limit(10).collect(&:related_item_id)
           related_item_ids = related_item_ids.map(&:inspect).join(',')
 
-          item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_item.item_id)
+          item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(each_item.item_id)
           # item_ad_detail.update_attributes(:new_version_id => new_version_id, :old_version_id => old_version_id, :related_item_ids => related_item_ids)
           item_ad_detail.update_attributes(:new_version_id => new_version_id, :related_item_ids => related_item_ids)
         end
@@ -65,7 +65,7 @@ class ItemAdDetail < ActiveRecord::Base
 
       impressions.each do |each_imp|
         p "Processing ItemAdDetail Impressions for #{each_imp.item_id}"
-        item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_imp.item_id)
+        item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(each_imp.item_id)
         item_ad_detail.update_attributes(:impressions => each_imp.impression_count)
       end
       page += 1
@@ -74,7 +74,7 @@ class ItemAdDetail < ActiveRecord::Base
     # @impressions = AddImpression.find_by_sql(impression_query)
     #
     # @impressions.each do |each_imp|
-    #   item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_imp.item_id)
+    #   item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(each_imp.item_id)
     #   item_ad_detail.update_attributes(:impressions => each_imp.impression_count)
     # end
 
@@ -82,7 +82,7 @@ class ItemAdDetail < ActiveRecord::Base
 
     @clicks.each do |each_click|
       p "Processing ItemAdDetail Clicks for #{each_click.item_id}"
-      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_click.item_id)
+      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(each_click.item_id)
       item_ad_detail.update_attributes(:clicks => each_click.click_count)
     end
 
@@ -90,7 +90,7 @@ class ItemAdDetail < ActiveRecord::Base
 
     @orders.each do |each_order|
       p "Processing ItemAdDetail Orders for #{each_order.item_id}"
-      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_order.item_id)
+      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(each_order.item_id)
       item_ad_detail.update_attributes(:orders => each_order.count)
     end
 
@@ -137,7 +137,7 @@ class ItemAdDetail < ActiveRecord::Base
 
     results.each do |each_key, each_result|
       each_key
-      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_key)
+      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(each_key)
       impression_count = each_result["total_imp"]
       clicks = each_result["total_clicks"]
       orders = each_result["total_orders"]
@@ -169,7 +169,7 @@ class ItemAdDetail < ActiveRecord::Base
         end
 
 
-        item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_item.item_id)
+        item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(each_item.item_id)
         item_ad_detail.update_attributes!(:ectr => ectr)
 
         # Redis items:"#{id}" update with impresssions, clicks and orders
