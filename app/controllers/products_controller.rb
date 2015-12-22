@@ -1389,18 +1389,31 @@ class ProductsController < ApplicationController
     params[:ret_format] ||= ""
     params[:is_test] ||= "false"
 
-    if request.format.symbol == :html
-      params[:ret_format] = "html"
-      params[:format] = "html"
-      extname = "html"
-    elsif request.format.symbol == :xml
-      params[:ret_format] = "xml"
-      params[:format] = "xml"
-      extname = "xml"
+    if params[:ret_format].blank?
+      if request.format.symbol == :html
+        params[:ret_format] = "html"
+        params[:format] = "html"
+        extname = "html"
+      elsif request.format.symbol == :xml
+        params[:ret_format] = "xml"
+        params[:format] = "xml"
+        extname = "xml"
+      else
+        params[:ret_format] = "js"
+        extname = "js"
+        params[:format] = "js"
+      end
     else
-      params[:ret_format] = "js"
-      extname = "js"
-      params[:format] = "js"
+      if params[:ret_format] == "html"
+        params[:format] = "html"
+        extname = "html"
+      elsif params[:ret_format] == "xml"
+        params[:format] = "xml"
+        extname = "xml"
+      else
+        extname = "js"
+        params[:format] = "js"
+      end
     end
 
     params[:is_test] = "false" if params[:ref_url].to_s.include?("gizbot.com")
