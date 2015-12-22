@@ -212,7 +212,7 @@ class HistoryDetailsController < ApplicationController
 
           url = params[:red_url] if !params[:red_url].blank?
         else
-          url = "#{@item_detail.url}"
+          url = "#{@item_detail.url}" rescue ""
           url = url.strip
 
           if url.include?("autoportal.com") && url.include?(".htm")
