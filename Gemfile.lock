@@ -188,7 +188,6 @@ GEM
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     netrc (0.11.0)
-    newrelic_rpm (3.14.1.311)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     oauth (0.4.7)
@@ -394,7 +393,6 @@ DEPENDENCIES
   mongoid
   mysql2 (~> 0.3.11)
   net-http-digest_auth
-  newrelic_rpm
   nokogiri
   oauth
   oauth2
