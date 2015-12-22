@@ -11,6 +11,9 @@ class Beauty < Product
 
   # has_many :compares, :as => :comparable
   #
+
+  VALID_BEAUTY_ITEM_NAMES = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & lovely","hamam","ayush","liril","lux ","pears","pepsodent","rexona","rin ","surf excel","vim "]
+
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 2.0,  :as => :name_ac do |item|
       tempName = item.name.gsub("-","")

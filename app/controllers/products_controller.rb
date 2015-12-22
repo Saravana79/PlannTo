@@ -393,7 +393,6 @@ class ProductsController < ApplicationController
   end
 
   def widget_for_women
-    # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
@@ -414,8 +413,6 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.js { render :text => jsonp, :content_type => "text/javascript" }
     end
-
-    # render :layout => false
   end
 
   def get_details_from_beauty_items(url, itemsaccess)
@@ -454,11 +451,11 @@ class ProductsController < ApplicationController
   end
 
   def show_widget_for_bebeautiful(url, itemsaccess, exclude_valid_item_names=false)
-    if exclude_valid_item_names
-      valid_item_names = []
-    else
-      valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & lovely","hamam","ayush","liril","lux ","pears","pepsodent","rexona","rin ","surf excel","vim "]
-    end
+    # if exclude_valid_item_names
+    #   valid_item_names = []
+    # else
+    #   valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & lovely","hamam","ayush","liril","lux ","pears","pepsodent","rexona","rin ","surf excel","vim "]
+    # end
 
     if !@items.blank?
       is_multi_array = @items.first.is_a?(Array)
@@ -467,11 +464,11 @@ class ProductsController < ApplicationController
         multi_items = @items
         multi_items.each_with_index do |each_items, index|
           if index == 0
-            @item, items, @search_url, @extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+            @item, items, @search_url, @extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], exclude_valid_item_names)
             @items = []
             @items << items
           else
-            new_item, new_items, new_search_url, new_extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+            new_item, new_items, new_search_url, new_extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], exclude_valid_item_names)
             @items << new_items
           end
 
@@ -480,18 +477,18 @@ class ProductsController < ApplicationController
         end
         @items = @items.flatten
       else
-        @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
+        @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo], exclude_valid_item_names)
       end
 
       if @items.blank? || @items.count < 4
         total_items = @items
-        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
+        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], exclude_valid_item_names)
 
         @items = total_items + @items
         @items = @items.flatten
       end
     else
-      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
+      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], exclude_valid_item_names)
       # @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
     end
 
@@ -1544,15 +1541,8 @@ class ProductsController < ApplicationController
     end
 
     if params[:beauty] != "true" && (params[:item_ids].blank? && params[:fashion_id].blank?)
-      # item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
-      #
-      # if random_id.blank?
-      #   item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
-      # end
-
       random_id = rand(20)
 
-      # params[:item_ids] = item_id
       params[:fashion_id] = random_id
     end
 
