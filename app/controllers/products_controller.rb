@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
   # before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
-  # before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
+  before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
   before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
 
@@ -19,13 +19,13 @@ class ProductsController < ApplicationController
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  # caches_action :elec_widget_1, :cache_path => proc {|c|
-  #   if !params[:item_ids].blank?
-  #     params.slice("item_ids", "page_type", "vendor_ids", "ret_format")
-  #   else
-  #     params.slice("ref_url", "page_type", "vendor_ids", "ret_format")
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :elec_widget_1, :cache_path => proc {|c|
+    if !params[:item_ids].blank?
+      params.slice("item_ids", "page_type", "vendor_ids", "ret_format")
+    else
+      params.slice("ref_url", "page_type", "vendor_ids", "ret_format")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   caches_action :price_text_vendor_details, :cache_path => proc {|c|
     if !params[:item_ids].blank?
@@ -558,90 +558,89 @@ class ProductsController < ApplicationController
   end
 
   def elec_widget_1
-    return render :nothing => true
-    # url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
-    # @test_condition = @is_test == "true" ? "&is_test=true" : ""
-    # @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
-    # @where_to_buy_items = []
-    # if params[:vendor_ids].blank?
-    #   #defaulting to amazon.
-    #   vendor_ids = '9882'.to_s.split(",");
+    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
+    @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
+    @where_to_buy_items = []
+    if params[:vendor_ids].blank?
+      #defaulting to amazon.
+      vendor_ids = '9882'.to_s.split(",");
+    else
+      vendor_ids = params[:vendor_ids].to_s.split(",")
+    end
+
+    show_count = params[:page_type] == "type_1" ? 6 : 4
+    show_count = 10 if params[:ret_format] == "xml"
+
+    @multiple_vendors = false
+
+    # include pre order status if we show more details.
+    unless @items.blank?
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      @publisher = Publisher.getpublisherfromdomain(url)
+      # Check have to activate tabs for publisher or not
+      @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+      @item = @items.first
+
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, [], vendor_ids)
+      @where_to_buy_items.map {|each_item| each_item.match_type = "exact" if each_item.match_type.blank? }
+
+      # Update Items if there is only one item
+      if @where_to_buy_items.count < show_count
+        itemsaccess = "related_items"
+        items = Item.get_related_items_if_one_item(@items, @publisher, status)
+
+        related_items = items - @items
+        @item = items.first if @item.blank?
+
+        @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, related_items, @show_price, status, @where_to_buy_items, vendor_ids)
+        @where_to_buy_items.map {|each_item| each_item.match_type = "related" if each_item.match_type.blank? }
+      end
+    end
+
+    if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
+      # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
+      item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
+      first_six_items = item_ids.shuffle.first(6)
+      @items = Item.where(:id => first_six_items)
+      @item = @items.first
+      @publisher = Publisher.getpublisherfromdomain(url)
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      itemaccess = "popular_items"
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items, vendor_ids)
+      @where_to_buy_items.map {|each_item| each_item.match_type = "top" if each_item.match_type.blank? }
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
+    end
+
+    @where_to_buy_items = @where_to_buy_items.first(show_count)
+
+    if !@where_to_buy_items.blank?
+      # itemsaccess = "none"
+      # @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     # else
-    #   vendor_ids = params[:vendor_ids].to_s.split(",")
-    # end
-    #
-    # show_count = params[:page_type] == "type_1" ? 6 : 4
-    # show_count = 10 if params[:ret_format] == "xml"
-    #
-    # @multiple_vendors = false
-    #
-    # # include pre order status if we show more details.
-    # unless @items.blank?
-    #   status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-    #   @publisher = Publisher.getpublisherfromdomain(url)
-    #   # Check have to activate tabs for publisher or not
-    #   @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
-    #   @item = @items.first
-    #
-    #   @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, [], vendor_ids)
-    #   @where_to_buy_items.map {|each_item| each_item.match_type = "exact" if each_item.match_type.blank? }
-    #
-    #   # Update Items if there is only one item
-    #   if @where_to_buy_items.count < show_count
-    #     itemsaccess = "related_items"
-    #     items = Item.get_related_items_if_one_item(@items, @publisher, status)
-    #
-    #     related_items = items - @items
-    #     @item = items.first if @item.blank?
-    #
-    #     @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, related_items, @show_price, status, @where_to_buy_items, vendor_ids)
-    #     @where_to_buy_items.map {|each_item| each_item.match_type = "related" if each_item.match_type.blank? }
-    #   end
-    # end
-    #
-    # if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
-    #   # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
-    #   item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
-    #   first_six_items = item_ids.shuffle.first(6)
-    #   @items = Item.where(:id => first_six_items)
-    #   @item = @items.first
-    #   @publisher = Publisher.getpublisherfromdomain(url)
-    #   status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-    #   itemaccess = "popular_items"
-    #   @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items, vendor_ids)
-    #   @where_to_buy_items.map {|each_item| each_item.match_type = "top" if each_item.match_type.blank? }
-    #   @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
-    # end
-    #
-    # @where_to_buy_items = @where_to_buy_items.first(show_count)
-    #
-    # if !@where_to_buy_items.blank?
-    #   # itemsaccess = "none"
-    #   # @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
-    # # else
-    #   if params[:is_test] != "true"
-    #     @impression_id = AddImpression.add_impression_to_resque("elec_widget_1", @item, url, current_user.blank? ? nil : current_user.id, request.remote_ip, nil, itemsaccess, url_params,
-    #                                                            cookies[:plan_to_temp_user_id], nil, nil, nil)
-    #   end
-    # end
-    #
-    # if !vendor_ids.blank?
-    #   @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
-    #   @multiple_vendors = true if vendor_ids.count > 1
-    #   @vendor = Vendor.where(:id => vendor_ids).first
-    # end
-    # @vendor_detail = @vendor.vendor_detail rescue VendorDetail.new
-    #
-    # @ref_url = url
-    #
-    # if params[:ret_format] == "html"
-    #   return render "elec_widget_1.js.erb", :layout => false, :content_type => "text/html"
-    # elsif params[:ret_format] == "xml" # For xml request
-    #   return render "elec_widget_1.xml.builder", :layout => false, :content_type => "text/xml"
-    # else
-    #   jsonp = prepare_response_json()
-    #   return render :text => jsonp, :content_type => "text/javascript"
-    # end
+      if params[:is_test] != "true"
+        @impression_id = AddImpression.add_impression_to_resque("elec_widget_1", @item, url, current_user.blank? ? nil : current_user.id, request.remote_ip, nil, itemsaccess, url_params,
+                                                               cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+    end
+
+    if !vendor_ids.blank?
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+      @multiple_vendors = true if vendor_ids.count > 1
+      @vendor = Vendor.where(:id => vendor_ids).first
+    end
+    @vendor_detail = @vendor.vendor_detail rescue VendorDetail.new
+
+    @ref_url = url
+
+    if params[:ret_format] == "html"
+      return render "elec_widget_1.js.erb", :layout => false, :content_type => "text/html"
+    elsif params[:ret_format] == "xml" # For xml request
+      return render "elec_widget_1.xml.builder", :layout => false, :content_type => "text/xml"
+    else
+      jsonp = prepare_response_json()
+      return render :text => jsonp, :content_type => "text/javascript"
+    end
   end
 
   def price_vendor_details
