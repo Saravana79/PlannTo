@@ -1240,7 +1240,6 @@ class AdvertisementsController < ApplicationController
         else
           return render :text => cache.html_safe
         end
-        cache_json.clear
         # Rails.cache.write(cache_key, cache)
       end
     end

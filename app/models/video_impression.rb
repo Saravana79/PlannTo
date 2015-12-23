@@ -57,7 +57,6 @@ class VideoImpression < ActiveRecord::Base
                          "time" => Time.zone.now.utc, "user" => nil, "remote_ip" => remote_ip, "advertisement_id" => param[:ads_id], "winning_price_enc" => param[:wp],
                          "sid" => param[:sid], "a" => param[:a], "params" => param[:url_params], "temp_user_id" => param[:plan_to_temp_user_id]}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'VideoImpression', impression_params)
-    impression_params.clear rescue ""
     # AddImpression.create_new_record(impression_params)
     return impression_id
   end
