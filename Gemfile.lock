@@ -157,6 +157,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     memcachier (0.0.2)
+    memory_profiler (0.9.6)
     mime-types (1.25.1)
     mimemagic (0.3.0)
     mini_portile2 (2.0.0)
@@ -380,6 +381,7 @@ DEPENDENCIES
   jquery-rails
   koala
   memcachier
+  memory_profiler
   mogli
   mongo
   mongoid

@@ -131,3 +131,5 @@ gem 'skylight'#, '~> 0.10.0'
 
 #To fix test-unit issue
 gem 'test-unit'
+
+gem 'memory_profiler'
