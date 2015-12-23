@@ -11,11 +11,11 @@ class ProductsController < ApplicationController
   # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
   caches_action :where_to_buy_items, :cache_path => proc {|c|
     if (params[:item_ids].blank? && params[:ref_url].blank?)
-      params.slice("price_full_details", "path", "sort_disable", "request_referer")
+      params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type")
     elsif params[:item_ids].blank?
-      params.slice("price_full_details", "path", "sort_disable", "ref_url")
+      params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type")
     else
-      params.slice("price_full_details", "path", "sort_disable", "item_ids")
+      params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -1214,15 +1214,16 @@ class ProductsController < ApplicationController
     params[:ref_url] ||= ""
     params[:path] ||= ""
     params[:sort_disable] ||= "false"
+    params[:protocol_type] = request.protocol
 
     @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     if (params[:item_ids].blank? && params[:ref_url].blank?)
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "request_referer"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type"))
     elsif params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "ref_url"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "item_ids"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type"))
     end
     cache_params = CGI::unescape(cache_params)
 
