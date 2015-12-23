@@ -54,7 +54,7 @@ gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
 gem 'sunspot_rails', '~>1.3.1'
 gem 'sunspot_solr'
 gem 'acts_as_follower'
-gem 'acts-as-messageable'
+# gem 'acts-as-messageable'
 gem 'tinymce-rails'
 gem 'redis', '~> 3.0.7'
 
