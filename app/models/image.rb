@@ -14,6 +14,8 @@ class Image < ActiveRecord::Base
       :url  => ":s3_sg_url",
       :convert_options => { :medium => "-gravity center -extent 176x132", :small => "-gravity center -extent 40x30"}
 
+  do_not_validate_attachment_file_type :avatar
+
 
   before_save :update_avatar_file_name
   after_save :update_item_imageurl
