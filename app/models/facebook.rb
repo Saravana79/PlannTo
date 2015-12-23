@@ -1,7 +1,7 @@
 class Facebook < ActiveRecord::Base
   has_one :user
   def profile
-    # @profile ||= FbGraph::User.me(self.access_token).fetch
+    @profile ||= FbGraph::User.me(self.access_token).fetch
   end
 
   def create_user
@@ -34,11 +34,11 @@ class Facebook < ActiveRecord::Base
     end
 
     def app
-      # FbGraph::Application.new config[:client_id], :secret => config[:client_secret]
+      FbGraph::Application.new config[:client_id], :secret => config[:client_secret]
     end
 
     def auth(redirect_uri = nil)
-      # FbGraph::Auth.new config[:client_id], config[:client_secret], :redirect_uri => redirect_uri
+      FbGraph::Auth.new config[:client_id], config[:client_secret], :redirect_uri => redirect_uri
     end
 
     def identify(fb_user)
@@ -49,12 +49,12 @@ class Facebook < ActiveRecord::Base
     end
 
     def user_feed(params)
-      # me = FbGraph::User.me(@facebook_user.access_token)
-      # me.feed!(
-      #   :message     => params[:message],
-      #   :description => params[:description],
-      #   :link        => params[:link]
-      # )
+      me = FbGraph::User.me(@facebook_user.access_token)
+      me.feed!(
+        :message     => params[:message],
+        :description => params[:description],
+        :link        => params[:link]
+      )
     end
 
     def store_facebook_users(current_user, facebook_profile)

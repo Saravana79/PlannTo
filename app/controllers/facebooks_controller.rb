@@ -28,8 +28,7 @@ class FacebooksController < ApplicationController
     end
     client.authorization_code = params[:code] || params[:error_code]
     access_token = client.access_token!
-    # user = FbGraph::User.me(access_token).fetch
-    user = nil
+    user = FbGraph::User.me(access_token).fetch
     authenticate Facebook.identify(user)
     current_user.create_user if facebook_current_user.blank?
     redirect_to root_url
