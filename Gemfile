@@ -10,7 +10,7 @@ gem 'uuidtools'
 gem "configatron", "~> 4.5.0"
 gem 'memcachier'
 gem 'dalli'
-gem 'fb_graph'
+# gem 'fb_graph'
 gem "oauth"
 gem "oauth2"
 gem "omniauth"
