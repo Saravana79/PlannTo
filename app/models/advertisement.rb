@@ -3028,6 +3028,11 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     advertisement
   end
 
+  def self.test_record()
+    res = Amazon::Ecs.item_search("", {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1389432031, :item_page => 1})
+    # return nil
+  end
+
   private
 
   def file_dimensions

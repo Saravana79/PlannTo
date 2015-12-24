@@ -340,14 +340,14 @@ class ProductsController < ApplicationController
     url =  tempurl
 
     if !@items.blank?
-      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
+      @item, @items, @search_url, extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
 
       if @items.blank?
-        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+        @item, @items, @search_url, extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
       end
     else
       # @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
-      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+      @item, @items, @search_url, extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
     end
 
     @search_url = CGI.escape(@search_url)
@@ -396,7 +396,7 @@ class ProductsController < ApplicationController
   def widget_for_women
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
-    @test_condition = @is_test == "true" ? "&is_test=true" : ""
+    # @test_condition = @is_test == "true" ? "&is_test=true" : ""
     url =  @url
 
     included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
@@ -418,13 +418,13 @@ class ProductsController < ApplicationController
 
   def get_details_from_beauty_items(url, itemsaccess)
     if !@items.blank?
-      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
+      @item, @items, @search_url, extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
 
       if @items.blank?
-        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+        @item, @items, @search_url, extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
       end
     else
-      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+      @item, @items, @search_url, extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
       @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
     end
 
@@ -458,46 +458,9 @@ class ProductsController < ApplicationController
     #   valid_item_names = ["pond's","ponds", "lakme", "sunslik", "dove", "vaseline", "tresemme","aviance","axe ","breeze","clinic plus","close up","elle 18","fair and lovely","fair & lovely","hamam","ayush","liril","lux ","pears","pepsodent","rexona","rin ","surf excel","vim "]
     # end
 
-    if !@items.blank?
-      is_multi_array = @items.first.is_a?(Array)
-
-      if is_multi_array
-        multi_items = @items
-        multi_items.each_with_index do |each_items, index|
-          if index == 0
-            @item, items, @search_url, @extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], exclude_valid_item_names)
-            @items = []
-            @items << items
-          else
-            new_item, new_items, new_search_url, new_extra_items = Item.get_item_items_from_amazon(each_items, params[:item_ids], params[:page_type], params[:geo], exclude_valid_item_names)
-            @items << new_items
-          end
-
-          @items = @items.flatten
-          break if @items.count >= 5
-        end
-        @items = @items.flatten
-      else
-        @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo], exclude_valid_item_names)
-      end
-
-      if @items.blank? || @items.count < 4
-        total_items = @items
-        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], exclude_valid_item_names)
-
-        @items = total_items + @items
-        @items = @items.flatten
-      end
-    else
-      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], exclude_valid_item_names)
-      # @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
-    end
-
-    @items = @items.flatten.uniq
-
-    @search_url = CGI.escape(@search_url)
+    item, @items, @search_url, extra_items = Beauty.get_items_for_beauty_ads(@items, params, url, exclude_valid_item_names)
+    @item = item if !item.blank?
     url_params = Advertisement.make_url_params(params)
-
     # include pre order status if we show more details.
     unless @items.blank?
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
@@ -871,7 +834,7 @@ class ProductsController < ApplicationController
 
   def deal_item_process(url, itemsaccess, url_params)
     @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id], for_widget="true")
-    return_path = "products/deal_widget.html.erb"
+    return_path = "products/deal_widget"
 
     if @is_test != "true"
       item_id = @items.first.id rescue ""
@@ -882,7 +845,7 @@ class ProductsController < ApplicationController
     if params[:page_type] == "type_6"
       @suitable_ui_size = "300_250"
       @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
-      return_path = "products/deal_widget_type_6.html.erb"
+      return_path = "products/deal_widget_type_6"
     end
 
     respond_to do |format|
@@ -917,11 +880,11 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_2.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_2", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "price_widget_type_2.html.erb", :layout => false }
+      format.html { return render "price_widget_type_2", :layout => false }
       format.js {
-        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_2.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("products/price_widget_type_2", :layout => false)}, :callback => params[:callback]
       }
     end
   end
@@ -942,12 +905,12 @@ class ProductsController < ApplicationController
       # @fc_click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => click_url, :item_id => nil, :ref_url => params[:ref_url])
     end
 
-    return_url = "products/price_widget_type_3.html.erb"
+    return_url = "products/price_widget_type_3"
 
     if params[:page_type] == "type_4"
-      return_url = "products/price_widget_type_4.html.erb"
+      return_url = "products/price_widget_type_4"
     elsif params[:page_type] == "type_5"
-      return_url = "products/price_widget_type_5.html.erb"
+      return_url = "products/price_widget_type_5"
     end
 
     success_status = @itemdetail.blank? ? false :true

@@ -86,6 +86,50 @@ class Beauty < Product
         end
       end
     end
+  end
 
+  def self.get_items_for_beauty_ads(items, param, url, exclude_valid_item_names)
+    item = nil
+    search_url = nil
+    extra_items = []
+    if !items.blank?
+      is_multi_array = items.first.is_a?(Array)
+
+      if is_multi_array
+        multi_items = items
+        multi_items.each_with_index do |each_items, index|
+          if index == 0
+            item, res_items, search_url, extra_items = Item.get_item_items_from_amazon(each_items, param[:item_ids], param[:page_type], param[:geo], exclude_valid_item_names)
+            items = []
+            items << res_items
+          else
+            new_item, new_items, new_search_url, new_extra_items = Item.get_item_items_from_amazon(each_items, param[:item_ids], param[:page_type], param[:geo], exclude_valid_item_names)
+            items << new_items
+          end
+
+          items = items.flatten
+          break if items.count >= 5
+        end
+        items = items.flatten
+      else
+        item, items, search_url, extra_items = Item.get_item_items_from_amazon(items, param[:item_ids], param[:page_type], param[:geo], exclude_valid_item_names)
+      end
+
+      if items.blank? || items.count < 4
+        total_items = items
+        @item, ext_res_items, search_url, extra_items = Item.get_best_seller_beauty_items_from_amazon(param[:page_type], url, param[:geo], exclude_valid_item_names)
+
+        items = total_items + ext_res_items
+        items = items.flatten
+      end
+    else
+      item, items, search_url, extra_items = Item.get_best_seller_beauty_items_from_amazon(param[:page_type], url, param[:geo], exclude_valid_item_names)
+      # @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
+    end
+
+    items = items.flatten.uniq
+    search_url = CGI.escape(search_url)
+
+    return item, items, search_url, extra_items
   end
 end
