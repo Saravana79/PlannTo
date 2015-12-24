@@ -961,9 +961,9 @@ class AdvertisementsController < ApplicationController
 
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
+    cache_key = "views/#{host_name}/advertisments/show_ads?#{cache_params}"
 
-    # p cache_key
+    #p cache_key
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -1158,7 +1158,7 @@ class AdvertisementsController < ApplicationController
 
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}"
+    cache_key = "views/#{host_name}/advertisments/image_show_ads?#{cache_params}"
     # if params[:format].to_s == "json"
     #   cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}.json"
     # end
