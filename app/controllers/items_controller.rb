@@ -91,7 +91,7 @@ class ItemsController < ApplicationController
       #logger.warn "Relation Count :: " + @item.relateditems.length.to_s
       #@item = Car.find params[:id]
       respond_to do |format|
-        format.html # show.html.erb
+        format.html {render :show, :layout => "home"}
         format.json { render json: @item }
       end if @item
     else

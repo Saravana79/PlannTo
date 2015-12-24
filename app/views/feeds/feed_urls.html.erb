@@ -1,25 +1,8 @@
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-  <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-    <title>PlannTo - Add Feeds</title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <link type="text/css" href="<%= configatron.root_image_path %>static/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-    <link type="text/css" href="<%= configatron.root_image_path %>static/stylesheets/plannto.css" rel="stylesheet"/>
-    <link type="text/css" href="<%= configatron.root_image_path %>static/stylesheets/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-    <script src="<%= configatron.root_image_path %>static/javascripts/jquery_ujs.js" type="text/javascript"></script>
-    <script src="<%= configatron.root_image_path %>static/javascripts/jquery.jscroll.min.js" type="text/javascript"></script>
-    <script src="<%= configatron.root_image_path %>static/javascripts/textTagger.js" type="text/javascript"></script>
-    <script src="<%= configatron.root_image_path %>static/javascripts/jquery.raty.js" type="text/javascript"></script>
-    <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
-    <%= csrf_meta_tags %>
-  </head>
-  <body style="background:white;position:relative;width:1000px;">
-  <button class="btn_submitanswer go_back" type="button" onclick="window.location='/feeds'">Go Back</button>
-  <button class="btn_submitanswer go_back" type="button" onclick="window.location='/feeds/feed_urls_batch_update'">Batch Update</button>
-  <div class="list_feed_urls">
-    <div class="search_form">
-      <%= form_for :search, :url => "/feeds/feed_urls", :html => {:method => 'get'} do |search_form| %>
+<button class="btn_submitanswer go_back" type="button" onclick="window.location='/feeds'">Go Back</button>
+<button class="btn_submitanswer go_back" type="button" onclick="window.location='/feeds/feed_urls_batch_update'">Batch Update</button>
+<div class="list_feed_urls">
+  <div class="search_form">
+    <%= form_for :search, :url => "/feeds/feed_urls", :html => {:method => 'get'} do |search_form| %>
         Category: <%= search_form.select :category, @categories, {:include_blank => true, :selected => params[:search][:category]} %>
         Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
         Source: <%#= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
@@ -37,13 +20,13 @@
           <%= search_form.submit "Filter" %>
           <%= search_form.submit "Clear" %>
         </div>
-      <% end %>
-    </div>
+    <% end %>
+  </div>
 
-    <%= hidden_field_tag :page_loaded_time, @loaded_time %>
-    <div class="sorting">
-        <form>
-          <label>Sort by:&nbsp;</label>
+  <%= hidden_field_tag :page_loaded_time, @loaded_time %>
+  <div class="sorting">
+    <form>
+      <label>Sort by:&nbsp;</label>
           <span id="sort_filter">
             <select name="feed_urls_sort_by" id="feed_urls_sort_by" class="order_by_category">
               <option value="published_at" <%= params[:feed_urls_sort_by] == "published_at" ? "selected=selected" : "" %>>Published Date</option>
@@ -52,155 +35,155 @@
             </select>
           </span>
 
-          <%= select_tag(:feed_urls_order_by, options_for_select([['Asc', 'asc'], ['Desc', 'desc']], selected: params[:feed_urls_order_by] ), :class => 'order_by_category') %>
+      <%= select_tag(:feed_urls_order_by, options_for_select([['Asc', 'asc'], ['Desc', 'desc']], selected: params[:feed_urls_order_by] ), :class => 'order_by_category') %>
 
-        </form>
-    </div>
-
-    <br/>
-    <div style="clear:both;display:block;margin-top:33px;">
-      <div id="feed_url_list" class='jscroll'>
-        <%= render "/feeds/feed_url_list" %>
-      </div>
-    </div>
+    </form>
   </div>
 
-  <div id="loading_div" style="display:none">
-    <%= image_tag "/assets/ajax-loader.gif" %>
+  <br/>
+  <div style="clear:both;display:block;margin-top:33px;">
+    <div id="feed_url_list" class='jscroll'>
+      <%= render "/feeds/feed_url_list" %>
+    </div>
   </div>
+</div>
 
-  <style type="text/css">
-      body { margin: 35px; }
+<div id="loading_div" style="display:none">
+  <%= image_tag "/assets/ajax-loader.gif" %>
+</div>
 
-      #feed_category {
-          height: 145px;
-          width: 110px;}
-      th {font-weight: bolder !important;}
+<style type="text/css">
+    body { margin: 35px; }
 
-      table, th, td
-      {
-          border: 1px solid black;
-          font-weight: normal;
-          font-size: 14px;
-      }
-      table
-      {
-          width:95%;
-          margin: 11px 0 0 26px;
-      }
+    #feed_category {
+        height: 145px;
+        width: 110px;}
+    th {font-weight: bolder !important;}
 
-      .feed_title {
-          font-weight: 700;
-          cursor: pointer;
-          color: #222222;
-      }
+    table, th, td
+    {
+        border: 1px solid black;
+        font-weight: normal;
+        font-size: 14px;
+    }
+    table
+    {
+        width:95%;
+        margin: 11px 0 0 26px;
+    }
 
-      .feed_explain td {border: none; }
+    .feed_title {
+        font-weight: 700;
+        cursor: pointer;
+        color: #222222;
+    }
 
-      .display {width: 1230px;}
+    .feed_explain td {border: none; }
 
-      .search_form {
-          color: #a52a2a;
-          font-size: 14px;
-          margin: -8px;
-          position: relative;
-          right: -18px;
-          width: 85%;
-      }
+    .display {width: 1230px;}
 
-      .go_back {
-          left: -78px;
-          margin: 10px;
-          position: relative;
-          top: -40px;
-      }
+    .search_form {
+        color: #a52a2a;
+        font-size: 14px;
+        margin: -8px;
+        position: relative;
+        right: -18px;
+        width: 85%;
+    }
 
-      .mark_as_list img {
-          padding: 0 0 0 10px;
-      }
+    .go_back {
+        left: -78px;
+        margin: 10px;
+        position: relative;
+        top: -40px;
+    }
 
-      .mark_as_button {
-          cursor: pointer;
-      }
+    .mark_as_list img {
+        padding: 0 0 0 10px;
+    }
 
-      .sorting {
-          color: #a52a2a;
-          float: right;
-          font-size: 14px;
-          left: -68px;
-          margin: -8px;
-          position: relative;
-      }
+    .mark_as_button {
+        cursor: pointer;
+    }
 
-      #loading_div {
-          position: absolute;
-          background-color: #FAFAFA;
-          z-index: 2147483647 !important;
-          opacity: 0.8;
-          overflow: hidden;
-          text-align: center; top: 0; left: 0;
-          height: 100%;
-          width: 100%;
-          padding-top:20%;
-      }
+    .sorting {
+        color: #a52a2a;
+        float: right;
+        font-size: 14px;
+        left: -68px;
+        margin: -8px;
+        position: relative;
+    }
 
-      .each_row {
-          line-height: 22px;
-          font-size: 11px;
-      }
+    #loading_div {
+        position: absolute;
+        background-color: #FAFAFA;
+        z-index: 2147483647 !important;
+        opacity: 0.8;
+        overflow: hidden;
+        text-align: center; top: 0; left: 0;
+        height: 100%;
+        width: 100%;
+        padding-top:20%;
+    }
 
-      .list_feed_urls {
-          padding-top: 15px;
-      }
+    .each_row {
+        line-height: 22px;
+        font-size: 11px;
+    }
 
-      #search_source {
-          float: right;
-          margin: -27px 239px 0 0;
-          position: relative;
-          width: 250px;
-          cursor: not-allowed;
-      }
-  </style>
+    .list_feed_urls {
+        padding-top: 15px;
+    }
+
+    #search_source {
+        float: right;
+        margin: -27px 239px 0 0;
+        position: relative;
+        width: 250px;
+        cursor: not-allowed;
+    }
+</style>
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
 
     $("document").ready(function()
     {
 
         if (<%= !@feed_urls.blank? && @feed_urls.all.count > 24 %>)
         {
-          $page_count = $(".pagination a.next_page").prev().text()
+            $page_count = $(".pagination a.next_page").prev().text()
 
 //        var href_val = $(".next_page").attr('href')
 //        $("#next-scroll-page").attr('href', href_val)
 
-                $('.jscroll').jscroll({
-            loadingHtml: 'Loading...',
-            padding: 20,
-            nextSelector: '.jscroll-next a:last'
-        });
+            $('.jscroll').jscroll({
+                loadingHtml: 'Loading...',
+                padding: 20,
+                nextSelector: '.jscroll-next a:last'
+            });
 
-        $('.pagination a').attr('data-remote', 'true')
+            $('.pagination a').attr('data-remote', 'true')
         }
 
-      $(".feed_title").live('click', function()
-      {
-          $(".display").html("")
-          var id = $(this).attr("id")
-          $.ajax({
-              type: "GET",
-              url: "<%= article_details_feeds_path() %>",
-              data: { feed_url_id: id },
-              success: function(data) {
-                $("#feed_display_"+id).html(data)
-              },
-              error: function(textStatus, errorThrown) {
-                 alert("Invalid data")
-              }
+        $(".feed_title").live('click', function()
+        {
+            $(".display").html("")
+            var id = $(this).attr("id")
+            $.ajax({
+                type: "GET",
+                url: "<%= article_details_feeds_path() %>",
+                data: { feed_url_id: id },
+                success: function(data) {
+                    $("#feed_display_"+id).html(data)
+                },
+                error: function(textStatus, errorThrown) {
+                    alert("Invalid data")
+                }
 
-          });
-      })
+            });
+        })
 
         $(".relevant_product").live("click", function () {
             $("<li id='" + $(this).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(this).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
@@ -360,7 +343,7 @@
         {
             var val = $(".auto_complete_field").val()
             if (val == "")
-              $("#search_source").val("")
+                $("#search_source").val("")
         })
 
         //datepicker
@@ -402,7 +385,4 @@
             $("#new_article_product").focus();
         });
     });
-  </script>
-  </body>
-  </html>
-
+</script>

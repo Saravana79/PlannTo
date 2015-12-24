@@ -95,7 +95,7 @@ class FeedsController < ApplicationController
 
     respond_to do |format|
       format.js
-      format.html
+      format.html {render :feed_urls, :layout => "home"}
     end
   end
 

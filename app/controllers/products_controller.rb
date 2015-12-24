@@ -71,13 +71,13 @@ class ProductsController < ApplicationController
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
 
-  caches_action :show,  :cache_path => Proc.new { |c|
-    if(current_user)
-      c.params.merge(:user => 1)
-    else
-      c.params.merge(:user => 0)
-    end
-     }
+  # caches_action :show,  :cache_path => Proc.new { |c|
+  #   if(current_user)
+  #     c.params.merge(:user => 1)
+  #   else
+  #     c.params.merge(:user => 0)
+  #   end
+  #    }
 #  caches_action :search_items, :cache_path => Proc.new { |c| c.params.except(:callback).except(:_) },:expires_in => 24.hours
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
@@ -220,6 +220,7 @@ class ProductsController < ApplicationController
       @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]} if key
     end
 
+    render :layout => "home"
   end
 
   def related_items
