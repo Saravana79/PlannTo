@@ -20,7 +20,7 @@ class AdvertisementsController < ApplicationController
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
-    return_path = "advertisements/show_ads.html.erb"
+    return_path = "advertisements/show_ads"
     @sid = sid = params[:sid] ||= ""
 
     # TODO: hot coded values, have to change in feature
@@ -231,14 +231,14 @@ class AdvertisementsController < ApplicationController
           end
           @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
 
-          return_path = "advertisements/show_ads.html.erb"
+          return_path = "advertisements/show_ads"
 
           @item_details = @item_details.first(6)
         end
       end
 
       # return_path = "advertisements/show_image_overlay_ads.html.erb"
-      return_path = "advertisements/image_overlay_ads_normal_div.html.erb"
+      return_path = "advertisements/image_overlay_ads_normal_div"
       @iframe_width = params[:width].blank? ? "" : params[:width] if @iframe_width.blank?
       @iframe_height = params[:height].blank? ? "" : params[:height] if @iframe_height.blank?
 
@@ -302,7 +302,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def return_expanded_html()
-    return_path = "advertisements/image_overlay_ads_expanded_div.html.erb"
+    return_path = "advertisements/image_overlay_ads_expanded_div"
 
     @ad_video_detail = @ad.ad_video_detail
     expanded = params[:expanded].to_s
