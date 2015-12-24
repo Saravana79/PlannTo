@@ -20,7 +20,7 @@ PlanNto::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  # config.assets.initialize_on_precompile = false
+  config.assets.initialize_on_precompile = false
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
@@ -46,9 +46,9 @@ PlanNto::Application.configure do
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
   #config.cache_store = :dalli_store
-  config.cache_store = :dalli_store, ENV["MEMCACHIER_SERVERS"].split(","),
-                    {:username => ENV["MEMCACHIER_USERNAME"],
-                     :password => ENV["MEMCACHIER_PASSWORD"]}
+  # config.cache_store = :dalli_store, ENV["MEMCACHIER_SERVERS"].split(","),
+  #                   {:username => ENV["MEMCACHIER_USERNAME"],
+  #                    :password => ENV["MEMCACHIER_PASSWORD"]}
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   config.action_controller.asset_host = "cdn1.plannto.com/static"
