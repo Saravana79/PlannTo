@@ -405,7 +405,7 @@ class AdvertisementsController < ApplicationController
         if @item_detail.blank?
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
-          render :json => {:success => @item_detail.blank? ? false : true, :html => render_to_string("advertisements/show_plannto_ads.html.erb", :layout => false)}, :callback => params[:callback]
+          render :json => {:success => @item_detail.blank? ? false : true, :html => render_to_string("advertisements/show_plannto_ads", :layout => false)}, :callback => params[:callback]
         end
       }
       format.html { render :layout => false }
@@ -461,9 +461,9 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/show_static_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_static_ads", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "show_static_ads.html.erb", :layout => false }
+      format.html { return render "show_static_ads", :layout => false }
     end
   end
 
@@ -497,9 +497,9 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/show_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_fashion_ads", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "show_fashion_ads.html.erb", :layout => false }
+      format.html { return render "show_fashion_ads", :layout => false }
     end
   end
 
@@ -533,9 +533,9 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/show_jockey_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_jockey_fashion_ads", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "show_jockey_fashion_ads.html.erb", :layout => false }
+      format.html { return render "show_jockey_fashion_ads", :layout => false }
     end
   end
 
@@ -571,9 +571,9 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/show_junglee_car_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_junglee_car_ads", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "show_junglee_car_ads.html.erb", :layout => false }
+      format.html { return render "show_junglee_car_ads", :layout => false }
     end
   end
 
@@ -607,9 +607,9 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/show_housing_dynamic_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_housing_dynamic_ads", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "show_housing_dynamic_ads.html.erb", :layout => false }
+      format.html { return render "show_housing_dynamic_ads", :layout => false }
     end
   end
 
@@ -629,9 +629,9 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/show_ad_layout.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_ad_layout", :layout => false)}, :callback => params[:callback]
       }
-      format.html { return render "show_ad_layout.html.erb", :layout => false }
+      format.html { return render "show_ad_layout", :layout => false }
     end
   end
 
@@ -833,7 +833,7 @@ class AdvertisementsController < ApplicationController
     params[:more_vendors] ||= "false"
     params[:is_test] ||= "true"
     params[:item_id] ||= "581,582,583,584,585,586"
-    render "carwale_demo.html.erb", :layout => false
+    render "carwale_demo", :layout => false
   end
 
   def gaadi_demo
