@@ -27,7 +27,7 @@ gem 'nokogiri'
 gem "haml-rails"
 gem  "haml"
 gem 'tinymce-rails-imageupload', '~> 3.5.6.3'
-gem 'rails_exception_handler', "~> 2"
+gem 'rails_exception_handler', "~> 2.0.2"
 gem 'aws-s3'
 gem 'aws-sdk-v1'
 gem 'aws-sdk', '~> 2'

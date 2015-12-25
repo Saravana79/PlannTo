@@ -248,7 +248,7 @@ GEM
       activesupport (= 3.2.22)
       bundler (~> 1.0)
       railties (= 3.2.22)
-    rails_exception_handler (2.3.4)
+    rails_exception_handler (2.0.2)
     railties (3.2.22)
       actionpack (= 3.2.22)
       activesupport (= 3.2.22)
@@ -408,7 +408,7 @@ DEPENDENCIES
   phantomjs (~> 1.9.7.1)
   progress_bar
   rails (= 3.2.22)
-  rails_exception_handler (~> 2)
+  rails_exception_handler (~> 2.0.2)
   rails_sql_views!
   redis (~> 3.0.7)
   remotipart (~> 1.0)
