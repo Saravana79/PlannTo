@@ -1037,8 +1037,8 @@ class AdvertisementsController < ApplicationController
             p "Problem in changing click_url and ref_url"
           end
         end
-        p "*************************** Cache process success ***************************"
-        logger.info "*************************** Cache process success ***************************"
+        # p "*************************** Cache process success ***************************"
+        # logger.info "*************************** Cache process success ***************************"
 
         return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
@@ -1231,8 +1231,8 @@ class AdvertisementsController < ApplicationController
             cache_json["html"] = cache_html
           end
         end
-        p "*************************** Cache process success ***************************"
-        logger.info "*************************** Cache process success ***************************"
+        # p "*************************** Cache process success ***************************"
+        # logger.info "*************************** Cache process success ***************************"
         
         set_access_control_headers()
         if params[:format].to_s == "json"

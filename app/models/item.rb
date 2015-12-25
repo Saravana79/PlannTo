@@ -2317,10 +2317,10 @@ end
     else
       unless url.nil?
         articles, tempurl = Item.get_articles_from_url(url)
-        article = articles.last
+        article = articles.first
 
         if (url.include?("stylecraze.com") || url.include?("fashionlady.in") || url.include?("bebeautiful.in"))
-          article = article.first
+          # article = articles.first
           if !article.blank?
             keyword = article.field2
             if !keyword.blank?

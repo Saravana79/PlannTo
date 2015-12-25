@@ -350,13 +350,10 @@ class SearchController < ApplicationController
           results.flatten!
           results = results.uniq {|each_hash| each_hash[:id]}
           auto_save = "true"
-          p results
         end
       end
     end
     list_scores = list_scores.fill(0, list_scores.count...selected_list.count)
-    p selected_list
-    p list_scores
 
     beauty_process = "false"
     if params[:category] == "Beauty"

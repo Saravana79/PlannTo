@@ -56,7 +56,7 @@ class ContentsController < ApplicationController
           items = params[:items].split(",")
          end 
         if items.size == 1
-        item = Item.find(items[0])
+        item = Item.find(items.last) rescue nil
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
         elsif (item.type == "AttributeTag")
