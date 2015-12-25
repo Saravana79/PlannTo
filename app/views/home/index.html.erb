@@ -619,16 +619,16 @@ $(document).ready(function(){
                                     <%items = Item.where(:id => configatron.homepagecompareitems1.split(",")) %>
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>">
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[0].name%></p>
-                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.first.name%></p>
+                                            <p class="compare-img"><img src="<%=items.first.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[1].name%></p>
-                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.second.name%></p>
+                                            <p class="compare-img"><img src="<%=items.second.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="clr"></div>
-                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                        <p><a><%= items.first.name + " Vs. " + items.second.name%></a></p>
                                     </a>
                                 </div>
                                         <div class="prd-div">
@@ -636,16 +636,16 @@ $(document).ready(function(){
 
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[0].name%></p>
-                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.first.name%></p>
+                                            <p class="compare-img"><img src="<%=items.first.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[1].name%></p>
-                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.second.name%></p>
+                                            <p class="compare-img"><img src="<%=items.second.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="clr"></div>
-                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                        <p><a><%= items.first.name + " Vs. " + items.second.name%></a></p>
                                     </a>
                                 </div>
                                         <div class="prd-div">
@@ -653,16 +653,16 @@ $(document).ready(function(){
 
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[0].name%></p>
-                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.first.name%></p>
+                                            <p class="compare-img"><img src="<%=items.first.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[1].name%></p>
-                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.second.name%></p>
+                                            <p class="compare-img"><img src="<%=items.second.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="clr"></div>
-                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                        <p><a><%= items.first.name + " Vs. " + items.second.name%></a></p>
 
                                 </div>
                                         <div class="prd-div">
@@ -670,16 +670,16 @@ $(document).ready(function(){
 
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[0].name%></p>
-                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.firstname%></p>
+                                            <p class="compare-img"><img src="<%=items.first.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
-                                            <p class="title"><%=items[1].name%></p>
-                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                            <p class="title"><%=items.second.name%></p>
+                                            <p class="compare-img"><img src="<%=items.second.image_url%>" alt="" /></p>
                                         </div>
                                         <div class="clr"></div>
-                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                        <p><a><%= items.first.name + " Vs. " + items.second.name%></a></p>
 
                                 </div>
 
