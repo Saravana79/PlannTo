@@ -94,9 +94,9 @@ class Car < Product
 
   def unfollowing_related_items(user, number)
     if user
-      relateditems.select{|item| !user.following?(item) }[0..number]
+      relateditems.select{|item| !user.following?(item) }.first(number.to_i+1)
     else
-      relateditems.limit(number)
+      relateditems.limit(number.to_i+1)
     end
   end
 

@@ -426,12 +426,12 @@ sunspot_search_items
     logger.info @follow_types
   if !current_user
       @considered_items  = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
-      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
+      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results.first(4) - @considered_items
    else   
      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
     @follow_item_ids = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).collect(&:followable_id)
     @follow_item_1 = Item.where('id in (?)', @follow_item_ids)
-    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item_1
+    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results.first(4) - @follow_item_1
    end 
    logger.info @follow_item  
     
@@ -582,7 +582,7 @@ sunspot_search_items
     @itemtype = @buying_plan.itemtype
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ''
     @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
-    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
+    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results.first(4) - @considered_items
   end 
   
   private
@@ -593,11 +593,11 @@ sunspot_search_items
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ''
     if @follow_item == ''
       @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
-      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
+      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results.first(4) - @considered_items
     else
       @follow_item_ids = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).collect(&:followable_id)
     @follow_item_1 = Item.where('id in (?)', @follow_item_ids)
-      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item_1
+      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results.first(4) - @follow_item_1
     end  
   end
 

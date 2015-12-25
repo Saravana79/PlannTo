@@ -316,7 +316,7 @@ class Item < ActiveRecord::Base
       end
     end
     
-    return items[0..4]
+    return items.first(4)
   end
 
   def self.get_related_item_list(item, limit=10, page=1) 

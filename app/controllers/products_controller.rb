@@ -186,7 +186,7 @@ class ProductsController < ApplicationController
     # @attribute_degree_view = @attribute_degree_view = @item.attribute_values.collect{|ia| ia if ia.attribute_id == 294}.compact.first.value rescue ""
     
     if (@item.is_a? Product)
-      @related_items = Item.get_related_items(@item, 3, true) 
+      @related_items = Item.get_related_items(@item, 3, true)
     end
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
