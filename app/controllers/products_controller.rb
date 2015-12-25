@@ -1,73 +1,74 @@
 require "securerandom"
 
 class ProductsController < ApplicationController
-  # before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
-  # before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
-  # before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
-  # before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
-  # before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
-  # before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
+  before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
+  before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
+  before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
+  before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
+  before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
+  before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
 
-  # caches_action :where_to_buy_items, :cache_path => proc {|c|
-  #   if (params[:item_ids].blank? && params[:ref_url].blank?)
-  #     params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type")
-  #   elsif params[:item_ids].blank?
-  #     params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type")
-  #   else
-  #     params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type")
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
+  caches_action :where_to_buy_items, :cache_path => proc {|c|
+    if (params[:item_ids].blank? && params[:ref_url].blank?)
+      params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type")
+    elsif params[:item_ids].blank?
+      params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type")
+    else
+      params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  # caches_action :elec_widget_1, :cache_path => proc {|c|
-  #   if !params[:item_ids].blank?
-  #     params.slice("item_ids", "page_type", "vendor_ids", "ret_format")
-  #   else
-  #     params.slice("ref_url", "page_type", "vendor_ids", "ret_format")
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
-  #
-  # caches_action :price_text_vendor_details, :cache_path => proc {|c|
-  #   if !params[:item_ids].blank?
-  #     params.slice("item_ids", "page_type")
-  #   else
-  #     params.slice("ref_url", "page_type")
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :elec_widget_1, :cache_path => proc {|c|
+    if !params[:item_ids].blank?
+      params.slice("item_ids", "page_type", "vendor_ids", "ret_format")
+    else
+      params.slice("ref_url", "page_type", "vendor_ids", "ret_format")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
+  caches_action :price_text_vendor_details, :cache_path => proc {|c|
+    if !params[:item_ids].blank?
+      params.slice("item_ids", "page_type")
+    else
+      params.slice("ref_url", "page_type")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
 
-  # caches_action :where_to_buy_items_vendor, :cache_path => proc {|c|
-  #    if (params[:item_ids].blank? && !params[:ref_url].blank?)
-  #      params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url", "geo")
-  #    elsif (params[:item_ids].blank? && params[:ref_url].blank?)
-  #     params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer", "geo")
-  #    elsif !params[:item_ids].blank?
-  #      params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable", "geo")
-  #    end
-  #  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :where_to_buy_items_vendor, :cache_path => proc {|c|
+     if (params[:item_ids].blank? && !params[:ref_url].blank?)
+       params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url", "geo")
+     elsif (params[:item_ids].blank? && params[:ref_url].blank?)
+      params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer", "geo")
+     elsif !params[:item_ids].blank?
+       params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable", "geo")
+     end
+   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  # caches_action :widget_for_women, :cache_path => proc {|c|
-  #   if params[:beauty] == "true"
-  #     if params[:item_ids].blank?
-  #       params.slice("ref_url", "page_type", "geo", "beauty")
-  #     else
-  #       params.slice("item_ids", "page_type", "geo", "beauty")
-  #     end
-  #   else
-  #     if params[:item_ids].blank?
-  #       params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty")
-  #     else
-  #       params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty")
-  #     end
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :widget_for_women, :cache_path => proc {|c|
+    if params[:beauty] == "true"
+      if params[:item_ids].blank?
+        params.slice("ref_url", "page_type", "geo", "beauty")
+      else
+        params.slice("item_ids", "page_type", "geo", "beauty")
+      end
+    else
+      if params[:item_ids].blank?
+        params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty")
+      else
+        params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty")
+      end
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  # caches_action :sports_widget, :cache_path => proc {|c|
-  #   if !params[:item_ids].blank?
-  #     params.slice("item_ids", "category_item_detail_id", "page_type", "random_id")
-  #   else
-  #     params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :sports_widget, :cache_path => proc {|c|
+    if !params[:item_ids].blank?
+      params.slice("item_ids", "category_item_detail_id", "page_type", "random_id")
+    else
+      params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
 
   # caches_action :show,  :cache_path => Proc.new { |c|
@@ -85,8 +86,9 @@ class ProductsController < ApplicationController
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
-  layout 'product'
+  # skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
+  skip_filter *_process_action_callbacks.map(&:filter), :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
+  layout 'product', :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
   include FollowMethods
   include ItemsHelper
   include Admin::AdvertisementsHelper
@@ -292,7 +294,6 @@ class ProductsController < ApplicationController
   end
 
    def where_to_buy_items
-     return render :nothing => true
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
@@ -331,7 +332,6 @@ class ProductsController < ApplicationController
    end
 
   def where_to_buy_items_vendor
-    return render :nothing => true
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
@@ -395,7 +395,6 @@ class ProductsController < ApplicationController
   end
 
   def widget_for_women
-    return render :nothing => true
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     # @test_condition = @is_test == "true" ? "&is_test=true" : ""
@@ -523,7 +522,6 @@ class ProductsController < ApplicationController
   end
 
   def elec_widget_1
-    return render :nothing => true
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
@@ -716,7 +714,6 @@ class ProductsController < ApplicationController
   end
 
   def price_text_vendor_details
-    return render :nothing => true
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
@@ -765,7 +762,6 @@ class ProductsController < ApplicationController
   end
 
   def sports_widget
-    return render :nothing => true
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()

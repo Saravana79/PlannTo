@@ -14,7 +14,8 @@ class AdvertisementsController < ApplicationController
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
   caches_action :video_ads, :cache_path => proc {|c| params.slice("ads_id", "size", "item_id", "protocol_type", "ret_format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
+  # skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
+  skip_filter *_process_action_callbacks.map(&:filter), :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
   skip_before_filter  :verify_authenticity_token, :only => [:ads_visited]
   #after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
