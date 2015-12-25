@@ -2401,7 +2401,7 @@ end
     end
     articles = ArticleContent.where(url: tempurl)
 
-    if article.blank?
+    if articles.blank?
       #for pagination in publisher website. removing /2/
       tempstr = tempurl.split(//).last(3).join
       matchobj = tempstr.match(/^\/\d{1}\/$/)
