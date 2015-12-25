@@ -46,9 +46,9 @@ class HistoryDetailsController < ApplicationController
       #   base_uri, params = @article_details.url.split("?")
       url = "#{@article_details.url}"
       domain = VendorDetail.getdomain(url)
-      @vd = VendorDetail.where(baseurl: domain)
-      unless @vd.blank?
-        vendor = Item.find(@vd[0].item_id)
+      vendor_detail = VendorDetail.where(baseurl: domain).last
+      unless vendor_detail.blank?
+        vendor = Item.find(vendor_detail.item_id)
         vendor_id = vendor.id
       end
       @impression_id = "123"
@@ -165,9 +165,9 @@ class HistoryDetailsController < ApplicationController
       item_id = @item_detail.blank? ? "" : @item_detail.item_detail_other_mappings.first.id
 
       domain = VendorDetail.getdomain(url)
-      @vd = VendorDetail.where(baseurl: domain)
-      unless @vd.blank?
-        vendor = Item.find(@vd[0].item_id)
+      vendor_detail = VendorDetail.where(baseurl: domain).last
+      unless vendor_detail.blank?
+        vendor = Item.find(vendor_detail.item_id)
       end
       vendor = @item_detail.blank? ? nil : @item_detail.vendor if vendor.blank?
       vendor_id = vendor.blank? ? "" : vendor.id
@@ -238,9 +238,9 @@ class HistoryDetailsController < ApplicationController
         item_id = @item_detail.blank? ? "" : @item_detail.itemid
 
         domain = VendorDetail.getdomain(url)
-        @vd = VendorDetail.where(baseurl: domain)
-        unless @vd.blank?
-          vendor = Item.find(@vd[0].item_id)
+        vendor_detail = VendorDetail.where(baseurl: domain).last
+        unless vendor_detail.blank?
+          vendor = Item.find(vendor_detail.item_id)
         end
 
         if !params[:tag].blank?
