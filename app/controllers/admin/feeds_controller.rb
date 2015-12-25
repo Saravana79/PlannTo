@@ -7,7 +7,7 @@ class Admin::FeedsController < ApplicationController
       filter_params["itemtype_id"] = @item_types 
       filter_params["items_id"] = ""
       filter_params["status"] = 1
-      filter_params["created_by"] = User.find(:all).collect(&:id)
+      filter_params["created_by"] = User.select("id").map(&:id)
       filter_params["page"] = 1
       filter_params["guide"] = params[:guide] if params[:guide].present?
       filter_params["order"] = "created_at desc"

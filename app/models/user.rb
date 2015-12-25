@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   end
   
   def self.get_follow_users_id(current_user)
-    user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
+    user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").map(&:followable_id)
   end
   
   def is_a_vendor?(vendor)

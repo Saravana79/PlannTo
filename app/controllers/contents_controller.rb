@@ -40,7 +40,7 @@ class ContentsController < ApplicationController
            filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"]) if params[:search_type] == "Myfeeds"
           filter_params["root_items"] = @root_items if params[:search_type] == "Myfeeds"
           filter_params["items_id"] = @items.split(",") if params[:search_type] == "Myfeeds"
-          filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.find(:all).collect(&:id)
+          filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.select("id").map(&:id)
        end  
       if params[:search_type] != "Myfeeds"
        unless  params[:items] == ''
@@ -175,7 +175,7 @@ class ContentsController < ApplicationController
            filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"]) if params[:search_type] == "Myfeeds"
           filter_params["root_items"] = @root_items if params[:search_type] == "Myfeeds"
           filter_params["items_id"] = @items.split(",") if params[:search_type] == "Myfeeds"
-          filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.find(:all).collect(&:id)
+          filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.select("id").map(&:id)
        end   
       if params[:search_type] != "Myfeeds"  
        unless  params[:items] == ''
@@ -482,7 +482,7 @@ end
        filter_params["items_id"] = items  unless params[:search_type] == "admin_feeds"
       
        filter_params["status"] = 1
-       filter_params["created_by"] = params[:search_type] == "admin_feeds" ? User.find(:all).collect(&:id) : User.get_follow_users_id(current_user)
+       filter_params["created_by"] = params[:search_type] == "admin_feeds" ? User.select("id").map(&:id) : User.get_follow_users_id(current_user)
        filter_params["page"] = 1
        filter_params["root_items"] = @root_items if params[:search_type] != "admin_feeds"
        filter_params["guide"] = params[:guide] if params[:guide].present?
