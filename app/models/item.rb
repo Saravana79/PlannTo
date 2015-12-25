@@ -1415,6 +1415,7 @@ end
     new_item_access = itemsaccess
     tempurl = url
     @items = []
+    article = nil
     unless (item_ids.blank?)
       new_item_access = "ItemId"
       if ((for_widget == true && sort_disable == "true") || (for_widget == false && sort_disable == "true"))
@@ -1441,20 +1442,20 @@ end
           if url.include?("#")
             tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
           end
-          @articles = ArticleContent.where(url: tempurl)
+          article = ArticleContent.where(url: tempurl).last
 
-          if @articles.blank? || @articles.nil?
+          if article.blank? || article.nil?
             #for pagination in publisher website. removing /2/
             tempstr = tempurl.split(//).last(3).join
             matchobj = tempstr.match(/^\/\d{1}\/$/)
             unless matchobj.nil?
               tempurlpage = tempurl[0..(tempurl.length-3)]
-              @articles = ArticleContent.where(url: tempurlpage)
+              article = ArticleContent.where(url: tempurlpage).last
             end
           end
 
-          unless @articles.blank?
-            @items = @articles[0].allitems.select{|a| a.is_a? Product}
+          unless article.blank?
+            @items = article.allitems.select{|a| a.is_a? Product}
             article_items_ids = @items.map(&:id)
             new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
@@ -1474,6 +1475,7 @@ end
     new_item_access = itemsaccess
     tempurl = url
     @items = []
+    article = nil
     unless (item_ids.blank?)
       new_item_access = "ItemId"
       if ((for_widget == true && sort_disable == "true") || (for_widget == false && sort_disable == "true"))
@@ -1500,20 +1502,20 @@ end
           if url.include?("#")
             tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
           end
-          @articles = ArticleContent.where(url: tempurl)
+          article = ArticleContent.where(url: tempurl).last
 
-          if @articles.blank? || @articles.nil?
+          if article.blank?
             #for pagination in publisher website. removing /2/
             tempstr = tempurl.split(//).last(3).join
             matchobj = tempstr.match(/^\/\d{1}\/$/)
             unless matchobj.nil?
               tempurlpage = tempurl[0..(tempurl.length-3)]
-              @articles = ArticleContent.where(url: tempurlpage)
+              article = ArticleContent.where(url: tempurlpage).last
             end
           end
 
-          unless @articles.blank?
-            @items = @articles[0].allitems.select{|a| a.is_a? Product}
+          unless article.blank?
+            @items = article.allitems.select{|a| a.is_a? Product}
             article_items_ids = @items.map(&:id)
             new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
@@ -2308,15 +2310,17 @@ end
     items = []
     from_article_field = false
     tempurl = url.to_s
+    article = nil
     if !item_ids.blank?
       item_id = item_ids.to_s.split(",").first
       items = Item.where(:id => item_id)
     else
       unless url.nil?
-        @articles, tempurl = Item.get_articles_from_url(url)
+        articles, tempurl = Item.get_articles_from_url(url)
+        article = articles.last
 
         if (url.include?("stylecraze.com") || url.include?("fashionlady.in") || url.include?("bebeautiful.in"))
-          article = @articles.first
+          article = article.first
           if !article.blank?
             keyword = article.field2
             if !keyword.blank?
@@ -2324,7 +2328,7 @@ end
               items << [OpenStruct.new(:name => keyword)]
             end
 
-            items << Item.get_items_from_articles(@articles)
+            items << Item.get_items_from_articles(articles)
 
             items << Item.get_items_from_fashion_url(url)
             # if items.flatten.blank?
@@ -2335,9 +2339,9 @@ end
             @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
           end
         else
-          if !@articles.blank?
-            # items = @articles[0].allitems.select{|a| a.is_a? Product}
-            items = Item.get_items_from_articles(@articles)
+          if !article.blank?
+            # items = article.allitems.select{|a| a.is_a? Product}
+            items = Item.get_items_from_articles(articles)
           end
         end
       end
@@ -2347,7 +2351,7 @@ end
   end
 
   def self.get_items_from_articles(articles)
-    items = articles[0].allitems
+    items = articles.last.allitems
 
     article_items_ids = items.map(&:id)
     new_items = article_items_ids.blank? ? [] : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
@@ -2388,24 +2392,25 @@ end
 
   def self.get_articles_from_url(url)
     tempurl = url;
+    articles = []
     if url.include?("?")
       tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
     end
     if url.include?("#")
       tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
     end
-    @articles = ArticleContent.where(url: tempurl)
+    articles = ArticleContent.where(url: tempurl)
 
-    if @articles.blank? || @articles.nil?
+    if article.blank?
       #for pagination in publisher website. removing /2/
       tempstr = tempurl.split(//).last(3).join
       matchobj = tempstr.match(/^\/\d{1}\/$/)
       unless matchobj.nil?
         tempurlpage = tempurl[0..(tempurl.length-3)]
-        @articles = ArticleContent.where(url: tempurlpage)
+        articles = ArticleContent.where(url: tempurlpage)
       end
     end
-    return @articles, tempurl
+    return articles, tempurl
   end
 
   def self.get_amazon_item_from_item_id(item_id="")
@@ -3107,6 +3112,7 @@ end
   def self.get_price_text_from_url(url, publisher, page_type="")
     @items = []
     @itemdetail = nil
+    article = nil
     unless url.nil?
       tempurl = url;
       if url.include?("?")
@@ -3120,19 +3126,19 @@ end
         tempurl = tempurl.gsub("m.mouthshut", "www.mouthshut")
       end
 
-      @articles = ArticleContent.where(url: tempurl)
+      article = ArticleContent.where(url: tempurl).last
 
-      if @articles.blank? || @articles.nil?
+      if article.blank?
         #for pagination in publisher website. removing /2/
         tempstr = tempurl.split(//).last(3).join
         matchobj = tempstr.match(/^\/\d{1}\/$/)
         unless matchobj.nil?
           tempurlpage = tempurl[0..(tempurl.length-3)]
-          @articles = ArticleContent.where(url: tempurlpage)
+          article = ArticleContent.where(url: tempurlpage).last
         end
       end
 
-      if @articles.blank?
+      if article.blank?
         if tempurl.include?("-Photos-")
           tempurl = tempurl.gsub("-Photos-", "-reviews-")
         elsif tempurl.include?("-discussion-")
@@ -3140,13 +3146,13 @@ end
         elsif tempurl.include?("-page-")
           tempurl = tempurl.gsub(/-page-.*/, "")
         end
-        @articles = ArticleContent.where(url: tempurl)
+        article = ArticleContent.where(url: tempurl).last
 
-        if @articles.blank?
+        if article.blank?
           last_word = tempurl.to_s.split("/").last
           last_word = last_word.to_s.gsub(/-review.*/, "-review%")
           tempurl = "http://www.mouthshut.com/%/#{last_word}"
-          @articles = ArticleContent.where("url like '#{tempurl}'")
+          article = ArticleContent.where("url like '#{tempurl}'").last
         end
       end
 
@@ -3156,8 +3162,8 @@ end
         status_details = [1,2,3]
       end
 
-      unless @articles.blank?
-        @items = @articles[0].allitems.select{|a| a.is_a? Product}
+      unless article.blank?
+        @items = article.allitems.select{|a| a.is_a? Product}
         article_items_ids = @items.map(&:id)
         new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
