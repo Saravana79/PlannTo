@@ -28,10 +28,10 @@ RailsExceptionHandler.configure do |config|
   config.storage_strategies = [:active_record] # Available options: [:active_record, :rails_log, :remote_url => {:target => 'http://example.com'}]
 
   # Change database/table for the active_record storage strategy
-  config.active_record_store_in = {
-    :database => 'production',
-    :record_table => 'error_messages'
-  }
+  # config.active_record_store_in = {
+  #   :database => 'production',
+  #   :record_table => 'error_messages'
+  # }
 
   config.store_request_info do |storage,request|
   
