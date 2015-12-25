@@ -301,7 +301,7 @@ class Item < ActiveRecord::Base
       unless(item.group_id.nil?)
         items = items.select{|a| (a.group_id.nil? or a.group_id != item.group_id) }
       end
-      items = Item.where(:id => items[0..4].collect(&:id)).includes(:item_rating,:attribute_values)
+      items = Item.where(:id => items.first(5).map(&:id)).includes(:item_rating,:attribute_values)
     else
       # items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values).order("id desc").limit(limit+2)
       #items = Item.find(related_item_ids, :order => "field(id, #{related_item_ids.map(&:inspect).join(',')})")
