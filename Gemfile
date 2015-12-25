@@ -33,7 +33,7 @@ gem 'aws-sdk-v1'
 gem 'aws-sdk', '~> 2'
 # gem 'record-cache'
 #gem 'execjs'
-gem 'therubyracer'
+# gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
