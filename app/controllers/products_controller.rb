@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
   before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
-  before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
+  # before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
   before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
 
@@ -65,13 +65,13 @@ class ProductsController < ApplicationController
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  caches_action :sports_widget, :cache_path => proc {|c|
-    if !params[:item_ids].blank?
-      params.slice("item_ids", "category_item_detail_id", "page_type", "random_id")
-    else
-      params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
-    end
-  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  # caches_action :sports_widget, :cache_path => proc {|c|
+  #   if !params[:item_ids].blank?
+  #     params.slice("item_ids", "category_item_detail_id", "page_type", "random_id")
+  #   else
+  #     params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
+  #   end
+  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
 
   # caches_action :show,  :cache_path => Proc.new { |c|
@@ -764,6 +764,7 @@ class ProductsController < ApplicationController
   end
 
   def sports_widget
+    return render :nothing => true
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
