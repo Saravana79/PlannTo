@@ -33,10 +33,6 @@ class AdvertisementsController < ApplicationController
 
     @ad_template_type = params[:page_type] unless params[:page_type].blank?
 
-    # params[:page_type] = @ad_template_type
-    #
-    # url_params = Advertisement.make_url_params(params)
-
     p_item_ids = item_ids = []
     p_item_ids = item_ids = params[:item_id].to_s.split(",") unless params[:item_id].blank?
 
@@ -99,6 +95,8 @@ class AdvertisementsController < ApplicationController
       @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
       @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+      @vendor_ids = vendor_ids
+
       if @is_test != "true"
         @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                                 cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
@@ -209,6 +207,7 @@ class AdvertisementsController < ApplicationController
             @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
             @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
             @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+            @vendor_ids = vendor_ids
 
             @item_details = @item_details.uniq(&:url)
             @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
@@ -249,6 +248,7 @@ class AdvertisementsController < ApplicationController
       @ad_template_type = "type_1"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
       @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+      @vendor_ids = vendor_ids
 
       if @normal_view_ratio.to_f != 0.0 && !@iframe_width.blank?
         @iframe_height = (@iframe_width.to_f / @normal_view_ratio).to_s
@@ -480,6 +480,7 @@ class AdvertisementsController < ApplicationController
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+    @vendor_ids = vendor_ids
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
@@ -516,6 +517,7 @@ class AdvertisementsController < ApplicationController
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     @vendor_ad_details.default = {"vendor_name" => "Jockey"}
+    @vendor_ids = vendor_ids
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
@@ -552,6 +554,7 @@ class AdvertisementsController < ApplicationController
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+    @vendor_ids = vendor_ids
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
@@ -585,6 +588,8 @@ class AdvertisementsController < ApplicationController
 
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+    @vendor_ids = vendor_ids
+
     @item = Item.new
     @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
 
@@ -915,15 +920,8 @@ class AdvertisementsController < ApplicationController
 
     if (params[:item_id].blank? || params[:fashion_id].blank? || (!@ad.blank? && @ad.sort_type == "random"))
       if (!@ad.blank? && ((@ad.id != 52 && @ad.advertisement_type == "fashion") || @ad.sort_type == "random"))
-        # item_id, random_id = Item.get_item_id_and_random_id(@ad, params[:item_id])
-        #
-        # if random_id.blank?
-        #   item_id, random_id = Item.get_item_id_and_random_id(@ad, params[:item_id])
-        # end
 
         random_id = rand(20)
-
-        # params[:item_id] = item_id
         params[:fashion_id] = random_id
       end
     end
@@ -931,14 +929,12 @@ class AdvertisementsController < ApplicationController
     if !params[:item_id].blank? && params[:fashion_id].blank?
       if !@ad.blank? && @ad.id == 52
         random_id = rand(10)
-
         params[:fashion_id] = random_id
       end
     end
 
     if !@ad.blank? && @ad.id == 56
       random_id = rand(10)
-
       params[:fashion_id] = random_id
     end
 

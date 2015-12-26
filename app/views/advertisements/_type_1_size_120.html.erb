@@ -25,7 +25,7 @@
                     <div class="product-img">
                       <a href="javascript:void(0)" style="text-decoration:none;">
                          <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                        <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 106,79).html_safe %>
+                        <%= get_image_tag(item_detail, vendor_ad_details[item_detail.site.to_s]['vendor_name'], @item.base_item_image_url(:medium), 106,79).html_safe %>
                         <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
                       </a>
                     </div>
@@ -33,7 +33,7 @@
 
                     <!--
                     <p class="product-desc">
-                      <%#= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text']), 45) %>
+                      <%#= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, vendor_ad_details[sliced_item_detail.first.site.to_s]['default_text']), 45) %>
                     </p> -->
                     <!--<p class="price-strike">Rs. 40, 000</p>-->
                     
@@ -48,13 +48,13 @@
               <% end %>
               <div class="product-extra-desc">
                 <p>
-                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil) %>
+                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, vendor_ad_details[sliced_item_detail.first.site.to_s]['default_text'], 50, nil) %>
                 </p>
               </div>
-                <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                <img class="vendor_image_src" src="<%= vendor_ad_details[sliced_item_detail.first.site.to_s]['imageurl'] %>" alt="" style="display: none;">
                 <% else %>
                     <%= render :partial => '/advertisements/get_120_page_content.html.erb', :locals => {:item_detail => sliced_item_detail.first, :indx => indx} %>
-                    <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                    <img class="vendor_image_src" src="<%= vendor_ad_details[sliced_item_detail.first.site.to_s]['imageurl'] %>" alt="" style="display: none;">
                 <% end %>
               </div>
           <% end %>

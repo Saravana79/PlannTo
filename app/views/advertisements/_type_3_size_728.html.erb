@@ -23,14 +23,14 @@
                   <div class="product-img">
                     <a href="<%= shop_now_url %>" target="_blank">
                        <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), '', 82).html_safe %>
+                      <%= get_image_tag(item_detail, vendor_ad_details[item_detail.site.to_s]['vendor_name'], @item.base_item_image_url(:medium), '', 82).html_safe %>
                       <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
                     </a>
                   </div>
                   <div class="product-desc">
                     <a href="<%= shop_now_url %>" target="_blank" class="">
                       <p class="text-desc">
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                        <%= raw get_offer_for_ad(@ad, item_detail, vendor_ad_details[item_detail.site.to_s]['default_text'], 90, shop_now_url) %>
                       </p>
                       
                     </a>
@@ -44,7 +44,7 @@
                   </p>
                 </div>
               </div>
-              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+              <img class="vendor_image_src" src="<%= vendor_ad_details[item_detail.site.to_s]['imageurl'] %>" alt="" style="display: none;">
             </div>
         <% end %>
 

@@ -213,4 +213,8 @@ module Admin::AdvertisementsHelper
     return_val = ad_status == "enabled" ? "Enable" : "Disable"
     return_val
   end
+
+  def get_vendor_ad_details_from_helper()
+    vendor_ad_details = @vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details_from_view(@vendor_ids)
+  end
 end

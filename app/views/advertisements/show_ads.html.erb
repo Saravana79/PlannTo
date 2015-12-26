@@ -16,7 +16,8 @@
 <body>
 
 <div class="plannto-advertisement main_div" style="cursor:pointer;">
-  <%= render :partial => "/advertisements/#{@ad_template_type}_size_#{@suitable_ui_size}" %>
+  <% vendor_ad_details = get_vendor_ad_details_from_helper() %>
+  <%= render :partial => "/advertisements/#{@ad_template_type}_size_#{@suitable_ui_size}", :locals => {:vendor_ad_details => vendor_ad_details} %>
 </div>
 <%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>
 </body>

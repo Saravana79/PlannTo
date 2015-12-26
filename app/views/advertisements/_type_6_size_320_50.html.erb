@@ -14,7 +14,7 @@
                    <div class="product-img">
                     <a href="<%= shop_now_url %>" target="_blank" style="text-decoration:none;">
                        <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), '', "").html_safe %>
+                      <%= get_image_tag(item_detail, vendor_ad_details[item_detail.site.to_s]['vendor_name'], @item.base_item_image_url(:medium), '', "").html_safe %>
                       <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
                     </a>
                   </div>
@@ -54,7 +54,7 @@
             </div>
         <% end %>
 
-        <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_ad_details[@item_details[0].site.to_i]['imageurl'] %>" width="68px" alt=""></a>
+        <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= vendor_ad_details[@item_details[0].site.to_s]['imageurl'] %>" width="68px" alt=""></a>
         <% if(!@item_details[0].cashback.nil? && @item_details[0].cashback != 0.0) %>
 
           <div style = "font-size: 9px;margin: 3px;" > Price includes cashback. </div>
