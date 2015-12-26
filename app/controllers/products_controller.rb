@@ -1,6 +1,8 @@
 require "securerandom"
 
 class ProductsController < ApplicationController
+  skip_filter *_process_action_callbacks.map(&:filter), :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
+
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
   before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
@@ -87,7 +89,6 @@ class ProductsController < ApplicationController
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
   # skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
-  skip_filter *_process_action_callbacks.map(&:filter), :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
   layout 'product', :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
   include FollowMethods
   include ItemsHelper
