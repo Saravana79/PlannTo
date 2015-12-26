@@ -398,7 +398,7 @@ class ProductsController < ApplicationController
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     # @test_condition = @is_test == "true" ? "&is_test=true" : ""
-    url =  @url
+    # url =  @url
 
     included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
     if (url.include?("bebeautiful.in") || included_beauty || params[:page_type] == "type_3")
