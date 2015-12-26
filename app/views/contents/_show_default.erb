@@ -313,13 +313,13 @@
  	 <%= render  "shared/share_buttons",:caption_text => content.title +  ' -PlannTo.com' %>
 	</div>
 	<% if ((content.sub_type == "#{ArticleCategory::REVIEWS}") || (content.sub_type == "#{ArticleCategory::LIST}")) %>
-		<%= render "contents/popular_items"%>
+		<%#= render "contents/popular_items"%>
 		<br/>	
 		<%= render "contents/related_contents"%>
 	<%else%>
 		<%= render "contents/related_contents"%>
 		<br/>
-		<%= render "contents/popular_items"%>
+		<%#= render "contents/popular_items"%>
 		
 	<%end%>
 
