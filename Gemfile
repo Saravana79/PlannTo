@@ -135,5 +135,3 @@ gem 'skylight'#, '~> 0.10.0'
 gem 'test-unit'
 
 gem 'memory_profiler'
-
-gem 'rails_12factor', group: :production
