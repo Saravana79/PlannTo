@@ -102,7 +102,7 @@ gem 'mongoid'
 gem 'bson_ext'
 
 # gem for check memory usage
-gem 'oink', '~> 0.10.1'
+gem 'oink', '~> 0.10'
 
 #amazon
 gem 'amazon-ecs', '~> 2.2.5'
@@ -135,3 +135,5 @@ gem 'skylight'#, '~> 0.10.0'
 gem 'test-unit'
 
 gem 'memory_profiler'
+
+gem 'rails_12factor', group: :production
