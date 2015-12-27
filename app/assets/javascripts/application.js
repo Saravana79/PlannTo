@@ -27,7 +27,7 @@ $(document).ready(function() {
     e.preventDefault();
     return false;
   });
-  
+
 
   $("#write_review").live('click', function(){
     $("#articleReviewSubContainer").show();
@@ -36,16 +36,16 @@ $(document).ready(function() {
       modal: true
     });
   });
-  
+
   $("#add_info").live('click', function(){
- 
+
     $("#popup_question_answer").dialog({
       height: 350,
       width: 500,
       modal: true
     });
   });
-  
+
   $( "#search_item" ).autocomplete({
 			source:  function (request, response) {
 			 if($('#follow_follow_type').val() == "follower")
@@ -61,7 +61,7 @@ $(document).ready(function() {
                     data:{
                         term:request.term,
                         authenticity_token: window._token,
-                        
+
                     },
                     type:"POST",
                     dataType:"json",
@@ -78,16 +78,16 @@ $(document).ready(function() {
                     }
                 });
         },
-                    
-			
-	
-    
+
+
+
+
 			minLength: 2,
 			select: function( event, ui ) {
 			  $('#follow_followable_id').val(ui.item.id);
 			  $('#follow_followable_type').val(ui.item.type);
 			  $('.follow_form').submit();
-			}	 
+			}
 	});
 	$( "#search_apps" ).autocomplete({
 			source: "/contents/search_autocomplete_list?sub_type=Apps",
@@ -96,9 +96,9 @@ $(document).ready(function() {
 			  $('#follow_followable_id').val(ui.item.id);
 			  $('#follow_followable_type').val(ui.item.type);
 			  $('.follow_form').submit();
-			}	 
+			}
 	});
-	
+
 	$( "#search_accessories" ).autocomplete({
 			source: "/contents/search_autocomplete_list?sub_type=Accessories",
 			minLength: 2,
@@ -106,9 +106,9 @@ $(document).ready(function() {
 			  $('#follow_followable_id').val(ui.item.id);
 			  $('#follow_followable_type').val(ui.item.type);
 			  $('.follow_form').submit();
-			}	 
+			}
 	});
- 
+
 });
 
 //-------------------- from jquery-youtube.js -----------
@@ -155,22 +155,22 @@ $.fn.youtube = function( type, config ) {
         config = type;
         type = config.type;
     }
-    
+
     config = config || {};
-    
+
     var i = this.length,
         yt,
         typo_s = typeof type === "string",
         validType = typo_s && $.youtube.validType(type),
         merge;
-        
+
     if ( ! validType && typo_s && (merge = type === $.youtube.IFRAME || type === $.youtube.OBJECT ? {videoType: type,type:$.youtube.VIDEO} : type ? {id: type} : false) ) {
         config = $.extend(true, {}, config, merge);
     }
-    
+
     while ( i-- ) {
         yt = $.youtube.get(this[i]) || new $.youtube(this[i], config);
-        
+
         if ( config.reload === true || yt.is_new || validType && yt.type !== type ) {
             if ( yt.init( ! validType && yt.is_new ? $.youtube.VIDEO : type) ) {
                 if ( ! yt.is_new ) {
@@ -178,7 +178,7 @@ $.fn.youtube = function( type, config ) {
                 }
                 yt.replace(i, this);
             }
-            
+
         } else {
             yt.update(config);
         }
@@ -196,22 +196,22 @@ $.youtube = function(element, config) {
 };
 
 $.youtube.prototype = {
-    
+
     init: function(type) {
         var fn, i = data_attrs.length,
             jsonStr, item,
             config = this.config,
             containers = this.config.containers,
             element = this.element;
-        
+
         if ( ! (fn = $.youtube.getObjectFn(type)) ) {
             if ( this.is_new || ! (fn = $.youtube.getObjectFn(type = this.type)) ) {
                 return log(type + ' is not defined');
             }
         }
-        
+
         config.type = this.type = type;
-        
+
         while ( i-- ) {
             config[data_attrs[i]] = config[data_attrs[i]] || element.data(data_attrs[i]) || attr(element, containers[data_attrs[i]]);
         }
@@ -235,13 +235,13 @@ $.youtube.prototype = {
                 return log( ' no dimentions, returns' );
             }
         }
-        
+
         config.nodeName = element[0].nodeName;
-        
+
         if ( ! (item = fn.call(this, config)) ) {
             return log("invalid object");
         }
-        
+
         // Sync attributes
         i = sync_attributes.length;
         while ( i-- ) {
@@ -249,16 +249,16 @@ $.youtube.prototype = {
                 item[sync_attributes[i]] = element[0][sync_attributes[i]];
             }
         }
-        
+
         // Sync data
         $.data(item, element.data());
-        
+
         // Replace the element
         element.replaceWith( item );
-        
+
         // Replace the element on a lower level
         element[0] = item;
-        
+
         for ( i in $.youtube.bind ) {
             if ( $.isFunction($.youtube.bind[i]) ) {
                 element.bind(i, (function(fn, self) {
@@ -271,13 +271,13 @@ $.youtube.prototype = {
                 log("unable to bind "+i);
             }
         }
-        
+
         this.is_new = false;
         this.id = config.id;
-        
+
         return this;
     },
-    
+
     update: function(config) {
         for ( var key in config ) {
             this.config[key] = config[key];
@@ -287,22 +287,22 @@ $.youtube.prototype = {
         }
         return this;
     },
-    
+
     replace: function(i, elem) {
         $.data(this.element[0], DATA_ID, this);
         $.data(elem[i], DATA_ID, this);
         elem[i] = this.element[0];
         return this;
     },
-    
+
     validDims: function() {
         return this.config.height && this.config.width;
     },
-    
+
     isObject: function(){
         return this.type === $.youtube.VIDEO && this.config.videoType === $.youtube.OBJECT;
     }
-    
+
 };
 
 $.extend($.youtube.prototype.update, {
@@ -328,22 +328,22 @@ $.each(["width", "height"], function(i, name) {
 });
 
 $.extend($.youtube, {
-    
+
     // Some constants that could be renamed if you feel for it...
     IMAGE: "image",
     VIDEO: "video",
     IFRAME: "iframe",
     OBJECT : "object",
-    
+
     // Id used to store data on dom elements
     DATA_ID: DATA_ID,
 
     // Urls
     url: 'http://www.youtube.com/',
     img_url: "http://img.youtube.com/vi/",
-    
+
     debug: enable_log,
-    
+
     config: function( config, val, byRef ) {
         var type = typeof config, name;
         if ( config != null ) {
@@ -361,7 +361,7 @@ $.extend($.youtube, {
         }
         return $.extend(!byRef, {}, $.youtube.config);
     },
-    
+
     image: function( data ) {
         var e = doc.createElement("img");
         e.src = $.youtube.image.url(data);
@@ -372,42 +372,42 @@ $.extend($.youtube, {
 
     video: function( data ) {
         var url = $.youtube.video.url(data),
-        
+
         e = data.videoType === $.youtube.IFRAME ?
             $.youtube.video.iframe(data, url) :
             $.youtube.video.object(data, url),
-        
+
         o = doc.createElement(rexceptnodes.test(data.nodeName) ? data.nodeName : (data.nodeName = "span"));
-        
+
         o.appendChild(e);
-        
+
         e.width = data.width;
         e.height = data.height;
-        
+
         return o;
     },
-    
+
     bind: function(name, fn) {
         $.youtube.bind[name] = fn;
     },
-    
+
     get: function(elem) {
         return typeof elem === "object" && elem !== null ?
             (elem instanceof $.youtube) ? elem :
                 $.data((elem instanceof $) && elem[0] ? elem[0] : elem, DATA_ID) :
                 typeof elem === "string" ? $.youtube.get($(elem)) : undefined;
     },
-    
+
     validType: function( type ) {
         return $.inArray( type, [$.youtube.IMAGE, $.youtube.VIDEO] ) !== -1;
     },
-    
+
     is: function( e ) {
         return (e = $.youtube.get(e)) && (e instanceof $.youtube);
     },
-    
+
     log: log,
-    
+
     getObjectFn: function(type) {
         return type === $.youtube.VIDEO ? $.youtube.video : type === $.youtube.IMAGE ? $.youtube.image: false;
     }
@@ -419,7 +419,7 @@ $.youtube.image.url = function(data){
 };
 
 $.extend($.youtube.video, {
-    
+
     url: function(data) {
         var url = data.id + '?', name, v;
         for ( name in data ) {
@@ -433,7 +433,7 @@ $.extend($.youtube.video, {
             $.youtube.url + 'embed/' + url :
             $.youtube.url + 'v/' + url + '?fs=1&amp;hl=en_US&amp;rel=0';
     },
-    
+
     iframe: function(data, url) {
         var e = doc.createElement("iframe");
         e.title = data.name || data.title || "";
@@ -442,7 +442,7 @@ $.extend($.youtube.video, {
         e.frameborder = data.iframeBorder;
         return e;
     },
-    
+
     object: function(data, url) {
         var e = doc.createElement("object"), p;
 
@@ -546,13 +546,13 @@ $.extend($.youtube.config, {
 		thumbChangeEvent: 'click.pikachoose',
 		stopOnClick: false
 	};
-   
+
     $.fn.PikaChoose = function(o) {
 		return this.each(function() {
 			$(this).data('pikachoose', new $pc(this, o));
 		});
 	};
-	
+
 	/**
      * The PikaChoose object.
      *
@@ -592,18 +592,18 @@ $.extend($.youtube.config, {
 			//user passed a data source
 			e = $("<ul></ul>").addClass("jcarousel-skin-pika").appendTo(e);
 			$.each(this.options.data,function(){
-				if(typeof(this.link) != "undefined"){ 
+				if(typeof(this.link) != "undefined"){
 					var tmp = $("<li><a href='"+this.link+"'><img></a></li>").appendTo(e);
 					if(typeof(this.title) != "undefined"){ tmp.find('a').attr('title',this.title); }
 				}else{
 					var tmp = $("<li><img></li>").appendTo(e);
 				}
 				if(typeof(this.caption) != "undefined"){ tmp.append("<span>"+this.caption+"</span>"); }
-				if(typeof(this.thumbnail) != "undefined"){ 
-					tmp.find('img').attr('ref',this.image); 
-					tmp.find('img').attr('src',this.thumbnail); 
+				if(typeof(this.thumbnail) != "undefined"){
+					tmp.find('img').attr('ref',this.image);
+					tmp.find('img').attr('src',this.thumbnail);
 				}else{
-					tmp.find('img').attr('src',this.image); 
+					tmp.find('img').attr('src',this.image);
 				}
 			});
 		}
@@ -614,7 +614,7 @@ $.extend($.youtube.config, {
         }else{
         	return;
         }
-		
+
 		var y = 0;
 		var x = 0;
 		for(var t = 0; t<25;t++){
@@ -628,12 +628,12 @@ $.extend($.youtube.config, {
 		}
 
     };//end PikaChoose function(e, o)
-    
+
     var $pc = $.PikaChoose;
         $pc.fn = $pc.prototype = {
         pikachoose: '4.4.8'
     };
-	
+
 	$.fn.pikachoose = $.fn.PikaChoose;
 
     $pc.fn.extend = $pc.extend = $.extend;
@@ -677,7 +677,7 @@ $.extend($.youtube.config, {
 			this.finishAnimating({'index':this.options.startOn,'source':this.active.attr('ref') || this.active.attr('src'),'caption':this.active.parents('li:first').find('span:first').html(), 'clickThrough':this.active.parent().attr('href') || "", 'clickThroughTarget':this.active.parent().attr('target') || "", 'clickThroughTitle':this.active.parent().attr('title') || ""});
 			//Set CSS that is a MUST have. All style specific stuff happens in css file
 			this.aniDiv.css({position:'relative'});
-			
+
 			//process all the thumbnails
 			var self = this;
 			this.updateThumbs();
@@ -685,7 +685,7 @@ $.extend($.youtube.config, {
 			if(this.options.fadeThumbsIn){
 				this.list.fadeIn();
 			}
-			
+
 			if(this.options.carousel){
 				//default options for carousel
 				var carouselDefaults = {vertical:this.options.carouselVertical, initCallback: function(carousel){
@@ -735,7 +735,7 @@ $.extend($.youtube.config, {
             $.data(ele[0],'imageTitle',self.attr('title') || "");
             $.data(ele[0],'imageAlt',self.attr('alt') || "");
         	$.data(ele[0],'index',this.thumbs.index(ele));
-			
+
 			//gets each items index to iterate through them. Thanks to Tushar for the fix.
 			$.data(ele[0],'order',self.closest('ul').find('li').index(self.parents('li')));
     		//pass data so it can enter the load scope
@@ -786,7 +786,7 @@ $.extend($.youtube.config, {
 					}}
 				);
 
-				
+
 				if(data.order == that.options.startOn){
 					self.fadeTo(250,1);
 					self.addClass('active');
@@ -883,10 +883,10 @@ $.extend($.youtube.config, {
 				//in this scope self referes to the PikaChoose object
 				self.aniDiv.css({height:self.image.height(),width:self.image.width()}).show();
 				self.aniDiv.children('div').css({'width':'20%','height':'20%','float':'left'});
-		
+
 				//decide our transition
 				var n = 0;
-				if(self.options.transition[0] == -1){	
+				if(self.options.transition[0] == -1){
 					//random
 					n = Math.floor(Math.random()*7)+1;
 				}else{
@@ -896,7 +896,7 @@ $.extend($.youtube.config, {
 				}
 				if(self.options.IESafe && $.browser.msie){ n = 1; }
 				self.doAnimation(n,data);
-				
+
 			}).attr('src',$.data(this).source);//end image preload
 	     },//end bindEvents
         /**
@@ -939,7 +939,7 @@ $.extend($.youtube.config, {
 				});//end ani_divs.children.each
 				self.aniDiv.hide();
 				self.aniImg.hide();
-				
+
 	     		switch(n){
 					case 0:
 						//fade out then in
@@ -948,7 +948,7 @@ $.extend($.youtube.config, {
 								self.finishAnimating(data);
 							});
 						});
-	
+
 						break;
 					case 1:
 						//full frame fade
@@ -960,11 +960,11 @@ $.extend($.youtube.config, {
 							self.aniImg.eq(0).fadeIn(self.options.animationSpeed)).done(function(){
 							self.finishAnimating(data);
 						});
-	
+
 						break;
 					case 2:
-						self.aniDiv.show().children().hide().each(function(index){  
-							//animate out as blocks 
+						self.aniDiv.show().children().hide().each(function(index){
+							//animate out as blocks
 							var delay = index*30;
 							$(this).css({opacity: 0.1}).show().delay(delay).animate({opacity: 1,"width":aWidth,"height":aHeight},200,'linear',function(){
 								if(self.aniDiv.find("div").index(this) == 24){
@@ -982,7 +982,7 @@ $.extend($.youtube.config, {
 								}
 							});
 						});
-						break;							
+						break;
 					case 4:
 						self.aniDiv.show().children().hide().each(function(index){
 							if(index>4){ return; }
@@ -1000,7 +1000,7 @@ $.extend($.youtube.config, {
 						self.aniDiv.show().children().show().each(function(index){
 							var delay = index*Math.floor(Math.random()*5)*7;
 							var gap = self.gapper($(this), aHeight, aWidth);
-							
+
 							if($(".animation div").index(this) == 24){
 								delay = 700;
 							}
@@ -1053,7 +1053,7 @@ $.extend($.youtube.config, {
 				self.aniDiv.fadeOut('fast');
 			}).attr('src',data.source);
 			var cur = data.index+1;
-     		var total = this.thumbs.length;	
+     		var total = this.thumbs.length;
      		this.counter.html(cur+"/"+total);
 			if(data.clickThrough != ""){
 				if(this.anchor == null){
@@ -1075,7 +1075,7 @@ $.extend($.youtube.config, {
 					return function(){ self.nextClick(); };
 				})(this), this.options.speed, this.timeOut);
      		}
-     		
+
      		if(typeof(this.options.animationFinished) == 'function'){
 	     		this.options.animationFinished(this);
 	     	}
@@ -1136,7 +1136,7 @@ $.extend($.youtube.config, {
 		 },
 		 Prev: function(){
 			var e = {data:{self: this}};
-			this.prevClick(e) 
+			this.prevClick(e)
 		 },
 		 Play: function(){
 			if(this.options.autoPlay){return;}
@@ -1165,8 +1165,8 @@ $.extend($.youtube.config, {
 	}); //end extend
 
 })(jQuery);
- 
- 
+
+
  /*!
  * jCarousel - Riding carousels with jQuery
  *   http://sorgalla.com/jcarousel/

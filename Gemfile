@@ -46,7 +46,7 @@ end
 gem 'citier', '~>0.1.15'
 gem 'rails_sql_views' , :git=> 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
-gem 'jquery-rails', '~> 2.3.0'
+gem 'jquery-rails', '~> 1.0.19'
 gem 'acts-as-taggable-on', '~>2.4.1'
 gem 'acts_as_rateable'
 gem 'remotipart', '~> 1.0'
