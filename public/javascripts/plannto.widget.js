@@ -10,7 +10,7 @@ var PlannTo = (function(window,undefined) {
 var PlannTo ={};
 var SubPath="/where_to_buy_items.js"
 //for production
-var domain = "www.plannto.com";
+var domain = "www.plannto32.herokuapp.com";
 //for development
 //var domain = "localhost:3000";
 // Localize jQuery variable
@@ -244,7 +244,7 @@ function main() {
           });
         })
       */ 
-        //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        //url = "http://www.plannto32.herokuapp.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    
       });
     }
