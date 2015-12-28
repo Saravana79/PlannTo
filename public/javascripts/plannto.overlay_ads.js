@@ -10,7 +10,7 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-    var domain = "www.plannto32.herokuapp.com";
+    var domain = "plannto32.herokuapp.com";
 //for development
 //    var domain = "localhost:3000";
 // Localize jQuery variable
