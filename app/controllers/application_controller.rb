@@ -3,11 +3,11 @@ class ApplicationController < ActionController::Base
   include Reputation
   protect_from_forgery
   #before_filter :check_authentication
-  before_filter :store_session_url
-  rescue_from FbGraph::Exception, :with => :fb_graph_exception
+  # before_filter :store_session_url
+  # rescue_from FbGraph::Exception, :with => :fb_graph_exception
   # prepend_before_filter { |c| RecordCache::Strategy::RequestCache.clear }
   # before_filter :cache_follow_items
-  before_filter :change_image_url_path
+  # before_filter :change_image_url_path
   #before_filter :set_referer
   
   #def set_referer
