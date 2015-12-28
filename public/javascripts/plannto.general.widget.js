@@ -188,7 +188,7 @@ var PlannTo = (function(window,undefined) {
              });
              })
              */
-            //url = "http://www.plannto32.herokuapp.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+            //url = "http://plannto32.herokuapp.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 
         });
     }

@@ -175,7 +175,7 @@ production:
   homepagecompareitems2: "5727,5678"
   homepagecompareitems3: "4974,5023"
   homepagecompareitems4: "5976,5539"
-  hostname: "http://www.plannto32.herokuapp.com"
+  hostname: "http://plannto32.herokuapp.com"
   rtbkit_hostname: "http://rtbtarget.plannto.com:9985"
   rtb_budget_reset_time: 2
   rtb_initial_budget: 22000000
