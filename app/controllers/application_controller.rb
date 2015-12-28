@@ -24,6 +24,13 @@ class ApplicationController < ActionController::Base
    #end
     
   #end
+  before_filter :check_rack_mini_profiler
+  def check_rack_mini_profiler
+    # for example - if current_user.admin?
+    if params[:rmp]
+      Rack::MiniProfiler.authorize_request
+    end
+  end
 
   def change_image_url_path
     if request.protocol == "https://"

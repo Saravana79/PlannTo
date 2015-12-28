@@ -1,7 +1,8 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.2.22'
-ruby '2.2.3'
+# ruby '2.2.3'
+ruby '2.1.8'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -134,4 +135,7 @@ gem 'skylight'#, '~> 0.10.0'
 #To fix test-unit issue
 gem 'test-unit'
 
+gem 'rack-mini-profiler'
+gem 'flamegraph'
+gem 'stackprof' # ruby 2.1+ only
 gem 'memory_profiler'
