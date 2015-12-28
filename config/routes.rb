@@ -501,6 +501,7 @@ resources :comments do
       post "default_save"
       post "batch_update"
       post "change_category"
+      get "empty_page"
     end
   end
 
@@ -558,4 +559,6 @@ resources :comments do
   match '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
 
   match "/publishers" => "publishers#index", :via => [:get]
+
+  resources :dumps, :only => [:index]
 end

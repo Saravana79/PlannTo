@@ -1,6 +1,6 @@
 class FeedsController < ApplicationController
   layout false
-  before_filter :authenticate_admin_user!, :except => [:article_details]
+  before_filter :authenticate_admin_user!, :except => [:article_details, :empty_page]
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:article_details]
 
   def index
@@ -353,6 +353,10 @@ class FeedsController < ApplicationController
   def load_suggestions
     Resque.enqueue(SourceItemProcess, "update_suggestions", Time.zone.now)
     render :text => "Load Suggestion Process Successfully Initiated"
+  end
+
+  def empty_page
+    render :nothing => true
   end
 
 end
