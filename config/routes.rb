@@ -555,7 +555,7 @@ resources :comments do
   match "/pages/estore_plugin" => "pages#estore_plugin", :via => [:get]
   match "/pages/estore_search" => "pages#estore_search", :via => [:get]
 
-  match '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
+  # match '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
 
   match "/publishers" => "publishers#index", :via => [:get]
 end
