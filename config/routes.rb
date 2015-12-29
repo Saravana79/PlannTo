@@ -558,4 +558,9 @@ resources :comments do
   # match '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
 
   match "/publishers" => "publishers#index", :via => [:get]
+
+  # Removed actions
+  match "/items/compare",:to => "dummy#index"
+  match ':itemtype/guides/:guide_type' => "dummy#index"
+  match ':itemtype/:item_id/guides/:guide_type' => "dummy#index"
 end
