@@ -2771,7 +2771,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         asin = each_item_detail.additional_details
         next if asin.blank?
 
-        res = Rails.cache.fetch(asin.to_s.gsub(" ", ""), {:expires_in => 5.hours}) do
+        res = res = APICache.get(asin.to_s.gsub(" ", ""), {:cache => 5.hours}) do
           Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
         end
 

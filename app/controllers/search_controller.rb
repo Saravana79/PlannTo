@@ -16,8 +16,8 @@ class SearchController < ApplicationController
     status << 2
     status = params[:status].split(',') if params[:status].present?
     @search_attributes = Rails.cache.fetch("search_attributes")
-    @search_attributes = nil
-    if @search_attributes.nil?
+    # @search_attributes = nil
+    if @search_attributes.blank?
       @search_attributes  = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute).order("sortorder").all      
       Rails.cache.write('search_attributes',  @search_attributes )
     end

@@ -177,14 +177,12 @@ class PlanntoUserDetail
   private
 
   def update_lad
-    p 1111111111111111111111111
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
       # update_duplicate_record
     end
 
     if self.skip_callback != true
-      p 2222222222222222222222222222222222222222222
       self.skip_duplicate_update = true
       self.skip_callback = true
       self.lad = Time.now
@@ -205,7 +203,6 @@ class PlanntoUserDetail
   end
 
   def update_duplicate_record
-    p 3333333333333333333333333333333333333
     # if self.plannto_user_id_changed? || self.google_user_id_changed?
       plannto_user_details = PlanntoUserDetail.where(:plannto_user_id => self.plannto_user_id)
       if plannto_user_details.count > 1
