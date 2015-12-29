@@ -4,6 +4,9 @@ class AdvertisementsController < ApplicationController
 
   newrelic_ignore :only => [:show_ads]
 
+  skip_filter *_process_action_callbacks.map(&:filter), :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
+  before_filter :change_image_url_path, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
+
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
@@ -14,7 +17,7 @@ class AdvertisementsController < ApplicationController
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
   caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
+  # skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
   skip_before_filter  :verify_authenticity_token, :only => [:ads_visited]
   #after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads

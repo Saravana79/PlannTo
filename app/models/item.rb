@@ -2294,7 +2294,7 @@ end
         extra_items = items - [item]
         extra_items = extra_items.first(8)
 
-        keyword = item.name.to_s
+        keyword = item.name.to_s rescue ""
         items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo, valid_item_names)
       end
     end
