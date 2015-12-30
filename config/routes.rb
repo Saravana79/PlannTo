@@ -208,8 +208,8 @@ resources :accounts do
   end
    match 'create_buying_plan' => 'preferences#new'
    match 'preferences/:search_type/:uuid' => 'preferences#show'
-   match ':itemtype/guides/:guide_type' => 'contents#search_guide'
-   match ':itemtype/:item_id/guides/:guide_type' => 'contents#search_guide'
+   # match ':itemtype/guides/:guide_type' => 'contents#search_guide'
+   # match ':itemtype/:item_id/guides/:guide_type' => 'contents#search_guide'
    
   resources :cars do
         resources :reports
@@ -378,7 +378,7 @@ resources :comments do
   resources :items do
        resources :reports    
     collection do
-      get :compare
+      # get :compare
       get :update_page
       get :remove_duplicate_item
     end

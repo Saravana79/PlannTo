@@ -1,6 +1,8 @@
 class ExternalContentsController < ApplicationController
 #caches_action :show, :unless => :current_user, :cache_path => Proc.new { |c| c.params }
   layout :false
+
+  skip_filter *_process_action_callbacks.map(&:filter), :only => [:show]
   
   def show
     @content = Content.find(params[:content_id])
@@ -16,10 +18,9 @@ class ExternalContentsController < ApplicationController
     #   paginate(:page => 1, :per_page => 6)
     # end
     # @related_contents = results.results
-    @related_contents = []
+    # @related_contents = []
 
     redirect_to @content.url
-
   end
 
 end
