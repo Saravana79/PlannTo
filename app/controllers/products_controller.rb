@@ -1,6 +1,9 @@
 require "securerandom"
 
 class ProductsController < ApplicationController
+  skip_filter *_process_action_callbacks.map(&:filter), :only => [:where_to_buy_items]
+  before_filter :change_image_url_path, :only => [:where_to_buy_items]
+
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
   before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
