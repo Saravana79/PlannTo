@@ -3020,7 +3020,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   def self.get_ad_from_ref_url_for_image_ads(param)
     items, tempurl, from_article_field = Item.get_items_from_url(param[:ref_url], param[:item_ids])
     # item = items.first
-    item = items.flatten.select {|d| !d.id.blank?}.first
+    item = items.flatten.select {|d| (!d.id.blank? && d.is_a?(Product))}.first
     item_id = item.id rescue ""
     item_type = item.itemtype.itemtype.to_s rescue ""
     itemtype_id = Item.get_root_level_id(item_type)

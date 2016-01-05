@@ -769,7 +769,8 @@ class AdvertisementsController < ApplicationController
 
   def in_image_ads_demo
     params[:type] ||= "flash"
-    params[:ref_url] ||= "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"
+    # params[:ref_url] ||= "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"
+    params[:ref_url] ||= "http://www.carblogindia.com/tata-zica-test-drive-review-specifications-photos/"
     render :layout => false
   end
 
@@ -1141,7 +1142,7 @@ class AdvertisementsController < ApplicationController
     params[:size] = params[:size].to_s.gsub("*", "x")
     params[:exp_size] = params[:exp_size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
-    ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
+    ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}") rescue ""
     if !ab_test_details.blank? && ab_test_details["enabled"] == "true"
       alternatives = ab_test_details.blank? ? {} : eval(ab_test_details["alternatives"])
       if alternatives.include?(params[:size])
