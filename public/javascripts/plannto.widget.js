@@ -97,7 +97,7 @@ var scriptCount = 0;
 return null;
 }
 
-PlannTo.onchange_function = function onchange_function(obj,moredetails)
+PlannTo.plannto_widget_onchange_function = function onchange_function(obj,moredetails)
   {
         var item_id =  PlannTo.jQuery(obj).val();
         var show_details = moredetails;
@@ -109,7 +109,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
 
   }
 
-    PlannTo.onclick_function = function onclick_function(id, obj,moredetails, pathname)
+    PlannTo.plannto_widget_onclick_function = function onclick_function(id, obj,moredetails, pathname)
     {
         var item_id =  id;
         var show_details = moredetails;
