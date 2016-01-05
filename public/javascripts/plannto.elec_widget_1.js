@@ -141,7 +141,7 @@ var PlannTo = (function(window,undefined) {
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
-        url = "http://"+domain + "/product_offers.js" + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + "offer" +"&ref_url="+pathname+"&doc_title-"+doc_title+"&is_test="+is_test+"&page_type="+page_type+"&callback=?";
+        url = url_protocol + "//"+ domain + "/product_offers.js" + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + "offer" +"&ref_url="+pathname+"&doc_title-"+doc_title+"&is_test="+is_test+"&page_type="+page_type+"&callback=?";
         jQuery.getJSON(url, function (data) {
             element_id.html(data.html);
             jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).removeClass();
@@ -162,7 +162,7 @@ var PlannTo = (function(window,undefined) {
     {
         var doc_title =  PlannTo.jQuery(document).title;
 
-        url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&geo="+geo+"&vendor_ids="+vendor_ids+"&tag="+tag+"&ascsubtag="+ascsubtag+"&callback=?"
+        url = url_protocol + "//"+ domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&geo="+geo+"&vendor_ids="+vendor_ids+"&tag="+tag+"&ascsubtag="+ascsubtag+"&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
@@ -218,6 +218,8 @@ var PlannTo = (function(window,undefined) {
         page_type = getParam(url,"page_type");
         var tag = getParam(url,"tag");
         var ascsubtag = getParam(url,"ascsubtag");
+        var url_arr = url.split("/");
+        url_protocol = url_arr[0]
 
         if (ads == "")
         {
@@ -261,7 +263,7 @@ var PlannTo = (function(window,undefined) {
             {
                 element_id = "advertisement";
             }
-            url = "http://"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+            url = url_protocol + "//"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
             jQuery.getJSON(url, function (data) {
                 jQuery("#"+element_id).html(data.html);
             });
