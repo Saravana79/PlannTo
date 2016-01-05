@@ -75,6 +75,7 @@ var scripts = document.getElementsByTagName('script');
 var element;
 var src;
 var count = 0;
+var scriptCount = 0;
   for (var i = 0; i < scripts.length; i++)
   {
     element = scripts[i];
