@@ -171,7 +171,20 @@ class PlanntoUserDetail
     # plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
 
     # heroku run rake db:mongoid:create_indexes
-    plannto_user_details = PlanntoUserDetail.delete_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
+    # plannto_user_details = PlanntoUserDetail.destroy_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
+
+    days = [*30..57]
+
+    days.each do |day|
+      plannto_user_details = PlanntoUserDetail.where("lad" => {"$lte" => "#{day}".to_i.days.ago})
+      tot_count = plannto_user_details.count
+
+      plannto_user_details.each do |each_rec|
+        p tot_count
+        tot_count = tot_count - 1
+        each_rec.delete
+      end
+    end
   end
 
   private
