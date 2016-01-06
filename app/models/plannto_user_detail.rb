@@ -180,9 +180,13 @@ class PlanntoUserDetail
       tot_count = plannto_user_details.count
 
       plannto_user_details.each do |each_rec|
-        p tot_count
-        tot_count = tot_count - 1
-        each_rec.delete
+        begin
+          p tot_count
+          tot_count = tot_count - 1
+          each_rec.delete
+        rescue Exception => e
+          p "Error"
+        end
       end
     end
   end
