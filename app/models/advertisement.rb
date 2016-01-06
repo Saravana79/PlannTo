@@ -1332,90 +1332,94 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         ClickDetail.import(clicks_details)
 
         clicks_import_mongo.each do |each_click_mongo|
-          if !each_click_mongo["temp_user_id"].blank?
-            #Updating PlanntoUserDetail
-            plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).to_a.last
+          begin
+            if !each_click_mongo["temp_user_id"].blank?
+              #Updating PlanntoUserDetail
+              plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).to_a.last
 
-            if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
-              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
-              if !cookie_match.blank? && !cookie_match.google_user_id.blank?
-                plannto_user_detail.google_user_id = cookie_match.google_user_id
+              if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
+                cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
+                if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+                  plannto_user_detail.google_user_id = cookie_match.google_user_id
+                  plannto_user_detail.save!
+                end
+              elsif plannto_user_detail.blank?
+                plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
+                cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
+                if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+                  plannto_user_detail.google_user_id = cookie_match.google_user_id
+                end
                 plannto_user_detail.save!
               end
-            elsif plannto_user_detail.blank?
-              plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
-              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
-              if !cookie_match.blank? && !cookie_match.google_user_id.blank?
-                plannto_user_detail.google_user_id = cookie_match.google_user_id
+            end
+
+            if !plannto_user_detail.blank?
+              agg_info = {}
+              new_m_agg_info = ""
+              itemtype_id = nil
+              #plannto user details
+              if !each_click_mongo["item_id"].blank?
+                itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
+                itemtype_id = itemtype.itemtype_id rescue ""
               end
+
+              if !itemtype_id.blank?
+                agg_info = {"#{itemtype_id}" => 1}
+                new_m_agg_info = "#{itemtype_id}:1"
+
+                m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                if m_item_type.blank?
+                  plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
+                  m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                end
+
+                click_item_ids = m_item_type.click_item_ids
+                click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
+                click_item_ids = click_item_ids.map(&:to_i).compact.uniq
+                m_item_type.click_item_ids = click_item_ids
+                m_item_type.lcd = Date.today
+                m_item_type.save!
+              end
+
+              if !new_m_agg_info.blank?
+                m_agg_info = plannto_user_detail.agg_info.to_s
+                m_agg_info_arr = m_agg_info.split(",")
+                m_agg_info_arr << new_m_agg_info
+                plannto_user_detail.agg_info = m_agg_info_arr.uniq.join(",")
+              end
+
+              plannto_user_detail.skip_duplicate_update = true
               plannto_user_detail.save!
             end
-          end
 
-          if !plannto_user_detail.blank?
-            agg_info = {}
-            new_m_agg_info = ""
-            itemtype_id = nil
-            #plannto user details
-            if !each_click_mongo["item_id"].blank?
-              itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
-              itemtype_id = itemtype.itemtype_id rescue ""
-            end
+            if each_click_mongo["video_impression_id"].blank?
+              ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first
+              unless ad_impression_mon.blank?
+                each_click_mongo.delete("ad_impression_id")
 
-            if !itemtype_id.blank?
-              agg_info = {"#{itemtype_id}" => 1}
-              new_m_agg_info = "#{itemtype_id}:1"
-
-              m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
-              if m_item_type.blank?
-                plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
-                m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                begin
+                  ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
+                rescue Exception => e
+                  p "Error while push m_click"
+                end
               end
+            else
+              ad_impression_mon = AdImpression.where(:_id => each_click_mongo["video_impression_id"]).first
+              unless ad_impression_mon.blank?
+                click_imp = {:timestamp => each_click_mongo["timestamp"]}
+                if each_click_mongo["video_impression_id"] != each_click_mongo["ad_impression_id"]
+                  click_imp.merge!({:video_impression_id => each_click_mongo["ad_impression_id"]})
+                end
 
-              click_item_ids = m_item_type.click_item_ids
-              click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
-              click_item_ids = click_item_ids.map(&:to_i).compact.uniq
-              m_item_type.click_item_ids = click_item_ids
-              m_item_type.lcd = Date.today
-              m_item_type.save!
-            end
-
-            if !new_m_agg_info.blank?
-              m_agg_info = plannto_user_detail.agg_info.to_s
-              m_agg_info_arr = m_agg_info.split(",")
-              m_agg_info_arr << new_m_agg_info
-              plannto_user_detail.agg_info = m_agg_info_arr.uniq.join(",")
-            end
-
-            plannto_user_detail.skip_duplicate_update = true
-            plannto_user_detail.save!
-          end
-
-          if each_click_mongo["video_impression_id"].blank?
-            ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first
-            unless ad_impression_mon.blank?
-              each_click_mongo.delete("ad_impression_id")
-
-              begin
-                ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
-              rescue Exception => e
-                p "Error while push m_click"
+                begin
+                  ad_impression_mon.m_clicks << MClick.new(click_imp)
+                rescue Exception => e
+                  p "Error while push m_click"
+                end
               end
             end
-          else
-            ad_impression_mon = AdImpression.where(:_id => each_click_mongo["video_impression_id"]).first
-            unless ad_impression_mon.blank?
-              click_imp = {:timestamp => each_click_mongo["timestamp"]}
-              if each_click_mongo["video_impression_id"] != each_click_mongo["ad_impression_id"]
-                click_imp.merge!({:video_impression_id => each_click_mongo["ad_impression_id"]})
-              end
-
-              begin
-                ad_impression_mon.m_clicks << MClick.new(click_imp)
-              rescue Exception => e
-                p "Error while push m_click"
-              end
-            end
+          rescue Exception => e
+            p "Error while process click mongo"
           end
         end
 
