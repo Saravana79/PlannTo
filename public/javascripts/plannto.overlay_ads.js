@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
 //    var SubPath="/price_vendor_details.js"
 //for production
-//    var domain = "www.plannto.com";
+    var domain = "www.plannto.com";
 //for development
-    var domain = "localhost:3000";
+//    var domain = "localhost:3000";
 // Localize jQuery variable
 //    var jQuery;
 
@@ -346,7 +346,7 @@ var PlannTo = (function(window,undefined) {
 
                                 jQuery("body").append('<div class="plan_main_div_image_1" style="padding: 0px; margin: 0px; border: medium none; background: transparent none repeat scroll 0px 0px; position: static;"> ' +
                                     '<div class="plannto_in_image_ad_1" style="margin: 0px; top: '+ off_top +'px; right: 0px; height: '+ n_ad_height_w_close_btn +'px; left: '+ off_d.left +'px; overflow: hidden; padding: 0px; position: absolute; visibility: visible; width: '+ off_d.width +'px; z-index: 10000;"><div class="plannto_iframe" style="position: relative; height: 100%; width: 100%; background: transparent none repeat scroll 0% 0%; color: inherit; font: 12px/0.5 Arial; margin-top: 0px; opacity: 1; bottom: 0px;"><span style="width:20px;float:right;display:block;height:20px;"><a href="#" class="close_plannto_iframe"></a></span>' +
-                                    '<span class="plannto_ad_tag" style="margin-right:5px;font-weight:600;color:#808080;font-family:sans-serif;font-size:11px;padding-top:7px;height:13px;right:24px;position:absolute;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">Ads By PlannTo</a></span> <div id="plannto_ad_frame" style="border:medium none;position:absolute;z-index:'+ z_index +';bottom:0px;background-color:white;width:'+img_width+'px;" height= '+ n_ad_height +'px width="'+img_width+'px"> </div><div id="exp_plannto_ad_frame" style="border:medium none;position:absolute;bottom:0px;display:none;" height='+e_ad_height+'px width="'+img_width+'px"> </div></div><div class="plannto_hint_button plannto_hint_button'+indx+'"></div></div></div>')
+                                    '<span class="plannto_ad_tag" style="margin-right:5px;font-weight:600;color:#808080;font-family:sans-serif;font-size:11px;padding-top:7px;height:13px;right:24px;position:absolute;"><a style="text-decoration:none;font-weight: 600;color: #808080;font-family: sans-serif;font-size: 11px;" href="http://www.plannto.com" target="_blank">Ads By PlannTo</a></span> <div id="plannto_ad_frame" style="border:medium none;position:absolute;z-index:'+ z_index +';bottom:0px;background-color:white;width:'+img_width+'px;" height= '+ n_ad_height +'px width="'+img_width+'px"> </div><div id="exp_plannto_ad_frame" style="z-index:-1;border:medium none;position:absolute;bottom:0px;display:none;" height='+e_ad_height+'px width="'+img_width+'px"> </div></div><div class="plannto_hint_button plannto_hint_button'+indx+'"></div></div></div>')
 
                                 if (!need_close_btn)
                                 {
@@ -355,8 +355,6 @@ var PlannTo = (function(window,undefined) {
 
                                 jQuery("#plannto_ad_frame").html(data.html)
 
-                                console.log(222222222222222)
-                                console.log(viewable)
                                 if (viewable)
                                 {
                                     jQuery(".plannto_hint_button").hide()
@@ -401,11 +399,18 @@ var PlannTo = (function(window,undefined) {
                                             jQuery(".plannto_iframe").css({"position":"absolute"})
 
                                             jQuery("#exp_plannto_ad_frame").html(expanded_html)
+//                                            jQuery("#exp_plannto_ad_frame").css({"index":-1})
                                             jQuery("#plannto_ad_frame").hide()
                                             jQuery("#exp_plannto_ad_frame").show()
                                             expanded = true
 
                                             return false;
+                                        }
+                                        else
+                                        {
+                                            var expanded_view_a = jQuery(".plannto_iframe").find("#expanded_view a")
+                                            var expanded_view_href = jQuery(expanded_view_a).attr("href")
+                                            window.open(expanded_view_href, '_blank');
                                         }
                                     }
                                 })

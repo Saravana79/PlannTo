@@ -10,14 +10,14 @@
             <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{item_id}&geo=#{params[:geo]}&red_url=#{@adv_detail.nv_click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
             <a href="<%= history_detail_path %>" target="_blank"><img class="img_overlay_img" width="<%= @iframe_width %>" height="<%= @iframe_height %>" src="<%= @normal_view_src %>"></a>
         <% elsif @normal_view_type == "flash" %>
-            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_width %>" height="<%= @iframe_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_width %>" height="<%= @iframe_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_normal">
               <param name="MOVIE" value="<%= @normal_view_src %>">
-              <param name="PLAY" value="false">
-              <param name="LOOP" value="false">
+              <param name="PLAY" value="true">
+              <param name="LOOP" value="true">
               <param name="QUALITY" value="high">
               <param name="SCALE" value="SHOWALL">
               <param name="wmode" value="transparent">
-              <embed name="fixed_flash_1408" wmode="transparent" src="<%= @normal_view_src %>" width="<%= @iframe_width %>" height="<%= @iframe_height %>" play="false" loop="false" quality="high" scale="SHOWALL" swliveconnect="true" pluginspage="http://www.macromedia.com/go/flashplayer/" title="Adobe Flash Player">
+              <embed name="fixed_flash_normal" wmode="transparent" src="<%= @normal_view_src %>" width="<%= @iframe_width %>" height="<%= @iframe_height %>" play="true" loop="true" quality="high" scale="SHOWALL" swliveconnect="true" pluginspage="http://www.macromedia.com/go/flashplayer/" title="Adobe Flash Player">
             </object>
         <% elsif @normal_view_type == "video" %>
             <video controls autoplay>

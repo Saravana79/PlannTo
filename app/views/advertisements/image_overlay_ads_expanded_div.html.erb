@@ -8,15 +8,19 @@
               <img class="img_overlay_img" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" src="<%= @expanded_view_src %>">
             </a>
         <% elsif @expanded_view_type == "flash" %>
-            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
-              <param name="MOVIE" value="<%= @expanded_view_src %>">
-              <param name="PLAY" value="true">
-              <param name="LOOP" value="true">
-              <param name="QUALITY" value="high">
-              <param name="SCALE" value="SHOWALL">
-              <param name="wmode" value="transparent">
-              <embed name="fixed_flash_1408" wmode="transparent" src="<%= @expanded_view_src %>" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" play="true" loop="true" quality="high" scale="SHOWALL" swliveconnect="true" pluginspage="http://www.macromedia.com/go/flashplayer/" title="Adobe Flash Player">
-            </object>
+            <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{item_id}&geo=#{params[:geo]}&red_url=#{@adv_detail.nv_click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
+            <a href="<%= history_detail_path %>" id="expanded_flash" target="_blank" onclick="alert(2)">
+              <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
+                <param name="MOVIE" value="<%= @expanded_view_src %>">
+                <param name="PLAY" value="true">
+                <param name="LOOP" value="true">
+                <param name="QUALITY" value="high">
+                <param name="SCALE" value="SHOWALL">
+                <param name="wmode" value="transparent">
+                <param name="FlashVars" value="clickTag=<%= history_detail_path %>">
+                <embed id="expanded_flash_ad" name="fixed_flash_1408" wmode="transparent" src="<%= @expanded_view_src %>" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" play="true" loop="true" quality="high" scale="SHOWALL" swliveconnect="true" pluginspage="http://www.macromedia.com/go/flashplayer/" title="Adobe Flash Player">
+              </object>
+            </a>
         <% elsif @expanded_view_type == "video" %>
             <video controls autoplay>
               <source src="<%= @expanded_view_src %>" type="video/mp4">
