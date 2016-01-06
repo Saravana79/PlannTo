@@ -173,7 +173,7 @@ class PlanntoUserDetail
     # heroku run rake db:mongoid:create_indexes
     # plannto_user_details = PlanntoUserDetail.destroy_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
 
-    days = [*30..57]
+    days = [*30..57].reverse
 
     days.each do |day|
       plannto_user_details = PlanntoUserDetail.where("lad" => {"$lte" => "#{day}".to_i.days.ago})
