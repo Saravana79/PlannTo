@@ -28,6 +28,15 @@
         <%= text_area_tag :general_widget, "<script type='text/javascript'> \nvar d = document; var s = d.createElement('script'); var url = window.location.href; s.src = 'http://localhost:3000/javascripts/plannto.overlay_ads.js?ref_url='+url+'&item_ids=&visited=true&publisher_id=#{@publisher.id}'; var h = d.getElementsByTagName('head')[0]; h.appendChild(s);\n</script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
       </div>
     </div>
+
+    <div class="row">
+      <div class="elec_widget">
+        <p style="padding-bottom: 20px;font-size: 17px;"> Price Text Widgets </p>
+        <img style="height: 200px;padding-right: 30px;" src="/images/BestOffers.png">
+
+        <%= text_area_tag :beauty_widget, "<div id='where_to_buy_items' style='width:610px;'></div> \n\n<script async src='#{configatron.hostname}/javascripts/plannto.price_text.widget.js?ref_url=&item_id=&show_details=true&page_type=type_6&hide_price=false&publisher_id=#{@publisher.id}'></script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -159,11 +159,11 @@ var PlannTo = (function(window,undefined) {
 //    event.preventDefault();
     }
 
-    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable, tag, ascsubtag)
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable, tag, ascsubtag, hide_price)
     {
         var doc_title =  PlannTo.jQuery(document).title;
 
-        url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&tag="+tag+"&ascsubtag="+ascsubtag+"&callback=?"
+        url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&tag="+tag+"&ascsubtag="+ascsubtag+"&hide_price="+hide_price+"&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
@@ -214,6 +214,7 @@ var PlannTo = (function(window,undefined) {
             var element_id = getParam(url,"element_id");
             var tag = getParam(url,"tag");
             var ascsubtag = getParam(url,"ascsubtag");
+            var hide_price = getParam(url,"hide_price");
 
             is_test = getParam(url,"is_test");
             page_type = getParam(url,"page_type");
@@ -224,7 +225,7 @@ var PlannTo = (function(window,undefined) {
                     element_id = "where_to_buy_items";
                 }
                 element = jQuery("#"+element_id)
-                planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,tag,ascsubtag)
+                planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,tag,ascsubtag, hide_price)
 
             }
             else

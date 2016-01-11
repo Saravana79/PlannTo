@@ -1092,7 +1092,6 @@ class Itemdetail < ActiveRecord::Base
         p "problem while updating item detail"
       end
     end
-
   end
 
   private
