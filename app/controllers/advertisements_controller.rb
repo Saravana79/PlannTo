@@ -11,7 +11,7 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
-  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on") : params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size") : params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
@@ -1057,6 +1057,7 @@ class AdvertisementsController < ApplicationController
     params[:item_id] = params[:item_id].to_s.split(",").map(&:to_i).sort.join(",") if !params[:item_id].blank?
     params[:page_type] ||= ""
     params[:size] ||= ""
+    params[:exp_size] ||= ""
     params[:click_url] ||= ""
     params[:r] ||= ""
     params[:a] ||= ""
@@ -1074,6 +1075,9 @@ class AdvertisementsController < ApplicationController
     params[:ev_click_url] ||= ""
     params[:expand_on] ||= ""
     params[:need_close_btn] ||= ""
+
+    params[:size] = params[:size].to_s.gsub("*", "x")
+    params[:exp_size] = params[:exp_size].to_s.gsub("*", "x")
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
@@ -1139,8 +1143,6 @@ class AdvertisementsController < ApplicationController
       end
     end
 
-    params[:size] = params[:size].to_s.gsub("*", "x")
-    params[:exp_size] = params[:exp_size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
     ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}") rescue ""
     if !ab_test_details.blank? && ab_test_details["enabled"] == "true"
@@ -1154,9 +1156,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size"))
     end
 
     cache_params = CGI::unescape(cache_params)
