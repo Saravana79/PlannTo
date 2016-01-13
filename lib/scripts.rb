@@ -705,8 +705,9 @@ DealItem.import(deal_items)
 url = "/home/sivakumar/Downloads/feed.xml"
 # url = "https://s3-ap-southeast-1.amazonaws.com/paytmreports/googlepla/feed.xml.gz"
 each_node_list = Nokogiri::XML::Reader(File.open(url)).first
+each_node_list = doc = Nokogiri::XML(File.open(url))
 
-each_node_list.first
+# each_node_list.first
 product_types = []
 source_items = []
 each_node_list.each_with_index do |each_node, index|
@@ -727,6 +728,7 @@ each_node_list.each_with_index do |each_node, index|
         p product_type
         # logger.info product_type
         product_types << product_type
+        product_types = product_types.uniq
         p "success"
         # logger.info "success"
         # process_count += 1
@@ -757,28 +759,28 @@ each_node_list.each_with_index do |each_node, index|
         source_item = Sourceitem.find_or_initialize_by_url(url)
         if source_item.new_record?
           source_item.update_attributes(:name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => mpn)
-        elsif source_item.verified && !source_item.matchitemid.blank?
-          item_detail = Itemdetail.find_or_initialize_by_url(url)
-          if item_detail.new_record?
-            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => mpn, :cashback => 0, :description => description, :IsError => false, :mrpprice => mrpprice)
-            image = item_detail.Image
-          else
-            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
-            image = item_detail.Image
-          end
-          begin
-            if image.blank? && !image_url.blank?
-              image = item_detail.build_image
-              tempfile = open(image_url)
-              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-              filename = image_url.split("/").last
-              avatar.original_filename = filename
-              image.avatar = avatar
-              image.save
-            end
-          rescue Exception => e
-            p "There was a problem in image update"
-          end
+        # elsif source_item.verified && !source_item.matchitemid.blank?
+        #   item_detail = Itemdetail.find_or_initialize_by_url(url)
+        #   if item_detail.new_record?
+        #     item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => mpn, :cashback => 0, :description => description, :IsError => false, :mrpprice => mrpprice)
+        #     image = item_detail.Image
+        #   else
+        #     item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
+        #     image = item_detail.Image
+        #   end
+        #   begin
+        #     if image.blank? && !image_url.blank?
+        #       image = item_detail.build_image
+        #       tempfile = open(image_url)
+        #       avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+        #       filename = image_url.split("/").last
+        #       avatar.original_filename = filename
+        #       image.avatar = avatar
+        #       image.save
+        #     end
+        #   rescue Exception => e
+        #     p "There was a problem in image update"
+        #   end
         end
 
 

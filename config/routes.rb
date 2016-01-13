@@ -468,9 +468,7 @@ resources :comments do
   # Note: This route will make all actions in every controller accessible via GET requests.
   match ':controller(/:action(/:id(.:format)))'
 
-  mount Resque::Server, :at => "/resque"  
-
-  match '/:username', :to => "accounts#profile", :as => "profile"
+  mount Resque::Server, :at => "/resque"
 
   match "travels/show_ads" => "travels#show_ads", :as => "travel_ads"
   match "travels/where_to_find_hotels",:to => "travels#where_to_find_hotels"
@@ -545,6 +543,7 @@ resources :comments do
   match "advertisements/video_ads" => "advertisements#video_ads", :as => "video_ads", :via => [:get]
   match "advertisements/ads_visited" => "advertisements#ads_visited", :via => [:post]
   match "advertisments/image_show_ads" => "advertisements#image_show_ads", :as => "image_show_ads"
+  match "/buy_at_best_price" => "products#buy_at_best_price", :as => "buy_at_best_price"
 
   match "/admin/source_categories/edit" => "admin/source_categories#edit", :as => "edit_admin_source_category", :via => [:get]
 
@@ -563,4 +562,6 @@ resources :comments do
   match "/items/compare",:to => "dummy#index"
   match ':itemtype/guides/:guide_type' => "dummy#index"
   match ':itemtype/:item_id/guides/:guide_type' => "dummy#index"
+
+  match '/:username', :to => "accounts#profile", :as => "profile"
 end

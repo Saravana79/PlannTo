@@ -802,6 +802,32 @@ class ProductsController < ApplicationController
     # render :layout => false
   end
 
+  def buy_at_best_price
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    # url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    # tempurl = url
+
+    publisher = Publisher.getpublisherfromdomain(url)
+    itemdetail = Item.get_price_text_from_url(url, publisher, params[:page_type])
+
+    if !itemdetail.blank?
+      if @is_test != "true"
+        # @impression_id = AddImpression.add_impression_to_resque("plannto_redirect_widget", params[:item_ids], url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+        # cookies[:plan_to_temp_user_id], nil, nil, nil)
+
+        click_params =  {:url => url, :request_referer => url, :time => Time.zone.now.utc, :item_id => params[:item_ids], :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => "",
+                         :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => params[:vendor_id], :source_type => "Video", :temp_user_id => cookies[:plan_to_temp_user_id], :advertisement_id => "", :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
+        Resque.enqueue(CreateImpressionAndClick, 'Click', click_params)
+      end
+    end
+
+    if !itemdetail.blank? && !itemdetail.url.blank?
+      return redirect_to itemdetail.url.to_s
+    else
+      return render :nothing => true
+    end
+  end
+
   def sports_widget
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
