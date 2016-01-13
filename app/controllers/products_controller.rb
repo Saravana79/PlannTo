@@ -478,27 +478,26 @@ class ProductsController < ApplicationController
             @items << new_items
           end
 
-          @items = @items.flatten
+          @items = @items.flatten.uniq(&:id)
           break if @items.count >= 5
         end
-        @items = @items.flatten
       else
         @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo], valid_item_names)
       end
+      @items = @items.flatten.uniq(&:id)
 
       if @items.blank? || @items.count < 4
         total_items = @items
         @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
 
         @items = total_items + @items
-        @items = @items.flatten
       end
     else
       @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo], valid_item_names)
       # @impression = ImpressionMissing.create_or_update_impression_missing(url, "fashion")
     end
 
-    @items = @items.flatten.uniq
+    @items = @items.flatten.uniq(&:id)
 
     @search_url = CGI.escape(@search_url)
     url_params = Advertisement.make_url_params(params)

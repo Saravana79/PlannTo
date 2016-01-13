@@ -2489,12 +2489,14 @@ end
       new_items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
 
       items = items.blank? ? new_items : (items + new_items).flatten
+      items = items.uniq(&:id)
 
       if (items.blank? || (!valid_item_names.blank? && items.count < 5))
         keyword = keywords.sample(1)[0]
         new_items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo, valid_item_names)
 
         items = items.blank? ? new_items : (items + new_items).flatten
+        items = items.uniq(&:id)
       end
 
       item = Item.where(:id => 27731).first
