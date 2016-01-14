@@ -1,5 +1,5 @@
-<% if !@itemdetail.blank? %>
-    <% red_url = get_update_with_tag_and_ascsubtag(@itemdetail.url) %>
+<% if !@where_to_buy_item.blank? %>
+    <% red_url = get_update_with_tag_and_ascsubtag(@where_to_buy_item.url) %>
     <% red_url = CGI.escape(red_url) %>
     <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{red_url}" %>
 
@@ -8,10 +8,10 @@
         <% if params[:hide_price] != "true" %>
             <div>
               <p style="font-weight: bold;margin:0px;font-size:14px;color:#3B3B3B">
-                <% if @itemdetail.mrpprice.to_i != 0 %>
-                    <span style="text-decoration:line-through;">Rs <%= @itemdetail.mrpprice %></span>
+                <% if @where_to_buy_item.mrpprice.to_i != 0 %>
+                    <span style="text-decoration:line-through;">Rs <%= @where_to_buy_item.mrpprice %></span>
                 <% end %>
-                <span style="color:#b12704;font-weight:bold;font-size:14px;">Rs. <%= number_with_delimiter(@itemdetail.price.to_i) %></span>
+                <span style="color:#b12704;font-weight:bold;font-size:14px;">Rs. <%= number_with_delimiter(@where_to_buy_item.price.to_i) %></span>
               </p>
             </div>
         <% end %>

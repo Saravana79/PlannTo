@@ -32,9 +32,18 @@
     <div class="row">
       <div class="elec_widget">
         <p style="padding-bottom: 20px;font-size: 17px;"> Price Text Widgets </p>
-        <img style="height: 200px;padding-right: 30px;" src="/images/BestOffers.png">
+        <img style="width: 348px;padding-right: 30px;" src="/images/price_text_widget_type_2.png">
 
-        <%= text_area_tag :beauty_widget, "<div id='where_to_buy_items' style='width:610px;'></div> \n\n<script async src='#{configatron.hostname}/javascripts/plannto.price_text.widget.js?ref_url=&item_id=&show_details=true&page_type=type_6&hide_price=false&publisher_id=#{@publisher.id}'></script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
+        <%= text_area_tag :price_text_widget, "<div id='where_to_buy_items' style='width:110px;'></div> \n\n<script async src='#{configatron.hostname}/javascripts/plannto.widget.js?item_id=&show_details=true&publisher_id=#{@publisher.id}&ref_url=&page_type=type_2&hide_price=false'></script>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="elec_widget">
+        <p style="padding-bottom: 20px;font-size: 17px;"> Link Widgets </p>
+        <img style="height: 180px;width:450px;padding-right: 30px;" src="/images/plannto_link_widget.png">
+
+        <%= text_area_tag :beauty_widget, "<a class='plannto_link_widget' dir='ltr' rel='nofollow' title='Plannto Sample Product' target=''_blank' href='#{configatron.hostname}/buy_at_best_price' data-redirect-href-updated='true'>Plannto Sample Product</a>", :style => "height: 109px; padding-right: 30px; width: 471px;" %>
       </div>
     </div>
   </div>

@@ -14,11 +14,11 @@ class ProductsController < ApplicationController
   # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
   caches_action :where_to_buy_items, :cache_path => proc {|c|
     if (params[:item_ids].blank? && params[:ref_url].blank?)
-      params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type")
+      params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type", "page_type", "hide_price")
     elsif params[:item_ids].blank?
-      params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type")
+      params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type", "page_type", "hide_price")
     else
-      params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type")
+      params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type", "page_type", "hide_price")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -32,9 +32,9 @@ class ProductsController < ApplicationController
 
   caches_action :price_text_vendor_details, :cache_path => proc {|c|
     if !params[:item_ids].blank?
-      params.slice("item_ids", "page_type", "hide_price")
+      params.slice("item_ids", "page_type")
     else
-      params.slice("ref_url", "page_type", "hide_price")
+      params.slice("ref_url", "page_type")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -327,8 +327,16 @@ class ProductsController < ApplicationController
       itemsaccess = "none"
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
+
+    if params[:page_type] == "type_2"
+      @where_to_buy_items = @where_to_buy_items.first(1)
+      @where_to_buy_item = @where_to_buy_items.first
+      jsonp = prepare_response_json("products/where_to_buy_items_type_2.html.erb")
+    else
+      jsonp = prepare_response_json()
+    end
+
     @ref_url = url
-    jsonp = prepare_response_json()
     render :text => jsonp, :content_type => "text/javascript"
    end
 
@@ -764,7 +772,7 @@ class ProductsController < ApplicationController
     @itemdetail = Item.get_price_text_from_url(url, @publisher, params[:page_type])
     @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
 
-    if ["type_3", "type_4", "type_5", "type_6"].include?(params[:page_type])
+    if ["type_3", "type_4", "type_5"].include?(params[:page_type])
       return price_widget_type_3(url, itemsaccess, url_params)
     end
 
@@ -978,8 +986,6 @@ class ProductsController < ApplicationController
       return_url = "products/price_widget_type_4.html.erb"
     elsif params[:page_type] == "type_5"
       return_url = "products/price_widget_type_5.html.erb"
-    elsif params[:page_type] == "type_6"
-      return_url = "products/price_widget_type_6.html.erb"
     end
 
     success_status = @itemdetail.blank? ? false :true
@@ -999,9 +1005,13 @@ class ProductsController < ApplicationController
     render :layout => false
   end
 
-  def prepare_response_json
+  def prepare_response_json(return_page="")
     defatetime = Time.now.to_i
-    html = html = render_to_string(:layout => false)
+    if return_page.blank?
+      html = render_to_string(:layout => false)
+    else
+      html = render_to_string(return_page, :layout => false)
+    end
     json = {"html" => html}.to_json
     callback = params[:callback]
     jsonp = callback + "(" + json + ")"
@@ -1248,15 +1258,17 @@ class ProductsController < ApplicationController
     params[:path] ||= ""
     params[:sort_disable] ||= "false"
     params[:protocol_type] = request.protocol
+    params[:page_type] ||= "type_1"
+    params[:hide_price] ||= "false"
 
     @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     if (params[:item_ids].blank? && params[:ref_url].blank?)
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "request_referer", "protocol_type", "page_type", "hide_price"))
     elsif params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "ref_url", "protocol_type", "page_type", "hide_price"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "item_ids", "protocol_type", "page_type", "hide_price"))
     end
     cache_params = CGI::unescape(cache_params)
 
@@ -1479,13 +1491,12 @@ class ProductsController < ApplicationController
     params[:ref_url] ||= ""
     params[:ascsubtag] ||= ""
     params[:is_pub] ||= "false"
-    params[:hide_price] ||= "false"
 
     cache_params = ""
     if !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "hide_price"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "hide_price"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type"))
       cache_params = CGI::unescape(cache_params)
     end
     cache_key = "views/#{host_name}/price_text_vendor_details.js?#{cache_params}.js"
