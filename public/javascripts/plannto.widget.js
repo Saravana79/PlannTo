@@ -158,11 +158,11 @@ PlannTo.plannto_widget_onchange_function = function onchange_function(obj,morede
 //    event.preventDefault();
   }
 
-    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable)
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable, page_type, hide_price)
     {
             var doc_title =  PlannTo.jQuery(document).title;
 
-          url = url_protocol + "//"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&callback=?"
+          url = url_protocol + "//"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title="+doc_title+"&sort_disable="+sort_disable+"&page_type="+page_type+"&hide_price="+hide_price+"&is_test="+is_test+"&callback=?"
 
             jQuery.getJSON(url, function (data) {
 
@@ -208,6 +208,8 @@ function main() {
         var show_price = getParam(url,"show_price");
         var ads = getParam(url,"advertisement");
         var element_id = getParam(url,"element_id");
+        var page_type = getParam(url,"page_type");
+        var hide_price = getParam(url,"hide_price");
         is_test = getParam(url,"is_test");
         var url_arr = url.split("/");
         url_protocol = url_arr[0]
@@ -218,7 +220,7 @@ function main() {
             element_id = "where_to_buy_items";
           }
           element = jQuery("#"+element_id)
-         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false)
+         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,page_type, hide_price)
 
        }
        else
@@ -228,7 +230,7 @@ function main() {
         {
           element_id = "advertisement";
         }
-        url = url_protocol + "//"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&is_test="+is_test+"&callback=?"
+        url = url_protocol + "//"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&page_type-"+page_type+"&hide_price="+hide_price+"&is_test="+is_test+"&callback=?"
         jQuery.getJSON(url, function (data) {
             jQuery("#"+element_id).html(data.html);
         });
