@@ -25,9 +25,9 @@
                         <div style="font-size: 11px;color: #000;">Starting at - </div>
                         <div class="price"><%= prettifyforcarprice(item_detail) %></div>
                     </div>
-                      <div style="color: #000;font-size: 11px;">
+                     <!--  <div style="color: #000;font-size: 11px;">
                           <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span> 
-                      </div>
+                      </div> -->
                     <div class="product-img">
                       <a href="javascript:void(0)">
                         <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 140,105).html_safe %>
