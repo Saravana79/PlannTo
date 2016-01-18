@@ -1028,15 +1028,21 @@ class AdvertisementsController < ApplicationController
 
           begin
             click_url = params[:click_url]
-            new_click_url = FeedUrl.get_value_from_pattern(click_url, "http://adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
-
-            old_click_url = FeedUrl.get_value_from_pattern(cache, "http://adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
+            old_click_url = FeedUrl.get_value_from_pattern(cache, "adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
+            new_click_url = FeedUrl.get_value_from_pattern(click_url, "adclick.g.doubleclick.net/aclk?<click_params>adurl", "<click_params>")
             cache = cache.gsub(old_click_url, new_click_url) if !old_click_url.blank? && !new_click_url.blank?
 
-            new_ref_url = CGI.escape(params[:ref_url].to_s)
+            encoded_old_click_url = old_click_url.to_s.gsub("&", "&amp;")
+            encoded_new_click_url = new_click_url.to_s.gsub("&", "&amp;")
+            cache = cache.gsub(encoded_old_click_url, encoded_new_click_url) if !encoded_old_click_url.blank? && !encoded_new_click_url.blank?
 
             old_ref_url = FeedUrl.get_value_from_pattern(cache, "ref_url=<ref_url>&amp;", "<ref_url>")
-            cache = cache.gsub(old_ref_url, new_ref_url)
+            new_ref_url = CGI.escape(params[:ref_url].to_s)
+            cache = cache.gsub(old_ref_url, new_ref_url) if !old_ref_url.blank? && !new_ref_url.blank?
+
+            encoded_old_ref_url = old_ref_url.to_s.gsub("&", "&amp;")
+            encoded_new_ref_url = new_ref_url.to_s.gsub("&", "&amp;")
+            cache = cache.gsub(encoded_old_ref_url, encoded_new_ref_url) if !encoded_old_ref_url.blank? && !encoded_new_ref_url.blank?
           rescue Exception => e
             p "Problem in changing click_url and ref_url"
           end
