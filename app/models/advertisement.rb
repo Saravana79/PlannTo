@@ -644,6 +644,7 @@ class Advertisement < ActiveRecord::Base
         publisher_hash = {}
         items_hash = {}
         domains_hash = {}
+        sid_hash = {}
 
         ads = Advertisement.select("id,commission")
         ad_detail_hash = {}
@@ -828,6 +829,27 @@ class Advertisement < ActiveRecord::Base
                 else
                   curr_domain.merge!("imp"=> curr_domain["imp"].to_i + 1)
                 end
+
+                #Sid hash
+                sid = impression.sid.to_s
+
+                current_sid_hash = sid_hash["sid_#{date}_#{impression.advertisement_id.to_s}"]
+
+                if current_sid_hash.blank?
+                  sid_hash["sid_#{date}_#{impression.advertisement_id.to_s}"] = {}
+                  current_sid_hash = sid_hash["sid_#{date}_#{impression.advertisement_id.to_s}"]
+                end
+
+                current_sid_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s, "agg_type" => "Sid")
+
+                current_sid_hash["agg_coll"] = {} if current_sid_hash["agg_coll"].blank?
+                curr_sid = current_sid_hash["agg_coll"]["#{sid}"]
+
+                if curr_sid.blank?
+                  current_sid_hash["agg_coll"].merge!("#{sid}" => {"imp" => 1})
+                else
+                  curr_sid.merge!("imp"=> curr_sid["imp"].to_i + 1)
+                end
               else
                 current_hash = publisher_hash["publisher_#{date}"]
 
@@ -999,6 +1021,27 @@ class Advertisement < ActiveRecord::Base
                     current_domain_hash["agg_coll"].merge!("#{domain}" => {"clicks" => 1})
                   else
                     curr_domain.merge!("clicks"=> curr_domain["clicks"].to_i + 1)
+                  end
+
+                  #Sid hash
+                  sid = click.sid.to_s
+
+                  current_sid_hash = sid_hash["sid_#{date}_#{click.advertisement_id.to_s}"]
+
+                  if current_sid_hash.blank?
+                    sid_hash["sid_#{date}_#{click.advertisement_id.to_s}"] = {}
+                    current_sid_hash = sid_hash["sid_#{date}_#{click.advertisement_id.to_s}"]
+                  end
+
+                  current_sid_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s, "agg_type" => "Sid")
+
+                  current_sid_hash["agg_coll"] = {} if current_sid_hash["agg_coll"].blank?
+                  curr_sid = current_sid_hash["agg_coll"]["#{sid}"]
+
+                  if curr_sid.blank?
+                    current_sid_hash["agg_coll"].merge!("#{sid}" => {"clicks" => 1})
+                  else
+                    curr_sid.merge!("clicks"=> curr_sid["clicks"].to_i + 1)
                   end
 
                 else
@@ -1190,6 +1233,18 @@ class Advertisement < ActiveRecord::Base
               agg_coll = Hash[agg_coll.map {|k, v| [k.gsub(".", "^"), v] }]
               domain_agg_imp.agg_coll = agg_coll
               domain_agg_imp.save!
+            end
+          end
+
+          sid_hash.each do |key, val|
+            sid_agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
+
+            if sid_agg_imp.blank?
+              sid_agg_imp = AggregatedImpressionByType.new(val)
+              sid_agg_imp.save!
+            else
+              sid_agg_imp.agg_coll = Advertisement.combine_hash(sid_agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
+              sid_agg_imp.save!
             end
           end
         rescue Exception => e
