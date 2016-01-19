@@ -17,13 +17,11 @@ class HistoryDetailsController < ApplicationController
       if req_url.to_s.include?("plannto.com") || req_url.to_s.include?("localhost")
         if !params["req"].blank?
           req_url = params["req"]
+        elsif !params["ref_url"].blank?
+          req_url = params["ref_url"]
         end
       end
     end
-
-   if req_url.blank? && !params["ref_url"].blank?
-     req_url = params["ref_url"]
-   end   
 
 
     if !params[:ads_id].blank?
