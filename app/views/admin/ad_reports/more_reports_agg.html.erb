@@ -52,6 +52,10 @@ To Date
         <%= select_tag(:type, options_for_select(["Advertisement", "Device", "Domain", "Hourly", "Is Related Item Impression", "Item", "Retargeting", "Publisher", "Size"], params[:type])) %>
         Advertisement ID:
         <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
+        <div class="next_line" style="padding-top: 12px;">
+          <span>Sort By:</span>
+          <%= select_tag(:sort_by, options_for_select(@sort_by, params[:sort_by])) %>
+        </div>
       </div>
       <%= f.submit "Generate Report", :class => "btn-link report_btn generate_btn" %>
   <% end %>

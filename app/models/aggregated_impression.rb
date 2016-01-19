@@ -120,8 +120,10 @@ class AggregatedImpression
       end
 
       results = final_hash
+      sort_by = param[:sort_by]
+      sort_by = "total_imp" if sort_by.blank?
 
-      results = Hash[results.sort_by {|_, v| v["total_imp"].to_i}.reverse]
+      results = Hash[results.sort_by {|_, v| v[sort_by].to_i}.reverse]
     end
     results
   end
