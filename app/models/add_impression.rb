@@ -60,7 +60,7 @@ class AddImpression < ActiveRecord::Base
      ai.winning_price = 0.0
    end
 
-   ai.sid = obj_params["sid"]
+   ai.sid = obj_params["sid"].to_s
    ai.created_at = obj_params["time"]
    ai.updated_at = obj_params["time"]
 

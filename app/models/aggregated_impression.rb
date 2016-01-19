@@ -101,6 +101,8 @@ class AggregatedImpression
           "agg_coll"
         when "Size"
           "size"
+        when "Sid"
+          "agg_coll"
       end
 
       result_hash = results.map(&:"#{option}")
