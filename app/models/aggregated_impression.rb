@@ -60,7 +60,7 @@ class AggregatedImpression
         query[:agg_date.lte] = end_date.to_date
       end
 
-      if ["Domain", "Item"].include?(param[:type])
+      if ["Domain", "Item", "Sid"].include?(param[:type])
         query[:agg_type] = param[:type]
         if param[:ad_type] == "advertisement"
           if param[:ad_id] != "All"
