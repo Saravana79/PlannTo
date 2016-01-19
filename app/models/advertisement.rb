@@ -975,7 +975,12 @@ class Advertisement < ActiveRecord::Base
                   end
 
                   #Domains hash
-                  domain = Item.get_host_without_www(click.hosted_site_url)
+                  domain_url = click.hosted_site_url
+                  if domain_url.blank? || domain_url.include?("plannto.com") || domain_url.include?("localhost") || !click_impression.blank?
+                    domain_url = click_impression.hosted_site_url.to_s if !click_impression.hosted_site_url.blank?
+                  end
+
+                  domain = Item.get_host_without_www(domain_url)
                   domain = domain.to_s.gsub(".", "^")
 
                   current_domain_hash = domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"]
