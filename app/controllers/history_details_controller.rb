@@ -12,17 +12,16 @@ class HistoryDetailsController < ApplicationController
     url = ""
     params[:geo] ||= "in"
 
-
     req_url = request.referer
-    unless req_url.nil?
-      if request.referer.to_s.include? "plannto.com" or request.referer.to_s.include? "localhost"
-        if (params["req"].present? && params["req"] != "")
+    if !req_url.blank?
+      if req_url.to_s.include?("plannto.com") || req_url.to_s.include?("localhost")
+        if !params["req"].blank?
           req_url = params["req"]
         end
       end
     end
 
-   if (req_url.nil? && params["ref_url"].present? && params["ref_url"] != "")
+   if req_url.blank? && !params["ref_url"].blank?
      req_url = params["ref_url"]
    end   
 
@@ -143,7 +142,7 @@ class HistoryDetailsController < ApplicationController
       url = params[:ref_url]
       ref_url = params[:ref_url]
 
-      click_params =  {:url => url, :request_referer => ref_url, :time => Time.zone.now.utc, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
+      click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now.utc, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
                        :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => nil, :source_type => "Offer", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
       return render :nothing => true
