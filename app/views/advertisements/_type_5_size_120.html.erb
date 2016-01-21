@@ -25,9 +25,10 @@
                         <div style="font-size: 11px;color: #000;">Starting at - </div>
                         <div class="price"><%= prettifyforcarprice(item_detail) %></div>
                     </div>
-                    <!--   <div style="color: #000;font-size: 11px;">
-                          <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span> 
-                      </div> -->
+                     <div style="color: #000;font-size: 10px;">
+                      <span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span>
+                     <!--     <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span> -->
+                      </div> 
                     <div class="product-img">
                       <a href="javascript:void(0)">
                         <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 106,79).html_safe %>
