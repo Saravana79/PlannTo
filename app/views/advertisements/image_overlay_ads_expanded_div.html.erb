@@ -1,15 +1,14 @@
 <div class="plannto-advertisement main_div" style="cursor:pointer;overflow: hidden;height: <%= @iframe_exp_height %>px !important;">
   <div id="expanded_view">
     <% if @adv_detail.expand_type == "static" %>
+        <% item_id = @item.id rescue "" %>
+        <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{item_id}&geo=#{params[:geo]}&red_url=#{@adv_detail.nv_click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
         <% if @expanded_view_type == "image" %>
-            <% item_id = @item.id rescue "" %>
-            <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{item_id}&geo=#{params[:geo]}&red_url=#{@adv_detail.nv_click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
             <a href="<%= history_detail_path %>" target="_blank">
               <img class="img_overlay_img" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" src="<%= @expanded_view_src %>">
             </a>
         <% elsif @expanded_view_type == "flash" %>
-            <% history_detail_path = "#{configatron.hostname}/history_details?item_id=#{item_id}&geo=#{params[:geo]}&red_url=#{@adv_detail.nv_click_url}&iid=#{@impression_id}&ads_id=#{params[:ads_id]}" %>
-            <a href="<%= history_detail_path %>" id="expanded_flash" target="_blank" onclick="alert(2)">
+            <a href="<%= history_detail_path %>" id="expanded_flash" target="_blank">
               <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="<%= @iframe_exp_width %>" height="<%= @iframe_exp_height %>" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="fixed_flash_1408">
                 <param name="MOVIE" value="<%= @expanded_view_src %>">
                 <param name="PLAY" value="true">
@@ -22,11 +21,13 @@
               </object>
             </a>
         <% elsif @expanded_view_type == "video" %>
-            <video controls autoplay>
-              <source src="<%= @expanded_view_src %>" type="video/mp4">
-              <source src="<%= @expanded_view_src_2 %>" type="video/webm">
-              Your browser does not support the video tag.
-            </video>
+            <a href="<%= history_detail_path %>" id="expanded_flash" target="_blank">
+              <video autoplay>
+                <source src="<%= @expanded_view_src %>" type="video/mp4">
+                <source src="<%= @expanded_view_src_2 %>" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </a>
         <% end %>
     <% elsif @adv_detail.expand_type == "dynamic" %>
         <%= render :partial => "/advertisements/image_overlay_ads/#{@ad_template_type}_#{@item_type}_size_responsive.html.erb" %>

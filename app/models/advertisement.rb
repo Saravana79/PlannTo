@@ -3054,7 +3054,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     item_ids
   end
 
-  def get_file_based_on_type(file_type)
+  def get_file_based_on_type(file_type, adv_detail)
     view_type = ""
     view_src_2 = ""
     view_ratio = 0
@@ -3064,15 +3064,16 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       view_type = "video"
       ad_video_detail = self.ad_video_detail
       if !ad_video_detail.blank?
-        view_src = "#{configatron.root_image_path}static/video_ads/#{@ad_video_detail.mp4}"
-        view_src_2 = "#{configatron.root_image_path}static/video_ads/#{@ad_video_detail.webm}"
+        view_src = "#{configatron.root_image_path}static/video_ads/#{ad_video_detail.mp4}"
+        view_src_2 = "#{configatron.root_image_path}static/video_ads/#{ad_video_detail.webm}"
       end
+      view_ratio = adv_detail.exp_video_width.to_f/adv_detail.exp_video_height rescue 0 if !adv_detail.exp_video_width.blank? && !adv_detail.exp_video_height.blank?
     else
       if ['.jpeg', '.pjpeg', '.gif', '.png', '.x-png', '.jpg'].include?(extname)
         view_type = "image"
         view_src = file_based_type.base_url rescue ""
         geo = Paperclip::Geometry.from_file(file_based_type.base_url)
-        view_ratio = geo.width/geo.height
+        view_ratio = geo.width.to_f/geo.height
       elsif [".swf"].include?(extname)
         view_type = "flash"
         view_src = file_based_type.base_url rescue ""

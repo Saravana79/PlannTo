@@ -1092,7 +1092,7 @@ class AdvertisementsController < ApplicationController
 
     #TODO: temporary changes
     # params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
-    # @ad = Advertisement.find 7
+    # @ad = Advertisement.find 80
     #
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
@@ -1100,15 +1100,15 @@ class AdvertisementsController < ApplicationController
     @publisher = Publisher.where(:id => params[:publisher_id]).last if !params[:publisher_id].blank?
 
     # @ad = Advertisement.where(:id => params[:ads_id]).first
+    @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
 
     if !@ad.blank?
       params[:ads_id] = @ad.id
-      @normal_view_src, @normal_view_src_2, @normal_view_type, @normal_view_ratio = @ad.get_file_based_on_type("normal_view")
-      @expanded_view_src, @expanded_view_src_2, @expanded_view_type, @expanded_view_ratio = @ad.get_file_based_on_type("expanded_view")
+      @normal_view_src, @normal_view_src_2, @normal_view_type, @normal_view_ratio = @ad.get_file_based_on_type("normal_view", @adv_detail)
+      @expanded_view_src, @expanded_view_src_2, @expanded_view_type, @expanded_view_ratio = @ad.get_file_based_on_type("expanded_view", @adv_detail)
       # @expanded_file = @ad.images.where(:ad_size => "expanded_view").last
     end
 
-    @adv_detail = !@ad.blank? ? @ad.adv_detail : AdvDetail.new
     if @adv_detail.blank?
       @adv_detail = AdvDetail.new
     else
