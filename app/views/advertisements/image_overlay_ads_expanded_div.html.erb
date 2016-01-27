@@ -22,7 +22,7 @@
             </a>
         <% elsif @expanded_view_type == "video" %>
             <a href="<%= history_detail_path %>" id="expanded_flash" target="_blank">
-              <video autoplay>
+              <video autoplay width="<%= @iframe_exp_width %>px" height="<%= @iframe_exp_height %>px">
                 <source src="<%= @expanded_view_src %>" type="video/mp4">
                 <source src="<%= @expanded_view_src_2 %>" type="video/webm">
                 Your browser does not support the video tag.
