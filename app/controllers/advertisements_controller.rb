@@ -1091,8 +1091,8 @@ class AdvertisementsController < ApplicationController
     @ad = Advertisement.get_ad_from_ref_url_for_image_ads(params)
 
     #TODO: temporary changes
-    params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
-    @ad = Advertisement.find 7
+    # params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
+    # @ad = Advertisement.find 7
     #
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
