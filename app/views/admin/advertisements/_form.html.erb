@@ -332,6 +332,7 @@
           <div>
             <%= radio_button_tag "adv_detail[ad_type]", 'static', @adv_detail.ad_type == "static", :class => "adv_detail_ad_type"%>Static
             <%= radio_button_tag "adv_detail[ad_type]", 'dynamic', @adv_detail.ad_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic
+            <%= radio_button_tag "adv_detail[ad_type]", 'static_html', @adv_detail.ad_type == "static_html", :class => "adv_detail_ad_type" %>Static Html
           </div>
         </div>
 
@@ -353,6 +354,7 @@
           <div class="title_header float_lft">Expanded View :</div>
           <div>
             <%= radio_button_tag "adv_detail[expand_type]", 'static', @adv_detail.expand_type == "static", :class => "adv_detail_expand_type"%>Static
+            <%= radio_button_tag "adv_detail[ad_type]", 'static_html', @adv_detail.ad_type == "static_html", :class => "adv_detail_ad_type" %>Static Html
             <!--<%#= radio_button_tag "adv_detail[expand_type]", 'dynamic', @adv_detail.expand_type == "dynamic", :class => "adv_detail_ad_type" %>Dynamic -->
             <%= radio_button_tag "adv_detail[expand_type]", 'none', @adv_detail.expand_type == "none", :class => "adv_detail_expand_type" %>None
           </div>
