@@ -207,9 +207,14 @@ var PlannTo = (function(window,undefined) {
                         var extra_top = off_d.height - off_d.org_height
                         if (extra_top > 0)
                         {
-                            exp_off_top = off_d.top + extra_top
+                            extra_top = off_d.top + extra_top
                         }
 //                    }
+
+                    if (exp_off_top < extra_top)
+                    {
+                        exp_off_top = extra_top
+                    }
 
                     if (pln_frame_expanded == true)
                     {
