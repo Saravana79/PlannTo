@@ -3067,7 +3067,9 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         view_src = "#{configatron.root_image_path}static/video_ads/#{ad_video_detail.mp4}"
         view_src_2 = "#{configatron.root_image_path}static/video_ads/#{ad_video_detail.webm}"
       end
-      view_ratio = adv_detail.exp_video_width.to_f/adv_detail.exp_video_height.to_f rescue 0 if !adv_detail.exp_video_width.blank? && !adv_detail.exp_video_height.blank?
+      if file_type == "expanded_view"
+        view_ratio = adv_detail.exp_video_width.to_f/adv_detail.exp_video_height.to_f rescue 0 if !adv_detail.exp_video_width.blank? && !adv_detail.exp_video_height.blank?
+      end
     else
       if ['.jpeg', '.pjpeg', '.gif', '.png', '.x-png', '.jpg'].include?(extname)
         view_type = "image"
