@@ -202,15 +202,14 @@ var PlannTo = (function(window,undefined) {
                     var exp_off_top = off_d.top + exp_img_h
                     var org_img_height = jQuery(image).height()
 
-                    if (exp_off_top < off_d.top)
-                    {
+//                    if (exp_off_top < off_d.top)
+//                    {
                         var extra_top = off_d.height - off_d.org_height
                         if (extra_top > 0)
                         {
                             exp_off_top = off_d.top + extra_top
                         }
-//                        exp_off_top = off_d.top
-                    }
+//                    }
 
                     if (pln_frame_expanded == true)
                     {
@@ -391,35 +390,81 @@ var PlannTo = (function(window,undefined) {
                                     expand_plannto_iframe_key = false
                                 }
 
-                                jQuery(".plannto_iframe").live(expand_on, function(event)
+                                if (expand_on == "hover")
                                 {
-                                    if (expand_type != "none")
+                                    jQuery(".plannto_iframe").live("hover", function(event)
                                     {
-                                        if (pln_frame_expanded == false)
+                                        if (expand_type != "none")
                                         {
-                                            pln_frame_expanded = true
-                                            reposition()
-                                            jQuery('.close_plannto_iframe').show()
-                                            jQuery(".plannto_iframe").animate({height: e_ad_height_w_close_btn+"px"}, "slow")
+                                            if (pln_frame_expanded == false)
+                                            {
+                                                pln_frame_expanded = true
+                                                reposition()
+                                                jQuery('.close_plannto_iframe').show()
+                                                jQuery(".plannto_iframe").animate({height: e_ad_height_w_close_btn+"px"}, "slow")
 
-                                            jQuery(".plannto_iframe").css({"position":"absolute"})
+                                                jQuery(".plannto_iframe").css({"position":"absolute"})
 
-                                            jQuery("#exp_plannto_ad_frame").html(expanded_html)
+                                                jQuery("#exp_plannto_ad_frame").html(expanded_html)
 //                                            jQuery("#exp_plannto_ad_frame").css({"index":-1})
-                                            jQuery("#plannto_ad_frame").hide()
-                                            jQuery("#exp_plannto_ad_frame").show()
-                                            expanded = true
+                                                jQuery("#plannto_ad_frame").hide()
+                                                jQuery("#exp_plannto_ad_frame").show()
+                                                expanded = true
 
-                                            return false;
+                                                return false;
+                                            }
                                         }
-                                        else
+                                    })
+
+                                    jQuery(".plannto_iframe").live("click", function(event)
+                                    {
+                                        if (expand_type != "none")
                                         {
-                                            var expanded_view_a = jQuery(".plannto_iframe").find("#expanded_view a")
-                                            var expanded_view_href = jQuery(expanded_view_a).attr("href")
-                                            window.open(expanded_view_href, '_blank');
+                                            if (pln_frame_expanded == false)
+                                            {
+                                                return false;
+                                            }
+                                            else
+                                            {
+                                                var expanded_view_a = jQuery(".plannto_iframe").find("#expanded_view a")
+                                                var expanded_view_href = jQuery(expanded_view_a).attr("href")
+                                                window.open(expanded_view_href, '_blank');
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                                }
+                                else
+                                {
+                                    jQuery(".plannto_iframe").live(expand_on, function(event)
+                                    {
+                                        if (expand_type != "none")
+                                        {
+                                            if (pln_frame_expanded == false)
+                                            {
+                                                pln_frame_expanded = true
+                                                reposition()
+                                                jQuery('.close_plannto_iframe').show()
+                                                jQuery(".plannto_iframe").animate({height: e_ad_height_w_close_btn+"px"}, "slow")
+
+                                                jQuery(".plannto_iframe").css({"position":"absolute"})
+
+                                                jQuery("#exp_plannto_ad_frame").html(expanded_html)
+//                                            jQuery("#exp_plannto_ad_frame").css({"index":-1})
+                                                jQuery("#plannto_ad_frame").hide()
+                                                jQuery("#exp_plannto_ad_frame").show()
+                                                expanded = true
+
+                                                return false;
+                                            }
+                                            else
+                                            {
+                                                var expanded_view_a = jQuery(".plannto_iframe").find("#expanded_view a")
+                                                var expanded_view_href = jQuery(expanded_view_a).attr("href")
+                                                window.open(expanded_view_href, '_blank');
+                                            }
+                                        }
+                                    })
+                                }
                             }
                         },
                         error: function (data) {
