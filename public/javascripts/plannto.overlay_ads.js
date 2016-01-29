@@ -397,29 +397,32 @@ var PlannTo = (function(window,undefined) {
 
                                 if (expand_on == "hover")
                                 {
-                                    jQuery(".plannto_iframe").live("hover", function(event)
+                                    var delay = 2000, setTimeoutConst;
+
+                                    jQuery(".plannto_iframe").hover(function()
                                     {
-                                        if (expand_type != "none")
-                                        {
-                                            if (pln_frame_expanded == false)
+                                        setTimeoutConst = setTimeout(function(){
+                                            if (expand_type != "none")
                                             {
-                                                pln_frame_expanded = true
-                                                reposition()
-                                                jQuery('.close_plannto_iframe').show()
-                                                jQuery(".plannto_iframe").animate({height: e_ad_height_w_close_btn+"px"}, "slow")
+                                                if (pln_frame_expanded == false)
+                                                {
+                                                    pln_frame_expanded = true
+                                                    reposition()
+                                                    jQuery('.close_plannto_iframe').show()
+                                                    jQuery(".plannto_iframe").animate({height: e_ad_height_w_close_btn+"px"}, "slow")
+                                                    jQuery(".plannto_iframe").css({"position":"absolute"})
+                                                    jQuery("#exp_plannto_ad_frame").html(expanded_html)
+                                                    jQuery("#plannto_ad_frame").hide()
+                                                    jQuery("#exp_plannto_ad_frame").show()
+                                                    expanded = true
 
-                                                jQuery(".plannto_iframe").css({"position":"absolute"})
-
-                                                jQuery("#exp_plannto_ad_frame").html(expanded_html)
-//                                            jQuery("#exp_plannto_ad_frame").css({"index":-1})
-                                                jQuery("#plannto_ad_frame").hide()
-                                                jQuery("#exp_plannto_ad_frame").show()
-                                                expanded = true
-
-                                                return false;
+                                                    return false;
+                                                }
                                             }
-                                        }
-                                    })
+                                        }, delay);
+                                    }, function(){
+                                        clearTimeout(setTimeoutConst );
+                                    });
 
                                     jQuery(".plannto_iframe").live("click", function(event)
                                     {
