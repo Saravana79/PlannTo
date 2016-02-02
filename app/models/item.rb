@@ -3153,7 +3153,7 @@ end
 
       status_details = page_type == "type_3" ? [1,2,3] : [1]
 
-      if(["type_4", "type_5"].include?(page_type))
+      if(["type_4", "type_5", "type_6"].include?(page_type))
         status_details = [1,2,3]
       end
 
