@@ -3066,6 +3066,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       if !ad_video_detail.blank?
         view_src = "#{configatron.root_image_path}static/video_ads/#{ad_video_detail.mp4}"
         view_src_2 = "#{configatron.root_image_path}static/video_ads/#{ad_video_detail.webm}"
+        # view_src = "/home/sivakumar/skype/Mahindra_KUV100_TV_Ad.mp4"
+        # view_src_2 = "/home/sivakumar/skype/Mahindra_KUV100_TV_Ad.webm"
       end
       if file_type == "expanded_view"
         view_ratio = adv_detail.exp_video_width.to_f/adv_detail.exp_video_height.to_f rescue 0 if !adv_detail.exp_video_width.blank? && !adv_detail.exp_video_height.blank?

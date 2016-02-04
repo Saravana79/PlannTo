@@ -10,6 +10,8 @@ class ProductsController < ApplicationController
   before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
   before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
+  skip_before_filter :verify_authenticity_token, :only => [:user_test_drive]
+  before_filter :set_access_control_headers, :only => [:user_test_drive]
 
   # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
   caches_action :where_to_buy_items, :cache_path => proc {|c|
@@ -89,7 +91,7 @@ class ProductsController < ApplicationController
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget, :user_test_drive]
   layout 'product'
   include FollowMethods
   include ItemsHelper
@@ -1627,6 +1629,11 @@ class ProductsController < ApplicationController
     end
   end
 
+  def user_test_drive
+    p params
+    render :json => {:success => true}
+  end
+
   private
 
   def get_item_object
@@ -1637,5 +1644,18 @@ class ProductsController < ApplicationController
     cache = cache.sub(/^\w+\((.*)\)$/, '\1')
     cache = callback.present? ? "#{callback}(#{cache})" : cache
     return cache
+  end
+
+  def set_access_control_headers
+    uri = URI.parse(request.referer) rescue ""
+    headerdetails = "*"
+    if !uri.blank?
+      headerdetails = uri.scheme+ "://" + uri.host rescue "*"
+    end
+    headers['Access-Control-Allow-Origin'] = headerdetails
+    headers['Access-Control-Request-Method'] = headerdetails
+    if (headerdetails != "*" && (headerdetails.include? "youtube.com"))
+      headers['Access-Control-Allow-Credentials'] = 'true'
+    end
   end
 end

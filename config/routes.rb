@@ -545,6 +545,8 @@ resources :comments do
   match "advertisments/image_show_ads" => "advertisements#image_show_ads", :as => "image_show_ads"
   match "/buy_at_best_price" => "products#buy_at_best_price", :as => "buy_at_best_price"
 
+  match "/products/user_test_drive" => "products#user_test_drive", :as => "user_test_drive", :via => [:post]
+
   match "/admin/source_categories/edit" => "admin/source_categories#edit", :as => "edit_admin_source_category", :via => [:get]
 
   match "/reports/article_reports" => "reports#article_reports", :via => [:get]
