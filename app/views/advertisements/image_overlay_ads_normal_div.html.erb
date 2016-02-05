@@ -832,47 +832,4 @@
     <%= hidden_field_tag :visited, "true" %>
   </div>
 
-  <div id="user_form" style="display:none;">
-    <form action="<%= configatron.hostname %>/products/user_test_drive" class="new_person" id="new_person" method="post">
-      <input id="person_name" name="person[name]" placeholder="Name" type="text" class="form_field"/>
-      <input id="person_email" name="person[email]" placeholder="Email" type="text" class="form_field"/>
-      <input id="person_mobile" name="person[mobile]" placeholder="Mobile" type="text" class="form_field"/>
-
-      <input name="commit" type="submit" value="Test Drive" />
-    </form>
-  </div>
-</div>
 <%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>
-
-<script>
-    jQuery("document").ready(function()
-    {
-        jQuery("#normal_view").live("click", function()
-        {
-            jQuery(this).hide()
-            jQuery("#user_form").show()
-            return false;
-        })
-
-        jQuery('form').submit(function() {
-            var valuesToSubmit = jQuery(this).serialize();
-            jQuery.ajax({
-                type: "POST",
-                url: jQuery(this).attr('action'), //sumbits it to the given url of the form
-                data: valuesToSubmit,
-                dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-            }).success(function(json){
-                jQuery("#user_form").find('input:text').val('');
-                jQuery("#user_form").hide()
-                jQuery("#normal_view").show()
-            });
-            return false; // prevents normal behaviour
-        });
-    });
-</script>
-
-<style>
-  .form_field {
-      float: left;
-  }
-</style>
