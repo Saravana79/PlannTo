@@ -198,9 +198,20 @@ var PlannTo = (function(window,undefined) {
 //                        console.log(n_ad_height)
 //                    }
 
+//                    console.log(33333333333)
+//                    console.log(off_d)
+//                    console.log(e_ad_height_w_close_btn)
                     var exp_img_h = off_d.height - e_ad_height_w_close_btn
-                    var exp_off_top = off_d.top + exp_img_h
-                    var org_img_height = jQuery(image).height()
+                    if (exp_img_h < 0)
+                    {
+                        var exp_off_top = off_d.top
+                    }
+                    else
+                    {
+                        var exp_off_top = off_d.top + exp_img_h
+                    }
+
+//                    console.log(exp_off_top)
 
 //                    if (exp_off_top < off_d.top)
 //                    {
@@ -210,6 +221,7 @@ var PlannTo = (function(window,undefined) {
                             extra_top = off_d.top + extra_top
                         }
 //                    }
+
 
                     if (exp_off_top < extra_top)
                     {
