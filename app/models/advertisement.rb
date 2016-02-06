@@ -426,6 +426,8 @@ class Advertisement < ActiveRecord::Base
         $redis.get("ad:spent:#{advertisement_id}")
       end
 
+      $redis.expire(act_spent_key, 2.hours)
+
       if return_val >= hourly_spent.to_i
         $redis_rtb.hset("advertisments:#{advertisement_id}", "status", "paused")
         time_usage = (time.min.to_f/60)*100
