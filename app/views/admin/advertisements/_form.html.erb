@@ -365,6 +365,16 @@
           <div>
             <%= text_field_tag "adv_detail[ev_click_url]", @adv_detail.ev_click_url %>
           </div>
+
+          <div class="title_header float_lft">Expanded View Width :</div>
+          <div>
+            <%= text_field_tag "adv_detail[exp_video_width]", @adv_detail.exp_video_width %>
+          </div>
+
+          <div class="title_header float_lft">Expanded View Height :</div>
+          <div>
+            <%= text_field_tag "adv_detail[exp_video_height]", @adv_detail.exp_video_height %>
+          </div>
         </div>
 
         <div class="fields-div">
@@ -961,19 +971,28 @@
       })
 
       $(".ev_add_details").hide()
-      var nv_val = $(".adv_detail_expand_type:checked").val()
-      if (nv_val != undefined && nv_val != "none")
+      var ev_val = $(".adv_detail_expand_type:checked").val()
+      console.log(11111111111111)
+      console.log(ev_val)
+      if (ev_val != undefined && ev_val != "none")
       {
-          $("."+nv_val+"_nv_add_details").show()
+//          $("."+ev_val+"_ev_add_details").show()
+          $(".static_ev_add_details").show()
       }
 
       $(".adv_detail_expand_type").change(function()
       {
           var changed_val = $(this).val()
-          var key = "." + changed_val + "_ev_add_details"
-
-          $(".ev_add_details").hide()
-          $(key).show()
+//          var key = "." + changed_val + "_ev_add_details"
+          if (changed_val != "none")
+          {
+              var key = ".static_ev_add_details"
+              $(key).show()
+          }
+          else
+          {
+              $(".ev_add_details").hide()
+          }
 
       })
   })
