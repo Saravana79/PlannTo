@@ -1114,3 +1114,22 @@ csv_details.each_with_index do |csv_detail, index|
     end
   end
 end
+
+
+# conversion_pixel_detail order update
+
+# conversion_pixel_details = ConversionPixelDetail.where("source='mi' and conversion_time > '2016-02-04'")
+#
+# conversion_pixel_details.each do |conversion_pixel_detail|
+#   p Click.where(:temp_user_id => conversion_pixel_detail.plannto_user_id)
+# end
+
+clicks = Click.where(:advertisement_id => 83)
+
+clicks.each do |click|
+  conversion_pixel_details = ConversionPixelDetail.where(:plannto_user_id => click.temp_user_id, :from_plannto => false)
+  conversion_pixel_details.each do |conversion_pixel_detail|
+    conversion_pixel_detail.from_plannto = true
+    conversion_pixel_detail.save
+  end
+end
