@@ -767,6 +767,12 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def in_image_ads_demo_1
+    params[:type] ||= ""
+    params[:ref_url] ||= "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"
+    render :layout => false
+  end
+
   def in_image_ads_demo
     params[:type] ||= "flash"
     # params[:ref_url] ||= "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"
