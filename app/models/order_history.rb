@@ -21,9 +21,12 @@ class OrderHistory < ActiveRecord::Base
   end
 
   def self.update_orders_from_amazon(date)
-    users = [["pla04", "cyn04"], ["interactive", "vagrenpgvir", "interactiv0e4"]]
+    users = [["pla04", "cyn04"], ["interactive", "vagrenpgvir", "interactiv0e4", "process_orders"]]
     users.each do |user|
       begin
+        if user[3].to_s == "process_orders"
+          update_orders_from_amazon_orders(user, date)
+        end
         filename = OrderHistory.generate_filename(user, date)
         url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
         xml_response = OrderHistory.get_order_details_from_amazon(url, user[0], user[1])
@@ -37,15 +40,17 @@ class OrderHistory < ActiveRecord::Base
           revenue = item.attributes["Earnings"].content rescue 0
           price = item.attributes["Price"].content rescue 0
           impression = AddImpression.where(:id => impression_id).first
-          time = impression.blank? ? date.to_time: impression.impression_time.to_time rescue Time.now
+          time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
 
-          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
-          order_history.vendor_ids = 9882
-          order_history.product_price = price.to_s.gsub("," , "")
-          order_history.no_of_orders = 1
+          # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
+          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
+          order_history.total_revenue = revenue
           order_history.order_status = "Validated"
           order_history.payment_status = "Validated"
 
+          order_history.vendor_ids = 9882
+          order_history.product_price = price.to_s.gsub("," , "")
+          order_history.no_of_orders = 1
           unless impression.blank?
             PlanntoUserDetail.update_plannto_user_detail(impression)
 
@@ -59,16 +64,57 @@ class OrderHistory < ActiveRecord::Base
           order_history.save!
         end
       rescue Exception => e
-        p "Error in order update"
+        p "Error in order update while earning report process"
       end
     end
   end
 
-  def self.generate_filename(user, date)
+  def self.update_orders_from_amazon_orders(user, date)
+    begin
+      filename = OrderHistory.generate_filename(user, date, "orders")
+      url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
+      xml_response = OrderHistory.get_order_details_from_amazon(url, user[0], user[1])
+
+      doc = Nokogiri::XML.parse(xml_response)
+      node = doc.elements.first
+      items_node = node.at_xpath("//Items")
+      items_node.xpath("Item").each do |item|
+        # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
+        impression_id = item.attributes["SubTag"].content
+        revenue = item.attributes["Earnings"].content rescue 0
+        price = item.attributes["Price"].content rescue 0
+        impression = AddImpression.where(:id => impression_id).first
+        time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
+
+        order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
+        order_history.vendor_ids = 9882
+        order_history.product_price = price.to_s.gsub("," , "") if !price.blank?
+        order_history.no_of_orders = 1
+        order_history.order_status = "Pending"
+        order_history.payment_status = "Pending"
+
+        unless impression.blank?
+          PlanntoUserDetail.update_plannto_user_detail(impression)
+
+          order_history.item_id = impression.item_id
+          product = impression.item
+          order_history.item_name = product.name unless product.blank?
+          order_history.sid = impression.sid
+          order_history.advertisement_id = impression.advertisement_id
+          order_history.publisher_id = impression.publisher_id
+        end
+        order_history.save!
+      end
+    rescue Exception => e
+      p "Error in order update while order report process"
+    end
+  end
+
+  def self.generate_filename(user, date, file_type="earnings")
     date_int = date.strftime("%Y%m%d")
     prefix_val = user[0]
     prefix_val = user[2].to_s if !user[2].to_s.blank?
-    filename = "#{prefix_val}-21-earnings-report-#{date_int}.xml.gz"
+    filename = "#{prefix_val}-21-#{file_type}-report-#{date_int}.xml.gz"
   end
 
   #url => "https://assoc-datafeeds-eu.amazon.com/datafeed/listReports"
