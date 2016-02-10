@@ -103,7 +103,7 @@ class OrderHistory < ActiveRecord::Base
           order_history.advertisement_id = impression.advertisement_id
           order_history.publisher_id = impression.publisher_id
         end
-        order_history.save!
+        order_history.save!(:validate => false)
       end
     rescue Exception => e
       p "Error in order update while order report process"
