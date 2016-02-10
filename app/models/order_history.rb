@@ -23,10 +23,11 @@ class OrderHistory < ActiveRecord::Base
   def self.update_orders_from_amazon(date)
     users = [["pla04", "cyn04"], ["interactive", "vagrenpgvir", "interactiv0e4", "process_orders"]]
     users.each do |user|
+      if user[3].to_s == "process_orders"
+        update_orders_from_amazon_orders(user, date)
+      end
+
       begin
-        if user[3].to_s == "process_orders"
-          update_orders_from_amazon_orders(user, date)
-        end
         filename = OrderHistory.generate_filename(user, date)
         url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
         xml_response = OrderHistory.get_order_details_from_amazon(url, user[0], user[1])
