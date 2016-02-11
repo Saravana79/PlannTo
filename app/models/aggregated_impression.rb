@@ -8,6 +8,8 @@ class AggregatedImpression
   field :total_clicks, type: Integer
   field :total_orders, type: Integer
   field :total_product_price, type: Float
+  field :tot_valid_orders, type: Integer # total_validated_orders
+  field :tot_valid_product_price, type: Float # total_validated_product_price
   field :total_costs, type: Float
   field :total_costs_wc, type: Float #Total costs with commission
   field :publishers, type: Hash
