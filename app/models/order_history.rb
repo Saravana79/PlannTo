@@ -207,14 +207,15 @@ class OrderHistory < ActiveRecord::Base
     order_status_values = self.order_status_change
     imp_id = self.impression_id
     imp = AdImpression.where(:_id => imp_id).first
+    impression = AddImpression.where(:id => imp_id).last
 
     begin
       if self.order_status_changed?
         if order_status_values[0] == "Pending" && order_status_values[1] == "Validated"
-          if !imp.blank?
-            time = imp.impression_time.to_time.utc rescue Time.now
-            agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
+          if !impression.blank?
+            time = impression.impression_time.to_time.utc rescue Time.now
             date = time.to_date rescue ""
+            agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
             price = self.product_price.to_s.gsub("," , "").to_f
 
             agg_imp.tot_valid_orders = agg_imp.tot_valid_orders.to_i + 1
@@ -223,10 +224,10 @@ class OrderHistory < ActiveRecord::Base
             agg_imp.save!
           end
         elsif order_status_values[0] == "Validated" && order_status_values[1] != "Validated"
-          if !imp.blank?
-            time = imp.impression_time.to_time.utc rescue Time.now
-            agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
+          if !impression.blank?
+            time = impression.impression_time.to_time.utc rescue Time.now
             date = time.to_date rescue ""
+            agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
             price = self.product_price.to_s.gsub("," , "").to_f
 
             agg_imp.tot_valid_orders = agg_imp.tot_valid_orders.to_i - 1
@@ -271,7 +272,6 @@ class OrderHistory < ActiveRecord::Base
   end
 
   def update_orders_in_aggregated_impression
-    p 111111111111111111111111111111
     # Update AggregatedImpression
     impression = AddImpression.where(:id => self.impression_id).last
 
