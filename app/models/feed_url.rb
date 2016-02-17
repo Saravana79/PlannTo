@@ -550,7 +550,7 @@ class FeedUrl < ActiveRecord::Base
 
     #update all source categories to cache
 
-    SourceCategory.update_all_to_cache()
+    # SourceCategory.update_all_to_cache()
   end
 
   def self.clean_up_redis_keys

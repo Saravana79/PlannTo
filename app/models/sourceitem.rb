@@ -29,10 +29,10 @@ class Sourceitem < ActiveRecord::Base
     url = "http://autoportal.com/vizury_feed.xml"
     xml_data = Net::HTTP.get_response(URI.parse(url)).body
     data = XmlSimple.xml_in(xml_data)
-    items = data["item"]
+    items = data["Row"]
 
     items.each do |item|
-      pid = item["pid"][0]
+      pid = item["model_id"][0]
       title = item["pname"][0]
       url = item["landing_page"][0]
       price = item["Sale_price"][0]
