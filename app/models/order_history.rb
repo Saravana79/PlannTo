@@ -204,45 +204,46 @@ class OrderHistory < ActiveRecord::Base
   private
 
   def create_record_in_m_order_history
-    order_status_values = self.order_status_change
+
     imp_id = self.impression_id
     imp = AdImpression.where(:_id => imp_id).first
     impression = AddImpression.where(:id => imp_id).last
 
-    begin
-      if self.order_status_changed?
-        if order_status_values[0] == "Pending" && order_status_values[1] == "Validated"
-          if !impression.blank?
-            time = impression.impression_time.to_time.utc rescue Time.now
-            date = time.to_date rescue ""
-            agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
-            price = self.product_price.to_s.gsub("," , "").to_f
-
-            agg_imp.tot_valid_orders = agg_imp.tot_valid_orders.to_i + 1
-            agg_imp.tot_valid_product_price = agg_imp.tot_valid_product_price.to_f + price
-
-            agg_imp.save!
-          end
-        elsif order_status_values[0] == "Validated" && order_status_values[1] != "Validated"
-          if !impression.blank?
-            time = impression.impression_time.to_time.utc rescue Time.now
-            date = time.to_date rescue ""
-            agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
-            price = self.product_price.to_s.gsub("," , "").to_f
-
-            agg_imp.tot_valid_orders = agg_imp.tot_valid_orders.to_i - 1
-            agg_imp.tot_valid_product_price = agg_imp.tot_valid_product_price.to_f - price
-
-            agg_imp.save!
-          end
-        end
-      end
-    rescue Exception => e
-      p "Error while updating order history"
-    end
-
     if self.skip_callback_order_history != true
       self.skip_callback_order_history = true
+      order_status_values = self.order_status_change
+      begin
+        if self.order_status_changed?
+          if order_status_values[0] == "Pending" && order_status_values[1] == "Validated"
+            if !impression.blank?
+              time = impression.impression_time.to_time.utc rescue Time.now
+              date = time.to_date rescue ""
+              agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
+              price = self.product_price.to_s.gsub("," , "").to_f
+
+              agg_imp.tot_valid_orders = agg_imp.tot_valid_orders.to_i + 1
+              agg_imp.tot_valid_product_price = agg_imp.tot_valid_product_price.to_f + price
+
+              agg_imp.save!
+            end
+          elsif order_status_values[0] == "Validated" && order_status_values[1] != "Validated"
+            if !impression.blank?
+              time = impression.impression_time.to_time.utc rescue Time.now
+              date = time.to_date rescue ""
+              agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
+              price = self.product_price.to_s.gsub("," , "").to_f
+
+              agg_imp.tot_valid_orders = agg_imp.tot_valid_orders.to_i - 1
+              agg_imp.tot_valid_product_price = agg_imp.tot_valid_product_price.to_f - price
+
+              agg_imp.save!
+            end
+          end
+        end
+      rescue Exception => e
+        p "Error while updating order history"
+      end
+
       if !imp.blank?
         m_order_history = imp.m_order_histories.where(:order_history_id => self.id).first
         unless m_order_history.blank?
@@ -363,7 +364,7 @@ class OrderHistory < ActiveRecord::Base
           agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item")
 
           if self.order_status == "Validated"
-            agg_imp.tot_valid_orders = 1
+            agg_imp_by_item.tot_valid_orders = 1
           end
 
           agg_imp_by_item.save!
