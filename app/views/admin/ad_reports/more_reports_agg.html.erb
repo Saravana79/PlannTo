@@ -1,3 +1,5 @@
+<link href="/assets/select2.min.css" rel="stylesheet" />
+<script src="/assets/select2.min.js"></script>
 <div class='report_form'>
   <%= form_for :impression, :url => admin_more_reports_agg_path, :method => :get do |f| %>
    <div class="dates">
@@ -51,7 +53,7 @@ To Date
         Report Type:
         <%= select_tag(:type, options_for_select(["Advertisement", "Device", "Domain", "Hourly", "Is Related Item Impression", "Item", "Retargeting", "Publisher", "Size", "Sid"], params[:type])) %>
         Advertisement ID:
-        <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id]), :multiple => true, :size => 4) %>
+        <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id]), :multiple => true) %>
         <div class="next_line" style="padding-top: 12px;">
           <span>Sort By:</span>
           <%= select_tag(:sort_by, options_for_select(@sort_by, params[:sort_by])) %>
@@ -150,6 +152,7 @@ To Date
     }
 
     .select_options {
+        margin-top: 48px;
         /*padding-left: 220px;*/
         /*position: absolute;*/
     }
@@ -330,6 +333,11 @@ To Date
         background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);
     }
 
+    #ad_id
+    {
+        width: 100px !important;
+    }
+
 </style>
 
 
@@ -344,5 +352,7 @@ To Date
             var sort_and_order_by = "report_sort_by="+$("#report_sort_by").val()
             window.location.href='/admin/more_reports?'+params_str+'&'+sort_and_order_by
         })
+
+        $("#ad_id").select2();
     })
 </script>

@@ -130,7 +130,7 @@ class Admin::AdReportsController < ApplicationController
   def more_reports_agg
     params[:type] ||= "Advertisement"
     params[:ad_type] ||= "advertisement"
-    params[:ad_id] ||= "All"
+    params[:ad_id] ||= ["All"]
     params[:report_sort_by] ||= "imp_count"
     params[:show_downloads] ||= "false"
     params[:sort_by] ||= "total_imp"
