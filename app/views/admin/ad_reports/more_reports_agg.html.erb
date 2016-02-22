@@ -51,7 +51,7 @@ To Date
         Report Type:
         <%= select_tag(:type, options_for_select(["Advertisement", "Device", "Domain", "Hourly", "Is Related Item Impression", "Item", "Retargeting", "Publisher", "Size", "Sid"], params[:type])) %>
         Advertisement ID:
-        <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
+        <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id]), :multiple => true, :size => 4) %>
         <div class="next_line" style="padding-top: 12px;">
           <span>Sort By:</span>
           <%= select_tag(:sort_by, options_for_select(@sort_by, params[:sort_by])) %>

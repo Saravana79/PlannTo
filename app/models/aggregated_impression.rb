@@ -37,8 +37,9 @@ class AggregatedImpression
         match["$match"].merge!("for_pub" => true)
       end
 
-      if param[:ad_id] != "All"
-        match["$match"].merge!("ad_id" => param[:ad_id].to_i)
+      if !param[:ad_id].include?("All")
+        ad_ids = param[:ad_id].compact.map(&:to_i)
+        match["$match"].merge!("ad_id" => {"$in" => ad_ids})
       end
 
       group =  { "$group" => { "_id" => option, "total_imp" => { "$sum" => "$total_imp" }, "total_clicks" => { "$sum" => "$total_clicks" },
@@ -54,6 +55,21 @@ class AggregatedImpression
       }
 
       results = AggregatedImpression.collection.aggregate([match,group])
+
+      if (!param[:ad_id].include?("All") && results.count > 1)
+        tot_hash = {}
+        results.each_with_index do |each_result, index|
+          each_result.each do |key, value|
+            if index == 0
+              tot_hash[key] = value
+            else
+              tot_hash[key] = tot_hash[key] + value
+            end
+          end
+        end
+        tot_hash["_id"] = "Total"
+        results << tot_hash
+      end
     else
       query = {}
 
@@ -67,8 +83,10 @@ class AggregatedImpression
       if ["Domain", "Item", "Sid"].include?(param[:type])
         query[:agg_type] = param[:type]
         if param[:ad_type] == "advertisement"
-          if param[:ad_id] != "All"
-            query[:ad_id] = param[:ad_id].to_i
+          if !param[:ad_id].include?("All")
+            ad_ids = param[:ad_id].compact.map(&:to_i)
+            # match["$match"].merge!("ad_id" => {"$in" => ad_ids})
+            query[:ad_id.in] = ad_ids
           else
             query[:ad_id.ne] = nil
           end
@@ -77,8 +95,10 @@ class AggregatedImpression
       else
         if param[:ad_type] == "advertisement"
           query[:for_pub] = nil
-          if param[:ad_id] != "All"
-            query[:ad_id] = param[:ad_id].to_i
+          if !param[:ad_id].include?("All")
+            ad_ids = param[:ad_id].compact.map(&:to_i)
+            # match["$match"].merge!("ad_id" => {"$in" => ad_ids})
+            query[:ad_id.in] = ad_ids
           else
             query[:ad_id.ne] = nil
           end

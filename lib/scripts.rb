@@ -1133,3 +1133,24 @@ clicks.each do |click|
     conversion_pixel_detail.save
   end
 end
+
+
+
+#Aggregated Detail update
+order_histories = OrderHistory.where("date(order_date) > '2016-1-1' and order_status='Validated'")
+
+order_histories.each do |order_history|
+  p order_history
+  impression = AddImpression.where(:id => order_history.impression_id).last
+  if !impression.blank?
+    time = impression.impression_time.to_time.utc rescue Time.now
+    date = time.to_date rescue ""
+    agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => order_history.advertisement_id).last
+    price = order_history.product_price.to_s.gsub("," , "").to_f
+
+    agg_imp.tot_valid_orders = agg_imp.tot_valid_orders.to_i + 1
+    agg_imp.tot_valid_product_price = agg_imp.tot_valid_product_price.to_f + price
+
+    agg_imp.save!
+  end
+end
