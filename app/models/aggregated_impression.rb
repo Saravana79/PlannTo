@@ -27,6 +27,10 @@ class AggregatedImpression
   # end
 
   def self.get_results_from_agg_impression(param, start_date, end_date)
+    if !param[:ad_id].is_a?(Array)
+      param[:ad_id] = param[:ad_id].to_s.split(",")
+    end
+
     if param[:type] == "Advertisement"
       option = "$ad_id"
       match = {"$match" => {"agg_date" => {"$gte" => start_date, "$lte" => end_date}}}
