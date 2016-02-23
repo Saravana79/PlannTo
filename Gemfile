@@ -128,3 +128,5 @@ gem 'roo', '~> 2.1.1'
 
 #Skylight is a smart profiler for Rails apps
 # gem 'skylight', '~> 0.10.0'
+
+gem 'puma'
