@@ -775,7 +775,7 @@ task :update_mouthshut_details_to_feed_url => :environment do
 
       # category = sources_list[source]["categories"]
 
-      SourceCategory.find_by_source(source).categories rescue ""
+      category = SourceCategory.find_by_source(source).categories rescue ""
       category = "Others" if category.blank?
 
       new_feed_url = FeedUrl.new(feed_id: 41, url: url_for_save, title: title.to_s.strip, category: category,
@@ -805,7 +805,7 @@ task :update_feed_url_with_title_desc => :environment do
     feed_urls.each do |feed_url|
       begin
         valid_categories=["science & technology","Autos & Vehicles","Science & Tech"]
-        SourceCategory.find_by_source(feed_url.source).categories rescue ""
+        category = SourceCategory.find_by_source(feed_url.source).categories rescue ""
         category = "Others" if category.blank?
         url = feed_url.url.to_s
         title, description, images, page_category = Feed.get_feed_url_values(url)

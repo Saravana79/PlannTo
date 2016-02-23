@@ -157,7 +157,7 @@ class FeedUrl < ActiveRecord::Base
         # sources_list = Rails.cache.read("sources_list_details")
         # category = sources_list[source]["categories"] rescue ""
 
-        SourceCategory.find_by_source(source).categories rescue ""
+        category = SourceCategory.find_by_source(source).categories rescue ""
         category = "Others" if category.blank?
 
         # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -318,7 +318,7 @@ class FeedUrl < ActiveRecord::Base
           # sources_list = Rails.cache.read("sources_list_details")
           # category = sources_list[source]["categories"] rescue ""
 
-          SourceCategory.find_by_source(source).categories rescue ""
+          category = SourceCategory.find_by_source(source).categories rescue ""
           category = "Others" if category.blank?
 
           # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -826,7 +826,7 @@ class FeedUrl < ActiveRecord::Base
       # sources_list = JSON.parse($redis.get("sources_list_details"))
       # categories = sources_list[host_without_www]["categories"] rescue ""
 
-      SourceCategory.find_by_source(host_without_www).categories rescue ""
+      categories = SourceCategory.find_by_source(host_without_www).categories rescue ""
 
       splt_categories = categories.split(",").map(&:strip)
       selected_values = splt_categories.map {|d| Item.get_root_level_id(d)}
