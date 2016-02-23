@@ -37,7 +37,7 @@ namespace :feed do
       # sources_list.default = "Others"
       # category = sources_list[source]
 
-      SourceCategory.find_by_source(source).categories rescue ""
+      category = SourceCategory.find_by_source(source).categories rescue ""
       category = "Others" if category.blank?
 
       check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first

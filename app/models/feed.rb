@@ -75,7 +75,7 @@ class Feed < ActiveRecord::Base
 
             # category = sources_list[source]["categories"]
 
-            SourceCategory.find_by_source(source).categories rescue ""
+            category = SourceCategory.find_by_source(source).categories rescue ""
             category = "Others" if category.blank?
 
             new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
@@ -133,7 +133,7 @@ class Feed < ActiveRecord::Base
         # sources_list = Rails.cache.read("sources_list_details")
         # category = sources_list[source]["categories"]
 
-        SourceCategory.find_by_source(source).categories rescue ""
+        category = SourceCategory.find_by_source(source).categories rescue ""
         category = "Others" if category.blank?
 
         check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
