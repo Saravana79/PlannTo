@@ -311,7 +311,8 @@ var PlannTo = (function(window,undefined) {
 //                    n_ratio = 0
 //                    e_ratio = 0
                     var page_visited = false;
-                    var z_index = -1
+//                    var z_index = -1
+                    var z_index = ""
 
                     indx = indx + 1;
                     img_width = jQuery(image).width()
@@ -333,7 +334,7 @@ var PlannTo = (function(window,undefined) {
 
                     var height = jQuery(image).height() - 63
 
-                    url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=&size='+ img_width +'*'+ n_ad_height +'&exp_size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&ref_url='+pathname
+                    url = 'http://'+domain+'/advertisments/image_show_ads.json?item_id='+ item_ids +'&ads_id=&size='+ img_width +'*'+ n_ad_height +'&exp_size='+ img_width +'*'+ img_height +'&more_vendors=true&ad_as_widget=true&exp_img_height='+ exp_img_height +'&ref_url='+pathname
                     var impression_id = ""
                     jQuery.ajax({
                         url : url,
