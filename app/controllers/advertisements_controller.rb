@@ -586,7 +586,9 @@ class AdvertisementsController < ApplicationController
     # static ad process
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
 
-    @ad_template_type = "type_4" #TODO: only accept type 1
+    if @ad_template_type != "type_5"
+      @ad_template_type = "type_4" #TODO: only accept type 1
+    end
 
     # @vendor = Vendor.where(:name => "Amazon").first
     # vendor_ids = [@vendor.id]

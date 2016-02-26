@@ -1529,7 +1529,7 @@ end
   end
 
   def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size,used_cars = false)
-    if ad_template_type == "type_4"
+    if (ad_template_type == "type_4" || ad_template_type == "type_5")
       if ["300", "120", "728","336_280","160_600"].include?(suitable_ui_size)
         item_details = item_details.first(12)
         sliced_item_details = item_details.each_slice(2)
