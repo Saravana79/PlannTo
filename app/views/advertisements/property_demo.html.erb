@@ -27,7 +27,7 @@
   <div class="demo_form row">
     <div class="search_form">
       <%= form_for :search, :url => "/advertisements/property_demo", :html => {:method => 'get'} do |search_form| %>
-          City : <%= select_tag :city_id, options_for_select([["Yelahanka", "29979"]], params[:city_id]) %>
+          Location : <%= select_tag :city_id, options_for_select([["Yelahanka", "29979"]], params[:city_id]) %>
           Property Type : <%= select_tag :property_type_ids, options_for_select([["Apartment", "35284"]], params[:property_type_ids]) %>
           <%= search_form.submit "Go" %>
       <% end %>
