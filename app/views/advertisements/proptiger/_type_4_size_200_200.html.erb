@@ -33,7 +33,8 @@
                     <div class="product-container">
                       <div style="padding: 2px 5px;">
                          <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <h3><%= item_detail.title.to_s.truncate(62) %></h3></a>
+                           <h3><%= item_detail.title.to_s.truncate(62) %><span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span></h3>
+                         </a>
                       </div>
                     
                       <div class="product-img-left">
@@ -45,12 +46,12 @@
                       </div>
                       <div class="product-txt-right">
                            <div class="product-txt-desc">
-                            <p>
-                              <%= item_detail.ad_detail4.to_s.truncate(62) + " | " + item_detail.ad_detail2.to_s.truncate(62) + " KM "%> 
-                            </p>
+                             <p> <%= "Livability " + item_detail.ad_detail2.to_s%> </p>
+                             <p class="possession" style="font-size: 11px;"><%= "Possession " + item_detail.ad_detail1.to_s%></p>
+                             <p class="property_status" style="font-size: 11px;"><%= item_detail.ad_detail3.to_s %></p>
                           </div>
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <p class="price"><%= prettifyforcarprice(item_detail) %></p>
+                          <p class="price"><%= "Starting from " + convert_num_to_laksh_or_crore(item_detail.price.to_i) %></p>
                         </a>
 
                         <p class="btn">

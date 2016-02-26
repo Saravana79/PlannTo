@@ -29,9 +29,7 @@
                           <div class="product-txt-right">
                             <h3><%= item_detail.title.to_s.truncate(52) %><span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span></h3>
                              <div class="product-txt-desc">
-                            <p>
-                              <%= "Livability " + item_detail.ad_detail2.to_s%>
-                            </p>
+                            <p> <%= "Livability " + item_detail.ad_detail2.to_s%> </p>
                             <p class="possession" style="font-size: 11px;"><%= "Possession " + item_detail.ad_detail1.to_s%></p>
                             <p class="property_status" style="font-size: 11px;"><%= item_detail.ad_detail3.to_s %></p>
                           </div>

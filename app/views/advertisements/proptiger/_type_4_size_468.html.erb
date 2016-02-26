@@ -7,25 +7,30 @@
 
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
-                <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" width="70px" alt=""></a></div>
+                <div class="logo">
+                  <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" width="70px" alt=""></a>
+                </div>
 
                 <div class="product-container">
                   <div style="float:left;width:168px;">
-                  <a href="<%= shop_now_url %>" target="_blank" class="">
-                    <div style="float:left;">
-                    <h3 class="product-title"><%= item_detail.title.to_s.truncate(46) %></h3>
-                  </div>
-                    <div style="float:left;">
+                    <a href="<%= shop_now_url %>" target="_blank" class="">
+                      <div style="float:left;">
+                        <h3><%= item_detail.title.to_s.truncate(46) %>
+                          <span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span>
+                        </h3>
+                      </div>
+                      <div style="float:left;">
                         <span class="product-txt-desc">
-                              <%= item_detail.ad_detail4.to_s.truncate(62) + " | " + item_detail.ad_detail2.to_s.truncate(62) + " KM  | " %> 
-                            </span> <span class="price"><%= prettifyforcarprice(item_detail) %></span>
-                    </div>
-                  </a>
-                  </div>  
+                              <%= item_detail.ad_detail1.to_s.truncate(62) + " | " + item_detail.ad_detail2.to_s.truncate(62) + " | " %>
+                            </span>
+                        <span class="price" style="font-size: 8px;"><%= "Starting from " + convert_num_to_laksh_or_crore(item_detail.price.to_i) %></span>
+                      </div>
+                    </a>
+                  </div>
                   <div class="product-img">
                     <a href="<%= shop_now_url %>" target="_blank">
-                       <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                  <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+                      <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+                      <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium), "", "", "original").html_safe %>
                       <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
                     </a>
                   </div>
@@ -53,13 +58,13 @@
 
         <div id="pager2" class="pager">
           <% if @item_details.count > 1 %>
-          <% [*1..@item_details.count].each do |each_loop| %>
-              <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
-          <% end %>
+              <% [*1..@item_details.count].each do |each_loop| %>
+                  <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+              <% end %>
           <% end %>
         </div>
 
-  <% else %>
+    <% else %>
         No Product Found
     <% end %>
   </div>
@@ -71,7 +76,10 @@
     .pager a {
         margin: 0px !important;
     }
-    .product-container a {text-decoration: none !important;}
+
+    .product-container a {
+        text-decoration: none !important;
+    }
 
     .advt-728 .advt-box .product-container h3 {
         word-break: normal;
@@ -83,8 +91,9 @@
     }
 
     <% if @item_details.count < 2 %>
-      .advt-728 .advt-box .btn {
+    .advt-728 .advt-box .btn {
         padding: 25px 0 0 !important;
-      }
+    }
+
     <% end %>
 </style>
