@@ -1154,3 +1154,13 @@ order_histories.each do |order_history|
     agg_imp.save!
   end
 end
+
+
+item_detail_others = ItemDetailOther.where(:itemtype_id => 33)
+
+item_details_other = item_details_others.last
+
+url = item_details_other.url
+doc = Nokogiri::HTML(open(url))
+
+doc.css(".prop-price-info")

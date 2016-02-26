@@ -352,4 +352,22 @@ module ApplicationHelper
       price = priceorg == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" % priceorg.to_f)
    end
 
+  def convert_num_to_laksh_or_crore(num)
+    return_val = ""
+    crore = num/10000000 rescue 0
+    if crore != 0
+      rem_num = num % 10000000
+      laksh = rem_num / 100000
+      return_val = "#{crore}.#{laksh} crore"
+    else
+      laksh = num / 100000
+      if laksh != 0
+        rem_num = num % 100000
+        thousand = rem_num / 1000
+        return_val = "#{laksh}.#{thousand} laksh"
+      end
+    end
+    return_val
+  end
+
 end

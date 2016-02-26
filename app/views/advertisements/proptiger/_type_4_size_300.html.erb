@@ -27,14 +27,16 @@
                             </a>
                           </div>
                           <div class="product-txt-right">
-                            <h3><%= item_detail.title.to_s.truncate(52) %></h3>
+                            <h3><%= item_detail.title.to_s.truncate(52) %><span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span></h3>
                              <div class="product-txt-desc">
                             <p>
                               <%= "Livability " + item_detail.ad_detail2.to_s%>
                             </p>
+                            <p class="possession" style="font-size: 11px;"><%= "Possession " + item_detail.ad_detail1.to_s%></p>
+                            <p class="property_status" style="font-size: 11px;"><%= item_detail.ad_detail3.to_s %></p>
                           </div>
                            
-                            <p class="price"><%= "Possession " + item_detail.ad_detail1.to_s%></p>
+                            <p class="price"><%= "Starting from " + convert_num_to_laksh_or_crore(item_detail.price.to_i) %></p>
 
                             <p class="btn">
                               <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Find out More</a>

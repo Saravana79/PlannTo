@@ -9,8 +9,8 @@ class ItemDetailOther < ActiveRecord::Base
 
   attr_accessor :offer
 
-  # For proptiger
-  # ad_detail1=possession,ad_detail2=livability_score
+  # For proptiger storing info
+  # ad_detail1=possession,ad_detail2=livability_score,ad_detail3=status,ad_detail4=location
 
   def self.update_item_detail_other_for_junglee(url)
     # url ||= "http://www.junglee.com/dp/B00RGA4F3U"
