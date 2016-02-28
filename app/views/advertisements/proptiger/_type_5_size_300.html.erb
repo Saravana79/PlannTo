@@ -13,28 +13,33 @@
           <ul id="foo3">
             <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
-                  <% sliced_item_detail.each do |item_detail| %>
+                  <% item_detail = sliced_item_detail[0] %>
                       <% ad_url = get_ad_url_from_detail_other(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                       <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
                       <div class="advt-box">
                         <div class="product-container">
-                          <div class="product-img-left">
+                          
+                          <div class="product-txt-right">
+                            <h3><span style="font-size:15px;"><%= item_detail.title.to_s.truncate(52) %></span><span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span>
+
+                            </h3>
+                            <div class="product-img-left">
                             <a href="#" style="text-decoration:none;">
                               <span style="  display: inline-block;height: 100%;vertical-align: middle;  text-align: center;"></span>
                              <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
                         
                             </a>
                           </div>
-                          <div class="product-txt-right">
-                            <h3><%= item_detail.title.to_s.truncate(52) %><span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span></h3>
+                           <div class="rate-count-info ng-scope" style="border-radius: 100%;background: #fff;border: 1px solid #ddd;color: #666;width: 27px;height: 27px;cursor: pointer;position: absolute;top: 220px;left: 270px;">
+                      <p style="padding: 6px 0px 0px 9px;font-size:12px;">  7 </p>
+                      </div>
                              <div class="product-txt-desc">
-                            <p>
-                              <%= "Livability " + item_detail.ad_detail2.to_s%>
-                            </p>
-                            <p class="possession" style="font-size: 11px;"><%= "Possession " + item_detail.ad_detail1.to_s%></p>
-                            <p class="property_status" style="font-size: 11px;"><%= item_detail.ad_detail3.to_s %></p>
-                          </div>
+                       
+                             <span class="property_status" style="font-size: 11px;"><%= item_detail.ad_detail3.to_s %> - </span>
+                          
+                            <span class="possession" style="font-size: 11px;"><%= "Possession " + item_detail.ad_detail1.to_s%></span>
+                           </div>
                            
                             <p class="price"><%= "Starting from " + convert_num_to_laksh_or_crore(item_detail.price.to_i) %></p>
 
@@ -45,7 +50,7 @@
                         </div>
                       </div>
                                   <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.vendor_id.to_i]['imageurl'] %>" alt="" style="display: none;">
-                  <% end %>
+                 
                   <div class="product-txt-desc" style="border-top: 1px solid #D9D9D9;text-align: center;">
                    
                   </div>

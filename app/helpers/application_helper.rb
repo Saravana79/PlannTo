@@ -364,7 +364,7 @@ module ApplicationHelper
       if laksh != 0
         rem_num = num % 100000
         thousand = rem_num / 1000
-        return_val = "#{laksh}.#{thousand} laksh"
+        return_val = "#{laksh}.#{thousand} lakhs"
       end
     end
     return_val

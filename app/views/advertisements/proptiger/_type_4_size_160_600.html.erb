@@ -26,14 +26,12 @@
                           </h3>
 
                           <div class="text-desc">
-                            <p> <%= "Livability " + item_detail.ad_detail2.to_s%> </p>
                             <p class="possession" style="font-size: 11px;"><%= "Possession " + item_detail.ad_detail1.to_s%></p>
-                            <p class="property_status" style="font-size: 11px;"><%= item_detail.ad_detail3.to_s %></p>
                           </div>
 
                           <p class="price"><%= "Starting from " + convert_num_to_laksh_or_crore(item_detail.price.to_i) %></p>
 
-                          <div class="product-img">
+                          <div class="product-img" style="height:90px;">
                             <a href="javascript:void(0)" style="text-decoration:none;">
                               <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                               <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium), "", "", "original").html_safe %>
