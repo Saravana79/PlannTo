@@ -30,8 +30,8 @@
                             <div style="float:left;width:140px;">
                             <h3 style="font-size:13px;"><%= item_detail.title.to_s.truncate(52) %><span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span></h3>
                             </div>
-                                <div class="rate-count-info ng-scope" style="border-radius: 100%;background: #fff;border: 1px solid #ddd;color: #666;width: 27px;height: 27px;cursor: pointer;float:right;">
-                            <p style="padding: 6px 0px 0px 9px;font-size:12px;">  7 </p>
+                            <div class="rate-count-info ng-scope" style="border-radius: 100%;background: #fff;border: 1px solid #ddd;color: #666;width: 27px;height: 27px;cursor: pointer;float:right;">
+                              <p style="padding: 5px;font-size:12px;"><%= item_detail.ad_detail2.to_f.round(1) %></p>
                             </div>
                              <div class="product-txt-desc">
                         
