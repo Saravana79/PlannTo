@@ -332,6 +332,9 @@ class ItemDetailOther < ActiveRecord::Base
     else
       query = "select * from item_detail_others where id in (#{car_condition}) and itemtype_id in (33) and status = 1  #{location_condition} #{order_by_condition}"
     end
+
+    p query
+
     item_details = ItemDetailOther.find_by_sql(query)
 
     # if !fashion_id.blank?

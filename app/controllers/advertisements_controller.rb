@@ -604,6 +604,8 @@ class AdvertisementsController < ApplicationController
     # @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
     @items, @item_details, @item = ItemDetailOther.get_item_detail_others_from_items_and_fashion_id_for_property(params[:item_id], params[:fashion_id])
 
+    p @item_details
+
     @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, [@item], @suitable_ui_size,true)
 
     if @is_test != "true"
