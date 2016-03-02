@@ -311,8 +311,8 @@ var PlannTo = (function(window,undefined) {
 //                    n_ratio = 0
 //                    e_ratio = 0
                     var page_visited = false;
-//                    var z_index = -1
-                    var z_index = ""
+                    var z_index = -1
+//                    var z_index = ""
 
                     indx = indx + 1;
                     img_width = jQuery(image).width()
