@@ -50,7 +50,7 @@
 <script type="text/javascript">
     $(function()
     {
-        <% if (@feed_urls.count < 25) %>
+        <% if (@feed_urls.all.count < 25) %>
         $(".jscroll-loading").hide()
         <% end %>
 
