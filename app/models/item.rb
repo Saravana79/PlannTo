@@ -2544,6 +2544,7 @@ end
     else
       offset = category_item_detail_id.to_i
     end
+    offset = offset.to_i
 
     rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").first(:offset => offset)
 
