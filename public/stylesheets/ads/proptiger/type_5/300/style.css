@@ -28,7 +28,7 @@ body {
 
 .advt-box .product-container{ clear:both; margin:0; padding:2px 2px;border-top: 1px solid #d9d9d9;height:208px;text-align: center;  }
 .advt-box .product-container .product-img-left{ margin:0 7px 0 0; padding:0; white-space: nowrap;text-align: center;white-space: nowrap;}
-.advt-box .product-container .product-img-left img { margin:0 auto; text-align:center; border:#CCC solid 0px;max-height: 128px;max-width: 290px;  vertical-align: middle;height: auto;width: auto;}
+.advt-box .product-container .product-img-left img { margin:0 auto; text-align:center; border:#CCC solid 0px;max-height: 120px;max-width: 290px;  vertical-align: middle;height: auto;width: auto;}
 .advt-box .product-container .product-txt-right{ margin:0; padding:0; }
 .advt-box .product-container h3{ margin:0 0 5px 0;padding:0; font-size:12px; color:#222; font-weight:bold;font-family: Arial, Helvetica, sans-serif;}
 .advt-box .product-container .price{ margin:0; padding:0px 0; color:#b12704; font-size:13px; font-weight:bold; float:left; width:100%;}
