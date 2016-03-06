@@ -88,9 +88,11 @@ class ProductsController < ApplicationController
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   # before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
   skip_before_filter :all_user_follow_item
-  before_filter :store_location, :only => [:show]
-  before_filter :set_referer,:only => [:show]
-  before_filter :log_impression, :only=> [:show]
+
+  # before_filter :store_location, :only => [:show]
+  # before_filter :set_referer,:only => [:show]
+  # before_filter :log_impression, :only=> [:show]
+
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget, :user_test_drive]
   layout 'product'
   include FollowMethods
@@ -165,6 +167,8 @@ class ProductsController < ApplicationController
   end
   
   def show
+    return render :nothing => true
+
     @static_page1  = "true"
     @filter_by = params["fl"]
     @write_review = params[:type]
