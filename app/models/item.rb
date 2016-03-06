@@ -2307,6 +2307,7 @@ end
     items = []
     from_article_field = false
     tempurl = url.to_s
+
     if !item_ids.blank?
       item_id = item_ids.to_s.split(",").first
       items = Item.where(:id => item_id)
@@ -2893,9 +2894,11 @@ end
       #   item_details = item_details.sample(6)
       # end
     else
-      item_name = Item.get_fashion_item_name_random()
+      # item_name = Item.get_fashion_item_name_random()
+      # item = Item.where(:name => item_name).first
 
-      item = Item.where(:name => item_name).first
+      item_name, item_id = Item.get_fashion_item_name_random()
+      item = Item.where(:id => item_id).first
       item_id_arr = [item.id] rescue []
       item_details = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids, fashion_id, ad)
       item_details = item_details.sample(6)
