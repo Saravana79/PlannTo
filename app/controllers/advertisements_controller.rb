@@ -149,7 +149,7 @@ class AdvertisementsController < ApplicationController
       }
     end
     #TODO: updating click url as empty
-    # params[:click_url] = ""
+    params[:click_url] = ""
   end
 
   def image_show_ads
