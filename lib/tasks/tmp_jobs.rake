@@ -414,7 +414,7 @@ end
 
 desc "temporary rake task"
 task :plannto_user_detail_process => :environment do
-  plannto_user_details = PlanntoUserDetail.where(:lad.gte => "#{1.week.ago}", :agg_info.exists => false)
+  plannto_user_details = PlanntoUserDetail.where(:lad.gte => "#{1.week.ago}", :ai.exists => false)
 
   total_count = plannto_user_details.count
 
@@ -423,7 +423,7 @@ task :plannto_user_detail_process => :environment do
     p "Remaining count => #{total_count}"
     begin
       agg_info_arr = []
-      item_types = plannto_user_detail.m_item_types
+      item_types = plannto_user_detail.i_types
       item_types.each do |item_type|
         r = item_type.r == true ? "r" : ""
         itemtype_id = item_type.itemtype_id
@@ -433,10 +433,10 @@ task :plannto_user_detail_process => :environment do
           agg_info_arr << "#{itemtype_id}:1"
         end
       end
-      plannto_user_detail.agg_info = agg_info_arr.join(",")
+      plannto_user_detail.ai = agg_info_arr.join(",")
       plannto_user_detail.save!
     rescue Exception => e
-      p "Error => #{plannto_user_detail.plannto_user_id}"
+      p "Error => #{plannto_user_detail.pid}"
     end
   end
 end

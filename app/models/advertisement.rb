@@ -1397,19 +1397,19 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           begin
             if !each_click_mongo["temp_user_id"].blank?
               #Updating PlanntoUserDetail
-              plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).to_a.last
+              plannto_user_detail = PlanntoUserDetail.where(:pid => each_click_mongo["temp_user_id"]).to_a.last
 
-              if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
+              if (!plannto_user_detail.blank? && plannto_user_detail.gid.blank?)
                 cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
                 if !cookie_match.blank? && !cookie_match.google_user_id.blank?
-                  plannto_user_detail.google_user_id = cookie_match.google_user_id
+                  plannto_user_detail.gid = cookie_match.google_user_id
                   plannto_user_detail.save!
                 end
               elsif plannto_user_detail.blank?
-                plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
+                plannto_user_detail = PlanntoUserDetail.new(:pid => each_click_mongo["temp_user_id"])
                 cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
                 if !cookie_match.blank? && !cookie_match.google_user_id.blank?
-                  plannto_user_detail.google_user_id = cookie_match.google_user_id
+                  plannto_user_detail.gid = cookie_match.google_user_id
                 end
                 plannto_user_detail.save!
               end
@@ -1429,25 +1429,25 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                 agg_info = {"#{itemtype_id}" => 1}
                 new_m_agg_info = "#{itemtype_id}:1"
 
-                m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
-                if m_item_type.blank?
-                  plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
-                  m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
+                if i_type.blank?
+                  plannto_user_detail.i_types << MItemType.new(:itemtype_id => itemtype_id)
+                  i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
                 end
 
-                click_item_ids = m_item_type.click_item_ids
-                click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
-                click_item_ids = click_item_ids.map(&:to_i).compact.uniq
-                m_item_type.click_item_ids = click_item_ids
-                m_item_type.lcd = Date.today
-                m_item_type.save!
+                ci_ids = i_type.ci_ids
+                ci_ids = ci_ids.blank? ? [each_click_mongo["item_id"].to_i] : (ci_ids + [each_click_mongo["item_id"].to_i])
+                ci_ids = ci_ids.map(&:to_i).compact.uniq
+                i_type.ci_ids = ci_ids
+                i_type.lcd = Date.today
+                i_type.save!
               end
 
               if !new_m_agg_info.blank?
-                m_agg_info = plannto_user_detail.agg_info.to_s
+                m_agg_info = plannto_user_detail.ai.to_s
                 m_agg_info_arr = m_agg_info.split(",")
                 m_agg_info_arr << new_m_agg_info
-                plannto_user_detail.agg_info = m_agg_info_arr.uniq.join(",")
+                plannto_user_detail.ai = m_agg_info_arr.uniq.join(",")
               end
 
               plannto_user_detail.skip_duplicate_update = true
@@ -1874,12 +1874,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
         clicks_import_mongo.each do |each_click_mongo|
           if !each_click_mongo["temp_user_id"].blank?
-            plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).to_a.last
+            plannto_user_detail = PlanntoUserDetail.where(:pid => each_click_mongo["temp_user_id"]).to_a.last
 
             if plannto_user_detail.blank?
-              plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
+              plannto_user_detail = PlanntoUserDetail.new(:pid => each_click_mongo["temp_user_id"])
               cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).select(:google_user_id).last
-              plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
+              plannto_user_detail.gid = cookie_match.google_user_id if !cookie_match.blank?
               plannto_user_detail.save!
             end
           end
@@ -1892,18 +1892,18 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           end
 
           if !itemtype_id.blank?
-            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
-            if m_item_type.blank?
-              plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
-              m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+            i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
+            if i_type.blank?
+              plannto_user_detail.i_types << MItemType.new(:itemtype_id => itemtype_id)
+              i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
             end
 
-            click_item_ids = m_item_type.click_item_ids
+            ci_ids = i_type.click_item_ids
             click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
             click_item_ids = click_item_ids.map(&:to_i).compact.uniq
-            m_item_type.click_item_ids = click_item_ids
-            m_item_type.lcd = Date.today
-            m_item_type.save!
+            i_type.click_item_ids = click_item_ids
+            i_type.lcd = Date.today
+            i_type.save!
           end
 
           plannto_user_detail.save!
