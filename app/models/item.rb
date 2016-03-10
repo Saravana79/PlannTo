@@ -1740,11 +1740,11 @@ end
                 item_ids = item_ids.to_s.split(",")
                 if item_ids.count < 10
 
-                  #Updating PlanntoUserDetail
-                  plannto_user_detail = PlanntoUserDetail.where(:gid => user_id).to_a.last
+                  #Updating PUserDetail
+                  plannto_user_detail = PUserDetail.where(:gid => user_id).to_a.last
 
                   if plannto_user_detail.blank?
-                    plannto_user_detail = PlanntoUserDetail.new(:gid => user_id)
+                    plannto_user_detail = PUserDetail.new(:gid => user_id)
                     if plannto_user_id.blank?
                       cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
                       if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?

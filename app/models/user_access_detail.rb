@@ -49,7 +49,7 @@ class UserAccessDetail < ActiveRecord::Base
       item_ids = item_ids.to_s.split(",")
       if item_ids.count < 10
 
-        plannto_user_detail = PlanntoUserDetail.where(:pid => user_id).to_a.last
+        plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
 
         if (!plannto_user_detail.blank? && plannto_user_detail.gid.blank?)
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
@@ -58,7 +58,7 @@ class UserAccessDetail < ActiveRecord::Base
             plannto_user_detail.save!
           end
         elsif plannto_user_detail.blank?
-          plannto_user_detail = PlanntoUserDetail.new(:pid => user_id)
+          plannto_user_detail = PUserDetail.new(:pid => user_id)
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
             plannto_user_detail.gid = cookie_match.google_user_id

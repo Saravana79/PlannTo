@@ -29,7 +29,7 @@ class CookieMatch < ActiveRecord::Base
     #   google_ula = "&google_ula=8326120"
     # end
 
-    plannto_user_detail = PlanntoUserDetail.where(:gid => param["google_gid"]).to_a.last
+    plannto_user_detail = PUserDetail.where(:gid => param["google_gid"]).to_a.last
 
     if !plannto_user_detail.blank?
       valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}

@@ -414,7 +414,7 @@ end
 
 desc "temporary rake task"
 task :plannto_user_detail_process => :environment do
-  plannto_user_details = PlanntoUserDetail.where(:lad.gte => "#{1.week.ago}", :ai.exists => false)
+  plannto_user_details = PUserDetail.where(:lad.gte => "#{1.week.ago}", :ai.exists => false)
 
   total_count = plannto_user_details.count
 
@@ -443,8 +443,8 @@ end
 
 desc "temporary rake task"
 task :remove_old_plannto_user_details => :environment do
-  # plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
-  plannto_user_details = PlanntoUserDetail.delete_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
+  # plannto_user_details = PUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
+  plannto_user_details = PUserDetail.delete_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
 end
 
 desc "paytm product update"

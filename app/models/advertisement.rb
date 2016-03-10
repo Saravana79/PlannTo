@@ -1396,8 +1396,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         clicks_import_mongo.each do |each_click_mongo|
           begin
             if !each_click_mongo["temp_user_id"].blank?
-              #Updating PlanntoUserDetail
-              plannto_user_detail = PlanntoUserDetail.where(:pid => each_click_mongo["temp_user_id"]).to_a.last
+              #Updating PUserDetail
+              plannto_user_detail = PUserDetail.where(:pid => each_click_mongo["temp_user_id"]).to_a.last
 
               if (!plannto_user_detail.blank? && plannto_user_detail.gid.blank?)
                 cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
@@ -1406,7 +1406,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   plannto_user_detail.save!
                 end
               elsif plannto_user_detail.blank?
-                plannto_user_detail = PlanntoUserDetail.new(:pid => each_click_mongo["temp_user_id"])
+                plannto_user_detail = PUserDetail.new(:pid => each_click_mongo["temp_user_id"])
                 cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
                 if !cookie_match.blank? && !cookie_match.google_user_id.blank?
                   plannto_user_detail.gid = cookie_match.google_user_id
@@ -1874,10 +1874,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
         clicks_import_mongo.each do |each_click_mongo|
           if !each_click_mongo["temp_user_id"].blank?
-            plannto_user_detail = PlanntoUserDetail.where(:pid => each_click_mongo["temp_user_id"]).to_a.last
+            plannto_user_detail = PUserDetail.where(:pid => each_click_mongo["temp_user_id"]).to_a.last
 
             if plannto_user_detail.blank?
-              plannto_user_detail = PlanntoUserDetail.new(:pid => each_click_mongo["temp_user_id"])
+              plannto_user_detail = PUserDetail.new(:pid => each_click_mongo["temp_user_id"])
               cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).select(:google_user_id).last
               plannto_user_detail.gid = cookie_match.google_user_id if !cookie_match.blank?
               plannto_user_detail.save!

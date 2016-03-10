@@ -1,4 +1,4 @@
-class PlanntoUserDetail
+class PUserDetail
   include Mongoid::Document
   # include Mongoid::Timestamps::Created
   after_save :update_lad#, :update_duplicate_record
@@ -37,7 +37,7 @@ class PlanntoUserDetail
   def self.update_plannto_user_detail(impression)
     # plannto user details
     if !impression.temp_user_id.blank?
-      plannto_user_detail = PlanntoUserDetail.where(:pid => impression.temp_user_id).to_a.last
+      plannto_user_detail = PUserDetail.where(:pid => impression.temp_user_id).to_a.last
 
       if (!plannto_user_detail.blank? && plannto_user_detail.gid.blank?)
         cookie_match = CookieMatch.where(:plannto_user_id => impression.temp_user_id).last
@@ -46,7 +46,7 @@ class PlanntoUserDetail
           plannto_user_detail.save!
         end
       elsif plannto_user_detail.blank?
-        plannto_user_detail = PlanntoUserDetail.new(:pid => impression.temp_user_id)
+        plannto_user_detail = PUserDetail.new(:pid => impression.temp_user_id)
         cookie_match = CookieMatch.where(:plannto_user_id => impression.temp_user_id).last
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
           plannto_user_detail.gid = cookie_match.google_user_id
@@ -179,15 +179,15 @@ class PlanntoUserDetail
   end
 
   def self.remove_old_records
-    # plannto_user_details = PlanntoUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
+    # plannto_user_details = PUserDetail.delete_all(:lad.lte => "#{1.month.ago}")
 
     # heroku run rake db:mongoid:create_indexes
-    # plannto_user_details = PlanntoUserDetail.destroy_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
+    # plannto_user_details = PUserDetail.destroy_all(conditions: {"lad" => {"$lte" => 1.month.ago}})
 
     days = [*30..57].reverse
 
     days.each do |day|
-      plannto_user_details = PlanntoUserDetail.where("lad" => {"$lte" => "#{day}".to_i.days.ago})
+      plannto_user_details = PUserDetail.where("lad" => {"$lte" => "#{day}".to_i.days.ago})
       tot_count = plannto_user_details.count
 
       plannto_user_details.each do |each_rec|
@@ -232,7 +232,7 @@ class PlanntoUserDetail
 
   def update_duplicate_record
     # if self.pid_changed? || self.google_user_id_changed?
-      plannto_user_details = PlanntoUserDetail.where(:pid => self.pid)
+      plannto_user_details = PUserDetail.where(:pid => self.pid)
       if plannto_user_details.count > 1
         old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
@@ -269,7 +269,7 @@ class PlanntoUserDetail
         self.save!
       end
 
-      plannto_user_details = PlanntoUserDetail.where(:gid => self.google_user_id)
+      plannto_user_details = PUserDetail.where(:gid => self.google_user_id)
       if plannto_user_details.count > 1
         old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
