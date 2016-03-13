@@ -1712,7 +1712,7 @@ end
 
             if !user_id.blank? && !url.blank?
               already_exist = Item.check_if_already_exist_in_user_visits(source_categories={}, user_id, url, "users:last_visits")
-              ranking = 0
+              rk = 0
               itemtype_id = ""
 
 
@@ -1725,7 +1725,7 @@ end
                   if apartment_domains.include?(domain)
                     item_ids = "35284,35236"
                     itemtype_id = 33
-                    ranking = 5
+                    rk = 5
                   elsif ["click.in", "trovit.co.in", "locanto.in","olx.in"].include?(domain)
                     if url.include?("flat") || url.include?("apartment")
                       item_ids = "35284"
@@ -1733,46 +1733,46 @@ end
                       item_ids = "35236"
                     end
                     itemtype_id = 33
-                    ranking = 5
+                    rk = 5
                   end
                 end
 
                 item_ids = item_ids.to_s.split(",")
                 if item_ids.count < 10
 
-                  #Updating PlanntoUserDetail
-                  plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).to_a.last
+                  #Updating PUserDetail
+                  plannto_user_detail = PUserDetail.where(:gid => user_id).to_a.last
 
                   if plannto_user_detail.blank?
-                    plannto_user_detail = PlanntoUserDetail.new(:google_user_id => user_id)
+                    plannto_user_detail = PUserDetail.new(:gid => user_id)
                     if plannto_user_id.blank?
                       cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
                       if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                        plannto_user_detail.pid = cookie_match.plannto_user_id
                       end
                     else
-                      plannto_user_detail.plannto_user_id = plannto_user_id
+                      plannto_user_detail.pid = plannto_user_id
                     end
                     plannto_user_detail.save!
-                  elsif plannto_user_detail.plannto_user_id.blank?
+                  elsif plannto_user_detail.pid.blank?
                     if plannto_user_id.blank?
                       cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
                       if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                        plannto_user_detail.pid = cookie_match.plannto_user_id
                       end
                     else
-                      plannto_user_detail.plannto_user_id = plannto_user_id
+                      plannto_user_detail.pid = plannto_user_id
                     end
                     plannto_user_detail.save!
                   end
 
-                  m_item_type = nil
+                  i_type = nil
                   if !plannto_user_detail.blank?
                     plannto_location_id = nil
                     if !google_location_id.blank?
                       plannto_location_id = google_geo_targeting_hash[google_location_id.to_i]
                     end
-                    plannto_user_detail.loc_id = plannto_location_id if !plannto_location_id.blank?
+                    plannto_user_detail.lid = plannto_location_id if !plannto_location_id.blank?
 
                     article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
 
@@ -1781,16 +1781,16 @@ end
                     itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
                     type = article_content.sub_type rescue "" if type.blank?
 
-                    if ranking.to_i == 0
+                    if rk.to_i == 0
                       case type.to_s
                         when "Reviews", "Spec", "Photo"
-                          ranking = 5
+                          rk = 5
                         when "Comparisons"
-                          ranking = 4
+                          rk = 4
                         when "Lists", "Others", "News"
-                          ranking = 3
+                          rk = 3
                         when ""
-                          ranking = 2
+                          rk = 2
                       end
                     end
 
@@ -1801,7 +1801,7 @@ end
                     new_m_agg_info = ""
 
                     if !itemtype_id.blank?
-                      m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
+                      i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
 
                       if resale == true
                         agg_info = {"#{itemtype_id}:r" => 1}
@@ -1811,16 +1811,16 @@ end
                         new_m_agg_info = "#{itemtype_id}:1"
                       end
 
-                      if m_item_type.blank?
-                        plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url], :r => resale)
-                        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
+                      if i_type.blank?
+                        plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url], :r => resale)
+                        i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
                       else
-                        list_of_urls = m_item_type.list_of_urls
-                        list_of_urls = list_of_urls.to_a
-                        list_of_urls << url
-                        m_item_type.list_of_urls = list_of_urls.uniq
-                        m_item_type.r = resale
-                        m_item_type.save!
+                        lu = i_type.lu
+                        lu = lu.to_a
+                        lu << url
+                        i_type.lu = lu.uniq
+                        i_type.r = resale
+                        i_type.save!
                       end
                     end
 
@@ -1828,16 +1828,16 @@ end
                     plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
 
                     if !new_m_agg_info.blank?
-                      m_agg_info = plannto_user_detail.agg_info.to_s
+                      m_agg_info = plannto_user_detail.ai.to_s
                       m_agg_info_arr = m_agg_info.split(",")
                       m_agg_info_arr << new_m_agg_info
-                      plannto_user_detail.agg_info = m_agg_info_arr.uniq.join(",")
+                      plannto_user_detail.ai = m_agg_info_arr.uniq.join(",")
                     end
 
                     plannto_user_detail.skip_duplicate_update = true
                     plannto_user_detail.save!
 
-                    cookie_matches_plannto_ids << plannto_user_detail.plannto_user_id
+                    cookie_matches_plannto_ids << plannto_user_detail.pid
                   end
 
                   # u_key = "u:ac:#{user_id}"
@@ -1857,11 +1857,11 @@ end
                   # incrby count for items
                   # item_ids.each do |each_key|
                   #   if u_values["#{each_key}_c"].blank?
-                  #     u_values["#{each_key}_c"] = ranking
+                  #     u_values["#{each_key}_c"] = rk
                   #     u_values["#{each_key}_la"] = Date.today.to_s
                   #   else
-                  #     old_ranking = u_values["#{each_key}_c"]
-                  #     u_values["#{each_key}_c"] = old_ranking.to_i + ranking
+                  #     old_rk = u_values["#{each_key}_c"]
+                  #     u_values["#{each_key}_c"] = old_rk.to_i + rk
                   #     u_values["#{each_key}_la"] = Date.today.to_s
                   #   end
                   # end
@@ -1903,9 +1903,9 @@ end
 
                   #plannto user details
 
-                  if !m_item_type.blank?
-                    removed_item_ids = m_item_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
-                    existing_item_ids = m_item_type.m_items.map(&:item_id)
+                  if !i_type.blank?
+                    removed_item_ids = i_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
+                    existing_item_ids = i_type.m_items.map(&:item_id)
                     arrival_item_ids = item_ids.map(&:to_i)
 
                     removed_item_ids = removed_item_ids - arrival_item_ids
@@ -1916,7 +1916,7 @@ end
 
                     if !removed_item_ids.blank?
                       removed_item_ids.each do |item_id|
-                        exp_item = m_item_type.m_items.where(:item_id => item_id).last
+                        exp_item = i_type.m_items.where(:item_id => item_id).last
                         exp_item.destroy
                       end
                     end
@@ -1924,17 +1924,17 @@ end
                     if !new_item_ids.blank?
                       new_item_ids.each do |item_id|
                         # lad = u_values["#{item_id}_la"].to_date
-                        # ranking = u_values["#{item_id}_c"]
-                        m_item_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :ranking => ranking)
+                        # rk = u_values["#{item_id}_c"]
+                        i_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
                       end
                     end
 
                     if !common_item_ids.blank?
                       common_item_ids.each do |item_id|
-                        m_item = m_item_type.m_items.where(:item_id => item_id).last
+                        m_item = i_type.m_items.where(:item_id => item_id).last
                         if !m_item.blank?
                           m_item.lad = Date.today
-                          m_item.ranking = m_item.ranking.to_i + ranking.to_i
+                          m_item.rk = m_item.rk.to_i + rk.to_i
                           m_item.save!
                         end
                       end
@@ -1942,26 +1942,26 @@ end
 
                     #Update redis_rtb from plannto_user_detail
                     if !plannto_user_detail.blank?
-                      if plannto_user_detail.plannto_user_id.blank?
-                        user_id_for_key = plannto_user_detail.google_user_id.to_s
+                      if plannto_user_detail.pid.blank?
+                        user_id_for_key = plannto_user_detail.gid.to_s
                         if resale != true
-                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}"
                         else
-                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
+                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
                         end
                       else
-                        user_id_for_key = plannto_user_detail.plannto_user_id.to_s
+                        user_id_for_key = plannto_user_detail.pid.to_s
                         if resale != true
-                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}"
                         else
-                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
+                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
                         end
                       end
 
                       if !user_id.blank?
-                        item_ids = m_item_type.m_items.sort_by {|each_val| each_val.ranking.to_i}.reverse.map(&:item_id).uniq.join(",")
-                        high_score = m_item_type.m_items.map {|each_val| each_val.ranking.to_i}.max
-                        tot_count = m_item_type.m_items.count
+                        item_ids = i_type.m_items.sort_by {|each_val| each_val.rk.to_i}.reverse.map(&:item_id).uniq.join(",")
+                        high_score = i_type.m_items.map {|each_val| each_val.rk.to_i}.max
+                        tot_count = i_type.m_items.count
                         pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
                         plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
                       end
