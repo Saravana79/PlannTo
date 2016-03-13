@@ -225,6 +225,10 @@ var PlannTo = (function(window,undefined) {
                     element_id = "where_to_buy_items";
                 }
                 element = jQuery("#"+element_id)
+                if (element.length == 0)
+                {
+                    element = jQuery('div[id^="where_to_buy_items"]')
+                }
                 planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,tag,ascsubtag, hide_price)
 
             }

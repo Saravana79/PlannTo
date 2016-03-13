@@ -47,6 +47,8 @@ class AdvertisementsController < ApplicationController
       return jockey_fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
     elsif !@ad.blank? && @ad.id == 52
       return junglee_used_car_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
+    elsif !@ad.blank? && @ad.id == 86
+      return proptiger_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
     elsif !@ad.blank? && @ad.id == 56
       return amazon_deal_ads(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids, return_path)
     elsif !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
@@ -66,7 +68,7 @@ class AdvertisementsController < ApplicationController
     elsif item_ids.include?(configatron.root_level_television_id.to_s)
       original_ids = $redis.get("amazon_top_televisions").to_s.split(",")
       @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
-    elsif !@ad.blank? && @ad.id == 52
+    elsif !@ad.blank? && (@ad.id == 52 || @ad.id == 86)
       # Nothing
     elsif !@ad.blank? && @ad.having_related_items == true
       itemsaccess = "advertisement"
@@ -146,6 +148,8 @@ class AdvertisementsController < ApplicationController
         end
       }
     end
+    #TODO: updating click url as empty
+    params[:click_url] = ""
   end
 
   def image_show_ads
@@ -580,6 +584,46 @@ class AdvertisementsController < ApplicationController
     end
   end
 
+  def proptiger_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_id, vendor_ids)
+    # static ad process
+    @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
+
+    if @ad_template_type != "type_5"
+      @ad_template_type = "type_4" #TODO: only accept type 1
+    end
+
+    # @vendor = Vendor.where(:name => "Amazon").first
+    # vendor_ids = [@vendor.id]
+    @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+
+    @current_vendor = @vendor_ad_details[@ad.vendor_id]
+    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @current_vendor = {} if @current_vendor.blank?
+    item_ids = item_id.to_s.split(",")
+
+    # @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
+    @items, @item_details, @item = ItemDetailOther.get_item_detail_others_from_items_and_fashion_id_for_property(params[:item_id], params[:fashion_id])
+
+    @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, [@item], @suitable_ui_size,true)
+
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
+    end
+
+    @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+    @click_url = @click_url.gsub("&amp;", "&")
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_junglee_car_ads.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "show_proptiger_ads.html.erb", :layout => false }
+    end
+  end
+
   def amazon_deal_ads(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_id, vendor_ids, return_path)
     @item_details = DealItem.get_deal_item_based_on_hour(params[:fashion_id])
     @item_details = Itemdetail.convert_to_itemdetails(@item_details)
@@ -717,6 +761,20 @@ class AdvertisementsController < ApplicationController
     params[:city_id] ||= "29673"
     params[:car_ids] ||= "581,582,583,584,585,586"
     item_ids = params[:city_id].to_s.split(",") + params[:car_ids].to_s.split(",")
+    item_ids = item_ids.compact.uniq.join(",")
+    params[:item_id] = item_ids
+    render :layout => false
+  end
+
+  def property_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:ads_id] ||= 86
+    params[:more_vendors] ||= false
+    params[:is_test] ||= "true"
+    params[:city_id] ||= "29979"
+    params[:property_type_ids] ||= "35284"
+    item_ids = params[:city_id].to_s.split(",") + params[:property_type_ids].to_s.split(",")
     item_ids = item_ids.compact.uniq.join(",")
     params[:item_id] = item_ids
     params[:item_id]
@@ -922,7 +980,7 @@ class AdvertisementsController < ApplicationController
     end
 
     if (params[:item_id].blank? || params[:fashion_id].blank? || (!@ad.blank? && @ad.sort_type == "random"))
-      if (!@ad.blank? && ((@ad.id != 52 && @ad.advertisement_type == "fashion") || @ad.sort_type == "random"))
+      if (!@ad.blank? && ((@ad.id != 52 && @ad.id != 86 && @ad.advertisement_type == "fashion") || @ad.sort_type == "random"))
         # item_id, random_id = Item.get_item_id_and_random_id(@ad, params[:item_id])
         #
         # if random_id.blank?
@@ -937,7 +995,7 @@ class AdvertisementsController < ApplicationController
     end
 
     if !params[:item_id].blank? && params[:fashion_id].blank?
-      if !@ad.blank? && @ad.id == 52
+      if !@ad.blank? && (@ad.id == 52 || @ad.id == 86)
         random_id = rand(10)
 
         params[:fashion_id] = random_id
@@ -1053,8 +1111,8 @@ class AdvertisementsController < ApplicationController
             p "Problem in changing click_url and ref_url"
           end
         end
-        p "*************************** Cache process success ***************************"
-        logger.info "*************************** Cache process success ***************************"
+        # p "*************************** Cache process success ***************************"
+        # logger.info "*************************** Cache process success ***************************"
 
         return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
@@ -1249,8 +1307,8 @@ class AdvertisementsController < ApplicationController
             cache_json["html"] = cache_html
           end
         end
-        p "*************************** Cache process success ***************************"
-        logger.info "*************************** Cache process success ***************************"
+        # p "*************************** Cache process success ***************************"
+        # logger.info "*************************** Cache process success ***************************"
         
         set_access_control_headers()
         if params[:format].to_s == "json"

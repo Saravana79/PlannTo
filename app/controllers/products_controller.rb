@@ -88,9 +88,11 @@ class ProductsController < ApplicationController
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   # before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
   skip_before_filter :all_user_follow_item
+
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
+
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget, :user_test_drive]
   layout 'product'
   include FollowMethods
@@ -574,7 +576,7 @@ class ProductsController < ApplicationController
   def elec_widget_1
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
-    @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
+    items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
     @where_to_buy_items = []
     if params[:vendor_ids].blank?
       #defaulting to amazon.
@@ -589,22 +591,22 @@ class ProductsController < ApplicationController
     @multiple_vendors = false
 
     # include pre order status if we show more details.
-    unless @items.blank?
+    unless items.blank?
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       @publisher = Publisher.getpublisherfromdomain(url)
       # Check have to activate tabs for publisher or not
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
-      @item = @items.first
+      @item = items.first
 
-      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, [], vendor_ids)
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, [], vendor_ids)
       @where_to_buy_items.map {|each_item| each_item.match_type = "exact" if each_item.match_type.blank? }
 
       # Update Items if there is only one item
       if @where_to_buy_items.count < show_count
         itemsaccess = "related_items"
-        items = Item.get_related_items_if_one_item(@items, @publisher, status)
+        items = Item.get_related_items_if_one_item(items, @publisher, status)
 
-        related_items = items - @items
+        related_items = items - items
         @item = items.first if @item.blank?
 
         @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, related_items, @show_price, status, @where_to_buy_items, vendor_ids)
@@ -616,12 +618,12 @@ class ProductsController < ApplicationController
       # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
       item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
       first_six_items = item_ids.shuffle.first(6)
-      @items = Item.where(:id => first_six_items)
-      @item = @items.first
+      items = Item.where(:id => first_six_items)
+      @item = items.first
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
-      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items, vendor_ids)
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids)
       @where_to_buy_items.map {|each_item| each_item.match_type = "top" if each_item.match_type.blank? }
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
@@ -637,6 +639,8 @@ class ProductsController < ApplicationController
                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
     end
+
+    @items_size = items.size
 
     if !vendor_ids.blank?
       @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
@@ -686,7 +690,7 @@ class ProductsController < ApplicationController
                                                                 cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
 
-      # @show_count = Item.get_show_item_count(@items)
+      # @show_count = Item.get_show_item_count(items)
 
       responses = []
       @where_to_buy_items = []
@@ -1377,7 +1381,8 @@ class ProductsController < ApplicationController
 
     records_count = $redis.get("sports_widget1:#{sub_category}:#{params[:page_type]}")
     if(records_count != nil)
-      p "printing  - " + "sports_widget1:#{sub_category}:#{params[:page_type]}" + " - " + records_count
+      #TODO: temporary commented
+      # p "printing  - " + "sports_widget1:#{sub_category}:#{params[:page_type]}" + " - " + records_count
     end
   
     if (!records_count.blank?)

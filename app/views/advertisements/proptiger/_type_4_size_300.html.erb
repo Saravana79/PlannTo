@@ -1,0 +1,81 @@
+<div class="advt-block">
+  <div class="advt-300">
+    <div class="logo"><a href="#"><img src="<%= @vendor_image_url %>" alt="" ></a>
+    </div>
+     <div id="pager2" class="pager">
+            <% [*1..@sliced_item_details.count].each do |each_loop| %>
+                <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+            <% end %>
+          </div>
+    <% if @item_details.count != 0 %>
+        <div class="list_carousel">
+         
+          <ul id="foo3">
+            <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
+                <li class="item_details" id="item_detail_<%= indx + 1 %>">
+                  <% sliced_item_detail.each do |item_detail| %>
+                      <% ad_url = get_ad_url_from_detail_other(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+                      <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+                      <div class="advt-box">
+                        <div class="product-container">
+                          <div class="product-img-left">
+                            <a href="#" style="text-decoration:none;">
+                              <span style="  display: inline-block;height: 100%;vertical-align: middle;  text-align: center;"></span>
+                             <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+                        
+                            </a>
+                          </div>
+                          <div class="product-txt-right">
+                            <div style="float:left;width:140px;">
+                            <h3 style="font-size:13px;"><%= item_detail.title.to_s.truncate(52) %><span class="location_name" style="font-size: 10px; font-weight: normal;">  <%= item_detail.ad_detail4.to_s %></span></h3>
+                            </div>
+                            <div class="rate-count-info ng-scope" style="border-radius: 100%;background: #fff;border: 1px solid #ddd;color: #666;width: 27px;height: 27px;cursor: pointer;float:right;">
+                              <p style="padding: 5px;font-size:12px;"><%= item_detail.ad_detail2.to_f.round(1) %></p>
+                            </div>
+                             <div class="product-txt-desc">
+                        
+                            <div >
+                            <!--  <p class="property_status" style="font-size: 10px;"><%= item_detail.ad_detail3.to_s %> - </p>-->
+                              <p class="possession" style="font-size: 10px;"><%= "Possession " + item_detail.ad_detail1.to_s%></p>
+                           
+                            </div>
+                          </div>
+                           
+                            <p class="price"><%= "Starting from " + convert_num_to_laksh_or_crore(item_detail.price.to_i) %></p>
+
+                            <p class="btn">
+                              <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Find out More</a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                                  <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.vendor_id.to_i]['imageurl'] %>" alt="" style="display: none;">
+                  <% end %>
+                  <div class="product-txt-desc" style="border-top: 1px solid #D9D9D9;text-align: center;">
+                   
+                  </div>
+         
+                </li>
+            <% end %>
+          </ul>
+          <!-- <div class="clearfix"></div>
+           <a id="prev3" class="prev" href="#">&lt;</a>
+           <a id="next3" class="next" href="#">&gt;</a>
+
+         </div>-->
+    <% else %>
+        No Product Found
+    <% end %>
+
+    </div>
+    <!-- end of advt-300 -->
+  </div>
+  </div>
+  <!-- end of advt-block -->
+
+  <style type="text/css">
+      .shop-now {
+          margin: 2px 0 0 !important;
+      }
+  </style>

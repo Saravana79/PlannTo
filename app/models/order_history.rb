@@ -53,7 +53,7 @@ class OrderHistory < ActiveRecord::Base
           order_history.product_price = price.to_s.gsub("," , "")
           order_history.no_of_orders = 1
           unless impression.blank?
-            PlanntoUserDetail.update_plannto_user_detail(impression)
+            PUserDetail.update_plannto_user_detail(impression)
 
             order_history.item_id = impression.item_id
             product = impression.item
@@ -97,7 +97,7 @@ class OrderHistory < ActiveRecord::Base
           order_history.payment_status = "Pending"
 
           unless impression.blank?
-            PlanntoUserDetail.update_plannto_user_detail(impression)
+            PUserDetail.update_plannto_user_detail(impression)
 
             order_history.item_id = impression.item_id
             product = impression.item
@@ -190,7 +190,7 @@ class OrderHistory < ActiveRecord::Base
       impression = csv_detail[headers.index("AffExtParam2")].blank? ? nil : AddImpression.where(:id => csv_detail[headers.index("AffExtParam2")]).first
 
       unless impression.blank?
-        PlanntoUserDetail.update_plannto_user_detail(impression)
+        PUserDetail.update_plannto_user_detail(impression)
 
         order_history.item_id = impression.item_id
         order_history.sid = impression.sid
