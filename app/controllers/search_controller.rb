@@ -440,8 +440,8 @@ class SearchController < ApplicationController
 
    def autocomplete_source_items
      # source_categories = SourceCategory.find_by_sql("select source from source_categories")
-     source_categories = SourceCategory.find_by_sql("select source from source_categories where source like '%#{params[:term]}%'")
-     sources = source_categories.map(&:source)
+     sources = SourceCategory.find_by_sql("select source from source_categories where source like '%#{params[:term]}%'").map(&:source)
+     # sources = source_categories.map(&:source)
 
      # searched_sources = sources.grep(/^#{params[:term]}/)
      results = sources.map {|x| {:id => x, :value => x, :type => "Source", :imgsrc => ""}}

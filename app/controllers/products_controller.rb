@@ -1383,7 +1383,8 @@ class ProductsController < ApplicationController
 
     records_count = $redis.get("sports_widget1:#{sub_category}:#{params[:page_type]}")
     if(records_count != nil)
-      p "printing  - " + "sports_widget1:#{sub_category}:#{params[:page_type]}" + " - " + records_count
+      #TODO: temporary commented
+      # p "printing  - " + "sports_widget1:#{sub_category}:#{params[:page_type]}" + " - " + records_count
     end
   
     if (!records_count.blank?)

@@ -74,8 +74,7 @@ class FeedsController < ApplicationController
     if !categories.blank?
       @categories = categories.to_s.split(",")
     else
-      categories = FeedUrl.find_by_sql("select distinct category from feed_urls").map(&:category)
-      categories = categories.join(",").split(",").compact.uniq
+      categories = FeedUrl.find_by_sql("select distinct category from feed_urls").map(&:category).join(",").split(",").compact.uniq
       @categories = categories
       $redis.set("categories_for_feed_urls", categories.join(","))
       $redis.expire("categories_for_feed_urls", 1.day)
