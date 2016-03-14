@@ -88,9 +88,7 @@ class AdvertisementsController < ApplicationController
 
     item_ids = @items.blank? ? [] : @items.map(&:id)
     @item = @items.first
-
     @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
-
     # Default item_details based on vendor if item_details empty
     #TODO: temporary solution, have to change based on ecpm
     if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
@@ -103,7 +101,7 @@ class AdvertisementsController < ApplicationController
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
       @vendor_ad_details.default = {"vendor_name" => "Amazon"}
       if @is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+        @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, nil, request.remote_ip, nil, itemsaccess, url_params,
                                                                 cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
         Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
       end
@@ -129,7 +127,7 @@ class AdvertisementsController < ApplicationController
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
       @click_url = @click_url.gsub("&amp;", "&")
     end
-    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
 
     respond_to do |format|
       format.json {
@@ -236,7 +234,7 @@ class AdvertisementsController < ApplicationController
             @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
             @click_url = @click_url.gsub("&amp;", "&")
           end
-          @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+          @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
 
           return_path = "advertisements/show_ads.html.erb"
 
@@ -487,7 +485,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
-    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
@@ -523,7 +521,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ad_details.default = {"vendor_name" => "Jockey"}
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
-    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
@@ -559,7 +557,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
-    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
@@ -599,7 +597,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
-    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
@@ -631,7 +629,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
     @vendor_ad_details.default = {"vendor_name" => "Amazon"}
     @item = Item.new
-    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
+    @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
 
     if @is_test != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_id, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])

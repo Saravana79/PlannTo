@@ -96,7 +96,7 @@ gem 'heroku-api'
 
 # Connection for mongodb
 gem 'mongo'
-gem 'mongoid'
+gem "mongoid"
 gem 'bson_ext'
 
 # gem for check memory usage
@@ -124,9 +124,14 @@ gem 'phantomjs', '~> 1.9.7.1'
 gem 'roo', '~> 2.1.1'
 #
 # #gem to terminate long request
-gem 'rack-timeout', '~> 0.3.2'
+# gem 'rack-timeout', '~> 0.3.2'
 
 #Skylight is a smart profiler for Rails apps
 # gem 'skylight', '~> 0.10.0'
 
-gem 'puma'
+# group :development do
+  # gem "rack-mini-profiler"
+  # gem 'brakeman', '~> 3.2', '>= 3.2.1'
+  # gem 'bullet', '~> 5.0'
+  # gem 'rails_best_practices', '~> 1.16'
+# end
