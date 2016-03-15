@@ -118,8 +118,8 @@ class Advertisement < ActiveRecord::Base
 
   def update_click_url_based_on_vendor
     if !self.vendor.blank? && self.advertisement_type == "dynamic"
-      vendor = self.vendor
-      vendor_detail = vendor.vendor_details.first
+      # vendor = self.vendor
+      vendor_detail = self.vendor_detail
       click_url = vendor_detail.baseurl
       self.update_column('click_url', click_url)
     end
@@ -3097,6 +3097,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     itemtype_id = Item.get_root_level_id(item_type)
     advertisement = Advertisement.joins(:content => :item_contents_relations_cache).where("advertisements.advertisement_type='in_image_ads' and advertisements.status=1 and advertisements.end_date >= '#{Date.today}'and advertisements.ecpm !=0 and advertisements.ecpm is not null and (item_contents_relations_cache.item_id = '#{item_id}' or item_contents_relations_cache.item_id = '#{itemtype_id}')").order("ecpm desc").first
     advertisement
+  end
+
+  def self.vendor_detail
+    vendor_id = a.vendor_id
+    vendor_detail = vendor_id.blank? ? nil : VendorDetail.find_by_sql("SELECT `vendor_details`.* FROM `vendor_details` WHERE `vendor_details`.`item_id` = #{vendor_id} LIMIT 1").first
+    vendor_detail
   end
 
   private

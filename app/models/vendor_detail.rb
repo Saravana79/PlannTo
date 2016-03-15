@@ -24,7 +24,7 @@ class VendorDetail < ActiveRecord::Base
     details = find_by_sql("SELECT item_id, name as vendor_name, imageurl, default_text FROM `vendor_details` WHERE item_id in (#{item_ids.blank? ? "''" : item_ids.map(&:inspect).join(', ')})")
 
     details.map {|each_detail| vendor_details.merge!(each_detail.item_id => each_detail.attributes.merge('imageurl' => configatron.root_image_url + "vendor" + '/medium/' + each_detail.imageurl.to_s))}
-
+    # vendor_details.map {|each_detail| each_detail.imageurl = configatron.root_image_url + "vendor" + '/medium/' + each_detail.imageurl.to_s}
     # Vendor.where("id in (?)", item_ids).map {|each_vendor| vendor_details.merge!(each_vendor.id => {:image_url => each_vendor.image_url, :default_text => each_vendor.default_text, :vendor_name => each_vendor.name})}
     vendor_details
   end
