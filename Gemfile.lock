@@ -246,6 +246,7 @@ GEM
       bundler (~> 1.0)
       railties (= 3.1.1)
     rails_exception_handler (2.0.2)
+    rails_stdout_logging (0.0.4)
     railties (3.1.1)
       actionpack (= 3.1.1)
       activesupport (= 3.1.1)
@@ -401,6 +402,7 @@ DEPENDENCIES
   rails (= 3.1.1)
   rails_exception_handler (~> 2)
   rails_sql_views!
+  rails_stdout_logging (~> 0.0.4)
   redis (~> 3.0.7)
   remotipart (~> 1.0)
   resque (~> 1.25.2)

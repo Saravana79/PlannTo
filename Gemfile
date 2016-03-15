@@ -135,3 +135,6 @@ gem 'roo', '~> 2.1.1'
   # gem 'bullet', '~> 5.0'
   # gem 'rails_best_practices', '~> 1.16'
 # end
+
+
+gem 'rails_stdout_logging', '~> 0.0.4'
