@@ -619,7 +619,7 @@ class ProductsController < ApplicationController
       item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
       first_six_items = item_ids.shuffle.first(6)
       items = Item.where(:id => first_six_items)
-      @item = items.first
+      @item = items[0]
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
@@ -650,6 +650,13 @@ class ProductsController < ApplicationController
     @vendor_detail = @vendor.vendor_detail rescue VendorDetail.new
 
     @ref_url = url
+    items_with_type = {}
+    items.each {|each_i| items_with_type.merge!(each_i.id.to_s => each_i.type)}
+    @where_to_buy_items.each {|each_item| each_item.type = items_with_type[each_item.itemid.to_s]}
+
+    items_with_imageurl = {}
+    items.each {|each_i| items_with_imageurl.merge!(each_i.id.to_s => each_i.imageurl)}
+    @where_to_buy_items.each {|each_item| each_item.imageurl = items_with_imageurl[each_item.itemid.to_s]}
 
     if params[:ret_format] == "html"
       return render "elec_widget_1.js.erb", :layout => false, :content_type => "text/html"
@@ -1635,7 +1642,6 @@ class ProductsController < ApplicationController
   end
 
   def user_test_drive
-    p params
     render :json => {:success => true}
   end
 

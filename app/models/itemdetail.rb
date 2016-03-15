@@ -3,7 +3,7 @@ class Itemdetail < ActiveRecord::Base
   has_one :vendor, :primary_key => "site", :foreign_key => "id"
   has_one :image, as: :imageable
 
-  attr_accessor :skip_after_save, :match_type
+  attr_accessor :skip_after_save, :match_type, :type, :imageurl
 
   belongs_to :item, :foreign_key => "itemid"
 
@@ -285,7 +285,7 @@ class Itemdetail < ActiveRecord::Base
       item = items[0]
       itemsaccess = "othercountry"
     elsif show_price != "false"
-      where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status, vendor_ids)
+      where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor_and_items(items, publisher, status, vendor_ids)
       main_item = item
       items = items - tempitems
 
@@ -293,7 +293,7 @@ class Itemdetail < ActiveRecord::Base
       if (items.blank? && where_to_buy_items.blank? && !main_item.blank?)
         item = main_item
         items = Item.where(:id => item.new_version_item_id)
-        where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status, vendor_ids)
+        where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor_and_items(items, publisher, status, vendor_ids)
 
         items = items - tempitems
 
@@ -301,7 +301,7 @@ class Itemdetail < ActiveRecord::Base
           item_ad_detail = main_item.item_ad_detail
           unless item_ad_detail.blank?
             items = Item.where(:id => item_ad_detail.old_version_id)
-            where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status, vendor_ids)
+            where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor_and_items(items, publisher, status, vendor_ids)
             items = items - tempitems
           end
         end
@@ -339,14 +339,12 @@ class Itemdetail < ActiveRecord::Base
       count = 0
       item_details.each do |item_detail|
         begin
-          p Time.now
           url = item_detail.url
           asin = url[/.*\/dp\/(.*)/m, 1]
           asin = asin.split("/")[0]
 
           # res = Amazon::Ecs.item_lookup("B00B70KYOO", {:response_group => 'Offers', :country => 'in'})
           res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Offers', :country => 'in'})
-          p res.is_valid_request?
           if res.is_valid_request?
             item = res.first_item
             unless item.blank?
@@ -804,7 +802,6 @@ class Itemdetail < ActiveRecord::Base
         category = each_item.at_xpath("merch_cat_list//merch_cat_path").content rescue ""
         categories = category.to_s.split("/")
         item_type = categories[2].to_s.downcase
-        p item_type
         case item_type
           when /car/
             itemtype_now = car_item_type
@@ -814,7 +811,6 @@ class Itemdetail < ActiveRecord::Base
             itemtype_tag = bike_item_type_tag
         end
         itemname = categories.last.to_s.downcase
-        p itemtype_tag
         next if itemtype_tag.blank? || itemname.blank?
 
         # item = Item.where(:itemtype_id => itemtype.id, :name => itemname).last
@@ -1091,6 +1087,17 @@ class Itemdetail < ActiveRecord::Base
       rescue Exception => e
         p "problem while updating item detail"
       end
+    end
+  end
+
+  def base_item_image_url(imagetype = :medium)
+    item_type = self.type.to_s.downcase rescue self.item.type.to_s.downcase
+    if(imagetype == :medium)
+      configatron.root_image_url + item_type + '/medium/default_' + item_type + ".jpeg"
+    elsif (imagetype == :org)
+      configatron.root_image_url + item_type + '/org/default_' + item_type + ".jpeg"
+    else
+      configatron.root_image_url + item_type + '/small/default_' + item_type + ".jpeg"
     end
   end
 

@@ -1330,12 +1330,12 @@ end
           vendor_ids = ["9882"]
           exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
           where_to_buy_items1 = []
-          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in(?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          where_to_buy_items2 = @item.itemdetails.where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
         end
       else
         vendor_ids = vendor_ids.blank? ? ["9882"] : vendor_ids
         where_to_buy_items1 = []
-        where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?',vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        where_to_buy_items2 = @item.itemdetails.where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?',vendor_ids,status,0).order('itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
 
       end
       @where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
@@ -1346,12 +1346,65 @@ end
     end
     @where_to_buy_items = @where_to_buy_items.flatten
 
-    if !vendor_ids.blank?
+    if !vendor_ids.blank? && vendor_ids.count > 1
       item_details = @where_to_buy_items.group_by {|item_detail| item_detail.itemid }
       @where_to_buy_items = Itemdetail.get_sort_by_vendor(item_details, vendor_ids)
     end
 
     return @where_to_buy_items, @tempitems, @item
+  end
+
+  def self.process_and_get_where_to_buy_items_using_vendor_and_items(items, publisher, status, vendor_ids=[])
+    tempitems = []
+    where_to_buy_items = []
+    item = items.last
+
+    if !publisher.blank? && vendor_ids.blank?
+      if !publisher.vendor_ids.blank?
+        vendor_ids = publisher.vendor_ids.split(",")
+        exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+
+        where_to_buy_items_all = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
+
+        items.each do |each_item|
+          where_to_buy_items_by_item = where_to_buy_items_all.select {|each_val| each_val.itemid == each_item.id}
+          where_to_buy_items1 = where_to_buy_items_by_item.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
+          where_to_buy_items2 = []
+          where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
+          if (where_to_buy_items.empty?)
+            tempitems << each_item
+          end
+        end
+      else
+        vendor_ids = ["9882"]
+        exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+        where_to_buy_items1 = []
+        where_to_buy_items2 = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
+
+        where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
+        if (where_to_buy_items.empty?)
+          tempitems << each_item
+        end
+      end
+    else
+      vendor_ids = vendor_ids.blank? ? ["9882"] : vendor_ids
+      where_to_buy_items1 = []
+      where_to_buy_items2 = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
+
+      where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
+      if (where_to_buy_items.empty?)
+        tempitems << each_item
+      end
+    end
+
+    where_to_buy_items = where_to_buy_items.flatten
+
+    if !vendor_ids.blank? && vendor_ids.count > 1
+      item_details = where_to_buy_items.group_by {|item_detail| item_detail.itemid }
+      where_to_buy_items = Itemdetail.get_sort_by_vendor(item_details, vendor_ids)
+    end
+
+    return where_to_buy_items, tempitems, item
   end
 
   def self.get_show_item_count(items)
@@ -1411,10 +1464,11 @@ end
   end
 
   def self.get_items_by_item_ids(item_ids, url, itemsaccess, request, for_widget=false, sort_disable='false')
+    url = url.to_s
     new_item_access = itemsaccess
     tempurl = url
     @items = []
-    unless (item_ids.blank?)
+    unless item_ids.blank?
       new_item_access = "ItemId"
       if ((for_widget == true && sort_disable == "true") || (for_widget == false && sort_disable == "true"))
         #@items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
@@ -1440,7 +1494,7 @@ end
           if url.include?("#")
             tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
           end
-          @articles = ArticleContent.where(url: tempurl)
+          @articles = tempurl.blank? ? [] : ArticleContent.where(url: tempurl)
 
           if @articles.empty? || @articles.nil?
             #for pagination in publisher website. removing /2/
@@ -1448,7 +1502,7 @@ end
             matchobj = tempstr.match(/^\/\d{1}\/$/)
             unless matchobj.nil?
               tempurlpage = tempurl[0..(tempurl.length-3)]
-              @articles = ArticleContent.where(url: tempurlpage)
+              @articles = tempurlpage.blank? ? [] : ArticleContent.where(url: tempurlpage)
             end
           end
 
@@ -2374,7 +2428,6 @@ end
     @items = []
     @items << OpenStruct.new(:name => term) if !term.blank?
 
-    p @items
     @items
   end
 
@@ -3638,7 +3691,7 @@ end
 
       terms_splt.each do |each_terms|
 
-        p splt_term = each_terms.join(" ")
+        splt_term = each_terms.join(" ")
 
         @items = Sunspot.search([Mobile]) do
           keywords splt_term do

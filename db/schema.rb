@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160304110145) do
+ActiveRecord::Schema.define(:version => 20160315050152) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(:version => 20160304110145) do
     t.string   "video_details"
   end
 
-  create_table "add_impressions1", :id => false, :force => true do |t|
+  create_table "add_impressions", :id => false, :force => true do |t|
     t.uuid     "id",                                :null => false
     t.string   "advertisement_type"
     t.integer  "advertisement_id"
@@ -84,13 +84,13 @@ ActiveRecord::Schema.define(:version => 20160304110145) do
     t.float    "winning_price"
   end
 
-  add_index "add_impressions1", ["advertisement_id"], :name => "index_add_impressions_on_advertisement_id"
-  add_index "add_impressions1", ["advertisement_type"], :name => "index_add_impressions_on_advertisement_type"
-  add_index "add_impressions1", ["impression_id"], :name => "index_add_impressions_on_impression_id"
-  add_index "add_impressions1", ["impression_time"], :name => "index_add_impressions_on_impression_time"
-  add_index "add_impressions1", ["item_id"], :name => "index_add_impressions_on_item_id"
-  add_index "add_impressions1", ["publisher_id"], :name => "publihserid"
-  add_index "add_impressions1", ["user_id"], :name => "index_add_impressions_on_user_id"
+  add_index "add_impressions", ["advertisement_id"], :name => "index_add_impressions_on_advertisement_id"
+  add_index "add_impressions", ["advertisement_type"], :name => "index_add_impressions_on_advertisement_type"
+  add_index "add_impressions", ["impression_id"], :name => "index_add_impressions_on_impression_id"
+  add_index "add_impressions", ["impression_time"], :name => "index_add_impressions_on_impression_time"
+  add_index "add_impressions", ["item_id"], :name => "index_add_impressions_on_item_id"
+  add_index "add_impressions", ["publisher_id"], :name => "publihserid"
+  add_index "add_impressions", ["user_id"], :name => "index_add_impressions_on_user_id"
 
   create_table "add_impressions_temp", :id => false, :force => true do |t|
     t.integer  "id",                            :null => false
@@ -603,6 +603,8 @@ ActiveRecord::Schema.define(:version => 20160304110145) do
     t.string   "article_category"
     t.string   "article_item_ids"
     t.decimal  "score",              :precision => 8, :scale => 2
+    t.integer  "created_by"
+    t.string   "created_type"
   end
 
   add_index "feed_urls", ["created_at"], :name => "index_feed_urls_on_created_at"
@@ -797,6 +799,8 @@ ActiveRecord::Schema.define(:version => 20160304110145) do
     t.datetime "updated_at"
     t.integer  "orders"
   end
+
+  add_index "item_ad_details", ["item_id"], :name => "index_item_ad_details_on_item_id"
 
   create_table "item_attribute_tag_relations", :force => true do |t|
     t.integer  "attribute_id",                 :null => false
@@ -1069,7 +1073,7 @@ ActiveRecord::Schema.define(:version => 20160304110145) do
     t.integer  "item_id"
     t.string   "item_name"
     t.string   "product_price"
-    t.string   "impression_id"
+    t.uuid     "impression_id"
     t.integer  "order_item_id"
     t.datetime "payment_date"
     t.integer  "payment_report_id"
@@ -1327,22 +1331,21 @@ ActiveRecord::Schema.define(:version => 20160304110145) do
   add_index "source_categories", ["source"], :name => "index_source_categories_on_source"
 
   create_table "sourceitems", :force => true do |t|
-    t.string   "name",               :limit => 100, :null => false
-    t.string   "url",                :limit => 500, :null => false
-    t.string   "urlsource",          :limit => 100, :null => false
-    t.integer  "status",                            :null => false
+    t.string   "name",            :limit => 100, :null => false
+    t.string   "url",             :limit => 500, :null => false
+    t.string   "urlsource",       :limit => 100, :null => false
+    t.integer  "status",                         :null => false
     t.integer  "matchfoundby"
     t.integer  "matchitemid"
-    t.string   "matchitemname",      :limit => 100
-    t.boolean  "verified",                          :null => false
-    t.integer  "itemtype_id",                       :null => false
-    t.string   "created_by",         :limit => 50,  :null => false
-    t.string   "updated_by",         :limit => 50
-    t.datetime "created_at",                        :null => false
+    t.string   "matchitemname",   :limit => 100
+    t.boolean  "verified",                       :null => false
+    t.integer  "itemtype_id",                    :null => false
+    t.string   "created_by",      :limit => 50,  :null => false
+    t.string   "updated_by",      :limit => 50
+    t.datetime "created_at",                     :null => false
     t.datetime "updated_at"
     t.integer  "suggestion_id"
     t.string   "suggestion_name"
-    t.string   "additional_details", :limit => 45
   end
 
   add_index "sourceitems", ["matchitemid"], :name => "matchitemid_itemid"
