@@ -76,6 +76,8 @@ class Advertisement < ActiveRecord::Base
       return_val = "468"
     elsif (width < 750)
       return_val = "728"
+     elsif (width < 972)
+      return_val = "970"   
     else
       return_val = "120"
     end

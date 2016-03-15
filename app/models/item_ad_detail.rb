@@ -181,7 +181,6 @@ class ItemAdDetail < ActiveRecord::Base
     end while !items.empty?
   end
 
-
   private
 
   def update_item_details_to_redis
