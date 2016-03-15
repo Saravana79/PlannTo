@@ -1,9 +1,9 @@
 class PlanntoUserDetailsController < ApplicationController
 
   def index
-    if !params[:plannto_user_id].blank?
+    if !params[:pid].blank?
       begin
-        @plannto_user_detail = PUserDetail.where(:pid => params[:plannto_user_id]).to_a.last
+        @plannto_user_detail = PUserDetail.where(:pid => params[:pid]).to_a.last
         @plannto_user_detail = @plannto_user_detail.blank? ? {} : @plannto_user_detail.attributes
       rescue Exception => e
         @plannto_user_detail = {}
@@ -11,7 +11,7 @@ class PlanntoUserDetailsController < ApplicationController
       end
     elsif !params[:google_user_id].blank?
       begin
-        @plannto_user_detail = PUserDetail.where(:gid => params[:google_user_id]).to_a.last
+        @plannto_user_detail = PUserDetail.where(:gid => params[:gid]).to_a.last
         @plannto_user_detail = @plannto_user_detail.blank? ? {} : @plannto_user_detail.attributes
       rescue Exception => e
         @plannto_user_detail = {}
