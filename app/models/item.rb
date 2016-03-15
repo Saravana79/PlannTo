@@ -1359,25 +1359,36 @@ end
     where_to_buy_items = []
     item = items.last
 
-    if !publisher.blank? && vendor_ids.blank?
-      if !publisher.vendor_ids.blank?
-        vendor_ids = publisher.vendor_ids.split(",")
-        exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+    if !items.blank?
+      if !publisher.blank? && vendor_ids.blank?
+        if !publisher.vendor_ids.blank?
+          vendor_ids = publisher.vendor_ids.split(",")
+          exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
 
-        where_to_buy_items_all = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
+          where_to_buy_items_all = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
 
-        items.each do |each_item|
-          where_to_buy_items_by_item = where_to_buy_items_all.select {|each_val| each_val.itemid == each_item.id}
-          where_to_buy_items1 = where_to_buy_items_by_item.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
-          where_to_buy_items2 = []
+          items.each do |each_item|
+            where_to_buy_items_by_item = where_to_buy_items_all.select {|each_val| each_val.itemid == each_item.id}
+            where_to_buy_items1 = where_to_buy_items_by_item.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
+            where_to_buy_items2 = []
+            where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
+            if (where_to_buy_items.empty?)
+              tempitems << each_item
+            end
+          end
+        else
+          vendor_ids = ["9882"]
+          exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+          where_to_buy_items1 = []
+          where_to_buy_items2 = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
+
           where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
           if (where_to_buy_items.empty?)
             tempitems << each_item
           end
         end
       else
-        vendor_ids = ["9882"]
-        exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+        vendor_ids = vendor_ids.blank? ? ["9882"] : vendor_ids
         where_to_buy_items1 = []
         where_to_buy_items2 = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
 
@@ -1385,15 +1396,6 @@ end
         if (where_to_buy_items.empty?)
           tempitems << each_item
         end
-      end
-    else
-      vendor_ids = vendor_ids.blank? ? ["9882"] : vendor_ids
-      where_to_buy_items1 = []
-      where_to_buy_items2 = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
-
-      where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
-      if (where_to_buy_items.empty?)
-        tempitems << each_item
       end
     end
 
