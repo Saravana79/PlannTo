@@ -96,7 +96,7 @@ gem 'heroku-api'
 
 # Connection for mongodb
 gem 'mongo'
-gem 'mongoid'
+gem "mongoid"
 gem 'bson_ext'
 
 # gem for check memory usage
@@ -132,10 +132,10 @@ gem 'rack-timeout', '~> 0.3.2'
 gem 'puma'
 
 # group :development do
-  # gem "rack-mini-profiler"
-  # gem 'brakeman', '~> 3.2', '>= 3.2.1'
-  # gem 'bullet', '~> 5.0'
-  # gem 'rails_best_practices', '~> 1.16'
+# gem "rack-mini-profiler"
+# gem 'brakeman', '~> 3.2', '>= 3.2.1'
+# gem 'bullet', '~> 5.0'
+# gem 'rails_best_practices', '~> 1.16'
 # end
 
 
