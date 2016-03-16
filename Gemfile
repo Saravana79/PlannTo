@@ -123,8 +123,10 @@ gem 'phantomjs', '~> 1.9.7.1'
 
 gem 'roo', '~> 2.1.1'
 #
+
+gem 'unicorn'
 # #gem to terminate long request
-# gem 'rack-timeout', '~> 0.3.2'
+gem 'rack-timeout', '~> 0.3.2'
 
 #Skylight is a smart profiler for Rails apps
 # gem 'skylight', '~> 0.10.0'
