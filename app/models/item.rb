@@ -1771,9 +1771,7 @@ end
               rk = 0
               itemtype_id = ""
 
-
               if already_exist == false
-
                 if item_ids.blank?
                   apartment_domains = ["anandproperties.com", "commonfloor.com", "harshasagar.com", "gharabari.com", "makaan.com", "mybangaloreproperty.com", "indianrealestateboard.com","propertyforum.com"]
                   domain = Item.get_host_without_www(url)
@@ -2956,6 +2954,30 @@ end
       item = Item.where(:id => item_id).first
       item_id_arr = [item.id] rescue []
       item_details = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids, fashion_id, ad)
+      item_details = item_details.sample(6)
+    end
+    item_details = item_details.first(6)
+    return item, item_details
+  end
+
+  def self.get_item_and_item_details_from_fashion_url_for_women_widget(url, item_ids, vendor_ids, fashion_id, ad=nil)
+    item = item_ids.blank? ? nil : Item.where(:id => item_ids.split(",")).first
+    item_details = []
+    if !item.blank?
+      item_details = Itemdetail.get_item_details_by_item_ids_for_women_widget([item.id], vendor_ids, fashion_id, ad)
+      # if !fashion_id.blank?
+      #   item_details = Item.get_itemdetails_using_fashion_id(item_details, fashion_id)
+      # else
+      #   item_details = item_details.sample(6)
+      # end
+    else
+      # item_name = Item.get_fashion_item_name_random()
+      # item = Item.where(:name => item_name).first
+
+      item_name, item_id = Item.get_fashion_item_name_random()
+      item = Item.where(:id => item_id).first
+      item_id_arr = [item.id] rescue []
+      item_details = Itemdetail.get_item_details_by_item_ids_for_women_widget(item_id_arr, vendor_ids, fashion_id, ad)
       item_details = item_details.sample(6)
     end
     item_details = item_details.first(6)

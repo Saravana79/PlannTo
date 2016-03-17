@@ -38,6 +38,27 @@ class Itemdetail < ActiveRecord::Base
                  and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')}) #{order_by_condition}")
   end
 
+  def self.get_item_details_by_item_ids_for_women_widget(item_ids, vendor_ids, fashion_id=nil, ad=nil)
+    # status_condition = vendor_ids.count > 1 ? " and itemdetails.status in (1,3,2)" : ""
+    vendor_ids = vendor_ids.compact
+    item_ids = item_ids.compact
+    status_condition = " and itemdetails.status in (1,3)"
+    # vendor_id = sanitize(vendor_id)
+
+    item_ids = item_ids.compact
+    return [] if item_ids.blank?
+
+    if (!fashion_id.blank? || (!ad.blank? && ad.sort_type == "random"))
+      order_by_condition = " order by rand(), sort_priority desc limit 12"
+    else
+      order_by_condition = "ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
+                 itemdetails.cashback end) asc limit 12"
+    end
+
+    find_by_sql("SELECT itemdetails.*, itemdetails.item_details_id as itemdetail_id, itemdetails.ItemName as name, itemdetails.Image as image_name,  items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
+                 and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')}) #{order_by_condition}")
+  end
+
   def self.get_item_details_count_by_item_ids(item_ids, vendor_ids)
     # status_condition = vendor_ids.count > 1 ? " and itemdetails.status in (1,3,2)" : ""
     status_condition = " and itemdetails.status in (1,3)"
