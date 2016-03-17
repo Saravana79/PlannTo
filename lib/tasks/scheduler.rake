@@ -269,3 +269,8 @@ desc "Update ConversionPixelDetail from based on click for ad 83"
 task :update_conversion_pixel_detail_from_click => :environment do
   Resque.enqueue(UpdateConversionPixelDetailFromClick, Time.zone.now.utc)
 end
+
+desc "Create New arrivals from amazon to source item "
+task :create_source_item_for_new_arrivals_from_amazon => :environment do
+  Resque.enqueue(CreateSourceItemForNewArrivalFromAmazon, "create_source_item_for_new_arrivals_from_amazon")
+end

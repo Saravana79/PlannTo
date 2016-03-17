@@ -240,10 +240,11 @@
                       <div class="product-title" style="height:34px;overflow:hidden;font-size:14px;padding:2px 8px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(42) %></div>
                       <div class="product-price">
                       <ul style="margin:0px;padding:0px;height:31px;">
-                        <% if ((!item.sale_price.blank?) && item.sale_price != item.price) %>
+                        <% sale_price = item.sale_price rescue "" %>
+                        <% if ((!sale_price.blank?) && sale_price != item.price) %>
                           <li class="strike"><%= (item.price.blank?) ? "" : prettifyforprice(item.price) %> </li>
                         <%end%>  
-                          <li class='price'><%= item.sale_price.blank? ? item.price.blank? ? "" : prettifyforprice(item.price) : prettifyforprice(item.sale_price) %></li>
+                          <li class='price'><%= sale_price.blank? ? item.price.blank? ? "" : prettifyforprice(item.price) : prettifyforprice(sale_price) %></li>
                         </ul>
 
                       </div>
