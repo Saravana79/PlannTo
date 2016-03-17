@@ -2497,7 +2497,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               p id
               p url
 
-              # next if 1 == 1 # TODO: have to fix
+              next if 1 == 1 # TODO: have to fix
 
               begin
                 id = each_item.get("ASIN").to_s.downcase rescue ""

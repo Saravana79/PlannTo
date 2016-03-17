@@ -554,10 +554,11 @@ class ProductsController < ApplicationController
     # @current_vendor = {} if @current_vendor.blank?
     # item_ids = item_id.to_s.split(",")
 
-    @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
+    @item, @items = Item.get_item_and_item_details_from_fashion_url_for_women_widget(url, item_ids, vendor_ids, params[:fashion_id])
     # @sliced_item_details = @item_details.each_slice(2)
 
-    @items = Itemdetail.get_widget_details_from_itemdetails(@item_details)
+    # p @item_details.map(&:id)
+    # p @items = Itemdetail.get_widget_details_from_itemdetails(@item_details)
 
     item_id = @item.id rescue nil
     if @is_test != "true"
