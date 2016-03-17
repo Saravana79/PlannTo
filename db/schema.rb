@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160315050152) do
+ActiveRecord::Schema.define(:version => 20160317121752) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -609,6 +609,7 @@ ActiveRecord::Schema.define(:version => 20160315050152) do
 
   add_index "feed_urls", ["created_at"], :name => "index_feed_urls_on_created_at"
   add_index "feed_urls", ["status"], :name => "index_feed_urls_on_status"
+  add_index "feed_urls", ["title"], :name => "index_feed_urls_on_title"
 
   create_table "feeds", :force => true do |t|
     t.string   "url"
