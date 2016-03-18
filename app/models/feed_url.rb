@@ -1,6 +1,8 @@
 class FeedUrl < ActiveRecord::Base
   belongs_to :feed
 
+  self.primary_key = "id"
+
   validates_uniqueness_of :url
 
   VALID = 1
