@@ -168,7 +168,7 @@
     $("document").ready(function()
     {
 
-        if (<%= !@feed_urls.blank? && @feed_urls.all.count > 24 %>)
+        if (<%= !@feed_urls.blank? && @feed_urls_count > 24 %>)
         {
           $page_count = $(".pagination a.next_page").prev().text()
 
