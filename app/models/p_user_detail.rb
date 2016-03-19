@@ -31,7 +31,7 @@ class PUserDetail
   # embeds_many :m_items
 
   index({ pid: 1 })
-  index({ gui: 1 })
+  index({ gid: 1 })
   index({ lad: 1 })
 
   def self.update_plannto_user_detail(impression)
