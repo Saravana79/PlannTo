@@ -1708,13 +1708,7 @@ end
 
   def self.buying_list_process_in_redis(user_vals)
     base_item_ids = Item.get_base_items_from_config()
-    # source_categories = JSON.parse($redis.get("source_categories_pattern"))
-    # source_categories.default = ""
-    google_geo_targeting_hash = {}
-
-    google_geo_targetings = GoogleGeoTargeting.where("location_id is not null")
-
-    google_geo_targetings.each {|each_val| google_geo_targeting_hash.merge!(each_val.criteria_id => each_val.location_id)}
+    google_geo_targeting_hash = GoogleGeoTargeting.get_location_id_hash_list()
 
     plannto_user_detail_hash = {}
     cookie_matches_plannto_ids = []
@@ -1824,7 +1818,7 @@ end
                   if !plannto_user_detail.blank?
                     plannto_location_id = nil
                     if !google_location_id.blank?
-                      plannto_location_id = google_geo_targeting_hash[google_location_id.to_i]
+                      plannto_location_id = google_geo_targeting_hash[google_location_id.to_s]
                     end
                     plannto_user_detail.lid = plannto_location_id if !plannto_location_id.blank?
 
