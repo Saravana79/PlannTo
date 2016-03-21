@@ -71,7 +71,7 @@ class PUserDetail
 
         i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
         if i_type.blank?
-          plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id)
+          plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :fad => Date.today)
           i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
         end
 
@@ -248,7 +248,7 @@ class PUserDetail
             self.update_attributes!(valid_attributes)
             i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
             if i_type.blank?
-              self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id)
+              self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id, :fad => Date.today)
               i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
             end
 
@@ -286,7 +286,7 @@ class PUserDetail
 
             i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
             if i_type.blank?
-              self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id)
+              self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id, :fad => Date.today)
               i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
             end
 
