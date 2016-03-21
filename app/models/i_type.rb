@@ -19,7 +19,7 @@ class IType
   field :lod, type: Date #Last order date
   field :r, type: Boolean, :default => 0 #Resale
   field :source, type: String
-  field :fad, Date #first accessed date
+  field :fad, type: Date #first accessed date
 
   embedded_in :plannto_user_detail
   embeds_many :m_items
