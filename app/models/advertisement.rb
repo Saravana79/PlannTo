@@ -1433,7 +1433,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
                 i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
                 if i_type.blank?
-                  plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id)
+                  plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :fad => Date.today)
                   i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
                 end
 
@@ -1896,7 +1896,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           if !itemtype_id.blank?
             i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
             if i_type.blank?
-              plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id)
+              plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :fad => Date.today)
               i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id).last
             end
 

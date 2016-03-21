@@ -1860,7 +1860,7 @@ end
                       end
 
                       if i_type.blank?
-                        plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url], :r => resale)
+                        plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url], :r => resale, :fad => Date.today)
                         i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
                       else
                         lu = i_type.lu
