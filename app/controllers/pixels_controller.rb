@@ -38,7 +38,7 @@ class PixelsController < ApplicationController
     else
       if params[:source] != "mysmartprice"
 
-        @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+        @cookie_match = CookieMatch.find_user_by_source(cookies[:plan_to_temp_user_id], params[:source]).first
         if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
           @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
         else
