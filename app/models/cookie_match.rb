@@ -2,6 +2,7 @@ class CookieMatch < ActiveRecord::Base
   validates_uniqueness_of :plannto_user_id
 
   scope :find_user, lambda {|plannto_user_id| where("plannto_user_id = '#{plannto_user_id}' and updated_at > '#{14.days.ago}'")}
+  scope :find_user_by_source, lambda {|plannto_user_id, source| where("plannto_user_id = '#{plannto_user_id}' and match_source='#{source}' and updated_at > '#{14.days.ago}'")}
 
   def self.check_cookie_user_exists?(plannto_user_id)
     matches = find_user(plannto_user_id)
@@ -12,7 +13,7 @@ class CookieMatch < ActiveRecord::Base
     param["source"] ||= "google"
     valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => param["source"]}
 
-    if !["google_pixel", "mysmartprice"].include?(param["source"])
+    if !["google_pixel", "mysmartprice", "autoportal"].include?(param["source"])
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
     end
   end
@@ -44,7 +45,7 @@ class CookieMatch < ActiveRecord::Base
 
   def self.process_cookie_matching(param)
     param["source"] ||= "google"
-    cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(param["plannto_user_id"])
+    cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id_and_match_source(param["plannto_user_id"], param["source"])
     cookie_match.update_attributes(:google_user_id => param["google_id"], :match_source => param["source"], :google_mapped => true)
 
     $redis_rtb.pipelined do
