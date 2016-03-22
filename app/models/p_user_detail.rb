@@ -95,6 +95,30 @@ class PUserDetail
         i_type.o_ids = o_ids
         i_type.lod = Date.today
         i_type.save!
+
+        if plannto_user_detail.pid.blank?
+          user_id_for_key = plannto_user_detail.gid.to_s
+          if resale != true
+            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}"
+          else
+            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
+          end
+        else
+          user_id_for_key = plannto_user_detail.pid.to_s
+          if resale != true
+            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}"
+          else
+            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
+          end
+        end
+
+        redis_values = $redis_rtb.hgetall(pud_redis_rtb_hash_key)
+        redis_values["op"] = "1"
+
+        $redis_rtb.pipelined do
+          $redis_rtb.hmset(pud_redis_rtb_hash_key, redis_values.flatten)
+          $redis_rtb.expire(pud_redis_rtb_hash_key, 1.weeks)
+        end
       end
 
       if !new_m_agg_info.blank?

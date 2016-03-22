@@ -2007,9 +2007,10 @@ end
                       end
 
                       if !user_id.blank?
-                        item_ids = i_type.m_items.sort_by {|each_val| each_val.rk.to_i}.reverse.map(&:item_id).uniq.join(",")
-                        high_score = i_type.m_items.map {|each_val| each_val.rk.to_i}.max
-                        tot_count = i_type.m_items.count
+                        m_items = i_type.m_items.select {|each_item| each_item.rk.to_i >= 8}
+                        item_ids = m_items.sort_by {|each_val| each_val.rk.to_i}.reverse.map(&:item_id).uniq.join(",")
+                        high_score = m_items.map {|each_val| each_val.rk.to_i}.max
+                        tot_count = m_items.count
                         pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
                         plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
                       end
@@ -2091,7 +2092,7 @@ end
 
         plannto_user_detail_hash.each do |key, val|
           $redis_rtb.hmset(key, val.flatten)
-          $redis_rtb.expire(key, 2.weeks)
+          $redis_rtb.expire(key, 1.weeks)
         end
       end
 
