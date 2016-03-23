@@ -449,8 +449,11 @@ end
       #if itemtype_id.size != 0
       #  sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)
       #end
-      relateditems=Item.find_by_sql(sql)
+
+      relateditems = Item.find_by_sql(sql)
+
       self.save_content_relations_cache(relateditems.collect(&:id))
+
       relateditems.each do |item|
         unless(item.slug.nil?)
           item_type = item.type.blank? ? "" : item.type.downcase.pluralize
@@ -567,11 +570,11 @@ def populate_pro_con
   end
 
   def save_content_relations_cache(related_items)
-    new_records = Array.new
+    new_records = []
     related_items.each do |item|
-      new_records << {:item_id => item, :content_id => self.id}
+      new_records << ItemContentsRelationsCache.new(:item_id => item, :content_id => self.id)
     end
-    ItemContentsRelationsCache.create(new_records)
+    ItemContentsRelationsCache.import(new_records)
   end
 
   def get_itemtype(item)
@@ -583,32 +586,40 @@ def populate_pro_con
     Content.transaction do
       self.status = get_content_status("update")
       self.update_attributes(params)
-      content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
-      content_item_relations.delete_all
+      ContentItemRelation.delete_all(["content_id = ?", self.id])
       rel_items = []
-      items.split(",").each_with_index do |id, index|
-        item = Item.find_by_id(id)
-        unless item.blank?
-          if index == 0
-            itemtype_id_val = get_itemtype(item)
-            if self.itemtype_id != itemtype_id_val
-              self.update_attributes(:itemtype_id => itemtype_id_val)
-            end
-          end
-          item_type_ids << get_itemtype(item)
-          rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
-          rel_items << rel
-        end
-      end
-      ContentItemRelation.import(rel_items)
 
-      ContentItemtypeRelation.delete_all(["content_id = ?", self.id])
-      rel_type_items = []
-      item_type_ids.uniq.each do |id|
-        rel_type_item = ContentItemtypeRelation.new(:itemtype_id => id, :content_id => self.id)
-        rel_type_items << rel_type_item
-      end
-      ContentItemtypeRelation.import(rel_type_items)
+      page = 1
+      sql_query = "select * from items where id in (#{items.split(",").map(&:inspect).join(',')})"
+      begin
+        items = Item.paginate_by_sql(sql_query, :page => page, :per_page => 1000)
+
+        items.each_with_index do |item, index|
+          unless item.blank?
+            if index == 0
+              itemtype_id_val = get_itemtype(item)
+              if self.itemtype_id != itemtype_id_val
+                self.update_attributes(:itemtype_id => itemtype_id_val)
+              end
+            end
+            item_type_ids << get_itemtype(item)
+            rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+            rel_items << rel
+          end
+        end
+
+        ContentItemRelation.import(rel_items)
+
+        ContentItemtypeRelation.delete_all(["content_id = ?", self.id])
+        rel_type_items = []
+        item_type_ids.uniq.each do |id|
+          rel_type_item = ContentItemtypeRelation.new(:itemtype_id => id, :content_id => self.id)
+          rel_type_items << rel_type_item
+        end
+        ContentItemtypeRelation.import(rel_type_items)
+
+        page += 1
+      end while !items.empty?
     end
     #Resque.enqueue(ContentRelationsCache, self.id, items.split(","), true)
     self.remove_old_contents_relations_cache
