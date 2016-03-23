@@ -3101,8 +3101,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     advertisement
   end
 
-  def self.vendor_detail
-    vendor_id = a.vendor_id
+  def vendor_detail
+    vendor_id = self.vendor_id
     vendor_detail = vendor_id.blank? ? nil : VendorDetail.find_by_sql("SELECT `vendor_details`.* FROM `vendor_details` WHERE `vendor_details`.`item_id` = #{vendor_id} LIMIT 1").first
     vendor_detail
   end
