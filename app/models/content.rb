@@ -584,21 +584,31 @@ def populate_pro_con
       self.status = get_content_status("update")
       self.update_attributes(params)
       content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
-      content_item_relations.destroy_all
+      content_item_relations.delete_all
+      rel_items = []
       items.split(",").each_with_index do |id, index|
         item = Item.find_by_id(id)
         unless item.blank?
-          self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
-          rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+          if index == 0
+            itemtype_id_val = get_itemtype(item)
+            if self.itemtype_id != itemtype_id_val
+              self.update_attributes(:itemtype_id => itemtype_id_val)
+            end
+          end
           item_type_ids << get_itemtype(item)
-          rel.save!
+          rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+          rel_items << rel
         end
       end
+      ContentItemRelation.import(rel_items)
 
       ContentItemtypeRelation.delete_all(["content_id = ?", self.id])
+      rel_type_items = []
       item_type_ids.uniq.each do |id|
-        ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
+        rel_type_item = ContentItemtypeRelation.new(:itemtype_id => id, :content_id => self.id)
+        rel_type_items << rel_type_item
       end
+      ContentItemtypeRelation.import(rel_type_items)
     end
     #Resque.enqueue(ContentRelationsCache, self.id, items.split(","), true)
     self.remove_old_contents_relations_cache
