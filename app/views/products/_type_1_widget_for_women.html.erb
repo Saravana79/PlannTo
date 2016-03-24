@@ -98,12 +98,13 @@
                       <p class="product-title" style="height:48px;overflow:hidden;font-size:14px;padding:5px 0px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(58) %></p>
                       <div class="product-price">
                         <ul style="margin:0px;padding:0px;">
-                          <li class=' <%= item.sale_price.blank? ? "price" : "strike" %>'><%= item.price.blank? ? "" : prettifyforprice(item.price) %> </li>
-                          <li class='price'><%= item.sale_price.blank? ? "" : prettifyforprice(item.sale_price) %></li>
+                          <% sale_price = item.sale_price rescue "" %>
+                          <% if ((!sale_price.blank?) && sale_price != item.price) %>
+                              <li class="strike"><%= (item.price.blank?) ? "" : prettifyforprice(item.price) %> </li>
+                          <%end%>
+                          <li class='price'><%= sale_price.blank? ? item.price.blank? ? "" : prettifyforprice(item.price) : prettifyforprice(sale_price) %></li>
                         </ul>
-
                       </div>
-
 
                       <p class="btn">
                         <a class="shop-now" href="<%= history_detail_path %>" target = "_blank" rel="nofollow">Shop
