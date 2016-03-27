@@ -1390,7 +1390,7 @@ end
       else
         vendor_ids = vendor_ids.blank? ? ["9882"] : vendor_ids
         where_to_buy_items1 = []
-        where_to_buy_items2 = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in ('9882') && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
+        where_to_buy_items2 = Itemdetail.find_by_sql("SELECT `itemdetails`.* FROM `itemdetails` WHERE `itemdetails`.`itemid` in (#{items.map(&:id).join(",")}) AND (site in (#{vendor_ids.map(&:inspect).join(', ')}) && itemdetails.status in ('1','3') and itemdetails.isError =0) ORDER BY itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc")
 
         where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
         if (where_to_buy_items.empty?)
