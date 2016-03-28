@@ -66,6 +66,7 @@ class OrderHistory < ActiveRecord::Base
         end
       rescue Exception => e
         p "Error in order update while earning report process"
+        p e.backtrace
       end
     end
   end
@@ -111,6 +112,7 @@ class OrderHistory < ActiveRecord::Base
       end
     rescue Exception => e
       p "Error in order update while order report process"
+      p e.backtrace
     end
   end
 

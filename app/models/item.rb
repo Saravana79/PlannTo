@@ -1586,7 +1586,10 @@ end
 
   def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size,used_cars = false)
     if (ad_template_type == "type_4" || ad_template_type == "type_5")
-      if ["300", "120", "728","336_280","160_600"].include?(suitable_ui_size)
+      if ["300","728","336_280"].include?(suitable_ui_size)
+        item_details = item_details.first(6)
+        sliced_item_details = item_details.each_slice(2)
+      elsif ["120","160_600"].include?(suitable_ui_size)
         item_details = item_details.first(12)
         sliced_item_details = item_details.each_slice(2)
       elsif suitable_ui_size == "300_600"
@@ -1601,11 +1604,10 @@ end
             item_details = item_details.first(correct_count)
             sliced_item_details = item_details.each_slice(3)
         end
-
       elsif suitable_ui_size == "468"
         item_details = item_details.first(4)
         sliced_item_details = []
-     elsif suitable_ui_size == "300_60"
+      elsif suitable_ui_size == "300_60"
         item_details = item_details.first(3)
         sliced_item_details = []
       elsif suitable_ui_size == "320_50"
