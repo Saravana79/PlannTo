@@ -24,7 +24,7 @@ class OrderHistory < ActiveRecord::Base
     users = [["pla04", "cyn04"], ["interactive", "vagrenpgvir", "interactiv0e4", "process_orders"]]
     users.each do |user|
       if user[3].to_s == "process_orders"
-        update_orders_from_amazon_orders(user, date)
+        OrderHistory.update_orders_from_amazon_orders(user, date)
       end
 
       begin
@@ -34,35 +34,37 @@ class OrderHistory < ActiveRecord::Base
 
         doc = Nokogiri::XML.parse(xml_response)
         node = doc.elements.first
-        items_node = node.at_xpath("//Items")
-        items_node.xpath("Item").each do |item|
-          # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
-          impression_id = item.attributes["SubTag"].content
-          revenue = item.attributes["Earnings"].content rescue 0
-          price = item.attributes["Price"].content rescue 0
-          impression = AddImpression.where(:id => impression_id).first
-          time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
+        items_node = node.at_xpath("//Items") rescue nil
+        if items_node.blank?
+          items_node.xpath("Item").each do |item|
+            # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
+            impression_id = item.attributes["SubTag"].content
+            revenue = item.attributes["Earnings"].content rescue 0
+            price = item.attributes["Price"].content rescue 0
+            impression = AddImpression.where(:id => impression_id).first
+            time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
 
-          # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
-          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
-          order_history.total_revenue = revenue
-          order_history.order_status = "Validated"
-          order_history.payment_status = "Validated"
+            # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
+            order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
+            order_history.total_revenue = revenue
+            order_history.order_status = "Validated"
+            order_history.payment_status = "Validated"
 
-          order_history.vendor_ids = 9882
-          order_history.product_price = price.to_s.gsub("," , "")
-          order_history.no_of_orders = 1
-          unless impression.blank?
-            PUserDetail.update_plannto_user_detail(impression)
+            order_history.vendor_ids = 9882
+            order_history.product_price = price.to_s.gsub("," , "")
+            order_history.no_of_orders = 1
+            unless impression.blank?
+              PUserDetail.update_plannto_user_detail(impression)
 
-            order_history.item_id = impression.item_id
-            product = impression.item
-            order_history.item_name = product.name unless product.blank?
-            order_history.sid = impression.sid
-            order_history.advertisement_id = impression.advertisement_id
-            order_history.publisher_id = impression.publisher_id
+              order_history.item_id = impression.item_id
+              product = impression.item
+              order_history.item_name = product.name unless product.blank?
+              order_history.sid = impression.sid
+              order_history.advertisement_id = impression.advertisement_id
+              order_history.publisher_id = impression.publisher_id
+            end
+            order_history.save!
           end
-          order_history.save!
         end
       rescue Exception => e
         p "Error in order update while earning report process"
@@ -77,37 +79,39 @@ class OrderHistory < ActiveRecord::Base
       url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
       xml_response = OrderHistory.get_order_details_from_amazon(url, user[0], user[1])
 
-      doc = Nokogiri::XML.parse(xml_response)
-      node = doc.elements.first
-      items_node = node.at_xpath("//Items")
-      items_node.xpath("Item").each do |item|
-        # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
-        impression_id = item.attributes["SubTag"].content
-        revenue = item.attributes["Earnings"].content rescue 0
-        price = item.attributes["Price"].content rescue 0
-        impression = AddImpression.where(:id => impression_id).first
-        time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
+      doc = Nokogiri::XML.parse(xml_response) rescue nil
+      if doc.blank?
+        node = doc.elements.first
+        items_node = node.at_xpath("//Items")
+        items_node.xpath("Item").each do |item|
+          # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
+          impression_id = item.attributes["SubTag"].content
+          revenue = item.attributes["Earnings"].content rescue 0
+          price = item.attributes["Price"].content rescue 0
+          impression = AddImpression.where(:id => impression_id).first
+          time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
 
-        order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
+          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
 
-        if order_history.new_record?
-          order_history.vendor_ids = 9882
-          order_history.product_price = price.to_s.gsub("," , "") if !price.blank?
-          order_history.no_of_orders = 1
-          order_history.order_status = "Pending"
-          order_history.payment_status = "Pending"
+          if order_history.new_record?
+            order_history.vendor_ids = 9882
+            order_history.product_price = price.to_s.gsub("," , "") if !price.blank?
+            order_history.no_of_orders = 1
+            order_history.order_status = "Pending"
+            order_history.payment_status = "Pending"
 
-          unless impression.blank?
-            PUserDetail.update_plannto_user_detail(impression)
+            unless impression.blank?
+              PUserDetail.update_plannto_user_detail(impression)
 
-            order_history.item_id = impression.item_id
-            product = impression.item
-            order_history.item_name = product.name unless product.blank?
-            order_history.sid = impression.sid
-            order_history.advertisement_id = impression.advertisement_id
-            order_history.publisher_id = impression.publisher_id
+              order_history.item_id = impression.item_id
+              product = impression.item
+              order_history.item_name = product.name unless product.blank?
+              order_history.sid = impression.sid
+              order_history.advertisement_id = impression.advertisement_id
+              order_history.publisher_id = impression.publisher_id
+            end
+            order_history.save!(:validate => false)
           end
-          order_history.save!(:validate => false)
         end
       end
     rescue Exception => e
