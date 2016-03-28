@@ -96,6 +96,17 @@ class PUserDetail
         i_type.lod = Date.today
         i_type.save!
 
+        article_content = ArticleContent.where(:url => impression.hosted_site_url).select("id,itemtype_id,sub_type").last
+
+        type = article_content.sub_type rescue ""
+        resale = type == ArticleCategory::ReSale ? true : false
+
+        if resale == false
+          domain = Item.get_host_without_www(impression.hosted_site_url)
+          resale_site_list = ["olx.in", "quikr.com", "classifieds.team-bhp.com"]
+          resale = true if resale_site_list.include?(domain)
+        end
+
         if plannto_user_detail.pid.blank?
           user_id_for_key = plannto_user_detail.gid.to_s
           if resale != true
