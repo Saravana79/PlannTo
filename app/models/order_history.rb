@@ -42,7 +42,7 @@ class OrderHistory < ActiveRecord::Base
             revenue = item.attributes["Earnings"].content rescue 0
             price = item.attributes["Price"].content rescue 0
             impression = AddImpression.where(:id => impression_id).first
-            time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
+            time = (impression.blank? ? date.to_time : impression.impression_time) rescue Time.now
 
             # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
             order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
@@ -89,7 +89,7 @@ class OrderHistory < ActiveRecord::Base
           revenue = item.attributes["Earnings"].content rescue 0
           price = item.attributes["Price"].content rescue 0
           impression = AddImpression.where(:id => impression_id).first
-          time = (impression.blank? ? date.to_time : impression.impression_time.to_time) rescue Time.now
+          time = (impression.blank? ? date.to_time : impression.impression_time) rescue Time.now
 
           order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
 
@@ -222,7 +222,8 @@ class OrderHistory < ActiveRecord::Base
         if self.order_status_changed?
           if order_status_values[0] == "Pending" && order_status_values[1] == "Validated"
             if !impression.blank?
-              time = impression.impression_time.to_time.utc rescue Time.now
+              # time = impression.impression_time.to_time.utc rescue Time.now
+              time = impression.impression_time rescue Time.now
               date = time.to_date rescue ""
               agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
               price = self.product_price.to_s.gsub("," , "").to_f
@@ -234,7 +235,8 @@ class OrderHistory < ActiveRecord::Base
             end
           elsif order_status_values[0] == "Validated" && order_status_values[1] != "Validated"
             if !impression.blank?
-              time = impression.impression_time.to_time.utc rescue Time.now
+              # time = impression.impression_time.to_time.utc rescue Time.now
+              time = impression.impression_time rescue Time.now
               date = time.to_date rescue ""
               agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
               price = self.product_price.to_s.gsub("," , "").to_f
@@ -285,7 +287,8 @@ class OrderHistory < ActiveRecord::Base
     price = self.product_price.to_s.gsub("," , "").to_f
 
     if !impression.blank?
-      time = impression.impression_time.to_time.utc rescue Time.now
+      # time = impression.impression_time.to_time.utc rescue Time.now
+      time = impression.impression_time rescue Time.now
       date = time.to_date rescue ""
       hour = time.hour rescue ""
       if !impression.advertisement_id.blank?
@@ -429,7 +432,8 @@ class OrderHistory < ActiveRecord::Base
         end
       end
     elsif !self.advertisement_id.blank?
-      time = self.order_date.to_time.utc rescue Time.now
+      # time = self.order_date.to_time.utc rescue Time.now
+      time = self.order_date rescue Time.now
       date = time.to_date rescue ""
 
       agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
@@ -470,7 +474,8 @@ class OrderHistory < ActiveRecord::Base
       agg_imp_by_item.agg_coll = item_agg_coll
       agg_imp_by_item.save!
     else
-      time = self.order_date.to_time.utc rescue Time.now
+      # time = self.order_date.to_time.utc rescue Time.now
+      time = self.order_date rescue Time.now
       date = time.to_date rescue ""
 
       agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
