@@ -719,6 +719,16 @@ class ProductsController < ApplicationController
   end
 
   def book_price_widget
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
+
+    if params[:item_ids].blank?
+      url_param = params[:ref_url].to_s.downcase.split("?").last
+      url_splt_params = CGI.parse(url_param)
+      isbn = url_splt_params["isbn"][0].to_s
+      params[:item_ids] = isbn if !isbn.blank?
+    end
+
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     @ad_template_type ||= params[:page_type]
@@ -727,7 +737,6 @@ class ProductsController < ApplicationController
 
     tempurl = "" #TODO: Hot coded values
     @item = Item.get_amazon_book_item_from_isbn(params[:item_ids])
-    url =  tempurl
 
     @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
 

@@ -1,8 +1,9 @@
-<% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{@item.url}" %>
+<% if !@item.marshal_dump.blank? %>
+    <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{@item.url}" %>
 
-<p class="" style="margin:10px 0px;">
-  <a  rel="nofollow" style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href=<%= shop_now_url %>>
-    <img src="<%= configatron.root_image_url %>vendor/medium/amazon.jpeg" width="70px"/>
-  </a>
-</p>
-
+    <p class="" style="margin:10px 0px;">
+      <a  rel="nofollow" style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href=<%= shop_now_url %>>
+        <img src="<%= configatron.root_image_url %>vendor/medium/amazon.jpeg" width="70px"/>
+      </a>
+    </p>
+<% end %>
