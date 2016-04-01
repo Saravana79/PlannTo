@@ -39,18 +39,19 @@ class OrderHistory < ActiveRecord::Base
           # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
           impression_id = item.attributes["SubTag"].content
           revenue = item.attributes["Earnings"].content rescue 0
-          price = item.attributes["Price"].content rescue 0
+          product_price = item.attributes["Price"].content rescue 0
           impression = AddImpression.where(:id => impression_id).first
           time = (impression.blank? ? date.to_time : impression.impression_time) rescue Time.now
+          product_price = product_price.to_s.gsub("," , "") if !product_price.blank?
 
           # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
-          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
+          # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
+          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_product_price(time, impression_id, product_price)
           order_history.total_revenue = revenue
           order_history.order_status = "Validated"
           order_history.payment_status = "Validated"
 
           order_history.vendor_ids = 9882
-          order_history.product_price = price.to_s.gsub("," , "")
           order_history.no_of_orders = 1
           unless impression.blank?
             PUserDetail.update_plannto_user_detail(impression)
@@ -84,15 +85,15 @@ class OrderHistory < ActiveRecord::Base
         # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
         impression_id = item.attributes["SubTag"].content
         revenue = item.attributes["Earnings"].content rescue 0
-        price = item.attributes["Price"].content rescue 0
+        product_price = item.attributes["Price"].content rescue 0
         impression = AddImpression.where(:id => impression_id).first
         time = (impression.blank? ? date.to_time : impression.impression_time) rescue Time.now
-
-        order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
+        product_price = product_price.to_s.gsub("," , "") if !product_price.blank?
+        order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_product_price(time, impression_id, product_price)
 
         if order_history.new_record?
           order_history.vendor_ids = 9882
-          order_history.product_price = price.to_s.gsub("," , "") if !price.blank?
+          # order_history.product_price = product_price.to_s.gsub("," , "") if !product_price.blank?
           order_history.no_of_orders = 1
           order_history.order_status = "Pending"
           order_history.payment_status = "Pending"
