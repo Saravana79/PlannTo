@@ -277,5 +277,5 @@ end
 
 desc "Create Sourceitem for amazon ec from amazon feeds"
 task :create_source_item_for_amazon_ec => :environment do
-  Resque.enqueue(SourceItemUpdateWithAmazonEc, "create_source_item_for_amazon_ec")
+  Resque.enqueue(SourceItemUpdateWithAmazonEc, "create_source_item_for_amazon_ec", Time.zone.now.utc)
 end
