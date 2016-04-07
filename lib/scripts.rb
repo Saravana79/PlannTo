@@ -919,7 +919,6 @@ class MyDocument < Nokogiri::XML::SAX::Document
   def cdata_block(string)
     characters(string)
   end
-
 end
 
 parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
@@ -1164,3 +1163,234 @@ url = item_details_other.url
 doc = Nokogiri::HTML(open(url))
 
 doc.css(".prop-price-info")
+
+
+
+# Amazon product update
+
+# url = "https://pla04:cyn04@assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
+# url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_ce.xml.gz"
+
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+
+  each_node_list = Nokogiri::XML::Reader(gz).first
+
+  each_node_list.first
+  product_types = []
+  source_items = []
+  item_categories = []
+  each_node_list.each_with_index do |each_node, index|
+    if each_node.local_name == "item_data"
+      outer_xml = each_node.outer_xml
+      hash = XmlSimple.xml_in(outer_xml)
+      if !hash.blank?
+        basic_data = hash["item_basic_data"][0]
+        item_category = basic_data["item_category"][0]
+
+        if basic_data["item_name"].to_s.include?("Apple iPhone 5s (Gold, 16GB)")
+          p 11111111111111111
+          p outer_xml
+        end
+
+        if item_categories.exclude?(item_category)
+          item_categories << item_category
+          p 222222222222
+          p item_categories
+        end
+      end
+    end
+  end
+else
+  p "Try Different format - Its not working"
+end
+
+
+
+
+
+# Update sourceitem from amazon with SAX parser
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_ce.xml.gz"
+
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+
+  require 'rubygems'
+  require 'nokogiri'
+
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @i = 0
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @i += 1
+      #@open_struct = OpenStruct.new
+    end
+
+    def end_element(name)
+      @open_struct.item_unique_id = @content if name == 'item_unique_id'
+      @open_struct.title = @content if name == 'item_name'
+      if name == 'item_page_url'
+        item_page_url = @content
+        # item_page_url = Item.amazon_formatted_url(item_page_url)
+        formatted_url = item_page_url.match(/(.*).*\/ref\/*/)
+        item_page_url = formatted_url[1]
+        @open_struct.url = item_page_url
+      end
+      if name == 'merch_cat_name'
+        merch_cat_name = @content
+        @open_struct.merch_cat_name = @content
+
+        itemtype_id = case merch_cat_name
+                      when "1805559031", "1805560031" #"Mobiles"
+                        6
+                      when "1375458031" #"Tablets"
+                        13
+                      when "1375424031" #"Laptops"
+                        23
+                      when "1389177031", "1389181031" #"DSLR", "Point & Shoot"
+                        12
+                      else
+                        0
+                      end
+
+        if itemtype_id != 0 && !@open_struct.item_unique_id.to_s.blank?
+          # p @open_struct.item_unique_id
+          # p @open_struct.title
+          # p @open_struct.url
+          # p itemtype_id
+          source_item = Sourceitem.find_or_initialize_by_additional_details(@open_struct.item_unique_id)
+
+          if source_item.new_record?
+            p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+            p source_item.additional_details
+            p @open_struct.title
+            source_item.update_attributes(:name => @open_struct.title, :url => @open_struct.url, :status => 2, :urlsource => "Amazon", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+          end
+        end
+
+      end
+      # #@open_struct.product_type = @content if name == "item_category"
+      #
+      # # if @open_struct.title.to_s.include?("Apple iPhone 5s (Gold, 16GB)")
+      # # if @open_struct.item_unique_id == ""
+      # if @open_struct.item_unique_id == "B00FXLCD38"
+      #   p "#{name} => #{@content}"
+      # end
+
+      # if name == "item_category"
+      #   if @open_struct.title.to_s.include?("Apple iPhone 5s (Gold, 16GB)")
+      #     p @open_struct.title
+      #     p @content
+      #   end
+      #   # if @contents.exclude?(@content)
+      #   #   @contents << @content
+      #   #   p @i
+      #   #   p @contents
+      #   # end
+      #   # @open_struct.url = @content
+      #   # p @open_struct.title
+      #   # p @open_struct.product_type
+      #   # p @open_struct.url
+      #
+      #   #product_type = @open_struct.product_type.split(">").last.strip rescue ""
+      #
+      #   # itemtype_id = case product_type
+      #   #                 when "Mobiles"
+      #   #                   6
+      #   #                 when "Tablets"
+      #   #                   13
+      #   #                 when "Laptops"
+      #   #                   23
+      #   #                 when "DSLR", "Point & Shoot"
+      #   #                   12
+      #   #                 else
+      #   #                   0
+      #   #               end
+      #
+      #   # if itemtype_id != 0
+      #   #   source_item = Sourceitem.find_or_initialize_by_url(@open_struct.url)
+      #
+      #   #   if source_item.new_record?
+      #   #     p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      #   #     p source_item.url
+      #   #     p @open_struct.title
+      #   #     source_item.update_attributes(:name => @open_struct.title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+      #   #   end
+      #   # end
+      # end
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
+  parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+  parser.parse(gz)
+else
+  p "Try Different format - Its not working"
+end
