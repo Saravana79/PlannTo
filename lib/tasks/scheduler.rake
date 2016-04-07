@@ -274,3 +274,8 @@ desc "Create New arrivals from amazon to source item "
 task :create_source_item_for_new_arrivals_from_amazon => :environment do
   Resque.enqueue(CreateSourceItemForNewArrivalFromAmazon, "create_source_item_for_new_arrivals_from_amazon")
 end
+
+desc "Create Sourceitem for amazon ec from amazon feeds"
+task :create_source_item_for_amazon_ec => :environment do
+  Resque.enqueue(SourceItemUpdateWithAmazonEc, "create_source_item_for_amazon_ec")
+end

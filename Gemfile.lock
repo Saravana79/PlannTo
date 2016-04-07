@@ -203,7 +203,7 @@ GEM
     omniauth-oauth2 (1.1.0)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
-    open_uri_redirections (0.1.4)
+    open_uri_redirections (0.2.1)
     options (2.3.2)
     origin (1.1.0)
     orm_adapter (0.0.7)
@@ -397,7 +397,7 @@ DEPENDENCIES
   omniauth
   omniauth-facebook
   omniauth-oauth2
-  open_uri_redirections (~> 0.1.4)
+  open_uri_redirections (~> 0.2.0)
   paperclip
   phantomjs (~> 1.9.7.1)
   progress_bar

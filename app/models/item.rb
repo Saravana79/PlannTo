@@ -2669,7 +2669,6 @@ end
   end
 
   def self.get_amazon_product_text_link_from_item_id(url, type="type_1")
-
     category_item = Item.get_amazon_product_text_link(url, type)
 
     asin = category_item.text
@@ -3773,6 +3772,11 @@ end
 
     # Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "advertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
     $redis_rtb.HMSET("items:#{id}", "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
+  end
+
+  def self.amazon_formatted_url(url)
+    formatted_url = url.match(/(.*).*\/ref\/*/)
+    formatted_url[1]
   end
 
   private

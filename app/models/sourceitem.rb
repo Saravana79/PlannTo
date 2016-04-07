@@ -2,6 +2,74 @@ class Sourceitem < ActiveRecord::Base
   # validates_uniqueness_of :url
   belongs_to :itemtype
 
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @i = 0
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @i += 1
+      #@open_struct = OpenStruct.new
+    end
+
+    def end_element(name)
+      @open_struct.item_unique_id = @content if name == 'item_unique_id'
+      @open_struct.title = @content if name == 'item_name'
+      if name == 'item_page_url'
+        item_page_url = @content
+        item_page_url = Item.amazon_formatted_url(item_page_url)
+        # formatted_url = item_page_url.match(/(.*).*\/ref\/*/)
+        # item_page_url = formatted_url[1]
+        @open_struct.url = item_page_url
+      end
+      if name == 'merch_cat_name'
+        merch_cat_name = @content
+        @open_struct.merch_cat_name = @content
+
+        itemtype_id = case merch_cat_name
+                        when "1805559031", "1805560031" #"Mobiles"
+                          6
+                        when "1375458031" #"Tablets"
+                          13
+                        when "1375424031" #"Laptops"
+                          23
+                        when "1389177031", "1389181031" #"DSLR", "Point & Shoot"
+                          12
+                        else
+                          0
+                      end
+
+        if itemtype_id != 0 && !@open_struct.item_unique_id.to_s.blank?
+          # p @open_struct.item_unique_id
+          # p @open_struct.title
+          # p @open_struct.url
+          # p itemtype_id
+          source_item = Sourceitem.find_or_initialize_by_additional_details(@open_struct.item_unique_id)
+
+          if source_item.new_record?
+            p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+            p source_item.additional_details
+            p @open_struct.title
+            source_item.update_attributes(:name => @open_struct.title, :url => @open_struct.url, :status => 2, :urlsource => "Amazon", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+          end
+        end
+      end
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
   def self.update_suggestions
     @source_items = Sourceitem.where(:verified => false, :suggestion_id => nil)
     count = 0
@@ -104,7 +172,7 @@ class Sourceitem < ActiveRecord::Base
 
           offer_text = response_offer_hash["codes"][0]["offerText"] rescue ""
           offer_text = offer_text.gsub(/\(Max.*/, "").to_s.strip rescue ""
-          effective_price =  response_offer_hash["codes"][0]["effective_price"] rescue ""
+          effective_price = response_offer_hash["codes"][0]["effective_price"] rescue ""
 
           title = response_hash["name"] rescue ""
           mrpprice = response_hash["actual_price"] rescue ""
@@ -198,14 +266,14 @@ class Sourceitem < ActiveRecord::Base
                 offer_summary = each_item.get_element("OfferSummary")
                 if !offer_listing.blank?
                   begin
-                    current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                    current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
                   rescue Exception => e
-                    current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                    current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
                   end
                   availability_str = offer_listing.get("Availability")
 
                   if availability_str.blank? && !offer_summary.blank?
-                    current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue "" if current_price.blank?
+                    current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue "" if current_price.blank?
 
                     total_new = offer_summary.get("TotalNew").to_i
 
@@ -231,7 +299,7 @@ class Sourceitem < ActiveRecord::Base
 
                   item_detail.update_attributes!(:price => current_price, :status => status, :last_verified_date => Time.now)
                 elsif !offer_summary.blank?
-                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue ""
+                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue ""
 
                   total_new = offer_summary.get("TotalNew").to_i
 
@@ -272,14 +340,14 @@ class Sourceitem < ActiveRecord::Base
                 image_url = each_item.get("LargeImage/URL") rescue nil
                 if !offer_listing.blank?
                   begin
-                    current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                    current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
                   rescue Exception => e
-                    current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                    current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
                   end
                   availability_str = offer_listing.get("Availability")
 
                   if availability_str.blank? && !offer_summary.blank?
-                    current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue "" if current_price.blank?
+                    current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue "" if current_price.blank?
 
                     total_new = offer_summary.get("TotalNew").to_i
 
@@ -303,7 +371,7 @@ class Sourceitem < ActiveRecord::Base
                              end
                   end
                 elsif !offer_summary.blank?
-                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue ""
+                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue ""
 
                   total_new = offer_summary.get("TotalNew").to_i
 
@@ -315,7 +383,7 @@ class Sourceitem < ActiveRecord::Base
                 end
 
                 item = Item.where(:name => each_key.camelize).first
-                item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "9882" )
+                item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "9882")
                 item_detail.save!
 
                 next if !item_detail.image.blank?
@@ -370,6 +438,48 @@ class Sourceitem < ActiveRecord::Base
       rescue Exception => e
         p "skip amazon api call error"
       end
+    end
+  end
+
+  def self.create_source_item_for_amazon_ec
+    url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_ce.xml.gz"
+
+    digest_auth = Net::HTTP::DigestAuth.new
+
+    uri = URI.parse(url)
+    uri.user = "pla04"
+    uri.password = "cyn04"
+
+    h = Net::HTTP.new uri.host, uri.port
+    h.use_ssl = true
+    h.ssl_version = :TLSv1
+
+    req = Net::HTTP::Get.new uri.request_uri
+
+    res = h.request req
+    # res is a 401 response with a WWW-Authenticate header
+
+    auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+    # create a new request with the Authorization header
+    req = Net::HTTP::Get.new uri.request_uri
+    req.add_field 'Authorization', auth
+
+    # re-issue request with Authorization
+    res = h.request req
+
+    if res.kind_of?(Net::HTTPFound)
+      location = res["location"]
+      infile = open(location)
+      gz = Zlib::GzipReader.new(infile)
+
+      require 'rubygems'
+      require 'nokogiri'
+
+      parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+      parser.parse(gz)
+    else
+      p "Try Different format - Its not working"
     end
   end
 end
