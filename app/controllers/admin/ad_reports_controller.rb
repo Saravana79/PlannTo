@@ -356,6 +356,10 @@ class Admin::AdReportsController < ApplicationController
     params[:id] ||= params[:advertisement_id]
     # user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
     user_condition = current_user.is_admin? ? "1=1" : " (advertisements.user_id=#{current_user.id} or user_relationships.user_id=#{current_user.id}) "
-    @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id = #{params[:id]} and #{user_condition}").last
+    if current_user.is_admin?
+      @advertisement = Advertisement.where("advertisements.id = #{params[:id]}").last
+    else
+      @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id = #{params[:id]} and #{user_condition}").last
+    end
   end
 end

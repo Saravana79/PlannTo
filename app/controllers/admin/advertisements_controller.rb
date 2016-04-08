@@ -18,7 +18,11 @@ class Admin::AdvertisementsController < ApplicationController
       @end_date = "20-12-2014".to_date
     end
     @collections_for_dropdown = [["Today", Date.today], ['Yesterday', Date.yesterday], ['Last Week', "#{Date.today-1.week}/#{Date.today}"], ['Last month', "#{Date.today-1.month}/#{Date.today}"], ['Last 3 months', "#{Date.today-3.months}/#{Date.today}"], ['Last 6 Months', "#{Date.today-6.months}/#{Date.today}"]]
-    @advertisements = Advertisement.joins(:user_relationships).where("#{@user_condition} and #{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
+    if current_user.is_admin?
+      @advertisements = Advertisement.where("#{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
+    else
+      @advertisements = Advertisement.joins(:user_relationships).where("#{@user_condition} and #{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
+    end
     @extra_ad_details = Advertisement.get_extra_details(@advertisements, params[:date], current_user)
   end
 
@@ -32,7 +36,11 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def edit
-    @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id=#{params[:id]} and #{@user_condition}").first
+    if current_user.is_admin?
+      @advertisement = Advertisement.where("advertisements.id=#{params[:id]}").first
+    else
+      @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id=#{params[:id]} and #{@user_condition}").first
+    end
     @adv_detail = @advertisement.adv_detail if !@advertisement.blank?
     @adv_detail = AdvDetail.new if @adv_detail.blank?
     @vendor = Vendor.find_by_id(@advertisement.vendor_id)
@@ -43,7 +51,11 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def show
-    @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id=#{params[:id]} and #{@user_condition}").first
+    if current_user.is_admin?
+      @advertisement = Advertisement.where("advertisements.id=#{params[:id]}").first
+    else
+      @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id=#{params[:id]} and #{@user_condition}").first
+    end
   end
 
   def create
