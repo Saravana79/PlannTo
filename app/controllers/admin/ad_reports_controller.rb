@@ -1,7 +1,7 @@
 class Admin::AdReportsController < ApplicationController
   before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report, :generate_report, :widget_reports, :load_vendors]
   before_filter :authenticate_user!, :only => [:view_ad_chart, :report, :generate_report, :widget_reports, :load_vendors]
-  before_filter :get_advertisement, :only => [:report, :generate_report]
+  before_filter :get_advertisement, :only => [:view_ad_chart, :report, :generate_report]
   layout "product"
 
   def index
@@ -240,7 +240,6 @@ class Admin::AdReportsController < ApplicationController
     end
 
     @search_path = admin_ad_report_view_ad_chart_path
-    @advertisement = Advertisement.where(:id => params[:advertisement_id]).first
 
     @publishers = Publisher.all
     params[:publisher_id] ||= Publisher.first.id
@@ -354,7 +353,9 @@ class Admin::AdReportsController < ApplicationController
   private
 
   def get_advertisement
-    user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
-    @advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").first
+    params[:id] ||= params[:advertisement_id]
+    # user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
+    user_condition = current_user.is_admin? ? "1=1" : " (advertisements.user_id=#{current_user.id} or user_relationships.user_id=#{current_user.id}) "
+    @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id = #{params[:id]} and #{user_condition}").last
   end
 end

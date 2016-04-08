@@ -18,7 +18,7 @@ class Admin::AdvertisementsController < ApplicationController
       @end_date = "20-12-2014".to_date
     end
     @collections_for_dropdown = [["Today", Date.today], ['Yesterday', Date.yesterday], ['Last Week', "#{Date.today-1.week}/#{Date.today}"], ['Last month', "#{Date.today-1.month}/#{Date.today}"], ['Last 3 months', "#{Date.today-3.months}/#{Date.today}"], ['Last 6 Months', "#{Date.today-6.months}/#{Date.today}"]]
-    @advertisements = Advertisement.where("#{@user_condition} and #{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
+    @advertisements = Advertisement.joins(:user_relationships).where("#{@user_condition} and #{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
     @extra_ad_details = Advertisement.get_extra_details(@advertisements, params[:date], current_user)
   end
 
@@ -32,7 +32,7 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def edit
-    @advertisement = Advertisement.where("id=#{params[:id]} and #{@user_condition}").first
+    @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id=#{params[:id]} and #{@user_condition}").first
     @adv_detail = @advertisement.adv_detail if !@advertisement.blank?
     @adv_detail = AdvDetail.new if @adv_detail.blank?
     @vendor = Vendor.find_by_id(@advertisement.vendor_id)
@@ -43,7 +43,7 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def show
-    @advertisement = Advertisement.where("id=#{params[:id]} and #{@user_condition}").first
+    @advertisement = Advertisement.joins(:user_relationships).where("advertisements.id=#{params[:id]} and #{@user_condition}").first
   end
 
   def create
@@ -203,6 +203,7 @@ class Admin::AdvertisementsController < ApplicationController
   private
 
   def make_user_condition
-    @user_condition = current_user.is_admin? ? "1=1" : " user_id=#{current_user.id} "
+    # @user_condition = current_user.is_admin? ? "1=1" : " user_id=#{current_user.id} "
+    @user_condition = current_user.is_admin? ? "1=1" : " (advertisements.user_id=#{current_user.id} or user_relationships.user_id=#{current_user.id}) "
   end
 end

@@ -19,6 +19,7 @@ class Advertisement < ActiveRecord::Base
   has_one :ad_video_detail
   has_one :adv_detail
   has_many :aggregated_details, :as => :entity
+  has_many :user_relationships, :as => :relationship
   has_many :ad_reports
 
   before_save :convert_device_to_string
@@ -26,6 +27,7 @@ class Advertisement < ActiveRecord::Base
   after_create :item_update_with_created_ad_item_ids
   after_save :update_click_url_based_on_vendor
   after_save :update_redis_with_advertisement
+  after_save :update_user_relationship
 
   scope :get_ad_by_id, lambda { |id| where("id = ?", id) }
 
@@ -3107,6 +3109,16 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     vendor_detail
   end
 
+  def other_users
+    users = []
+    relationships = UserRelationship.where(:relationship_type => "Advertisement", :relationship_id => self.id)
+    relationships_ids = relationships.map(&:user_id)
+    if !relationships_ids.blank?
+      users = User.where(:id => relationships_ids)
+    end
+    users
+  end
+
   private
 
   def file_dimensions
@@ -3121,6 +3133,46 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   def convert_device_to_string
     if !self.device.blank? && self.device.is_a?(Array)
       self.device = self.device.join(",")
+    end
+  end
+
+  def update_user_relationship
+    if self.other_user_ids_changed?
+      old_val, new_val = self.other_user_ids_change
+
+      if !old_val.blank?
+        old_val_arr = old_val.to_s.split(",").map(&:to_i)
+        new_val_arr = new_val.to_s.split(",").map(&:to_i)
+
+        skippable_user_ids = new_val_arr & old_val_arr
+        removable_user_ids = old_val_arr - skippable_user_ids
+        creatable_user_ids = new_val_arr - old_val_arr
+
+        removable_user_ids.each do |each_id|
+          user_relationship = UserRelationship.where(:user_id => each_id, :relationship_type => "Advertisement", :relationship_id => self.id).last
+          user_relationship.destroy
+        end
+      else
+        creatable_user_ids = self.other_user_ids.to_s.split(",").map(&:to_i)
+      end
+
+      creatable_user_ids.each do |each_id|
+        user_relationship = UserRelationship.find_or_initialize_by_user_id_and_relationship_type_and_relationship_id(each_id, "Advertisement", self.id)
+        if user_relationship.new_record?
+          user_relationship.save
+        end
+      end
+    end
+
+    if !other_user_ids.blank?
+      other_user_ids_arr = other_user_ids.to_s.split(",")
+      users = User.where(:id => other_user_ids_arr)
+      users.each do |each_user|
+        user_relationship = UserRelationship.find_or_initialize_by_user_id_and_relationship_type_and_relationship_id(each_user.id, "Advertisement", self.id)
+        if user_relationship.new_record?
+          user_relationship.save
+        end
+      end
     end
   end
 

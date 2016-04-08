@@ -592,7 +592,7 @@ def populate_pro_con
       page = 1
       sql_query = "select * from items where id in (#{items.split(",").map(&:inspect).join(',')})"
       begin
-        items = Item.paginate_by_sql(sql_query, :page => page, :per_page => 1000)
+        items = Item.paginate_by_sql(sql_query, :page => page, :per_page => 1000) rescue []
 
         items.each_with_index do |item, index|
           unless item.blank?
