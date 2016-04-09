@@ -2,7 +2,7 @@
   Advertisement Reports
 </h3>
 <br/>
-<%= form_for :impression, :url => admin_ad_reports_generate_path, :method => :post do |f| %>
+<%= form_for :impression, :url => admin_ad_reports_report_path, :method => :post do |f| %>
     <%= hidden_field_tag :id, params[:id] %>
     <div>
 <span style="width:100px;display:block;float:left;padding-top:5px;">
@@ -53,7 +53,7 @@ To Date
 Select By
 </span>
     <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-<%= select_tag(:select_by, options_for_select(@select_types, params[:select_by])) %>
+<%= select_tag(:select_by, options_for_select(@select_types, params[:type])) %>
 </span>
     </div>
 
@@ -73,29 +73,82 @@ Select By
 </div>
 -->
 
-<br/><br/>
-<div id="report">
-  <table border="1" width="90%">
-    <tr>
-      <th> Generate Date </th>
-      <th> Start Date </th>
-      <th> End Date </th>
-      <th> Report Type </th>
-      <th> Status </th>
-    </tr>
-    <% @ad_reports.each do | report | %>
-        <tr>
-          <td><%= report.report_date %> </td>
-          <td><%= report.from_date %> </td>
-          <td><%= report.to_date %> </td>
-          <td><%= report.report_type == "item_id" ? "By Item" : "By Hosted Site Url" %> </td>
-          <td><%= report.status == "ready" ? link_to("Download", report.filepath, :target => "_blank") : report.status %> </td>
-        </tr>
-    <%end%>
-  </table>
-  <%= will_paginate @ad_reports %>
-</div>
+<!--<br/><br/>-->
+<!--<div id="report">-->
+  <!--<table border="1" width="90%">-->
+    <!--<tr>-->
+      <!--<th> Generate Date </th>-->
+      <!--<th> Start Date </th>-->
+      <!--<th> End Date </th>-->
+      <!--<th> Report Type </th>-->
+      <!--<th> Status </th>-->
+    <!--</tr>-->
+    <!--<%# @ad_reports.each do | report | %>-->
+        <!--<tr>-->
+          <!--<td><%#= report.report_date %> </td>-->
+          <!--<td><%#= report.from_date %> </td>-->
+          <!--<td><%#= report.to_date %> </td>-->
+          <!--<td><%#= report.report_type == "item_id" ? "By Item" : "By Hosted Site Url" %> </td>-->
+          <!--<td><%#= report.status == "ready" ? link_to("Download", report.filepath, :target => "_blank") : report.status %> </td>-->
+        <!--</tr>-->
+    <!--<%#end%>-->
+  <!--</table>-->
+  <!--<%#= will_paginate @ad_reports %>-->
+<!--</div>-->
 
+<br />
+
+<h2 style="margin-left: 10%;"> Report </h2>
+
+<br/>
+
+<table border="0" width="80%" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="header_compare"  > <%= params[:type] %> </th>
+    <th class="header_compare"  > Total Impressions </th>
+    <th class="header_compare"  > Total Clicks </th>
+    <th class="header_compare"  > CTR </th>
+  </tr>
+  <% if params[:type] == "Advertisement" %>
+      <% @results.each do |each_hash| %>
+          <tr>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= each_hash["_id"] %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_imp"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_clicks"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= "#{get_ectr(each_hash["total_clicks"].to_i, each_hash["total_imp"].to_i)}" + " %" %>
+            </td>
+          </tr>
+      <% end %>
+  <% else %>
+      <% @results.each do |each_key, each_hash| %>
+          <tr>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <% if params[:type] == "Hourly" %>
+                  <%= (each_key.to_i + 5) % 24 %>
+              <% else %>
+                  <%= get_if_item(each_key) %>
+              <% end %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_imp"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_clicks"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= "#{get_ectr(each_hash["total_clicks"].to_i, each_hash["total_imp"].to_i)}" + " %" %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs"].to_f.round(2) %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_orders"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_product_price"].to_f.round(2) %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["tot_valid_orders"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["tot_valid_product_price"].to_f.round(2) %> </td>
+          </tr>
+      <% end %>
+  <% end %>
+</table>
+
+
+<br/><br/>
 
 <style type="text/css">
 

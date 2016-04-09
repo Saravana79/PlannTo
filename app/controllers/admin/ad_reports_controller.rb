@@ -322,17 +322,39 @@ class Admin::AdReportsController < ApplicationController
   #   end
   # end
 
+  # def report
+  #   params[:select_by] ||= "item_id"
+  #   @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
+  #   @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
+  #   @reports ||= []
+  #   @select_types = [['Item', 'item_id'],["Hosted Url", "hosted_site_url"]]
+  #
+  #   if !@advertisement.blank?
+  #     @ad_reports = @advertisement.my_reports(current_user).paginate(:page => params[:page], :per_page => 10)
+  #   else
+  #     redirect_to root_path
+  #   end
+  # end
+
   def report
-    params[:select_by] ||= "item_id"
+    params[:type] ||= "Item"
     @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
     @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
     @reports ||= []
-    @select_types = [['Item', 'item_id'],["Hosted Url", "hosted_site_url"]]
+    @select_types = ['Item', "Domain"]
 
-    if !@advertisement.blank?
-      @ad_reports = @advertisement.my_reports(current_user).paginate(:page => params[:page], :per_page => 10)
+    params[:select_by] ||= "item_id"
+    @results = Advertisement.generate_more_reports_direct(params)
+
+    if @results.is_a?(Hash)
+      @results = Hash[@results.first(50)]
     else
-      redirect_to root_path
+      @results = @results.first(50)
+    end
+
+    if params[:type] == "Item"
+      item_ids = @results.map {|k, _| k}.compact.map(&:to_i)
+      @items = Item.where(:id => item_ids)
     end
   end
 

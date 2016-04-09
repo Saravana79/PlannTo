@@ -554,6 +554,19 @@ class Advertisement < ActiveRecord::Base
     ad_report.update_attributes(:status => "ready")
   end
 
+  def self.generate_more_reports_direct(param)
+    param[:ad_id] = param[:id]
+    param[:report_sort_by] = "imp_count"
+    param[:ad_type] = "advertisement"
+    param[:show_downloads] ||= "false"
+    param[:sort_by] ||= "total_imp"
+
+    start_date = param[:from_date].blank? ? Date.today.beginning_of_day : param[:from_date].to_date.beginning_of_day
+    end_date = param[:to_date].blank? ? Date.today.end_of_day : param[:to_date].to_date.end_of_day
+
+    @results = AggregatedImpression.get_results_from_agg_impression(param, start_date, end_date)
+  end
+
   def self.generate_more_reports(ad_report_id)
     ad_report = AdReport.where(:id => ad_report_id).first
 
