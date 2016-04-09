@@ -343,7 +343,6 @@ class Admin::AdReportsController < ApplicationController
     @reports ||= []
     @select_types = ['Item', "Domain"]
 
-    params[:select_by] ||= "item_id"
     @results = Advertisement.generate_more_reports_direct(params)
 
     if @results.is_a?(Hash)
