@@ -21,7 +21,7 @@ class Admin::AdvertisementsController < ApplicationController
     if current_user.is_admin?
       @advertisements = Advertisement.where("#{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
     else
-      @advertisements = Advertisement.joins(:user_relationships).where("#{@user_condition} and #{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
+      @advertisements = Advertisement.joins(:user_relationships).where("#{@user_condition} and #{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page]).distinct
     end
     @extra_ad_details = Advertisement.get_extra_details(@advertisements, params[:date], current_user)
   end
