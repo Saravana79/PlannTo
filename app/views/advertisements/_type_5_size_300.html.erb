@@ -58,7 +58,7 @@
                       </div>
                     </div>
                     <div class="product-txt-desc">
-                      <%= raw get_autoportal_links_for_ad(@click_url, ad_url) %>
+                      <%= raw get_autoportal_links_for_ad(@click_url, ad_url, item_detail) %>
                       <!--<p>-->
                         <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
                       <!--</p>-->
@@ -92,5 +92,15 @@
 
     .advt-box .product-container h3 {
         font-size: 14px !important;
+    }
+    .offer_ad
+    {
+        color: #222 !important;
+        font-family: Arial !important;
+        font-size: 10px !important;
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        font-weight: 600;
     }
 </style>
