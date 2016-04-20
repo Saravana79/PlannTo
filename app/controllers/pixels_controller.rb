@@ -30,7 +30,7 @@ class PixelsController < ApplicationController
     params[:source] ||= "google"
     ref_url = request.referer
     source_source_url = params[:source_source_url]
-    # ref_url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    ref_url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
 
     if params[:type].to_s == "conversion"
       @img_src = nil
