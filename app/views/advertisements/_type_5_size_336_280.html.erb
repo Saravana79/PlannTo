@@ -10,15 +10,15 @@
         </a>
       </div>
       <div class="list_carousel">
-          <div id="pager2" class="pager">
-            <%if @item_details.count > 1 %>
-            <% [*1..@item_details.count].each do |each_loop| %>
-                <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
-            <% end %>
-            <% end %>
-          </div>
-     </div>
-     <div class="clearfix"></div>
+        <div id="pager2" class="pager">
+          <% if @item_details.count > 1 %>
+              <% [*1..@item_details.count].each do |each_loop| %>
+                  <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+              <% end %>
+          <% end %>
+        </div>
+      </div>
+      <div class="clearfix"></div>
     </div>
 
     <% if @item_details.count != 0 %>
@@ -41,13 +41,13 @@
                         <a href="<%= shop_now_url %>" target="_blank" class="">
                           <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3>
 
-                           <div>
-                              <span style="font-size: 11px;color: #000;">Starting at - </span>
-                              <span class="price"><%= prettifyforcarprice(item_detail) %></span>
+                          <div>
+                            <span style="font-size: 11px;color: #000;">Starting at - </span>
+                            <span class="price"><%= prettifyforcarprice(item_detail) %></span>
                           </div>
                           <div style="padding: 5px 0px;color: #000;font-size: 10px;">
                             <!--<span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span>-->
-                             <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span> 
+                            <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span>
                           </div>
                         </a>
 
@@ -58,9 +58,9 @@
                       </div>
                     </div>
                     <div class="product-txt-desc">
-                      <%= raw get_autoportal_links_for_ad(@click_url, ad_url) %>
+                      <%= raw get_autoportal_links_for_ad(@click_url, ad_url, item_detail) %>
                       <!--<p>-->
-                        <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                      <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
                       <!--</p>-->
                     </div>
                   </div>
@@ -68,11 +68,11 @@
                 </li>
             <% end %>
           </ul>
-          </div>
-          <div class="clearfix"></div>
-          <!--<a id="prev3" class="prev" href="#">&lt;</a>
-          <a id="next3" class="next" href="#">&gt;</a>
-         -->
+        </div>
+        <div class="clearfix"></div>
+        <!--<a id="prev3" class="prev" href="#">&lt;</a>
+        <a id="next3" class="next" href="#">&gt;</a>
+       -->
 
     <% else %>
         No Product Found
@@ -88,14 +88,15 @@
         margin: 0px !important;
     }
 
-    .product-container a {text-decoration: none !important;}
+    .product-container a {
+        text-decoration: none !important;
+    }
 
     .advt-box .product-container h3 {
         font-size: 15px !important;
     }
 
-    .offer_ad
-    {
+    .offer_ad {
         color: #222 !important;
         font-family: Arial !important;
         font-size: 10px !important;
