@@ -117,7 +117,7 @@ body {
 }
 .pager a.selected {
 	text-decoration: none;
-	background:#F76300;
+	background: #d70000 none repeat scroll 0 0;
 	color:white;
 }
 .timer {
