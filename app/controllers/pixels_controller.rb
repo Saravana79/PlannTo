@@ -38,6 +38,8 @@ class PixelsController < ApplicationController
 
       conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
     else
+      ref_url = CGI.escape(ref_url)
+      source_source_url = CGI.escape(source_source_url)
       if params[:source] != "mysmartprice"
 
         @cookie_match = CookieMatch.find_user_by_source(cookies[:plan_to_temp_user_id], params[:source]).first
