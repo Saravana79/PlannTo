@@ -17,13 +17,13 @@ module Admin::AdvertisementsHelper
     # photo_shop_now_url = click_url.blank? ? photo_ad_url : (click_url+photo_ad_url)
     # photo_link = "<a href='#{photo_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Photos</a>"
 
-    mileage = item_detail.description.to_s.split("|")[0] rescue ""
-    mileage_link = "<span class='offer_ad'> #{mileage} </span>"
-    return_val = mileage.blank? ? "" : "#{mileage_link} | "
-
     fuel_type = item_detail.description.to_s.split("|")[1] rescue ""
     fuel_type_link = "<span class='offer_ad'> #{fuel_type} </span>"
-    return_val = fuel_type.blank? ? return_val : return_val+"#{fuel_type_link} | "
+    return_val = fuel_type.blank? ? "" : "#{fuel_type_link} | "
+
+    mileage = item_detail.description.to_s.split("|")[0] rescue ""
+    mileage_link = "<span class='offer_ad'> #{mileage} </span>"
+    return_val = mileage.blank? ? return_val : return_val+"#{mileage_link} km/l | "
 
     reviews_shop_now_url = click_url.blank? ? reviews_ad_url : (click_url+reviews_ad_url)
     reviews_link = "<a href='#{reviews_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Reviews</a>"
