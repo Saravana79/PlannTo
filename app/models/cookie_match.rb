@@ -11,7 +11,7 @@ class CookieMatch < ActiveRecord::Base
 
   def self.enqueue_cookie_matching(param, plannto_user_id)
     param["source"] ||= "google"
-    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => param["source"]}
+    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => param["source"], "source_source_url" => param["source_source_url"]}
 
     if ["google_pixel", "mysmartprice"].exclude?(param["source"])
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
@@ -60,7 +60,8 @@ class CookieMatch < ActiveRecord::Base
     end
 
     if !param["ref_url"].blank?
-      user_access_detail = UserAccessDetail.create(:plannto_user_id => param["plannto_user_id"], :ref_url => param["ref_url"], :source => param["source"])
+      user_access_detail = UserAccessDetail.find_or_initialize_by_plannto_user_id_and_ref_url_and_source(param["plannto_user_id"], param["ref_url"], param["source"])
+      user_access_detail.save
     end
   end
 
@@ -90,9 +91,10 @@ class CookieMatch < ActiveRecord::Base
             cookie_detail = JSON.parse(cookie_detail)["args"][1]
             cookie_detail["source"] ||= "google"
             ref_url = cookie_detail.delete("ref_url")
+            source_source_url = cookie_detail.delete("source_source_url")
             cookies_arr << cookie_detail
             if !ref_url.blank?
-              param = {"plannto_user_id" => cookie_detail["plannto_user_id"], "ref_url" => ref_url, "source" => cookie_detail["source"]}
+              param = {"plannto_user_id" => cookie_detail["plannto_user_id"], "ref_url" => ref_url, "source" => cookie_detail["source"], "source_source_url" => source_source_url}
               user_access_details << param
             end
           rescue Exception => e
@@ -141,6 +143,7 @@ class CookieMatch < ActiveRecord::Base
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
             user_access_details_count-=1
             new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
+            # new_user_access_detail = UserAccessDetail.find_or_initialize_by_plannto_user_id_and_ref_url_and_source(user_access_detail["plannto_user_id"], user_access_detail["ref_url"], user_access_detail["source"])
             ref_url = new_user_access_detail.ref_url.to_s
             including_skip_val = skip_urls.any? { |word| ref_url.include?(word) }
 
@@ -205,7 +208,7 @@ class CookieMatch < ActiveRecord::Base
               item_details_by_itemtype_ids.each do |key, val|
                 itemtype_id = key
                 item_ids = val.map(&:itemid).join(",")
-                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, user_access_detail["source"], itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories={}, user_access_detail["source"], itemtype_id, user_access_detail["source_source_url"])
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end
             elsif !msp_id.blank?

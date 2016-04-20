@@ -29,6 +29,8 @@ class PixelsController < ApplicationController
   def vendor_page
     params[:source] ||= "google"
     ref_url = request.referer
+    source_source_url = params[:source_source_url]
+    # ref_url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
 
     if params[:type].to_s == "conversion"
       @img_src = nil
@@ -40,7 +42,7 @@ class PixelsController < ApplicationController
 
         @cookie_match = CookieMatch.find_user_by_source(cookies[:plan_to_temp_user_id], params[:source]).first
         if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-          @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
+          @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}&source_source_url=#{source_source_url}"
         else
           google_ula_vendor = case params[:source]
                                 when "mysmartprice"
@@ -53,7 +55,7 @@ class PixelsController < ApplicationController
                                   ""
                               end
 
-          @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}"
+          @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}&source_source_url=#{source_source_url}"
         end
       else
         @img_src = nil

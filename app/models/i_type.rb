@@ -20,6 +20,7 @@ class IType
   field :r, type: Boolean, :default => 0 #Resale
   field :source, type: String
   field :fad, type: Date #first accessed date
+  field :ssu, type: Array #source source url
 
   embedded_in :plannto_user_detail
   embeds_many :m_items
