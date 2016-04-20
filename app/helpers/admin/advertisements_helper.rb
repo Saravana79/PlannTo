@@ -22,8 +22,8 @@ module Admin::AdvertisementsHelper
     return_val = fuel_type.blank? ? "" : "#{fuel_type_link} | "
 
     mileage = item_detail.description.to_s.split("|")[0] rescue ""
-    mileage_link = "<span class='offer_ad'> #{mileage} </span>"
-    return_val = mileage.blank? ? return_val : return_val+"#{mileage_link} km/l | "
+    mileage_link = "<span class='offer_ad'> #{mileage} km/l</span>"
+    return_val = mileage.blank? ? return_val : return_val+"#{mileage_link} | "
 
     reviews_shop_now_url = click_url.blank? ? reviews_ad_url : (click_url+reviews_ad_url)
     reviews_link = "<a href='#{reviews_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Reviews</a>"
