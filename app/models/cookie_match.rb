@@ -203,9 +203,9 @@ class CookieMatch < ActiveRecord::Base
 
               # item_details = Itemdetail.where("url like '#{par_url}' and site=75798")
 
-              item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{par_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
+              item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{par_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
 
-              item_details_by_itemtype_ids = item_details.group_by {|x| x.itemtype_id}
+              item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
 
               item_details_by_itemtype_ids.each do |key, val|
                 itemtype_id = key
