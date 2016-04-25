@@ -90,10 +90,10 @@ class UserAccessDetail < ActiveRecord::Base
               lu = lu.to_a
               lu << url
               i_type.lu = lu.compact.uniq
-              ssu = i_type.ssu
-              ssu = ssu.to_a
-              ssu << ss_url
-              i_type.ssu = ssu.compact.uniq
+              # ssu = i_type.ssu
+              # ssu = ssu.to_a
+              # ssu << ss_url
+              # i_type.ssu = ssu.compact.uniq
               i_type.r = resale
               i_type.save!
             end
@@ -107,6 +107,12 @@ class UserAccessDetail < ActiveRecord::Base
             i_type.ci_ids = ci_ids
             i_type.lcd = Date.today
             i_type.source = "autoportal"
+
+            ssu = i_type.ssu
+            ssu = ssu.to_a
+            ssu << ss_url
+            i_type.ssu = ssu.compact.uniq
+
             i_type.save!
 
             # ubl:pl:<userid>:<itemtye>
