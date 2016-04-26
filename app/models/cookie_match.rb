@@ -13,11 +13,36 @@ class CookieMatch < ActiveRecord::Base
     ref_url = (param["ref_url"].include?("%3A%2F%2F") ?  CGI.unescape(param["ref_url"]) : param["ref_url"]) rescue ""
     source_source_url = (param["source_source_url"].include?("%3A%2F%2F") ?  CGI.unescape(param["source_source_url"]) : param["source_source_url"]) rescue ""
     param["source"] ||= "google"
-    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => ref_url, "source" => param["source"], "source_source_url" => source_source_url}
+
+    ref_url_params = CookieMatch.get_params(ref_url)
+    source_source_url_domain = ""
+    if !ref_url_params.blank?
+      source_source_url_domain = ref_url_params["utm_source"].blank? ? "" : ref_url_params["utm_source"][0].to_s
+    end
+
+    if source_source_url_domain.blank?
+      source_source_url_params = CookieMatch.get_params(source_source_url)
+
+      if source_source_url_params.blank?
+        source_source_url_domain = source_source_url_params["utm_source"].blank? ? "" : source_source_url_params["utm_source"][0].to_s
+      end
+    end
+
+    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => ref_url, "source" => param["source"], "source_source_url" => source_source_url_domain}
 
     if ["google_pixel", "mysmartprice"].exclude?(param["source"])
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
     end
+  end
+
+  def self.get_params(url)
+    begin
+      uri    = URI.parse(url)
+      params = CGI.parse(uri.query)
+    rescue Exception => e
+      params = {}
+    end
+    params
   end
 
   def self.enqueue_pixel_matching(param, plannto_user_id)
@@ -89,6 +114,8 @@ class CookieMatch < ActiveRecord::Base
         cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 2000)
         cookies_arr = []
         user_access_details = []
+        # ref_url_arr = []
+        # ss_url_arr = []
 
         cookie_details.each do |cookie_detail|
           count -= 1
@@ -96,8 +123,11 @@ class CookieMatch < ActiveRecord::Base
             cookie_detail = JSON.parse(cookie_detail)["args"][1]
             cookie_detail["source"] ||= "google"
             ref_url = cookie_detail.delete("ref_url")
-
             source_source_url = cookie_detail.delete("source_source_url")
+
+            # ref_url_arr << ref_url
+            # ss_url_arr << source_source_url
+
             cookies_arr << cookie_detail
             if !ref_url.blank?
               param = {"plannto_user_id" => cookie_detail["plannto_user_id"], "ref_url" => ref_url, "source" => cookie_detail["source"], "source_source_url" => source_source_url}
@@ -108,6 +138,13 @@ class CookieMatch < ActiveRecord::Base
           end
           p "Remaining CookieMatch Count - #{count}"
         end
+
+
+        #TODO: temp action for checking source and source list
+        # $redis.pipelined do
+        #   $redis.sadd("source_ref_urls", ref_url_arr)
+        #   $redis.sadd("source_source_urls", ss_url_arr)
+        # end
 
         # ActiveRecord::Base.transaction do
         #   cookies_arr.each do |cookie_detail|
@@ -147,6 +184,7 @@ class CookieMatch < ActiveRecord::Base
         user_access_details.each do |user_access_detail|
           begin
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
+            p "+++++++++++++++ Source as #{user_access_detail["source"]} +++++++++++++++"
             user_access_details_count-=1
             new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
             # new_user_access_detail = UserAccessDetail.find_or_initialize_by_plannto_user_id_and_ref_url_and_source(user_access_detail["plannto_user_id"], user_access_detail["ref_url"], user_access_detail["source"])
