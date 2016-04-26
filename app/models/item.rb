@@ -2125,7 +2125,7 @@ end
           source_category = SourceCategory.source(host).last rescue ""
           pattern = source_category.pattern.to_s
         else
-          pattern = source_categories[host]
+          pattern = source_categories[host]["pattern"].to_s rescue ""
         end
 
         if !pattern.blank?
