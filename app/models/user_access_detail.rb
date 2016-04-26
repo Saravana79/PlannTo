@@ -17,11 +17,13 @@ class UserAccessDetail < ActiveRecord::Base
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     agg_info = {}
     # base_item_ids = Item.get_base_items_from_config()
-    # source_categories = SourceCategory.get_source_category_with_paginations()
+    # if source_categories.blank?
+    #   source_categories = SourceCategory.get_source_category_with_paginations()
+    # end
     redis_rtb_hash = {}
     plannto_user_detail_hash = {}
 
-    already_exist = Item.check_if_already_exist_in_user_visits(source_categories={}, user_id, url, url_prefix="users:last_visits:plannto")
+    already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
     rk = 0
     cookie_matches_plannto_ids = []
 

@@ -1,6 +1,7 @@
 class SourceCategory < ActiveRecord::Base
   validates_uniqueness_of :source
   # after_save :check_and_assign_sources_hash_to_cache_from_table
+  after_save :get_source_category_with_paginations
   scope :source, lambda { |source| where(:source => source) }
 
   # def self.update_all_to_cache()
@@ -24,10 +25,10 @@ class SourceCategory < ActiveRecord::Base
   #   $redis.set("sources_list_details", sources_list.to_json)
   # end
   #
-  # def self.get_source_category_with_paginations()
-  #   source_categories = {}
-  #   @source_categories.map {|f| source_categories.merge!({f.source => {"pattern" => f.pattern}}) if !f.pattern.blank?}
-  #   @source_categories = []
-  #   $redis.set("source_categories_pattern", source_categories.to_json)
-  # end
+  def self.get_source_category_with_paginations()
+    source_categories = {}
+    source_categories_records = SourceCategory.where("pattern is not null and pattern != ''")
+    source_categories_records.map {|f| source_categories.merge!({f.source => {"pattern" => f.pattern}}) if !f.pattern.blank?}
+    $redis.set("source_categories_pattern", source_categories.to_json)
+  end
 end

@@ -2121,12 +2121,14 @@ end
         #   source_categories.default = ""
         # end
 
-        source_category = SourceCategory.source(host).last rescue ""
+        if source_categories.blank?
+          source_category = SourceCategory.source(host).last rescue ""
+          pattern = source_category.pattern.to_s
+        else
+          pattern = source_categories[host]
+        end
 
-        # source_category = source_categories[host]
-
-        if !source_category.blank? && !source_category.pattern.blank?
-          pattern = source_category.pattern
+        if !pattern.blank?
           str1, str2 = pattern.split("<page>")
           str2 = str2.blank? ? "$" : Regexp.escape(str2.to_s)
           exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{str2}/m, 1]
