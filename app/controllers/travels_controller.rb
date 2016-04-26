@@ -274,11 +274,12 @@ class TravelsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(tempurl, "PriceComparison")
+      @impression = ImpressionMissing.find_or_initialize_by_hosted_site_url_and_req_type(tempurl, "PriceComparison")
       if @impression.new_record?
-        @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
+        # @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
+        @impression.save
       else
-        @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
+        @impression.update_attributes(:count => @impression.count + 1)
       end
       #address = Geocoder.search(request.ip)
       defatetime = Time.now.to_i
@@ -415,11 +416,13 @@ class TravelsController < ApplicationController
     else
       @related_hotels =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(url, "PriceComparison")
+      @impression = ImpressionMissing.find_or_initialize_by_hosted_site_url_and_req_type(url, "PriceComparison")
       if @impression.new_record?
-        @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
+        @impression.count = 1
+        @impression.save
       else
-        @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
+        # @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
+        @impression.update_attributes(:count => @impression.count + 1)
       end
       #address = Geocoder.search(request.ip)
       defatetime = Time.now.to_i

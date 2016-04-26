@@ -177,10 +177,10 @@ class CookieMatch < ActiveRecord::Base
         end
 
         user_access_details_count = user_access_details.count
-        user_access_details_import = []
+        # user_access_details_import = []
         redis_rtb_hash = {}
         plannto_user_detail_hash = {}
-        housing_user_access_details_user_ids = []
+        # housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
           begin
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
@@ -196,7 +196,7 @@ class CookieMatch < ActiveRecord::Base
             # user_access_details_import << new_user_access_detail
 
             if new_user_access_detail.source == "housing"
-              housing_user_access_details_user_ids << new_user_access_detail.plannto_user_id
+              # housing_user_access_details_user_ids << new_user_access_detail.plannto_user_id
               next
             end
 
@@ -248,7 +248,7 @@ class CookieMatch < ActiveRecord::Base
               # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{par_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
               # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{ref_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
 
-              redis_vals = $redis_rtb.hgetall "url:#{url_without_params}"
+              redis_vals = $redis_rtb.hgetall("url:#{url_without_params}")
 
               # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
               if !redis_vals.blank?

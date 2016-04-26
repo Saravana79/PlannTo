@@ -5,7 +5,7 @@ class ImpressionMissing < ActiveRecord::Base
       impression.count = 1
       impression.save
     else
-      impression.update_attributes(:updated_time => Time.zone.now, :count => impression.count + 1)
+      impression.update_attributes(:count => impression.count + 1)
     end
 
     impression

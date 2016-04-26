@@ -97,7 +97,7 @@ class UserAccessDetail < ActiveRecord::Base
               # ssu << ss_url
               # i_type.ssu = ssu.compact.uniq
               i_type.r = resale
-              i_type.save!
+              # i_type.save!
             end
           end
 
@@ -123,6 +123,8 @@ class UserAccessDetail < ActiveRecord::Base
               $redis_rtb.hmset(autoportal_key, ["source", "autoportal", "click_item_ids", ci_ids.join(",")])
               $redis_rtb.expire(autoportal_key, 2.weeks)
             end
+          else
+            i_type.save!
           end
 
           plannto_user_detail_hash_new, resale_val = plannto_user_detail.update_additional_details(url)

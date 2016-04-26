@@ -343,11 +343,13 @@ class ArticleContent < Content
 
       @best_deals.select { |a| a }
     else
-      @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(url, "OffersDeals")
+      @impression = ImpressionMissing.find_or_initialize_by_hosted_site_url_and_req_type(url, "OffersDeals")
       if @impression.new_record?
-        @impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
+        # @impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
+        @impression.count = 1
+        @impression.save
       else
-        @impression.update_attributes(updated_time: Time.zone.now, :count => @impression.count + 1)
+        @impression.update_attributes(:count => @impression.count + 1)
       end
     end
     return @item, @best_deals, @impression_id
