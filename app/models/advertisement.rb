@@ -1338,6 +1338,7 @@ class Advertisement < ActiveRecord::Base
         redis_rtb_hash = {}
         plannto_user_detail_hash = {}
         plannto_autoportal_hash = {}
+        cookie_matches_plannto_ids = []
         non_ad_impressions_list.each do |impression|
           begin
             article_content = ArticleContent.find_by_sql("select itemtype_id,sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
@@ -1359,10 +1360,11 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                 else
                   item_ids = match_item_ids.join(",")
 
-                  redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
+                  redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
                   redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                   plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
                   plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
+                  cookie_matches_plannto_ids << cookie_matches_plannto_id if cookie_matches_plannto_id.blank?
                 end
               end
 
@@ -1395,6 +1397,26 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           plannto_autoportal_hash.each do |key, val|
             $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.expire(key, 2.weeks)
+          end
+        end
+
+        p "-------------------------------- CookieMatch In User Access Detail ------------------------------"
+
+        if !cookie_matches_plannto_ids.compact!.blank?
+          begin
+            cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
+            cookie_matches.update_all(:updated_at => Time.now)
+
+            $redis_rtb.pipelined do
+              cookie_matches.each do |cookie_match|
+                if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
+                  $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
+                  $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
+                end
+              end
+            end
+          rescue Exception => e
+            p "Error processing cookie match"
           end
         end
 

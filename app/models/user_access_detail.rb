@@ -29,7 +29,8 @@ class UserAccessDetail < ActiveRecord::Base
     p "========================= already_exist => #{already_exist} ========================="
 
     rk = 0
-    cookie_matches_plannto_ids = []
+    # cookie_matches_plannto_ids = []
+    cookie_matches_plannto_id = nil
 
     if already_exist == false
 
@@ -61,6 +62,7 @@ class UserAccessDetail < ActiveRecord::Base
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
             plannto_user_detail.gid = cookie_match.google_user_id
+            cookie_matches_plannto_id = cookie_match.plannto_user_id
             # plannto_user_detail.save!
           end
         elsif plannto_user_detail.blank?
@@ -68,6 +70,7 @@ class UserAccessDetail < ActiveRecord::Base
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
             plannto_user_detail.gid = cookie_match.google_user_id
+            cookie_matches_plannto_id = cookie_match.plannto_user_id
           end
           # plannto_user_detail.save!
         end
@@ -150,7 +153,7 @@ class UserAccessDetail < ActiveRecord::Base
           plannto_user_detail.skip_duplicate_update = true
           plannto_user_detail.save!
 
-          cookie_matches_plannto_ids << plannto_user_detail.pid #TODO: have to implement cookie match process
+          # cookie_matches_plannto_ids << plannto_user_detail.pid #TODO: have to implement cookie match process
         end
 
         # add_fad = u_values.blank? ? true : false
@@ -312,25 +315,25 @@ class UserAccessDetail < ActiveRecord::Base
       end
     end
 
-    p "-------------------------------- CookieMatch In User Access Detail ------------------------------"
-
-    if !cookie_matches_plannto_ids.compact!.blank?
-      begin
-        cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
-        cookie_matches.update_all(:updated_at => Time.now)
-
-        $redis_rtb.pipelined do
-          cookie_matches.each do |cookie_match|
-            if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
-              $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
-            end
-          end
-        end
-      rescue Exception => e
-        p "Error processing cookie match"
-      end
-    end
+    # p "-------------------------------- CookieMatch In User Access Detail ------------------------------"
+    #
+    # if !cookie_matches_plannto_ids.compact!.blank?
+    #   begin
+    #     cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
+    #     cookie_matches.update_all(:updated_at => Time.now)
+    #
+    #     $redis_rtb.pipelined do
+    #       cookie_matches.each do |cookie_match|
+    #         if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
+    #           $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
+    #           $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
+    #         end
+    #       end
+    #     end
+    #   rescue Exception => e
+    #     p "Error processing cookie match"
+    #   end
+    # end
 
     # $redis_rtb.pipelined do
     #   redis_rtb_hash.each do |key, val|
@@ -339,7 +342,7 @@ class UserAccessDetail < ActiveRecord::Base
     #     $redis_rtb.expire(key, 2.weeks)
     #   end
     # end
-    return redis_rtb_hash, plannto_user_detail_hash, plannto_autoportal_hash
+    return redis_rtb_hash, plannto_user_detail_hash, plannto_autoportal_hash, cookie_matches_plannto_id
   end
 
   def self.get_buying_list_above(above_val, u_values, buying_list_key, base_item_ids)
