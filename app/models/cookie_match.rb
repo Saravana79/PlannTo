@@ -330,6 +330,8 @@ where url = '#{ref_url}' group by ac.id").first
           end
         end
 
+        p "List of autoportal for rtb update"
+        p plannto_autoportal_hash
         $redis_rtb.pipelined do
           plannto_autoportal_hash.each do |key, val|
             $redis_rtb.hmset(key, val.flatten)

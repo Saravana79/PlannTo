@@ -25,6 +25,9 @@ class UserAccessDetail < ActiveRecord::Base
     plannto_autoportal_hash = {}
 
     already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
+
+    p "========================= already_exist => #{already_exist} ========================="
+
     rk = 0
     cookie_matches_plannto_ids = []
 
@@ -124,7 +127,7 @@ class UserAccessDetail < ActiveRecord::Base
             # ubl:pl:<userid>:<itemtye>
 
             #TODO: trying to save as bulk in redis rtb
-            # autoportal_key = "ubl:pl:#{plannto_user_detail.pid}:#{itemtype_id}"
+            autoportal_key = "ubl:pl:#{plannto_user_detail.pid}:#{itemtype_id}"
             # $redis_rtb.pipelined do
             #   $redis_rtb.hmset(autoportal_key, ["source", "autoportal", "click_item_ids", ci_ids.join(",")])
             #   $redis_rtb.expire(autoportal_key, 2.weeks)
