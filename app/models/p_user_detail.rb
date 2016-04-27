@@ -161,7 +161,10 @@ class PUserDetail
       key_prefix = "ubl:pl:#{user_id_for_key}"
     end
 
+    p "***************** redis query calling *****************"
     values = $redis_rtb.hgetall(key_prefix)
+    p "----------------------------------"
+    p values
     values = {} if values.blank?
     redis_rtb = {key_prefix => values}
 
@@ -205,10 +208,11 @@ class PUserDetail
       redis_rtb_ubl.merge!("g" => "f")
     end
 
-    self.skip_callback = true
-    self.skip_duplicate_update = true
+    p "&&&&&&&&&& Additional details assigned &&&&&&&&&&"
+    # self.skip_callback = true
+    # self.skip_duplicate_update = true
 
-    self.save!
+    # self.save!
 
     return redis_rtb, resale
   end
@@ -240,12 +244,14 @@ class PUserDetail
   private
 
   def update_lad
+    p 6666666666666666666666666
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
       # update_duplicate_record
     end
 
     if self.skip_callback != true
+      p 111111111111111
       self.skip_duplicate_update = true
       self.skip_callback = true
       self.lad = Time.now

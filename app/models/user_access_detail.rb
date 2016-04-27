@@ -57,7 +57,7 @@ class UserAccessDetail < ActiveRecord::Base
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
             plannto_user_detail.gid = cookie_match.google_user_id
-            plannto_user_detail.save!
+            # plannto_user_detail.save!
           end
         elsif plannto_user_detail.blank?
           plannto_user_detail = PUserDetail.new(:pid => user_id)
@@ -65,7 +65,7 @@ class UserAccessDetail < ActiveRecord::Base
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
             plannto_user_detail.gid = cookie_match.google_user_id
           end
-          plannto_user_detail.save!
+          # plannto_user_detail.save!
         end
 
         i_type = nil
@@ -85,18 +85,21 @@ class UserAccessDetail < ActiveRecord::Base
             end
 
             if i_type.blank?
-              plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
-              i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+              # plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
+              # i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+
+              # plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
+              i_type = IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
             else
               lu = i_type.lu
               lu = lu.to_a
               lu << url
               i_type.lu = lu.compact.uniq
+              i_type.r = resale
               # ssu = i_type.ssu
               # ssu = ssu.to_a
               # ssu << ss_url
               # i_type.ssu = ssu.compact.uniq
-              i_type.r = resale
               # i_type.save!
             end
           end
@@ -115,7 +118,7 @@ class UserAccessDetail < ActiveRecord::Base
             ssu << ss_url
             i_type.ssu = ssu.compact.uniq
 
-            i_type.save!
+            # i_type.save! if !i_type.new_record?
 
             # ubl:pl:<userid>:<itemtye>
             autoportal_key = "ubl:pl:#{plannto_user_detail.pid}:#{itemtype_id}"
@@ -124,7 +127,8 @@ class UserAccessDetail < ActiveRecord::Base
               $redis_rtb.expire(autoportal_key, 2.weeks)
             end
           else
-            i_type.save!
+            #todo: will chcek in feature & totally save below
+            # i_type.save! if !i_type.new_record?
           end
 
           plannto_user_detail_hash_new, resale_val = plannto_user_detail.update_additional_details(url)
@@ -195,40 +199,54 @@ class UserAccessDetail < ActiveRecord::Base
           p i_type
 
           if !i_type.blank?
-            removed_item_ids = i_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
-            existing_item_ids = i_type.m_items.map(&:item_id)
-            arrival_item_ids = item_ids.map(&:to_i)
+            if !i_type.new_record?
+              removed_item_ids = i_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
+              existing_item_ids = i_type.m_items.map(&:item_id)
+              arrival_item_ids = item_ids.map(&:to_i)
 
-            removed_item_ids = removed_item_ids - arrival_item_ids
+              removed_item_ids = removed_item_ids - arrival_item_ids
 
-            common_item_ids = arrival_item_ids & existing_item_ids
+              common_item_ids = arrival_item_ids & existing_item_ids
 
-            new_item_ids = arrival_item_ids - common_item_ids
+              new_item_ids = arrival_item_ids - common_item_ids
 
-            if !removed_item_ids.blank?
-              removed_item_ids.each do |item_id|
-                exp_item = i_type.m_items.where(:item_id => item_id).last
-                exp_item.destroy
-              end
-            end
-
-            if !new_item_ids.blank?
-              new_item_ids.each do |item_id|
-                # lad = u_values["#{item_id}_la"].to_date
-                # rk = u_values["#{item_id}_c"]
-                i_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
-              end
-            end
-
-            if !common_item_ids.blank?
-              common_item_ids.each do |item_id|
-                m_item = i_type.m_items.where(:item_id => item_id).last
-                if !m_item.blank?
-                  m_item.lad = Date.today
-                  m_item.rk = m_item.rk.to_i + rk.to_i
-                  m_item.save!
+              if !removed_item_ids.blank?
+                removed_item_ids.each do |item_id|
+                  exp_item = i_type.m_items.where(:item_id => item_id).last
+                  exp_item.destroy
                 end
               end
+
+              if !new_item_ids.blank?
+                new_item_ids.each do |item_id|
+                  # lad = u_values["#{item_id}_la"].to_date
+                  # rk = u_values["#{item_id}_c"]
+                  i_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
+                end
+              end
+
+              if !common_item_ids.blank?
+                common_item_ids.each do |item_id|
+                  m_item = i_type.m_items.where(:item_id => item_id).last
+                  if !m_item.blank?
+                    m_item.lad = Date.today
+                    m_item.rk = m_item.rk.to_i + rk.to_i
+                    m_item.save!
+                  end
+                end
+              end
+              i_type.save!
+            else
+              new_item_ids = item_ids.map(&:to_i)
+
+              if !new_item_ids.blank?
+                new_item_ids.each do |item_id|
+                  # lad = u_values["#{item_id}_la"].to_date
+                  # rk = u_values["#{item_id}_c"]
+                  i_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
+                end
+              end
+              plannto_user_detail.i_types << i_type
             end
 
             #Update redis_rtb from plannto_user_detail

@@ -6,6 +6,7 @@ class ImpressionMissing < ActiveRecord::Base
       impression.save
     else
       impression.update_attributes(:count => impression.count + 1)
+      ActiveRecord::Base.connection.execute("update impression_missings set count=count+1 where id=#{impression.id}")
     end
 
     impression
