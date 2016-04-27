@@ -185,7 +185,8 @@ class CookieMatch < ActiveRecord::Base
         cookie_matches_plannto_ids = []
         # housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
-          cookie_match = imported_values.select {|each_rec| (each_rec.plannto_user_id == user_access_detail["plannto_user_id"] && !each_rec.google_user_id.blank?)}.last
+          p "############## Cookie match from array of imported values ##############"
+          p cookie_match = imported_values.select {|each_rec| (each_rec.plannto_user_id == user_access_detail["plannto_user_id"] && !each_rec.google_user_id.blank?)}.last
           begin
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
             p "+++++++++++++++ Source as #{user_access_detail["source"]} +++++++++++++++"
@@ -275,15 +276,15 @@ class CookieMatch < ActiveRecord::Base
               else
                 # ImpressionMissing.create_or_update_impression_missing(url_without_params, "vendor_page")
 
-                impression = ImpressionMissing.where(:hosted_site_url => url_without_params).last
-                if impression.blank?
+                # impression = ImpressionMissing.where(:hosted_site_url => url_without_params).last
+                # if impression.blank?
                   impression_missings_arr << ImpressionMissing.new(:hosted_site_url => url_without_params, :req_type => "vendor_page", :count => 1)
                 # else
                   # impression.update_attributes(:count => impression.count + 1)
                   # ActiveRecord::Base.connection.execute("update impression_missings set count=count+1 where id=#{impression.id}")
-                end
+                # end
 
-                impression
+                # impression
 
               end
             elsif !msp_id.blank?
