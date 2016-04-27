@@ -1,4 +1,5 @@
 class ImpressionMissing < ActiveRecord::Base
+  validates_uniqueness_of :hosted_site_url
   def self.create_or_update_impression_missing(tempurl, type="PriceComparison")
     impression = ImpressionMissing.find_or_initialize_by_hosted_site_url_and_req_type(tempurl, type)
     if impression.new_record?

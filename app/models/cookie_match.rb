@@ -335,6 +335,7 @@ where url = '#{ref_url}' group by ac.id").first
 
         # Create impression missing records
         if !impression_missings_arr.blank?
+          impression_missings_arr = impression_missings_arr.uniq(&:hosted_site_url)
           ImpressionMissing.import(impression_missings_arr)
         end
 
