@@ -181,6 +181,7 @@ class CookieMatch < ActiveRecord::Base
         redis_rtb_hash = {}
         plannto_user_detail_hash = {}
         plannto_autoportal_hash = {}
+        impression_missings_arr = {}
         # housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
           begin
@@ -266,7 +267,18 @@ class CookieMatch < ActiveRecord::Base
                   plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
                 end
               else
-                ImpressionMissing.create_or_update_impression_missing(url_without_params, "vendor_page")
+                # ImpressionMissing.create_or_update_impression_missing(url_without_params, "vendor_page")
+
+                impression = ImpressionMissing.where(:hosted_site_url => tempurl).last
+                if impression.blank?
+                  impression_missings_arr << ImpressionMissing.new(:hosted_site_url => tempurl, :req_type => "vendor_page", :count => 1)
+                # else
+                  # impression.update_attributes(:count => impression.count + 1)
+                  # ActiveRecord::Base.connection.execute("update impression_missings set count=count+1 where id=#{impression.id}")
+                end
+
+                impression
+
               end
             elsif !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
@@ -314,6 +326,11 @@ where url = '#{ref_url}' group by ac.id").first
           end
         end
 
+        # Create impression missing records
+        if !impression_missings_arr.blank?
+          ImpressionMissing.import(impression_missings_arr)
+        end
+
         # Redis Rtb update
         $redis_rtb.pipelined do
           redis_rtb_hash.each do |key, val|
@@ -331,7 +348,6 @@ where url = '#{ref_url}' group by ac.id").first
         end
 
         p "List of autoportal for rtb update"
-        p plannto_autoportal_hash
         $redis_rtb.pipelined do
           plannto_autoportal_hash.each do |key, val|
             $redis_rtb.hmset(key, val.flatten)
