@@ -185,6 +185,7 @@ class CookieMatch < ActiveRecord::Base
         cookie_matches_plannto_ids = []
         # housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
+          cookie_match = imported_values.select {|each_rec| (each_rec.plannto_user_id == user_access_detail["plannto_user_id"] && !each_rec.google_user_id.blank?)}.last
           begin
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
             p "+++++++++++++++ Source as #{user_access_detail["source"]} +++++++++++++++"
@@ -215,7 +216,7 @@ class CookieMatch < ActiveRecord::Base
                 itemtype_id = item_detail_other.itemtype_id rescue ""
 
                 item_ids = item_detail_other.item_detail_other_mappings.map(&:item_id).join(",").to_s rescue ""
-                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id, "", cookie_match)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
                 plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
@@ -229,7 +230,7 @@ class CookieMatch < ActiveRecord::Base
                 itemtype_id = item_detail_other.itemtype_id rescue ""
 
                 item_ids = item_detail_other.item_detail_other_mappings.map(&:item_id).join(",").to_s rescue ""
-                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id, "", cookie_match)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
                 plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
@@ -242,7 +243,7 @@ class CookieMatch < ActiveRecord::Base
               itemtype_id = item_detail_other.itemtype_id rescue ""
 
               item_ids = ""
-              redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id)
+              redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id, "", cookie_match)
               plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
               cookie_matches_plannto_ids << cookie_matches_plannto_id if cookie_matches_plannto_id.blank?
@@ -266,7 +267,7 @@ class CookieMatch < ActiveRecord::Base
                 item_details_by_itemtype_ids.each do |key, val|
                   itemtype_id = key
                   item_ids = val
-                  redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id, user_access_detail["source_source_url"])
+                  redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, user_access_detail["source"], itemtype_id, user_access_detail["source_source_url"], cookie_match)
                   plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
                   plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
                   cookie_matches_plannto_ids << cookie_matches_plannto_id if cookie_matches_plannto_id.blank?
@@ -300,7 +301,7 @@ class CookieMatch < ActiveRecord::Base
                 itemtype_id = item_detail.itemtype_id rescue ""
 
                 item_ids = item_detail.itemid.to_s rescue ""
-                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id, "", cookie_match)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
                 plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
@@ -320,7 +321,7 @@ where url = '#{ref_url}' group by ac.id").first
                 #plannto user details
                 itemtype_id = article_content.itemtype_id
 
-                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id, "", cookie_match)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
                 plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)

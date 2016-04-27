@@ -13,7 +13,7 @@ class UserAccessDetail < ActiveRecord::Base
   #   end
   # end
 
-  def self.update_buying_list(user_id, url, type, item_ids,source_categories, source="google", itemtype_id=nil, ss_url=nil)
+  def self.update_buying_list(user_id, url, type, item_ids,source_categories, source="google", itemtype_id=nil, ss_url=nil, cookie_match=nil)
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     agg_info = {}
     # base_item_ids = Item.get_base_items_from_config()
@@ -57,20 +57,22 @@ class UserAccessDetail < ActiveRecord::Base
       if item_ids.count < 10
 
         plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
-
-        if (!plannto_user_detail.blank? && plannto_user_detail.gid.blank?)
+        if cookie_match.blank?
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
-            plannto_user_detail.gid = cookie_match.google_user_id
             cookie_matches_plannto_id = cookie_match.plannto_user_id
+          end
+        end
+
+        if (!plannto_user_detail.blank? && plannto_user_detail.gid.blank?)
+          if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+            plannto_user_detail.gid = cookie_match.google_user_id
             # plannto_user_detail.save!
           end
         elsif plannto_user_detail.blank?
           plannto_user_detail = PUserDetail.new(:pid => user_id)
-          cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
             plannto_user_detail.gid = cookie_match.google_user_id
-            cookie_matches_plannto_id = cookie_match.plannto_user_id
           end
           # plannto_user_detail.save!
         end
