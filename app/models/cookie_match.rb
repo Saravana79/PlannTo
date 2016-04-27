@@ -449,7 +449,7 @@ class CookieMatch < ActiveRecord::Base
 
       # length = $redis_rtb.llen("users:visits")
 
-      length = $redis.llen("resque:queue:cookie_matching_process")
+      length = $redis.llen("resque:queue:cookie_matching_process_batch")
       if length < 100
         [*length...100].each do |each_count|
           # user_vals = $redis_rtb.lrange("users:visits", 0, 5000)
