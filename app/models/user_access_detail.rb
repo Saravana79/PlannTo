@@ -189,18 +189,21 @@ class UserAccessDetail < ActiveRecord::Base
               new_item_ids = arrival_item_ids - common_item_ids
 
               if !removed_item_ids.blank?
-                removed_item_ids.each do |item_id|
-                  exp_item = i_type.m_items.where(:item_id => item_id).last
-                  exp_item.destroy
-                end
+                i_type.m_items.where(:item_id.in => removed_item_ids).destroy_all
+                # removed_item_ids.each do |item_id|
+                #   exp_item = i_type.m_items.where(:item_id => item_id).last
+                #   exp_item.destroy
+                # end
               end
 
               if !new_item_ids.blank?
+                arry_of_m_items = []
                 new_item_ids.each do |item_id|
                   # lad = u_values["#{item_id}_la"].to_date
                   # rk = u_values["#{item_id}_c"]
-                  i_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
+                  arry_of_m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
                 end
+                i_type.m_items << arry_of_m_items
               end
 
               if !common_item_ids.blank?
@@ -208,7 +211,7 @@ class UserAccessDetail < ActiveRecord::Base
                   m_item = i_type.m_items.where(:item_id => item_id).last
                   if !m_item.blank?
                     m_item.lad = Date.today
-                    m_item.rk = m_item.rk.to_i + rk.to_i
+                    m_item.rk = m_item.rk.to_i + rk.to_i if rk.to_i != 0
                     m_item.save!
                   end
                 end
@@ -218,11 +221,13 @@ class UserAccessDetail < ActiveRecord::Base
               new_item_ids = item_ids.map(&:to_i)
 
               if !new_item_ids.blank?
+                arry_of_m_items = []
                 new_item_ids.each do |item_id|
                   # lad = u_values["#{item_id}_la"].to_date
                   # rk = u_values["#{item_id}_c"]
-                  i_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
+                  arry_of_m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
                 end
+                i_type.m_items << arry_of_m_items
               end
               plannto_user_detail.i_types << i_type
             end
