@@ -454,7 +454,7 @@ class CookieMatch < ActiveRecord::Base
         [*length...100].each do |each_count|
           # user_vals = $redis_rtb.lrange("users:visits", 0, 5000)
           cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 3000)
-          Resque.enqueue(CookieMatchingProcess, "cookie_matching_process_in_redis", Time.zone.now.utc, cookie_details)
+          Resque.enqueue(CookieMatchingProcessBatch, "cookie_matching_process_in_redis", Time.zone.now.utc, cookie_details)
           $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
         end
       end
