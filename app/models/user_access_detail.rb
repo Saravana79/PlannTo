@@ -25,7 +25,10 @@ class UserAccessDetail < ActiveRecord::Base
     plannto_autoportal_hash = {}
     item_ids = item_ids.to_s.split(",")
     already_exist = true
-
+    resale = type == ArticleCategory::ReSale ? true : false
+    plannto_user_detail = nil
+    i_type = nil
+    
     # already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
     if item_ids.count < 10
       plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
