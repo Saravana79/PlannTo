@@ -23,8 +23,28 @@ class UserAccessDetail < ActiveRecord::Base
     redis_rtb_hash = {}
     plannto_user_detail_hash = {}
     plannto_autoportal_hash = {}
+    item_ids = item_ids.to_s.split(",")
+    already_exist = true
 
-    already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
+    # already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
+    if item_ids.count < 10
+      plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
+      if !plannto_user_detail.blank?
+        if !itemtype_id.blank? && itemtype_id.to_i != 0
+          i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+          if !i_type.blank?
+            list_of_urls = i_type.lu.to_a
+            if !list_of_urls.include?(url)
+              already_exist = false
+            end
+          else
+            already_exist = false
+          end
+        end
+      else
+        already_exist = false
+      end
+    end
 
     p "========================= already_exist => #{already_exist} ========================="
 
@@ -51,12 +71,7 @@ class UserAccessDetail < ActiveRecord::Base
         rk = 5
       end
 
-      resale = type == ArticleCategory::ReSale ? true : false
-
-      item_ids = item_ids.to_s.split(",")
       if item_ids.count < 10
-
-        plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
         if cookie_match.blank?
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
@@ -77,12 +92,12 @@ class UserAccessDetail < ActiveRecord::Base
           # plannto_user_detail.save!
         end
 
-        i_type = nil
+        # i_type = nil
         if !plannto_user_detail.blank?
           #plannto user details
 
-          if !itemtype_id.blank?
-            i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+          if !itemtype_id.blank? && itemtype_id.to_i != 0
+            # i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
             new_m_agg_info = ""
 
             if resale == true
@@ -111,103 +126,52 @@ class UserAccessDetail < ActiveRecord::Base
               # i_type.ssu = ssu.compact.uniq
               # i_type.save!
             end
+
+            if url.to_s.include?("autoportal")
+              ci_ids = i_type.ci_ids
+              ci_ids = ci_ids.blank? ? item_ids : (ci_ids + item_ids)
+              ci_ids = ci_ids.map(&:to_i).compact.uniq
+
+              if !i_type.blank?
+                i_type.ci_ids = ci_ids
+                i_type.lcd = Date.today
+                i_type.source = "autoportal"
+
+                ssu = i_type.ssu
+                ssu = ssu.to_a
+                ssu << ss_url
+                i_type.ssu = ssu.compact.uniq
+              end
+
+              # i_type.save! if !i_type.new_record?
+
+              # ubl:pl:<userid>:<itemtye>
+
+              #TODO: trying to save as bulk in redis rtb
+              autoportal_key = "ubl:pl:#{plannto_user_detail.pid}:#{itemtype_id}"
+              # $redis_rtb.pipelined do
+              #   $redis_rtb.hmset(autoportal_key, ["source", "autoportal", "click_item_ids", ci_ids.join(",")])
+              #   $redis_rtb.expire(autoportal_key, 2.weeks)
+              # end
+
+              plannto_autoportal_hash.merge!(autoportal_key => {"source" => "autoportal", "click_item_ids" => ci_ids.join(",")})
+            end
+
+            plannto_user_detail_hash_new, resale_val = plannto_user_detail.update_additional_details(url)
+            plannto_user_detail_hash_new.values.first.merge!(agg_info) if !agg_info.blank? && !plannto_user_detail_hash_new.blank?
+            plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+
+            if !new_m_agg_info.blank?
+              m_agg_info = plannto_user_detail.ai.to_s
+              m_agg_info_arr = m_agg_info.split(",")
+              m_agg_info_arr << new_m_agg_info
+              plannto_user_detail.ai = m_agg_info_arr.uniq.join(",")
+            end
+
+            # plannto_user_detail.skip_duplicate_update = true
+            plannto_user_detail.lad = Time.now
+            plannto_user_detail.save!
           end
-
-
-          if url.to_s.include?("autoportal")
-            ci_ids = i_type.ci_ids
-            ci_ids = ci_ids.blank? ? item_ids : (ci_ids + item_ids)
-            ci_ids = ci_ids.map(&:to_i).compact.uniq
-            i_type.ci_ids = ci_ids
-            i_type.lcd = Date.today
-            i_type.source = "autoportal"
-
-            ssu = i_type.ssu
-            ssu = ssu.to_a
-            ssu << ss_url
-            i_type.ssu = ssu.compact.uniq
-
-            # i_type.save! if !i_type.new_record?
-
-            # ubl:pl:<userid>:<itemtye>
-
-            #TODO: trying to save as bulk in redis rtb
-            autoportal_key = "ubl:pl:#{plannto_user_detail.pid}:#{itemtype_id}"
-            # $redis_rtb.pipelined do
-            #   $redis_rtb.hmset(autoportal_key, ["source", "autoportal", "click_item_ids", ci_ids.join(",")])
-            #   $redis_rtb.expire(autoportal_key, 2.weeks)
-            # end
-
-            plannto_autoportal_hash.merge!(autoportal_key => {"source" => "autoportal", "click_item_ids" => ci_ids.join(",")})
-          end
-
-          plannto_user_detail_hash_new, resale_val = plannto_user_detail.update_additional_details(url)
-          plannto_user_detail_hash_new.values.first.merge!(agg_info) if !agg_info.blank? && !plannto_user_detail_hash_new.blank?
-          plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
-
-          if !new_m_agg_info.blank?
-            m_agg_info = plannto_user_detail.ai.to_s
-            m_agg_info_arr = m_agg_info.split(",")
-            m_agg_info_arr << new_m_agg_info
-            plannto_user_detail.ai = m_agg_info_arr.uniq.join(",")
-          end
-
-          # plannto_user_detail.skip_duplicate_update = true
-          plannto_user_detail.lad = Time.now
-          plannto_user_detail.save!
-
-          # cookie_matches_plannto_ids << plannto_user_detail.pid #TODO: have to implement cookie match process
-        end
-
-        # add_fad = u_values.blank? ? true : false
-        #
-        # # Remove expired items from user details
-        # u_values.each do |key,val|
-        #   if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
-        #     item_id = key.gsub("_la", "")
-        #     u_values.delete("#{item_id}_c")
-        #     u_values.delete("#{item_id}_la")
-        #   end
-        # end
-        #
-        # # incrby count for items
-        # item_ids.each do |each_key|
-        #   if u_values["#{each_key}_c"].blank?
-        #     u_values["#{each_key}_c"] = rk
-        #     u_values["#{each_key}_la"] = Date.today.to_s
-        #   else
-        #     old_rk = u_values["#{each_key}_c"]
-        #     u_values["#{each_key}_c"] = old_rk.to_i + rk
-        #     u_values["#{each_key}_la"] = Date.today.to_s
-        #   end
-        # end
-        #
-        # # Above 30 Ranking
-        # buying_list = get_buying_list_above(30, u_values, "buyinglist", base_item_ids)
-        #
-        # # Above 20 Ranking
-        # buying_list_20 = get_buying_list_above(20, u_values, "buyinglist_20", base_item_ids)
-        #
-        #
-        # #buying soon check
-        # top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com"]
-        # host = Item.get_host_without_www(url)
-        # bs = top_sites.include?(host)
-        #
-        # # if !old_buying_list.blank? || !buying_list.blank?
-        #   u_values["buyinglist"] = buying_list.join(",")
-        #   u_values["buyinglist_20"] = buying_list_20.join(",")
-        #   existing_source = u_values["source"].to_s
-        #   existing_source = existing_source.split(",").compact
-        #   existing_source << source
-        #   new_source = existing_source.uniq
-        #   u_values["source"] = new_source.join(",")
-        #   items_hash = u_values.select {|k,_| k.include?("_c")}
-        #   items_count = items_hash.count
-        #   all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
-
-          #plannto user details
-          p i_type
 
           if !i_type.blank?
             if !i_type.new_record?
@@ -287,6 +251,56 @@ class UserAccessDetail < ActiveRecord::Base
               end
             end
           end
+
+          # cookie_matches_plannto_ids << plannto_user_detail.pid #TODO: have to implement cookie match process
+        end
+
+        # add_fad = u_values.blank? ? true : false
+        #
+        # # Remove expired items from user details
+        # u_values.each do |key,val|
+        #   if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
+        #     item_id = key.gsub("_la", "")
+        #     u_values.delete("#{item_id}_c")
+        #     u_values.delete("#{item_id}_la")
+        #   end
+        # end
+        #
+        # # incrby count for items
+        # item_ids.each do |each_key|
+        #   if u_values["#{each_key}_c"].blank?
+        #     u_values["#{each_key}_c"] = rk
+        #     u_values["#{each_key}_la"] = Date.today.to_s
+        #   else
+        #     old_rk = u_values["#{each_key}_c"]
+        #     u_values["#{each_key}_c"] = old_rk.to_i + rk
+        #     u_values["#{each_key}_la"] = Date.today.to_s
+        #   end
+        # end
+        #
+        # # Above 30 Ranking
+        # buying_list = get_buying_list_above(30, u_values, "buyinglist", base_item_ids)
+        #
+        # # Above 20 Ranking
+        # buying_list_20 = get_buying_list_above(20, u_values, "buyinglist_20", base_item_ids)
+        #
+        #
+        # #buying soon check
+        # top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com"]
+        # host = Item.get_host_without_www(url)
+        # bs = top_sites.include?(host)
+        #
+        # # if !old_buying_list.blank? || !buying_list.blank?
+        #   u_values["buyinglist"] = buying_list.join(",")
+        #   u_values["buyinglist_20"] = buying_list_20.join(",")
+        #   existing_source = u_values["source"].to_s
+        #   existing_source = existing_source.split(",").compact
+        #   existing_source << source
+        #   new_source = existing_source.uniq
+        #   u_values["source"] = new_source.join(",")
+        #   items_hash = u_values.select {|k,_| k.include?("_c")}
+        #   items_count = items_hash.count
+        #   all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
 
 
         #   all_item_ids = all_item_ids.join(",")
