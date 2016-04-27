@@ -274,9 +274,9 @@ class CookieMatch < ActiveRecord::Base
               else
                 # ImpressionMissing.create_or_update_impression_missing(url_without_params, "vendor_page")
 
-                impression = ImpressionMissing.where(:hosted_site_url => tempurl).last
+                impression = ImpressionMissing.where(:hosted_site_url => url_without_params).last
                 if impression.blank?
-                  impression_missings_arr << ImpressionMissing.new(:hosted_site_url => tempurl, :req_type => "vendor_page", :count => 1)
+                  impression_missings_arr << ImpressionMissing.new(:hosted_site_url => url_without_params, :req_type => "vendor_page", :count => 1)
                 # else
                   # impression.update_attributes(:count => impression.count + 1)
                   # ActiveRecord::Base.connection.execute("update impression_missings set count=count+1 where id=#{impression.id}")
