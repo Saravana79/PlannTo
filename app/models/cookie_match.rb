@@ -181,7 +181,7 @@ class CookieMatch < ActiveRecord::Base
         redis_rtb_hash = {}
         plannto_user_detail_hash = {}
         plannto_autoportal_hash = {}
-        impression_missings_arr = {}
+        impression_missings_arr = []
         cookie_matches_plannto_ids = []
         # housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
