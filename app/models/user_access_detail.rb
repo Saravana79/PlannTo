@@ -22,6 +22,7 @@ class UserAccessDetail < ActiveRecord::Base
     # end
     redis_rtb_hash = {}
     plannto_user_detail_hash = {}
+    plannto_autoportal_hash = {}
 
     already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
     rk = 0
@@ -121,14 +122,15 @@ class UserAccessDetail < ActiveRecord::Base
             # i_type.save! if !i_type.new_record?
 
             # ubl:pl:<userid>:<itemtye>
-            autoportal_key = "ubl:pl:#{plannto_user_detail.pid}:#{itemtype_id}"
-            $redis_rtb.pipelined do
-              $redis_rtb.hmset(autoportal_key, ["source", "autoportal", "click_item_ids", ci_ids.join(",")])
-              $redis_rtb.expire(autoportal_key, 2.weeks)
-            end
-          else
-            #todo: will chcek in feature & totally save below
-            # i_type.save! if !i_type.new_record?
+
+            #TODO: trying to save as bulk in redis rtb
+            # autoportal_key = "ubl:pl:#{plannto_user_detail.pid}:#{itemtype_id}"
+            # $redis_rtb.pipelined do
+            #   $redis_rtb.hmset(autoportal_key, ["source", "autoportal", "click_item_ids", ci_ids.join(",")])
+            #   $redis_rtb.expire(autoportal_key, 2.weeks)
+            # end
+
+            plannto_autoportal_hash.merge!(autoportal_key => {"source" => "autoportal", "click_item_ids" => ci_ids.join(",")})
           end
 
           plannto_user_detail_hash_new, resale_val = plannto_user_detail.update_additional_details(url)
@@ -334,7 +336,7 @@ class UserAccessDetail < ActiveRecord::Base
     #     $redis_rtb.expire(key, 2.weeks)
     #   end
     # end
-    return redis_rtb_hash, plannto_user_detail_hash
+    return redis_rtb_hash, plannto_user_detail_hash, plannto_autoportal_hash
   end
 
   def self.get_buying_list_above(above_val, u_values, buying_list_key, base_item_ids)

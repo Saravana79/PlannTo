@@ -1337,6 +1337,7 @@ class Advertisement < ActiveRecord::Base
 
         redis_rtb_hash = {}
         plannto_user_detail_hash = {}
+        plannto_autoportal_hash = {}
         non_ad_impressions_list.each do |impression|
           begin
             article_content = ArticleContent.find_by_sql("select itemtype_id,sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
@@ -1358,9 +1359,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                 else
                   item_ids = match_item_ids.join(",")
 
-                  redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
+                  redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
                   redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                   plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+                  plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
                 end
               end
 
@@ -1384,6 +1386,13 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
         $redis_rtb.pipelined do
           plannto_user_detail_hash.each do |key, val|
+            $redis_rtb.hmset(key, val.flatten)
+            $redis_rtb.expire(key, 2.weeks)
+          end
+        end
+
+        $redis_rtb.pipelined do
+          plannto_autoportal_hash.each do |key, val|
             $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.expire(key, 2.weeks)
           end
