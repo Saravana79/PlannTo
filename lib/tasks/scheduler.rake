@@ -173,6 +173,12 @@ task :update_item_details_from_vendors_flipkart => :environment do
   Resque.enqueue(UpdateItemDetailsFromVendorsFlipkart, "update_from_vendors_flipkart", Time.zone.now.utc)
 end
 
+desc "Processing Cookie Matching Enqueue based on user id in redis"
+task :cookie_matching_process_enqueue => :environment do
+  time = Time.zone.now.utc
+  Resque.enqueue(CookieMatchingProcessEnqueue, "cookie_matching_process_in_redis_enqueue", Time.zone.now.utc)
+end
+
 desc "Update bulk cookie matching"
 task :bulk_cookie_matching_process => :environment do
   if $redis.llen("resque:queue:bulk_cookie_matching_process") < 1
