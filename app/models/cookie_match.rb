@@ -161,7 +161,7 @@ class CookieMatch < ActiveRecord::Base
 
         imported_values = imported_values.reverse.uniq(&:plannto_user_id)
 
-        result = CookieMatch.import(imported_values)
+        # result = CookieMatch.import(imported_values) #TODO: have to enable later
 
         #TODO: have to delete duplicate records
         # result.failed_instances.each do |cookie_detail|
@@ -309,24 +309,25 @@ class CookieMatch < ActiveRecord::Base
                 cookie_matches_plannto_ids << cookie_matches_plannto_id if cookie_matches_plannto_id.blank?
               end
             else
-              article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id, itemtype_id from article_contents ac inner join contents c on ac.id = c.id
-inner join item_contents_relations_cache icc on icc.content_id = ac.id
-where url = '#{ref_url}' group by ac.id").first
+              ref_url = ref_url.to_s.split("?")[0] if ref_url.include?("?")
+              redis_vals = $redis_rtb.hgetall("url:#{ref_url}")
 
-              unless article_content.blank?
-                #TODO: have to continue from here
+              # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
+              if !redis_vals.blank?
                 user_id = new_user_access_detail.plannto_user_id
-                type = article_content.sub_type
-                item_ids = article_content.all_item_ids.to_s rescue ""
+                type = redis_vals["article_type"].to_s
+                item_ids = redis_vals["item_ids"].to_s rescue ""
 
                 #plannto user details
-                itemtype_id = article_content.itemtype_id
+                itemtype_id = redis_vals["itemtype"].to_i
 
                 redis_hash, plannto_user_detail_hash_new, plannto_autoportal_hash_new, cookie_matches_plannto_id = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id, "", cookie_match)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
                 plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
                 plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
                 cookie_matches_plannto_ids << cookie_matches_plannto_id if cookie_matches_plannto_id.blank?
+              else
+                impression_missings_arr << ImpressionMissing.new(:hosted_site_url => ref_url, :req_type => "vendor_page", :count => 1)
               end
             end
           rescue Exception => e
