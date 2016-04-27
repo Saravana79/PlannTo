@@ -1,7 +1,7 @@
 class PUserDetail
   include Mongoid::Document
   # include Mongoid::Timestamps::Created
-  after_save :update_lad#, :update_duplicate_record
+  # after_save :update_lad#, :update_duplicate_record
 
   attr_accessor :skip_callback, :skip_duplicate_update
 
@@ -43,6 +43,7 @@ class PUserDetail
         cookie_match = CookieMatch.where(:plannto_user_id => impression.temp_user_id).last
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
           plannto_user_detail.gid = cookie_match.google_user_id
+          plannto_user_detail.lad = Time.now
           plannto_user_detail.save!
         end
       elsif plannto_user_detail.blank?
@@ -51,6 +52,7 @@ class PUserDetail
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
           plannto_user_detail.gid = cookie_match.google_user_id
         end
+        plannto_user_detail.lad = Time.now
         plannto_user_detail.save!
       end
     end
@@ -140,6 +142,7 @@ class PUserDetail
       end
 
       plannto_user_detail.skip_duplicate_update = true
+      plannto_user_detail.lad = Time.now
       plannto_user_detail.save!
     end
   end

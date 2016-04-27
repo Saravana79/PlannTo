@@ -1803,6 +1803,7 @@ end
                     else
                       plannto_user_detail.pid = plannto_user_id
                     end
+                    plannto_user_detail.lad = Time.now
                     plannto_user_detail.save!
                   elsif plannto_user_detail.pid.blank?
                     if plannto_user_id.blank?
@@ -1813,6 +1814,7 @@ end
                     else
                       plannto_user_detail.pid = plannto_user_id
                     end
+                    plannto_user_detail.lad = Time.now
                     plannto_user_detail.save!
                   end
 
@@ -1884,7 +1886,8 @@ end
                       plannto_user_detail.ai = m_agg_info_arr.uniq.join(",")
                     end
 
-                    plannto_user_detail.skip_duplicate_update = true
+                    # plannto_user_detail.skip_duplicate_update = true
+                    plannto_user_detail.lad = Time.now
                     plannto_user_detail.save!
 
                     cookie_matches_plannto_ids << plannto_user_detail.pid

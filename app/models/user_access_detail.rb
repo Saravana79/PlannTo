@@ -150,7 +150,8 @@ class UserAccessDetail < ActiveRecord::Base
             plannto_user_detail.ai = m_agg_info_arr.uniq.join(",")
           end
 
-          plannto_user_detail.skip_duplicate_update = true
+          # plannto_user_detail.skip_duplicate_update = true
+          plannto_user_detail.lad = Time.now
           plannto_user_detail.save!
 
           # cookie_matches_plannto_ids << plannto_user_detail.pid #TODO: have to implement cookie match process

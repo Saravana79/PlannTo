@@ -434,6 +434,7 @@ task :plannto_user_detail_process => :environment do
         end
       end
       plannto_user_detail.ai = agg_info_arr.join(",")
+      plannto_user_detail.lad = Time.now
       plannto_user_detail.save!
     rescue Exception => e
       p "Error => #{plannto_user_detail.pid}"

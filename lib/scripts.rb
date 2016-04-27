@@ -1394,3 +1394,24 @@ if res.kind_of?(Net::HTTPFound)
 else
   p "Try Different format - Its not working"
 end
+
+
+#remove CookieMatch old records of last 2 months
+
+query = "select * from cookie_matches where updated_at < '#{2.month.ago}'"
+batch_size = 10000
+
+page = 1
+begin
+  cookie_matches = CookieMatch.paginate_by_sql(query, :page => page, :per_page => batch_size).delete_all
+
+  # cookie_matches.delete_all
+  page += 1
+end while !cookie_matches.empty?
+
+
+CookieMatch.find_in_batches(:batch_size => 10000) do |cookie_matches|
+  sel_cookie_matches = cookie_matches.select {|each_record| each_record.updated_at < 2.year.ago}
+  p sel_cookie_matches.count
+  sel_cookie_matches.each {|d| d.delete}
+end
