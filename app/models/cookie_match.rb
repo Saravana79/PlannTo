@@ -185,8 +185,8 @@ class CookieMatch < ActiveRecord::Base
         cookie_matches_plannto_ids = []
         # housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
-          p "############## Cookie match from array of imported values ##############"
-          p cookie_match = imported_values.select {|each_rec| (each_rec.plannto_user_id == user_access_detail["plannto_user_id"] && !each_rec.google_user_id.blank?)}.last
+          # p "############## Cookie match from array of imported values ##############"
+          # p cookie_match = imported_values.select {|each_rec| (each_rec.plannto_user_id == user_access_detail["plannto_user_id"] && !each_rec.google_user_id.blank?)}.last
           begin
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
             p "+++++++++++++++ Source as #{user_access_detail["source"]} +++++++++++++++"
@@ -334,6 +334,7 @@ class CookieMatch < ActiveRecord::Base
             p "There was problem in UserAccssDetail => #{e}"
             p "There was problem in UserAccssDetail => #{e.backtrace}"
           end
+          p "+++++++++++++++++++++++++++++ Process Completed +++++++++++++++++++++++++++++"
         end
 
         # Create impression missing records
