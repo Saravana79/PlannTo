@@ -103,7 +103,7 @@ class Sourceitem < ActiveRecord::Base
     items.each do |item|
       p "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
       p item
-      pid = item["model_id"][0]
+      pid = item["variant_id"][0] rescue item["model_id"][0]
       title = item["pname"][0]
       url = item["landing_page"][0]
       price = Itemdetail.convert_laksh_or_crore_to_num(item["Sale_price"][0])
