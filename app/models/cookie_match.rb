@@ -536,12 +536,14 @@ class CookieMatch < ActiveRecord::Base
       end
     end
 
+    user_access_details = user_access_details.uniq_by {|d| d["plannto_user_id"] + "_" + d['source']}
+
     user_access_details_count = user_access_details.count
 
     keys_arr = []
     user_access_details.each do |each_uac|
       ref_url = each_uac["ref_url"]
-      if each_uac["source"] == "autoportal"
+      if (each_uac["source"] == "autoportal" && !ref_url.include?("cardekho") && each_uac["source"] != "housing")
         url_without_params = ref_url.to_s.split("?")[0]
         keys_arr << "url:#{url_without_params}"
       end
@@ -694,7 +696,9 @@ class CookieMatch < ActiveRecord::Base
           end
         else
           ref_url = ref_url.to_s.split("?")[0] if ref_url.include?("?")
-          redis_vals = $redis_rtb.hgetall("url:#{ref_url}")
+          # redis_vals = $redis_rtb.hgetall("url:#{ref_url}")
+
+          p redis_vals = new_hash_with_redis_vals["url:#{ref_url}"]
 
           # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
           if !redis_vals.blank?
