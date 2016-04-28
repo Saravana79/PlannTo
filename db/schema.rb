@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160407143223) do
+ActiveRecord::Schema.define(:version => 20160428133233) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -151,6 +151,8 @@ ActiveRecord::Schema.define(:version => 20160407143223) do
     t.text     "related_item_ids"
     t.string   "sort_type",                                             :default => "default"
     t.string   "other_user_ids"
+    t.string   "target_type"
+    t.integer  "location_id"
   end
 
   create_table "aggregated_details", :force => true do |t|

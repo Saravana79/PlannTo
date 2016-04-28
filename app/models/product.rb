@@ -16,7 +16,6 @@ has_one :manufacturer,
 
 
  def self.search_type(type)
-
    if (type.blank? || type.include?("Others"))
       return [ "ItemtypeTag".camelize.constantize, "Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, 
               "Beauty".camelize.constantize,"Color".camelize.constantize,"Apparel".camelize.constantize, "Style".camelize.constantize,
@@ -26,6 +25,7 @@ has_one :manufacturer,
               'Accessory'.camelize.constantize, "Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,'Training'.camelize.constantize,
               "AttributeTag".camelize.constantize,"Topic".camelize.constantize,'Insurance'.camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
    end
+   type = type.split(",") if type.include?(",")
    if type.is_a?(Array)
      return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue (t.to_s.gsub(/\s+/,'').strip.camelize.constantize rescue nil)}
    else

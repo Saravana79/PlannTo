@@ -309,7 +309,6 @@ class SearchController < ApplicationController
     results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
   end   
     render :json => results
-    
   end
 
   def search_items_by_relavance

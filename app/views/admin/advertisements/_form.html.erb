@@ -38,14 +38,15 @@
         <%= f.radio_button :advertisement_type, 'static', :class => "ad_type", :checked => @advertisement.advertisement_type == "static" ? "checked" : "" %>Static
         <%= f.radio_button :advertisement_type, 'dynamic', :class => "ad_type", :checked => @advertisement.advertisement_type == "dynamic" ? "checked" : "" %>Dynamic
         <% if current_user.is_admin? || 1==1 %>
-            <%= f.radio_button :advertisement_type, 'dynamicpc', :class => "ad_type", :checked => @advertisement.advertisement_type == "dynamicpc" ? "checked" : "" %>Dynamic Best Price
+            <!--<%#= f.radio_button :advertisement_type, 'dynamicpc', :class => "ad_type", :checked => @advertisement.advertisement_type == "dynamicpc" ? "checked" : "" %>Dynamic Best Price-->
             <!-- <%#= f.radio_button :advertisement_type, 'plannto', :class => "ad_type" %>Plannto -->
-            <%= f.radio_button :advertisement_type, 'flash', :class => "ad_type", :checked => @advertisement.advertisement_type == "flash" ? "checked" : "" %>Flash
-            <%= f.radio_button :advertisement_type, 'fashion', :class => "ad_type", :checked => @advertisement.advertisement_type == "fashion" ? "checked" : "" %>Fashion
-            <%= f.radio_button :advertisement_type, 'jockey_fashion', :class => "ad_type", :checked => @advertisement.advertisement_type == "jockey_fashion" ? "checked" : "" %>Jockey Fashion
-            <%= f.radio_button :advertisement_type, 'housing_dynamic', :class => "ad_type", :checked => @advertisement.advertisement_type == "housing_dynamic" ? "checked" : "" %>Housing Dynamic
-            <%= f.radio_button :advertisement_type, 'display_ads', :class => "ad_type", :checked => @advertisement.advertisement_type == "display_ads" ? "checked" : "" %>Display Ads
+            <!--<%#= f.radio_button :advertisement_type, 'flash', :class => "ad_type", :checked => @advertisement.advertisement_type == "flash" ? "checked" : "" %>Flash -->
+            <!--<%#= f.radio_button :advertisement_type, 'fashion', :class => "ad_type", :checked => @advertisement.advertisement_type == "fashion" ? "checked" : "" %>Fashion-->
+            <!--<%#= f.radio_button :advertisement_type, 'jockey_fashion', :class => "ad_type", :checked => @advertisement.advertisement_type == "jockey_fashion" ? "checked" : "" %>Jockey Fashion-->
+            <!--<%#= f.radio_button :advertisement_type, 'housing_dynamic', :class => "ad_type", :checked => @advertisement.advertisement_type == "housing_dynamic" ? "checked" : "" %>Housing Dynamic-->
+            <!--<%#= f.radio_button :advertisement_type, 'display_ads', :class => "ad_type", :checked => @advertisement.advertisement_type == "display_ads" ? "checked" : "" %>Display Ads-->
             <%= f.radio_button :advertisement_type, 'in_image_ads', :class => "ad_type", :checked => @advertisement.advertisement_type == "in_image_ads" ? "checked" : "" %>In Image Ads
+            <%= f.radio_button :advertisement_type, 'video', :class => "ad_type", :checked => @advertisement.advertisement_type == "video" ? "checked" : "" %>Video
         <% end %>
       </div>
     </div>
@@ -53,10 +54,14 @@
     <div class="fields-div">
         <div class="title_header float_lft">Device :</div>
         <div>
-          <%= label_tag "PC" %>
-          <%= check_box_tag "advertisement[device][]", "pc", @advertisement.device.to_s.split(",").include?("pc"), {:style => "width: 0 !important;"} %>
-          <%= label_tag "Mobile" %>
-          <%= check_box_tag "advertisement[device][]", "mobile", @advertisement.device.to_s.split(",").include?("mobile"), {:style => "width: 0 !important;"} %>
+          <label for="PC">
+            <%= check_box_tag "advertisement[device][]", "pc", @advertisement.device.to_s.split(",").include?("pc"), {:style => "width: 2 !important;"} %>
+            Pc
+          </label>
+          <label for="Mobile">
+            <%= check_box_tag "advertisement[device][]", "mobile", @advertisement.device.to_s.split(",").include?("mobile"), {:style => "width: 2 !important;"} %>
+            Mobile
+          </label>
           <%#= f.check_box :device, {}, ["pc", "mobile"]%>
         </div>
     </div>
@@ -102,7 +107,7 @@
         <ul id="ad_product_list_ul" class="tagging" style=""></ul>
       </div>
 
-      <div class="title_header float_lft">Product :</div>
+      <div class="title_header float_lft">Target Products :</div>
       <div class="taggingdiv">
         <div class="float_lft " id="displayTagBox">
           <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
@@ -113,6 +118,7 @@
       </div>
     </div>
 
+    <!--
       <div class="fields-div" id="man_included_products">
 
         <div class="title_header float_lft">Target Products :</div>
@@ -120,7 +126,7 @@
           <ul id="man_included_product_list" class="tagging"></ul>
           <div class="float_lft " id="displayTagBox">
             <input placeholder="Start Typing for suggestions.." type="text" value="" id="man_included_product"/>
-            <%= f.hidden_field 'man_included_item_ids', :id => "man_included_item_ids" %>
+            <%#= f.hidden_field 'man_included_item_ids', :id => "man_included_item_ids" %>
           </div>
         </div>
       </div>
@@ -132,10 +138,11 @@
           <ul id="man_excluded_product_list" class="tagging"></ul>
           <div class="float_lft " id="displayTagBox">
             <input placeholder="Start Typing for suggestions.." type="text" value="" id="man_excluded_product"/>
-            <%= f.hidden_field 'man_exclusive_item_ids', :id => "man_exclusive_item_ids" %>
+            <%#= f.hidden_field 'man_exclusive_item_ids', :id => "man_exclusive_item_ids" %>
           </div>
         </div>
       </div>
+
 
     <div class="fields-div" id="reviewProducts">
 
@@ -148,13 +155,15 @@
       </div>
     </div>
 
+    -->
+
     <div class="fields-div">
     <div class="title_header float_lft">Excluded Sites :</div>
     <div class="float_lft"> <%= f.text_field :excluded_sites %> </div>
     </div>
 
     <div class="fields-div">
-      <div class="title_header float_lft">Having Related Items :</div>
+      <div class="title_header float_lft">Include Related Products :</div>
       <div class="float_lft"> <%= f.select :having_related_items, options_for_select([true, false], @advertisement.having_related_items) %> </div>
     </div>
 
@@ -199,6 +208,22 @@
         <%= f.text_field :cost %></div>
     </div>
 
+    <div class="fields-div">
+      <div class="title_header float_lft">Target Type :</div>
+      <div>
+        <%= select_tag(:target_type, grouped_options_for_select([['Within Site',['Contextual','Behavioural']],['Audience Extension',[['Contextual', 'AE_Contextual'],['Behavioural', 'AE_Behavioural']]]], [@advertisement.target_type.to_s.split(",")]), :multiple => true, :style => "height: 106px; margin-top: 8px;") %>
+      </div>
+    </div>
+
+    <div class="fields-div city_div" style="">
+      <!--<label for="group_id">City :</label>-->
+      <div class="title_header float_lft">Location :</div>
+      <%= f.hidden_field(:location_id, :id => "location_id") %>
+      <div>
+        <%= text_field_tag :location_id_serach, "", :class => "auto_complete_field" %> <br />
+      </div>
+    </div>
+
     <% if current_user.is_admin? && 1 != 1 %>
         <div class="fields-div">
           <div class="title_header float_lft">Commission :</div>
@@ -209,7 +234,7 @@
         <%= hidden_field_tag :commission, @advertisement.commission %>
     <% end %>
 
-    <div id="related_product_list" style="display:none;">
+    <div id="related_product_list" style="display:block;">
       <a href="#" class="Closebut">&nbsp;</a>
       <%= hidden_field_tag "articles_item_id" %>
       <ul id="new_article_product_list" class="tagging" style="padding-left: 264px;"></ul>
@@ -871,6 +896,18 @@
     .select_button_for_list_ad_products {
         float:left;
     }
+
+    input[type=checkbox], input[type=radio] {
+        vertical-align: middle;
+        position: relative;
+        bottom: 1px;
+        width: 2% !important;
+    }
+    input[type=radio] {
+        bottom: 2px;
+        width: 2% !important;
+    }
+
 </style>
 
 <% unless @advertisement.new_record? %>
@@ -999,5 +1036,37 @@
           }
 
       })
+
+      $( ".auto_complete_field" ).autocomplete({
+          source:  function (request, response) {
+              console.log(request.term)
+              $.ajax({
+                  url:"/search/autocomplete_items?search_type=Country,State,City,Place",
+                  data:{
+                      term:request.term,
+                      authenticity_token: window._token,
+
+                  },
+                  type:"POST",
+                  dataType:"json",
+                  success:function (data) {
+                      response($.map(data, function (item) {
+                          return{
+                              id:item.id,
+                              value:item.value,
+                              type:item.type,
+                              url:item.url
+                          }
+                      }));
+//           spinner.stop();
+                  }
+              });
+          },
+
+          minLength: 2,
+          select: function( event, ui ) {
+              $('#location_id').val(ui.item.id);
+          }
+      });
   })
 </script>
