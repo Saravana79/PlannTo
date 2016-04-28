@@ -2110,7 +2110,7 @@ end
 
   def self.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits")
     exists = false
-    key = "#{url_prefix}:#{user_id}"
+    p key = "#{url_prefix}:#{user_id}"
     visited_urls = $redis.lrange(key, 0, -1)
 
     if visited_urls.include?(url)
