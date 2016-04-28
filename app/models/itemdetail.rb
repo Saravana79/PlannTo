@@ -1122,6 +1122,19 @@ class Itemdetail < ActiveRecord::Base
     end
   end
 
+  def self.convert_laksh_or_crore_to_num(price)
+    price = price.to_s.gsub(",", "")
+
+    if price.include?("Lac")
+      price = price.gsub(" Lac", "")
+      price = (price.to_f * 100000).round
+    elsif price.include?("Cr")
+      price = price.gsub(" Cr", "")
+      price = (price.to_f * 10000000).round
+    end
+    price
+  end
+
   private
 
   def update_last_verified_date

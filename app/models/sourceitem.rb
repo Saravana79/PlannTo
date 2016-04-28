@@ -94,20 +94,25 @@ class Sourceitem < ActiveRecord::Base
 
   def self.update_source_item_for_auto_portals()
     require 'xmlsimple'
-    url = "http://autoportal.com/vizury_feed.xml"
+    # url = "http://autoportal.com/vizury_feed.xml"
+    url = "http://autoportal.com/variants_feed.xml"
     xml_data = Net::HTTP.get_response(URI.parse(url)).body
     data = XmlSimple.xml_in(xml_data)
     items = data["Row"]
 
     items.each do |item|
+      p "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+      p item
       pid = item["model_id"][0]
       title = item["pname"][0]
       url = item["landing_page"][0]
-      price = item["Sale_price"][0]
+      price = Itemdetail.convert_laksh_or_crore_to_num(item["Sale_price"][0])
+      mrpprice = Itemdetail.convert_laksh_or_crore_to_num(item["Original_price"][0])
       image_url = item["image"][0]
       mileage = item["mileage"][0]
       fueltype = item["fueltype"][0]
-      emi_value = item["monthly_emi"][0]
+      offers = item["offers"][0] rescue nil
+      emi_value = item["monthly_emi"][0].to_s.gsub(",", "")
       emi_available = !emi_value.blank?
 
       if !url.include?(".htm")
@@ -120,24 +125,43 @@ class Sourceitem < ActiveRecord::Base
       elsif source_item.verified && !source_item.matchitemid.blank?
         item_detail = Itemdetail.find_or_initialize_by_url(url)
         if item_detail.new_record?
-          item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 75798, :iscashondeliveryavailable => false, :isemiavailable => emi_available, :additional_details => pid, :cashback => emi_value, :description => "#{mileage}|#{fueltype}", :IsError => false)
+          item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :mrpprice => mrpprice, :status => 1, :last_verified_date => Time.now, :site => 75798, :iscashondeliveryavailable => false, :isemiavailable => emi_available, :additional_details => pid, :cashback => emi_value, :description => "#{mileage}|#{fueltype}", :IsError => false, :offer => offers)
           image = item_detail.Image
         else
-          item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
+          item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :offer => offers)
           image = item_detail.Image
         end
         begin
           if image.blank? && !image_url.blank?
             image = item_detail.build_image
-            tempfile = open(image_url)
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-            filename = image_url.split("/").last
+            # tempfile = open(image_url)
+            # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+            # filename = image_url.split("/").last
+            # avatar.original_filename = filename
+            # image.avatar = avatar
+            # image.save
+
+            safe_thumbnail_url = URI.encode(URI.decode(image_url))
+            extname = File.extname(safe_thumbnail_url).delete("%")
+            basename = File.basename(safe_thumbnail_url, extname).delete("%")
+            file = Tempfile.new([basename, extname])
+            file.binmode
+            open(URI.parse(safe_thumbnail_url)) do |data|
+              file.write data.read
+            end
+            file.rewind
+
+            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
             avatar.original_filename = filename
+
             image.avatar = avatar
-            image.save
+            if image.save
+              item_detail.update_attributes(:Image => filename)
+            end
           end
         rescue Exception => e
           p "There was a problem in image update"
+          p e
         end
       end
     end
@@ -201,13 +225,31 @@ class Sourceitem < ActiveRecord::Base
           begin
             if image.blank? && !image_url.blank?
               image = item_detail.build_image
-              tempfile = open(image_url)
-              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-              # filename = image_url.split("/").last
-              filename = "#{item_detail.id}.jpeg"
+              # tempfile = open(image_url)
+              # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+              # # filename = image_url.split("/").last
+              # filename = "#{item_detail.id}.jpeg"
+              # avatar.original_filename = filename
+              # image.avatar = avatar
+              # image.save
+
+              safe_thumbnail_url = URI.encode(URI.decode(image_url))
+              extname = File.extname(safe_thumbnail_url).delete("%")
+              basename = File.basename(safe_thumbnail_url, extname).delete("%")
+              file = Tempfile.new([basename, extname])
+              file.binmode
+              open(URI.parse(safe_thumbnail_url)) do |data|
+                file.write data.read
+              end
+              file.rewind
+
+              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
               avatar.original_filename = filename
+
               image.avatar = avatar
-              image.save
+              if image.save
+                item_detail.update_attributes(:Image => filename)
+              end
             end
           rescue Exception => e
             p e.backtrace

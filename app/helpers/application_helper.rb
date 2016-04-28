@@ -354,17 +354,17 @@ module ApplicationHelper
 
   def convert_num_to_laksh_or_crore(num)
     return_val = ""
-    crore = num/10000000 rescue 0
+    crore = num.to_i/10000000 rescue 0
     if crore != 0
       rem_num = num % 10000000
-      laksh = rem_num / 100000
-      return_val = "#{crore}.#{laksh} crore"
+      laksh = rem_num.to_i / 100000
+      return_val = "#{crore}.#{laksh} Cr"
     else
-      laksh = num / 100000
+      laksh = num.to_i / 100000
       if laksh != 0
         rem_num = num % 100000
-        thousand = rem_num / 1000
-        return_val = "#{laksh}.#{thousand} lakhs"
+        thousand = rem_num.to_i / 1000
+        return_val = "#{laksh}.#{thousand} Lac"
       end
     end
     return_val

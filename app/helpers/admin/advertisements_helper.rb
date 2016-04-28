@@ -10,29 +10,33 @@ module Admin::AdvertisementsHelper
   end
 
   def get_autoportal_links_for_ad(click_url, ad_url, item_detail=nil)
-    # photo_ad_url = ad_url+"&extra_link=photos.html"
-    # sales_statistics_ad_url = ad_url+"&extra_link=sales-statistics/"
-    reviews_ad_url = ad_url+"&extra_link=reviews/"
+    if !item_detail.blank? && !item_detail.offer.blank?
+      return_val = "<span class='offer_ad'> #{item_detail.offer} </span>"
+    else
+      # photo_ad_url = ad_url+"&extra_link=photos.html"
+      # sales_statistics_ad_url = ad_url+"&extra_link=sales-statistics/"
+      reviews_ad_url = ad_url+"&extra_link=reviews/"
 
-    # photo_shop_now_url = click_url.blank? ? photo_ad_url : (click_url+photo_ad_url)
-    # photo_link = "<a href='#{photo_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Photos</a>"
+      # photo_shop_now_url = click_url.blank? ? photo_ad_url : (click_url+photo_ad_url)
+      # photo_link = "<a href='#{photo_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Photos</a>"
 
-    fuel_type = item_detail.description.to_s.split("|")[1] rescue ""
-    fuel_type_link = "<span class='offer_ad'> #{fuel_type} </span>"
-    return_val = fuel_type.blank? ? "" : "#{fuel_type_link} | "
+      fuel_type = item_detail.description.to_s.split("|")[1] rescue ""
+      fuel_type_link = "<span class='offer_ad'> #{fuel_type} </span>"
+      return_val = fuel_type.blank? ? "" : "#{fuel_type_link} | "
 
-    mileage = item_detail.description.to_s.split("|")[0] rescue ""
-    mileage_link = "<span class='offer_ad'> #{mileage} km/l</span>"
-    return_val = mileage.blank? ? return_val : return_val+"#{mileage_link} | "
+      mileage = item_detail.description.to_s.split("|")[0] rescue ""
+      mileage_link = "<span class='offer_ad'> #{mileage} km/l</span>"
+      return_val = mileage.blank? ? return_val : return_val+"#{mileage_link} | "
 
-    reviews_shop_now_url = click_url.blank? ? reviews_ad_url : (click_url+reviews_ad_url)
-    reviews_link = "<a href='#{reviews_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Reviews</a>"
-    return_val = return_val+"#{reviews_link}"
+      reviews_shop_now_url = click_url.blank? ? reviews_ad_url : (click_url+reviews_ad_url)
+      reviews_link = "<a href='#{reviews_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank' >Reviews</a>"
+      return_val = return_val+"#{reviews_link}"
 
-    # sales_statistics_shop_now_url = click_url.blank? ? sales_statistics_ad_url : (click_url+sales_statistics_ad_url)
-    # sales_statistics_link = "<a href='#{sales_statistics_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank'>Sales Statistics</a>"
+      # sales_statistics_shop_now_url = click_url.blank? ? sales_statistics_ad_url : (click_url+sales_statistics_ad_url)
+      # sales_statistics_link = "<a href='#{sales_statistics_shop_now_url}' id='offer_ad' class='car_extra_link_ad' target='_blank'>Sales Statistics</a>"
 
-    # return "#{photo_link} | #{reviews_link} | #{sales_statistics_link}"
+      # return "#{photo_link} | #{reviews_link} | #{sales_statistics_link}"
+    end
     return return_val
   end
 

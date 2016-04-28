@@ -39,7 +39,7 @@
                       <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(36) %></h3>
                     </div>
                       <div style="float:left;">
-                              <span class="price"><%= prettifyforcarprice(item_detail) %></span>
+                              <span class="price"><%= convert_num_to_laksh_or_crore(item_detail.price) %></span>
                      
                       </div>
                       <div class="right-div">
