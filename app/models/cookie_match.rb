@@ -537,6 +537,29 @@ class CookieMatch < ActiveRecord::Base
     end
 
     user_access_details_count = user_access_details.count
+
+    keys_arr = []
+    user_access_details.each do |each_uac|
+      ref_url = each_uac["ref_url"]
+      if each_uac["source"] == "autoportal"
+        url_without_params = ref_url.to_s.split("?")[0]
+        keys_arr << "url:#{url_without_params}"
+      end
+    end
+    keys_arr.uniq!
+
+
+    results = $redis_rtb.pipelined do
+      keys_arr.uniq.each do |each_key|
+        $redis_rtb.hgetall(each_key)
+      end
+    end
+
+    new_hash_with_redis_vals = {}
+    keys_arr.each_with_index do |val, indx|
+      new_hash_with_redis_vals.merge!(val => results[indx])
+    end
+
     # user_access_details_import = []
     redis_rtb_hash = {}
     plannto_user_detail_hash = {}
@@ -619,7 +642,8 @@ class CookieMatch < ActiveRecord::Base
           # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{par_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
           # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{ref_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
 
-          p redis_vals = $redis_rtb.hgetall("url:#{url_without_params}")
+          # redis_vals = $redis_rtb.hgetall("url:#{url_without_params}")
+          p redis_vals = new_hash_with_redis_vals["url:#{url_without_params}"]
 
           # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
           if !redis_vals.blank?
