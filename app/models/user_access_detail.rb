@@ -29,25 +29,25 @@ class UserAccessDetail < ActiveRecord::Base
     plannto_user_detail = nil
     i_type = nil
 
-    # already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
-    if item_ids.count < 10
-      plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
-      if !plannto_user_detail.blank?
-        if !itemtype_id.blank? && itemtype_id.to_i != 0
-          i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
-          if !i_type.blank?
-            list_of_urls = i_type.lu.to_a
-            if !list_of_urls.include?(url)
-              already_exist = false
-            end
-          else
-            already_exist = false
-          end
-        end
-      else
-        already_exist = false
-      end
-    end
+    already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
+    # if item_ids.count < 10
+    #   plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
+    #   if !plannto_user_detail.blank?
+    #     if !itemtype_id.blank? && itemtype_id.to_i != 0
+    #       i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+    #       if !i_type.blank?
+    #         list_of_urls = i_type.lu.to_a
+    #         if !list_of_urls.include?(url)
+    #           already_exist = false
+    #         end
+    #       else
+    #         already_exist = false
+    #       end
+    #     end
+    #   else
+    #     already_exist = false
+    #   end
+    # end
 
     p "========================= already_exist => #{already_exist} ========================="
 
@@ -81,6 +81,7 @@ class UserAccessDetail < ActiveRecord::Base
             cookie_matches_plannto_id = cookie_match.plannto_user_id
           end
         end
+        plannto_user_detail = PUserDetail.where(:pid => user_id).to_a.last
 
         if (!plannto_user_detail.blank? && plannto_user_detail.gid.blank?)
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
@@ -95,12 +96,12 @@ class UserAccessDetail < ActiveRecord::Base
           # plannto_user_detail.save!
         end
 
-        # i_type = nil
+        i_type = nil
         if !plannto_user_detail.blank?
           #plannto user details
 
           if !itemtype_id.blank? && itemtype_id.to_i != 0
-            # i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+            i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
             new_m_agg_info = ""
 
             if resale == true

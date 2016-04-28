@@ -2115,41 +2115,42 @@ end
 
     if visited_urls.include?(url)
       exists = true
-    else
-      begin
-        host = Item.get_host_without_www(url)
-
-        # if source_categories.blank?
-        #   source_categories = JSON.parse($redis.get("source_categories_pattern"))
-        #   source_categories.default = ""
-        # end
-
-        if source_categories.blank?
-          source_category = SourceCategory.source(host).last rescue ""
-          pattern = source_category.pattern.to_s
-        else
-          pattern = source_categories[host]["pattern"].to_s rescue ""
-        end
-
-        if !pattern.blank?
-          str1, str2 = pattern.split("<page>")
-          str2 = str2.blank? ? "$" : Regexp.escape(str2.to_s)
-          exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{str2}/m, 1]
-          if exp_val.to_s.is_an_integer?
-            patten_with_val = pattern.gsub("<page>", exp_val)
-            patten_for_query = pattern.gsub("<page>", ".*")
-            url_for_query = url.gsub(patten_with_val, patten_for_query)
-            regex_url = /#{url_for_query}/
-            results = visited_urls.grep(regex_url)
-            exists = true if results.count > 0
-          end
-        end
-      rescue Exception => e
-        exists = true
-        p "Error url => #{url}"
-        p e
-      end
     end
+    # else
+    #   begin
+    #     host = Item.get_host_without_www(url)
+    #
+    #     # if source_categories.blank?
+    #     #   source_categories = JSON.parse($redis.get("source_categories_pattern"))
+    #     #   source_categories.default = ""
+    #     # end
+    #
+    #     if source_categories.blank?
+    #       source_category = SourceCategory.source(host).last rescue ""
+    #       pattern = source_category.pattern.to_s
+    #     else
+    #       pattern = source_categories[host]["pattern"].to_s rescue ""
+    #     end
+    #
+    #     if !pattern.blank?
+    #       str1, str2 = pattern.split("<page>")
+    #       str2 = str2.blank? ? "$" : Regexp.escape(str2.to_s)
+    #       exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{str2}/m, 1]
+    #       if exp_val.to_s.is_an_integer?
+    #         patten_with_val = pattern.gsub("<page>", exp_val)
+    #         patten_for_query = pattern.gsub("<page>", ".*")
+    #         url_for_query = url.gsub(patten_with_val, patten_for_query)
+    #         regex_url = /#{url_for_query}/
+    #         results = visited_urls.grep(regex_url)
+    #         exists = true if results.count > 0
+    #       end
+    #     end
+    #   rescue Exception => e
+    #     exists = true
+    #     p "Error url => #{url}"
+    #     p e
+    #   end
+    # end
 
     $redis.pipelined do
       $redis.lpush(key, url) if exists == false

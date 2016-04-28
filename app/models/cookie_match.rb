@@ -619,7 +619,7 @@ class CookieMatch < ActiveRecord::Base
           # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{par_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
           # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{ref_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
 
-          redis_vals = $redis_rtb.hgetall("url:#{url_without_params}")
+          p redis_vals = $redis_rtb.hgetall("url:#{url_without_params}")
 
           # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
           if !redis_vals.blank?
