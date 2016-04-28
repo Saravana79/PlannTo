@@ -49,7 +49,7 @@ class UserAccessDetail < ActiveRecord::Base
     #   end
     # end
 
-    p "========================= already_exist => #{already_exist} ========================="
+    p "========================= already_exist => #{url} => #{already_exist} ========================="
 
     rk = 0
     # cookie_matches_plannto_ids = []
