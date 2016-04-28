@@ -145,12 +145,30 @@ items.each do |item|
     end
     if image.blank? && !image_url.blank?
       image = item_detail.build_image
-      tempfile = open(image_url)
-      avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-      filename = image_url.split("/").last
+      # tempfile = open(image_url)
+      # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+      # filename = image_url.split("/").last
+      # avatar.original_filename = filename
+      # image.avatar = avatar
+      # image.save
+
+      safe_thumbnail_url = URI.encode(URI.decode(image_url))
+      extname = File.extname(safe_thumbnail_url).delete("%")
+      basename = File.basename(safe_thumbnail_url, extname).delete("%")
+      file = Tempfile.new([basename, extname])
+      file.binmode
+      open(URI.parse(safe_thumbnail_url)) do |data|
+        file.write data.read
+      end
+      file.rewind
+
+      avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
       avatar.original_filename = filename
+
       image.avatar = avatar
-      image.save
+      if image.save
+        item_detail.update_attributes(:Image => filename)
+      end
     end
   end
 end
@@ -661,12 +679,30 @@ items.each do |item|
     begin
       if image.blank? && !image_url.blank?
         image = item_detail.build_image
-        tempfile = open(image_url)
-        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-        filename = image_url.split("/").last
+        # tempfile = open(image_url)
+        # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+        # filename = image_url.split("/").last
+        # avatar.original_filename = filename
+        # image.avatar = avatar
+        # image.save
+
+        safe_thumbnail_url = URI.encode(URI.decode(image_url))
+        extname = File.extname(safe_thumbnail_url).delete("%")
+        basename = File.basename(safe_thumbnail_url, extname).delete("%")
+        file = Tempfile.new([basename, extname])
+        file.binmode
+        open(URI.parse(safe_thumbnail_url)) do |data|
+          file.write data.read
+        end
+        file.rewind
+
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
         avatar.original_filename = filename
+
         image.avatar = avatar
-        image.save
+        if image.save
+          item_detail.update_attributes(:Image => filename)
+        end
       end
     rescue Exception => e
       p "There was a problem in image update"
@@ -835,13 +871,31 @@ source_items.each do |source_item|
     begin
       if image.blank? && !image_url.blank?
         image = item_detail.build_image
-        tempfile = open(image_url)
-        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-        # filename = image_url.split("/").last
-        filename = "#{item_detail.id}.jpeg"
+        # tempfile = open(image_url)
+        # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+        # # filename = image_url.split("/").last
+        # filename = "#{item_detail.id}.jpeg"
+        # avatar.original_filename = filename
+        # image.avatar = avatar
+        # image.save
+
+        safe_thumbnail_url = URI.encode(URI.decode(image_url))
+        extname = File.extname(safe_thumbnail_url).delete("%")
+        basename = File.basename(safe_thumbnail_url, extname).delete("%")
+        file = Tempfile.new([basename, extname])
+        file.binmode
+        open(URI.parse(safe_thumbnail_url)) do |data|
+          file.write data.read
+        end
+        file.rewind
+
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
         avatar.original_filename = filename
+
         image.avatar = avatar
-        image.save
+        if image.save
+          item_detail.update_attributes(:Image => filename)
+        end
       end
     rescue Exception => e
       p e.backtrace
@@ -978,13 +1032,31 @@ products.each do |each_product|
     begin
       if image.blank? && !image_url.blank?
         image = item_beauty_detail.build_image
-        tempfile = open(image_url)
-        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-        # filename = image_url.split("/").last
-        filename = "#{item_beauty_detail.id}.jpeg"
+        # tempfile = open(image_url)
+        # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+        # # filename = image_url.split("/").last
+        # filename = "#{item_beauty_detail.id}.jpeg"
+        # avatar.original_filename = filename
+        # image.avatar = avatar
+        # image.save
+
+        safe_thumbnail_url = URI.encode(URI.decode(image_url))
+        extname = File.extname(safe_thumbnail_url).delete("%")
+        basename = File.basename(safe_thumbnail_url, extname).delete("%")
+        file = Tempfile.new([basename, extname])
+        file.binmode
+        open(URI.parse(safe_thumbnail_url)) do |data|
+          file.write data.read
+        end
+        file.rewind
+
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
         avatar.original_filename = filename
+
         image.avatar = avatar
-        image.save
+        if image.save
+          item_detail.update_attributes(:Image => filename)
+        end
       end
     rescue Exception => e
       p e.backtrace
@@ -1038,13 +1110,31 @@ jockey_hash.each do |int_key, int_val|
         begin
           if image.blank? && !image_url.blank?
             image = item_detail.build_image
-            tempfile = open(image_url)
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-            # filename = image_url.split("/").last
-            filename = "#{item_detail.id}.jpeg"
+            # tempfile = open(image_url)
+            # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+            # # filename = image_url.split("/").last
+            # filename = "#{item_detail.id}.jpeg"
+            # avatar.original_filename = filename
+            # image.avatar = avatar
+            # image.save
+
+            safe_thumbnail_url = URI.encode(URI.decode(image_url))
+            extname = File.extname(safe_thumbnail_url).delete("%")
+            basename = File.basename(safe_thumbnail_url, extname).delete("%")
+            file = Tempfile.new([basename, extname])
+            file.binmode
+            open(URI.parse(safe_thumbnail_url)) do |data|
+              file.write data.read
+            end
+            file.rewind
+
+            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file, :type => 'image/jpeg'})
             avatar.original_filename = filename
+
             image.avatar = avatar
-            image.save
+            if image.save
+              item_detail.update_attributes(:Image => filename)
+            end
           end
         rescue Exception => e
           p e.backtrace
