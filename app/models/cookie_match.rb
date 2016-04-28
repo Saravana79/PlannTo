@@ -645,7 +645,9 @@ class CookieMatch < ActiveRecord::Base
           # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{ref_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
 
           # redis_vals = $redis_rtb.hgetall("url:#{url_without_params}")
-          p redis_vals = new_hash_with_redis_vals["url:#{url_without_params}"]
+          redis_key = "url:#{url_without_params}"
+          redis_vals = new_hash_with_redis_vals[redis_key]
+          p "&&&&&&&&&&&&&&&&&&&&& #{redis_key} => #{redis_vals} &&&&&&&&&&&&&&&&&&&&&"
 
           # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
           if !redis_vals.blank?
@@ -698,7 +700,9 @@ class CookieMatch < ActiveRecord::Base
           ref_url = ref_url.to_s.split("?")[0] if ref_url.include?("?")
           # redis_vals = $redis_rtb.hgetall("url:#{ref_url}")
 
-          p redis_vals = new_hash_with_redis_vals["url:#{ref_url}"]
+          redis_key = "url:#{ref_url}"
+          redis_vals = new_hash_with_redis_vals[redis_key]
+          p "%%%%%%%%%%%%%%%% #{redis_key} => #{redis_vals} %%%%%%%%%%%%%%%%"
 
           # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
           if !redis_vals.blank?
