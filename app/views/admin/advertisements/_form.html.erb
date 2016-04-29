@@ -232,7 +232,7 @@
       <div class="title_header float_lft">Location :</div>
       <%= f.hidden_field(:location_id, :id => "location_id") %>
       <div>
-        <%= text_field_tag :location_id_serach, "", :class => "auto_complete_field" %> <br />
+        <%= text_field_tag :location_id_serach, "#{ @location_name }", :class => "auto_complete_field" %> <br />
       </div>
     </div>
 
@@ -1000,6 +1000,10 @@
       {
           var li_values = $("#ad_product_list_ul li")
           var length = li_values.length
+          if (length <= 5)
+          {
+              $(".select_button_for_list_ad_products").hide()
+          }
           $.each([1,2,3,4,5], function(inx,val)
           {
               length = length - 1

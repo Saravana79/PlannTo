@@ -33,6 +33,7 @@ class Admin::AdvertisementsController < ApplicationController
     @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25, :schedule_details => [*0..23].join(","), :device => "pc,mobile")
     @adv_detail = AdvDetail.new
     @advertisements = [@advertisement]
+    @location_name = ""
   end
 
   def edit
@@ -51,6 +52,8 @@ class Admin::AdvertisementsController < ApplicationController
     @related_items  = related_item_ids.blank? ? [] : @items.select {|d| related_item_ids.include?(d.id)}
     @items = @items - @related_items
     @exclusive_items = Item.where(:id => @advertisement.exclusive_item_ids.to_s.split(",")) rescue []
+    location = Item.where(:id => @advertisement.location_id).last
+    @location_name = location.blank? ? "" : location.get_name
   end
 
   def show
