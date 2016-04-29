@@ -1804,7 +1804,7 @@ end
                       plannto_user_detail.pid = plannto_user_id
                     end
                     plannto_user_detail.lad = Time.now
-                    plannto_user_detail.save!
+                    # plannto_user_detail.save!
                   elsif plannto_user_detail.pid.blank?
                     if plannto_user_id.blank?
                       cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
@@ -1815,7 +1815,7 @@ end
                       plannto_user_detail.pid = plannto_user_id
                     end
                     plannto_user_detail.lad = Time.now
-                    plannto_user_detail.save!
+                    # plannto_user_detail.save!
                   end
 
                   i_type = nil
@@ -1826,12 +1826,15 @@ end
                     end
                     plannto_user_detail.lid = plannto_location_id if !plannto_location_id.blank?
 
-                    article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
+                    if item_ids.blank? || itemtype_id.blank? || type.blank?
+                      article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
 
-                    item_ids = article_content.item_ids if !article_content.blank? && item_ids.blank?
-
-                    itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
-                    type = article_content.sub_type rescue "" if type.blank?
+                      if !article_content.blank?
+                        item_ids = article_content.item_ids if item_ids.blank?
+                        itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
+                        type = article_content.sub_type rescue "" if type.blank?
+                      end
+                    end
 
                     if rk.to_i == 0
                       case type.to_s
@@ -1864,15 +1867,16 @@ end
                       end
 
                       if i_type.blank?
-                        plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url], :r => resale, :fad => Date.today)
-                        i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+                        # plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url], :r => resale, :fad => Date.today)
+                        # i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+                        i_type = IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today)
                       else
                         lu = i_type.lu
                         lu = lu.to_a
                         lu << url
                         i_type.lu = lu.uniq
                         i_type.r = resale
-                        i_type.save!
+                        # i_type.save!
                       end
                     end
 
@@ -1891,6 +1895,89 @@ end
                     plannto_user_detail.save!
 
                     cookie_matches_plannto_ids << plannto_user_detail.pid
+
+                    if !i_type.blank?
+                      if !i_type.new_record?
+                        removed_item_ids = i_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
+                        existing_item_ids = i_type.m_items.map(&:item_id)
+                        arrival_item_ids = item_ids.map(&:to_i)
+
+                        removed_item_ids = removed_item_ids - arrival_item_ids
+                        common_item_ids = arrival_item_ids & existing_item_ids
+                        new_item_ids = arrival_item_ids - common_item_ids
+
+                        if !removed_item_ids.blank?
+                          i_type.m_items.where(:item_id.in => removed_item_ids).destroy_all
+                          # removed_item_ids.each do |item_id|
+                          #   exp_item = i_type.m_items.where(:item_id => item_id).last
+                          #   exp_item.destroy
+                          # end
+                        end
+
+                        if !new_item_ids.blank?
+                          arry_of_m_items = []
+                          new_item_ids.each do |item_id|
+                            # lad = u_values["#{item_id}_la"].to_date
+                            # rk = u_values["#{item_id}_c"]
+                            arry_of_m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
+                          end
+                          i_type.m_items << arry_of_m_items
+                        end
+
+                        if !common_item_ids.blank?
+                          common_item_ids.each do |item_id|
+                            m_item = i_type.m_items.where(:item_id => item_id).last
+                            if !m_item.blank?
+                              m_item.lad = Date.today
+                              m_item.rk = m_item.rk.to_i + rk.to_i if rk.to_i != 0
+                              m_item.save!
+                            end
+                          end
+                        end
+                        i_type.save!
+                      else
+                        new_item_ids = item_ids.map(&:to_i)
+
+                        if !new_item_ids.blank?
+                          arry_of_m_items = []
+                          new_item_ids.each do |item_id|
+                            # lad = u_values["#{item_id}_la"].to_date
+                            # rk = u_values["#{item_id}_c"]
+                            arry_of_m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
+                          end
+                          i_type.m_items << arry_of_m_items
+                        end
+                        plannto_user_detail.i_types << i_type
+                      end
+
+                      #Update redis_rtb from plannto_user_detail
+                      if !plannto_user_detail.blank?
+                        if plannto_user_detail.pid.blank?
+                          user_id_for_key = plannto_user_detail.gid.to_s
+                          if resale != true
+                            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}"
+                          else
+                            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
+                          end
+                        else
+                          user_id_for_key = plannto_user_detail.pid.to_s
+                          if resale != true
+                            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}"
+                          else
+                            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
+                          end
+                        end
+
+                        if !user_id.blank?
+                          m_items = i_type.m_items.select {|each_item| each_item.rk.to_i >= 8}
+                          item_ids = m_items.sort_by {|each_val| each_val.rk.to_i}.reverse.map(&:item_id).uniq.join(",")
+                          high_score = m_items.map {|each_val| each_val.rk.to_i}.max
+                          tot_count = m_items.count
+                          pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
+                          plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
+                        end
+                      end
+                    end
                   end
 
                   # u_key = "u:ac:#{user_id}"
@@ -1956,72 +2043,6 @@ end
 
                   #plannto user details
 
-                  if !i_type.blank?
-                    removed_item_ids = i_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
-                    existing_item_ids = i_type.m_items.map(&:item_id)
-                    arrival_item_ids = item_ids.map(&:to_i)
-
-                    removed_item_ids = removed_item_ids - arrival_item_ids
-
-                    common_item_ids = arrival_item_ids & existing_item_ids
-
-                    new_item_ids = arrival_item_ids - common_item_ids
-
-                    if !removed_item_ids.blank?
-                      removed_item_ids.each do |item_id|
-                        exp_item = i_type.m_items.where(:item_id => item_id).last
-                        exp_item.destroy
-                      end
-                    end
-
-                    if !new_item_ids.blank?
-                      new_item_ids.each do |item_id|
-                        # lad = u_values["#{item_id}_la"].to_date
-                        # rk = u_values["#{item_id}_c"]
-                        i_type.m_items << MItem.new(:item_id => item_id, :lad => Date.today, :rk => rk)
-                      end
-                    end
-
-                    if !common_item_ids.blank?
-                      common_item_ids.each do |item_id|
-                        m_item = i_type.m_items.where(:item_id => item_id).last
-                        if !m_item.blank?
-                          m_item.lad = Date.today
-                          m_item.rk = m_item.rk.to_i + rk.to_i
-                          m_item.save!
-                        end
-                      end
-                    end
-
-                    #Update redis_rtb from plannto_user_detail
-                    if !plannto_user_detail.blank?
-                      if plannto_user_detail.pid.blank?
-                        user_id_for_key = plannto_user_detail.gid.to_s
-                        if resale != true
-                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}"
-                        else
-                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
-                        end
-                      else
-                        user_id_for_key = plannto_user_detail.pid.to_s
-                        if resale != true
-                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}"
-                        else
-                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{i_type.itemtype_id}:resale"
-                        end
-                      end
-
-                      if !user_id.blank?
-                        m_items = i_type.m_items.select {|each_item| each_item.rk.to_i >= 8}
-                        item_ids = m_items.sort_by {|each_val| each_val.rk.to_i}.reverse.map(&:item_id).uniq.join(",")
-                        high_score = m_items.map {|each_val| each_val.rk.to_i}.max
-                        tot_count = m_items.count
-                        pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
-                        plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
-                      end
-                    end
-                  end
-
                   # all_item_ids = all_item_ids.join(",")
                   # temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
                   # temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
@@ -2053,24 +2074,6 @@ end
         end
       end
 
-      p "--------------------------------CookieMatch process------------------------------"
-
-      begin
-        cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
-        cookie_matches.update_all(:updated_at => Time.now)
-
-        $redis_rtb.pipelined do
-          cookie_matches.each do |cookie_match|
-            if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
-              $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
-            end
-          end
-        end
-      rescue Exception => e
-        p "Error processing cookie match"
-      end
-
       p "---------------------- Process Redis and Redis rtb update ----------------------"
 
       # $redis.pipelined do
@@ -2099,6 +2102,27 @@ end
           $redis_rtb.hmset(key, val.flatten)
           $redis_rtb.expire(key, 1.weeks)
         end
+      end
+
+      p "--------------------------------CookieMatch Table Update ------------------------------"
+
+      begin
+        cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
+        # cookie_matches.update_all(:updated_at => Time.now)
+        cookie_matches.each do |each_rec|
+          each_rec.touch
+        end
+
+        $redis_rtb.pipelined do
+          cookie_matches.each do |cookie_match|
+            if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
+              $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
+              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
+            end
+          end
+        end
+      rescue Exception => e
+        p "Error processing cookie match"
       end
 
       p "------------------------------ Process Completed ------------------------------"

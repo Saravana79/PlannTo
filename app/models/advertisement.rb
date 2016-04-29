@@ -1405,7 +1405,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         if !cookie_matches_plannto_ids.compact!.blank?
           begin
             cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
-            cookie_matches.update_all(:updated_at => Time.now)
+            # cookie_matches.update_all(:updated_at => Time.now)
+            cookie_matches.each do |each_rec|
+              each_rec.touch
+            end
 
             $redis_rtb.pipelined do
               cookie_matches.each do |cookie_match|
