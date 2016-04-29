@@ -539,7 +539,7 @@ class CookieMatch < ActiveRecord::Base
       end
     end
 
-    user_access_details = user_access_details.uniq_by {|d| d["plannto_user_id"] + "_" + d['source']}
+    user_access_details = user_access_details.uniq_by {|d| d["plannto_user_id"] + "_" + d['ref_url']}
 
     user_access_details_count = user_access_details.count
 
