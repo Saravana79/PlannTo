@@ -139,7 +139,6 @@ class UserAccessDetail < ActiveRecord::Base
               if !i_type.blank?
                 i_type.ci_ids = ci_ids
                 i_type.lcd = Date.today
-                i_type.source = "autoportal"
 
                 ssu = i_type.ssu
                 ssu = ssu.to_a
@@ -178,6 +177,10 @@ class UserAccessDetail < ActiveRecord::Base
           end
 
           if !i_type.blank?
+            source_list = i_type.source.to_a
+            source_list << source.to_s.downcase
+            i_type.source = source_list.compact.uniq
+
             if !i_type.new_record?
               removed_item_ids = i_type.m_items.where(:lad.lte => 1.month.ago).map(&:item_id)
               existing_item_ids = i_type.m_items.map(&:item_id)

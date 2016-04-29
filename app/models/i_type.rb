@@ -18,7 +18,7 @@ class IType
   field :o_ids, type: Array #order_item_ids
   field :lod, type: Date #Last order date
   field :r, type: Boolean, :default => 0 #Resale
-  field :source, type: String
+  field :source, type: Array
   field :fad, type: Date #first accessed date
   field :ssu, type: Array #source source url
 

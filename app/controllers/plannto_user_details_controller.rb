@@ -22,6 +22,16 @@ class PlanntoUserDetailsController < ApplicationController
     else
       @plannto_user_detail = {"Error" => "Try to use pid=xxx or gid=xxx"}
     end
+
+    #Sort m_items by rank
+    begin
+      @plannto_user_detail["i_types"].each_with_index do |each_i_type, index|
+        each_i_type["m_items"] = each_i_type["m_items"].sort_by {|each_rec| each_rec["rk"].to_i}.reverse
+      end
+    rescue Exception => e
+      @plannto_user_detail = @plannto_user_detail
+    end
+
     render :layout => false
   end
 end
