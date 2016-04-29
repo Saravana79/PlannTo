@@ -594,7 +594,7 @@ class CookieMatch < ActiveRecord::Base
         end
 
         msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
-        if ref_url.include?("cardekho")
+        if (ref_url.include?("cardekho") && 1 != 1)
           # site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
           item_detail_other = ItemDetailOther.where(:url => ref_url).last
 

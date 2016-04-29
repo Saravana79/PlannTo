@@ -75,6 +75,7 @@ class Admin::AdvertisementsController < ApplicationController
 
     params[:advertisement][:template_type] = "" if params[:advertisement][:advertisement_type] == "static"
 
+    params[:target_type] ||= []
     params[:advertisement][:target_type] = params[:target_type].join(",")
 
     @advertisement = Advertisement.new(params[:advertisement])
@@ -136,6 +137,7 @@ class Admin::AdvertisementsController < ApplicationController
       end
     end
 
+    params[:target_type] ||= []
     params[:advertisement][:target_type] = params[:target_type].join(",")
     params[:advertisement][:template_type] = "" if params[:advertisement][:advertisement_type] == "static"
 

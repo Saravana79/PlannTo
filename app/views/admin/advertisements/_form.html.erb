@@ -111,12 +111,10 @@
       <div class="taggingdiv">
         <div class="float_lft " id="displayTagBox">
           <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
-          <%= link_to(image_tag("#{configatron.root_image_path}static/images/open-window.png", :class => "select_button_for_rel_products", :width => "15px;"), "javascript:void(0)") %>
-          <%= hidden_field_tag "related_item_ids", @items.blank? ? "" : @items.map(&:id).join(",") %>
-          <%= f.hidden_field 'exclusive_item_ids', :id => "exclusive_item_ids" %>
         </div>
       </div>
     </div>
+    <%= f.hidden_field 'exclusive_item_ids', :id => "exclusive_item_ids" %>
 
     <!--
       <div class="fields-div" id="man_included_products">
@@ -167,9 +165,23 @@
       <div class="float_lft"> <%= f.select :having_related_items, options_for_select([true, false], @advertisement.having_related_items) %> </div>
     </div>
 
+    <div class="fields-div">
+      <div class="title_header float_lft"></div>
+      <div class="float_lft">
+        <ul id="related_item_ids_list" class="tagging"></ul>
+        <%#= link_to("more... #{image_tag("#{configatron.root_image_path}static/images/open-window.png", :class => "", :width => "15px;")}".html_safe, "javascript:void(0)", :class => "select_button_for_list_ad_products") %>
+      </div>
+    </div>
+
     <div class="fields-div related_item_ids">
-      <div class="title_header float_lft">Related Item Ids :</div>
-      <div class="float_lft"> <%= f.text_field :related_item_ids %> </div>
+      <div class="title_header float_lft">Related Products :</div>
+      <div class="taggingdiv">
+        <div class="float_lft " id="displayTagBox">
+          <input placeholder="Start Typing for suggestions.." type="text" value="" id="related_item_ids_tag"/>
+          <%= f.hidden_field :related_item_ids %>
+          <%= link_to(image_tag("#{configatron.root_image_path}static/images/open-window.png", :class => "select_button_for_rel_products", :width => "15px;"), "javascript:void(0)") %>
+        </div>
+      </div>
     </div>
 
     <div class="fields-div" style="clear:both;">
@@ -211,7 +223,7 @@
     <div class="fields-div">
       <div class="title_header float_lft">Target Type :</div>
       <div>
-        <%= select_tag(:target_type, grouped_options_for_select([['Within Site',['Contextual','Behavioural']],['Audience Extension',[['Contextual', 'AE_Contextual'],['Behavioural', 'AE_Behavioural']]]], [@advertisement.target_type.to_s.split(",")]), :multiple => true, :style => "height: 106px; margin-top: 8px;") %>
+        <%= select_tag(:target_type, grouped_options_for_select([['Within Site',['Contextual','Behavioural']],['Audience Extension',[['Contextual', 'AE_Contextual'],['Behavioural', 'AE_Behavioural']]]], @advertisement.target_type.to_s.split(",")), :multiple => true, :style => "height: 106px; margin-top: 8px;") %>
       </div>
     </div>
 
@@ -234,7 +246,7 @@
         <%= hidden_field_tag :commission, @advertisement.commission %>
     <% end %>
 
-    <div id="related_product_list" style="display:none;">
+    <div id="new_article_product_list_popup" style="display:none;">
       <a href="#" class="Closebut">&nbsp;</a>
       <%= hidden_field_tag "articles_item_id" %>
       <ul id="new_article_product_list" class="tagging" style="padding-left: 264px;"></ul>
@@ -459,6 +471,8 @@
         };
         $.textTagger("#ad_product", "#ad_product_list", settings);
 
+
+
         <% unless @item.blank? %>
         $.addTag("#ad_product", "#ad_product_list", settings, "<%= @item.name %>", "<%= @item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
@@ -480,6 +494,10 @@
         <%end%>
         $.textTagger("#ad_product", "#ad_product_list_ul", settings);
 //ends
+
+        settings_related_items = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
+            hidden_field: "#advertisement_related_item_ids"};
+        $.textTagger("#related_item_ids_tag", "#related_item_ids_list", settings_related_items);
         <%end%>
 
         //exclusive product
@@ -572,7 +590,7 @@
             $("#new_article_product_list").html("")
             $("#list_of_products").html("")
 
-            $('#related_product_list').bPopup({
+            $('#new_article_product_list_popup').bPopup({
                 closeClass:'Closebut',
                 modalClose: false,
                 position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
@@ -592,24 +610,24 @@
 
         })
 
-        $('#deleteTag').live('click', function(){
-            var item_id = $(this).attr("item_id")
-            console.log(item_id)
-
-            var item_ids = $("#related_item_ids").val()
-
-            item_ids = item_ids.split(",")
-
-            item_ids = $.grep(item_ids, function(value) {
-                return value != item_id;
-            });
-
-            $("#related_item_ids").val(item_ids.join(","))
-
-            $(this).closest('li').remove();
-
-            return false;
-        })
+//        $('#deleteTag').live('click', function(){
+//            var item_id = $(this).attr("item_id")
+//            console.log(item_id)
+//
+//            var item_ids = $("#related_item_ids").val()
+//
+//            item_ids = item_ids.split(",")
+//
+//            item_ids = $.grep(item_ids, function(value) {
+//                return value != item_id;
+//            });
+//
+//            $("#related_item_ids").val(item_ids.join(","))
+//
+//            $(this).closest('li').remove();
+//
+//            return false;
+//        })
 
         $(".populate_btn").live("click", function()
         {
@@ -619,7 +637,7 @@
                 var name = $(val).siblings(".item_name").text()
 
                 if (item_id != "All"){
-                    $.addTag("ad_product", "ad_product_list", settings_new, name, item_id, false);
+                    $.addTag("related_item_ids_tag", "related_item_ids_list", settings_related_items, name, item_id, false);
                     $.addIdToField(settings_new.hidden_field, item_id, true);
                 }
             })
@@ -707,10 +725,10 @@
 
     a.Closebut:hover { background-position:left -41px;}
 
-    #related_product_list {
+    #new_article_product_list_popup {
         background: none repeat scroll 0 0 #f9f9f9;
         left: 30% !important;
-        top: 10% !important;
+        top: 50% !important;
         width: 600px;
         height:500px;
     }
