@@ -113,11 +113,11 @@ class UserAccessDetail < ActiveRecord::Base
             end
 
             if i_type.blank?
-              # plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
-              # i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+              plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
+              i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
 
               # plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
-              i_type = IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
+              # i_type = IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today, :ssu => [ss_url].compact)
             else
               lu = i_type.lu
               lu = lu.to_a
