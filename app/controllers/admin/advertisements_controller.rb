@@ -47,6 +47,9 @@ class Admin::AdvertisementsController < ApplicationController
     @ad_status = @advertisement.status == 1 ? "Enable" : "Disable"
 
     @items = Item.where(:id => @advertisement.content.related_items.collect(&:item_id)) rescue []
+    related_item_ids = @advertisement.related_item_ids.to_s.split(",").map(&:to_i)
+    @related_items  = related_item_ids.blank? ? [] : @items.select {|d| related_item_ids.include?(d.id)}
+    @items = @items - @related_items
     @exclusive_items = Item.where(:id => @advertisement.exclusive_item_ids.to_s.split(",")) rescue []
   end
 

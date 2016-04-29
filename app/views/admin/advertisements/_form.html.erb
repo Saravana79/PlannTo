@@ -497,6 +497,16 @@
 
         settings_related_items = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
             hidden_field: "#advertisement_related_item_ids"};
+
+        <%unless @related_items.nil? %>
+        <% @related_items.each do |item| %>
+
+        $.addTag("related_item_ids_tag", "related_item_ids_list", settings, "<%= item.name %>", "<%= item.id %>", false);
+        $.addIdToField(settings_related_items.hidden_field, "<%= item.id %>", true);
+        //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
+        <%end%>
+        <%end%>
+
         $.textTagger("#related_item_ids_tag", "#related_item_ids_list", settings_related_items);
         <%end%>
 
