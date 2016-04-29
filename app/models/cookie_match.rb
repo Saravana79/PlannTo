@@ -547,7 +547,7 @@ class CookieMatch < ActiveRecord::Base
     keys_arr = []
     user_access_details.each do |each_uac|
       ref_url = each_uac["ref_url"]
-      if (each_uac["source"] == "autoportal" && !ref_url.include?("cardekho") && each_uac["source"] != "housing")
+      if ["autoportal", "zigwheels", "cardekho", "gaadi"].include?(each_uac["source"])
         keys_arr << "url:#{ref_url}"
       end
     end
@@ -636,7 +636,7 @@ class CookieMatch < ActiveRecord::Base
           plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
           plannto_autoportal_hash.merge!(plannto_autoportal_hash_new) if plannto_autoportal_hash_new.blank? || !plannto_autoportal_hash_new.values.map(&:blank?).include?(true)
           cookie_matches_plannto_ids << cookie_matches_plannto_id if cookie_matches_plannto_id.blank?
-        elsif user_access_detail["source"] == "autoportal"
+        elsif ["autoportal", "zigwheels", "cardekho", "gaadi"].include?(user_access_detail["source"])
           user_id = new_user_access_detail.plannto_user_id
           type = "Reviews"
           # par_url = ref_url.to_s.split("/")- [ref_url.to_s.split("/").last]
