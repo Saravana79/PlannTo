@@ -74,7 +74,7 @@ class UserAccessDetail < ActiveRecord::Base
         rk = 5
       end
 
-      if item_ids.count < 10
+      if item_ids.count < 20
         if cookie_match.blank?
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
           if !cookie_match.blank? && !cookie_match.google_user_id.blank?
