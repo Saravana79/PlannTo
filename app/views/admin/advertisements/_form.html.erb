@@ -86,7 +86,7 @@
 
     <div class="fields-div">
       <div class="title_header float_lft">Target Audience :</div>
-      <div class="float_lft"> <%= f.select :target_audience, options_for_select(["Buyer", "Owner", "Both"], @advertisement.target_audience) %> </div>
+      <div class="float_lft"> <%= f.select :target_audience, options_for_select(["Buyer", "Owner", "Both", "Resale"], @advertisement.target_audience) %> </div>
     </div>
 
     <%= hidden_field_tag 'ad_item_id' %>
@@ -156,11 +156,6 @@
     -->
 
     <div class="fields-div">
-    <div class="title_header float_lft">Excluded Sites :</div>
-    <div class="float_lft"> <%= f.text_field :excluded_sites %> </div>
-    </div>
-
-    <div class="fields-div">
       <div class="title_header float_lft">Include Related Products :</div>
       <div class="float_lft"> <%= f.select :having_related_items, options_for_select([true, false], @advertisement.having_related_items) %> </div>
     </div>
@@ -184,6 +179,22 @@
       </div>
     </div>
 
+    <div class="fields-div">
+      <div class="title_header float_lft">Target Type :</div>
+      <div>
+        <%= select_tag(:target_type, grouped_options_for_select([['Within Site',['Contextual','Behavioural']],['Audience Extension',[['Contextual', 'AE_Contextual'],['Behavioural', 'AE_Behavioural']]]], @advertisement.target_type.to_s.split(",")), :multiple => true, :style => "height: 106px; margin-top: 8px;") %>
+      </div>
+    </div>
+
+    <div class="fields-div city_div" style="">
+      <!--<label for="group_id">City :</label>-->
+      <div class="title_header float_lft">Location :</div>
+      <%= f.hidden_field(:location_id, :id => "location_id") %>
+      <div>
+        <%= text_field_tag :location_id_serach, "#{ @location_name }", :class => "auto_complete_field" %> <br />
+      </div>
+    </div>
+
     <div class="fields-div" style="clear:both;">
       <div class="title_header float_lft">Start Date :</div>
       <div>
@@ -200,6 +211,12 @@
       <div>
         <%= f.text_field :click_url %></div>
     </div>
+
+    <div class="fields-div">
+      <div class="title_header float_lft">Excluded Sites :</div>
+      <div class="float_lft"> <%= f.text_field :excluded_sites %> </div>
+    </div>
+
     <div class="fields-div">
       <div class="title_header float_lft">Budget[per day] :</div>
       <div>
@@ -218,22 +235,6 @@
       <div class="title_header float_lft">Cost :</div>
       <div>
         <%= f.text_field :cost %></div>
-    </div>
-
-    <div class="fields-div">
-      <div class="title_header float_lft">Target Type :</div>
-      <div>
-        <%= select_tag(:target_type, grouped_options_for_select([['Within Site',['Contextual','Behavioural']],['Audience Extension',[['Contextual', 'AE_Contextual'],['Behavioural', 'AE_Behavioural']]]], @advertisement.target_type.to_s.split(",")), :multiple => true, :style => "height: 106px; margin-top: 8px;") %>
-      </div>
-    </div>
-
-    <div class="fields-div city_div" style="">
-      <!--<label for="group_id">City :</label>-->
-      <div class="title_header float_lft">Location :</div>
-      <%= f.hidden_field(:location_id, :id => "location_id") %>
-      <div>
-        <%= text_field_tag :location_id_serach, "#{ @location_name }", :class => "auto_complete_field" %> <br />
-      </div>
     </div>
 
     <% if current_user.is_admin? && 1 != 1 %>
@@ -600,6 +601,12 @@
             $("#new_article_product_list").html("")
             $("#list_of_products").html("")
 
+            var item_ids = $("#ad_item_id").val()
+            console.log(item_ids)
+            $.get( "/related_items", {car_id: item_ids, popup: true }, function( data ) {
+                $( "#list_of_products" ).html( data );
+            });
+
             $('#new_article_product_list_popup').bPopup({
                 closeClass:'Closebut',
                 modalClose: false,
@@ -656,6 +663,8 @@
             $("#list_of_products").html("")
             if (checked_length == 0)
                 alert("Nothing to populate")
+
+            $("#new_article_product_list_popup").bPopup().close();
         })
 
         $("#plmenu li").click(function()
