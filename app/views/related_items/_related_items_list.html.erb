@@ -8,7 +8,7 @@
         <!--<%#= check_box_tag "related_items[]", each_item.id, true, :id => "related_items_#{each_item.id}", :class => "related_item" %>-->
         <!--<span class="item_name"> <%#= each_item.name %> </span>-->
       <!--</li>-->
-  <!--<% #end %>-->
+  <!--<%#end %>-->
 
   <% @related_items.each_with_index do |related_item, indx| %>
       <li class=<%= indx%2 == 0 ? 'float_left' : 'float_right' %>>
