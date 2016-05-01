@@ -10,7 +10,7 @@ class RelatedItemsController < ApplicationController
 
     @related_items = Item.where(:id => related_item_ids)
     @related_items = related_item_ids.collect {|id| @related_items.detect {|x| x.id == id}}
-    @related_items.compact!
+    @related_items = @related_items.uniq.compact
 
     if params[:popup] == "true"
       @related_items = @related_items.first(20)
