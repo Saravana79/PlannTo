@@ -55,11 +55,11 @@
         <div class="title_header float_lft">Device :</div>
         <div>
           <label for="PC">
-            <%= check_box_tag "advertisement[device][]", "pc", @advertisement.device.to_s.split(",").include?("pc"), {:style => "width: 2 !important;"} %>
+            <%= check_box_tag "advertisement[device][]", "pc", @advertisement.device.to_s.split(",").include?("pc"), {:style => "width: 2% !important;"} %>
             Pc
           </label>
           <label for="Mobile">
-            <%= check_box_tag "advertisement[device][]", "mobile", @advertisement.device.to_s.split(",").include?("mobile"), {:style => "width: 2 !important;"} %>
+            <%= check_box_tag "advertisement[device][]", "mobile", @advertisement.device.to_s.split(",").include?("mobile"), {:style => "width: 2% !important;"} %>
             Mobile
           </label>
           <%#= f.check_box :device, {}, ["pc", "mobile"]%>
@@ -181,7 +181,7 @@
 
     <div class="fields-div">
       <div class="title_header float_lft">Target Type :</div>
-      <div>
+      <div class="float_lft">
         <%= select_tag(:target_type, grouped_options_for_select([['Within Site',['Contextual','Behavioural']],['Audience Extension',[['Contextual', 'AE_Contextual'],['Behavioural', 'AE_Behavioural']]]], @advertisement.target_type.to_s.split(",")), :multiple => true, :style => "height: 106px; margin-top: 8px;") %>
       </div>
     </div>
@@ -190,7 +190,7 @@
       <!--<label for="group_id">City :</label>-->
       <div class="title_header float_lft">Location :</div>
       <%= f.hidden_field(:location_id, :id => "location_id") %>
-      <div>
+      <div class="float_lft">
         <%= text_field_tag :location_id_serach, "#{ @location_name }", :class => "auto_complete_field" %> <br />
       </div>
     </div>
@@ -938,7 +938,7 @@
         vertical-align: middle;
         position: relative;
         bottom: 1px;
-        width: 2% !important;
+        /*width: 2% !important;*/
     }
     input[type=radio] {
         bottom: 2px;
