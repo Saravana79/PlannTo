@@ -3171,6 +3171,15 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     users
   end
 
+  def self.get_autoscroll_status(item_ids, ad_template_type, param)
+    is_remarketing = param[:r].to_i == 1 ? true : false
+    return_val = false
+    if (is_remarketing && item_ids.count > 1 && ad_template_type == "type_1")
+      return_val = true
+    end
+    return_val
+  end
+
   private
 
   def file_dimensions

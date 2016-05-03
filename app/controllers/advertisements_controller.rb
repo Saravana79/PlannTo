@@ -21,6 +21,7 @@ class AdvertisementsController < ApplicationController
   skip_before_filter  :verify_authenticity_token, :only => [:ads_visited]
   #after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
+    @auto_scroll = false
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
     return_path = "advertisements/show_ads.html.erb"
@@ -39,6 +40,8 @@ class AdvertisementsController < ApplicationController
 
     p_item_ids = item_ids = []
     p_item_ids = item_ids = params[:item_id].to_s.split(",") unless params[:item_id].blank?
+
+    @auto_scroll = Advertisement.get_autoscroll_status(item_ids, @ad_template_type, params)
 
     if !@ad.blank? && (@ad.advertisement_type == "fashion" || params[:ad_type] == "fashion")
       return fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
