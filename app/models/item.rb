@@ -1623,9 +1623,12 @@ end
         item_details = item_details.first(6)
         sliced_item_details = []
       end
-    elsif ad_template_type == "type_8"
+    elsif ["type_8", "type_9"].include?(ad_template_type)
       item_details = item_details.first(12)
       sliced_item_details = item_details.each_slice(2)
+      if ad_template_type == "type_9" && ["160_600", "728"].exclude?(suitable_ui_size)
+        item_details = item_details.first(6)
+      end
     else
       if suitable_ui_size == "300_600"
         item_details = item_details.first(18)

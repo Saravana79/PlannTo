@@ -7,43 +7,36 @@
 
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
-                <div class="logo">
-                  <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a>
-                </div>
+                <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" width="70px" alt=""></a></div>
 
                 <div class="product-container">
-                  <div style="float:left;width:200px;">
-                    <a href="<%= shop_now_url %>" target="_blank" class="">
-                      <div style="text-align:center;">
-                        <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
-                      </div>
-                      <br clear="both"/>
-
-                      <div style="text-align:center;margin-top:5px;">
-                        <span style="font-size: 11px;color: #000;">Starting at - </span>
-                        <span class="price"><%= convert_num_to_laksh_or_crore(item_detail.price) %></span>
-                      </div>
-                      <div style="padding: 10px 0px;color: #000;font-size: 11px;text-align:center;">
-                        <!--  <span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span> -->
-                        <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span>
-                      </div>
-                    </a>
+                  <div style="float:left;width:168px;">
+                  <a href="<%= shop_now_url %>" target="_blank" class="">
+                    <div style="float:left;">
+                    <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(36) %></h3>
                   </div>
+                  <div>
+                              <span style="font-size: 11px;color: #000;">Starting at - </span>
+                              <span class="price"><%= convert_num_to_laksh_or_crore(item_detail.price) %></span>
+                          </div>
+                  </a>
+                  </div>  
                   <div class="product-img">
                     <a href="<%= shop_now_url %>" target="_blank">
                       <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), '', 82).html_safe %>
                       <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
                     </a>
                   </div>
+                  <!--
                   <div class="product-desc">
-                    <a href="<%= shop_now_url %>" target="_blank" class="">
-                      <%= raw get_autoportal_links_for_ad(@click_url, ad_url, item_detail) %>
-                      <!--<p class="text-desc">-->
-                      <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
-                      <!--</p>-->
+                    <a href="<%#= shop_now_url %>" target="_blank" class="">
+                      <p class="text-desc">
+                        <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                      </p>
 
                     </a>
                   </div>
+                -->
                 </div>
 
                 <div class="right-div">
@@ -58,13 +51,13 @@
 
         <div id="pager2" class="pager">
           <% if @item_details.count > 1 %>
-              <% [*1..@item_details.count].each do |each_loop| %>
-                  <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
-              <% end %>
+          <% [*1..@item_details.count].each do |each_loop| %>
+              <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+          <% end %>
           <% end %>
         </div>
 
-    <% else %>
+  <% else %>
         No Product Found
     <% end %>
   </div>
@@ -76,24 +69,25 @@
     .pager a {
         margin: 0px !important;
     }
-
-    .product-container a {
-        text-decoration: none !important;
-    }
+    .product-container a {text-decoration: none !important;}
 
     .advt-728 .advt-box .product-container h3 {
         word-break: normal;
         padding: 7px 0 0;
     }
 
-    <% if @item_details.count < 2 %>
-    .advt-728 .advt-box .btn {
-        padding: 25px 0 0 !important;
+    .product-img img {
+        height: 56px;
     }
 
+    <% if @item_details.count < 2 %>
+      .advt-728 .advt-box .btn {
+        padding: 25px 0 0 !important;
+      }
     <% end %>
 
-    .offer_ad {
+    .offer_ad
+    {
         color: #222 !important;
         font-family: Arial !important;
         font-size: 10px !important;
