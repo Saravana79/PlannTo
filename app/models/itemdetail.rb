@@ -232,6 +232,14 @@ class Itemdetail < ActiveRecord::Base
   end
 
   def self.get_sort_by_group(item_details, group_ids)
+    i = 0
+    group_ids.each do |k,v|
+      i += 1
+      if v.blank?
+        group_ids[k] = "temp_id_#{i}"
+      end
+    end
+
     item_details = item_details.values.flatten
     item_details_hash = item_details.group_by { |each_val| group_ids[each_val.itemid] }
 
