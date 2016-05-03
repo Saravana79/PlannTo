@@ -1623,6 +1623,9 @@ end
         item_details = item_details.first(6)
         sliced_item_details = []
       end
+    elsif ad_template_type == "type_8"
+      item_details = item_details.first(12)
+      sliced_item_details = item_details.each_slice(2)
     else
       if suitable_ui_size == "300_600"
         item_details = item_details.first(18)
