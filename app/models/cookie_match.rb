@@ -254,12 +254,12 @@ class CookieMatch < ActiveRecord::Base
               # par_url = ref_url.to_s.split("/")- [ref_url.to_s.split("/").last]
               # par_url = par_url.join("/") + "/" + "%"
 
-              # url_without_params = ref_url.to_s.split("?")[0]
+              url_without_params = ref_url.to_s.split("?")[0]
 
               # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{par_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
               # item_details = Itemdetail.find_by_sql("SELECT distinct(itemid),i.itemtype_id as item_type_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.url like '#{ref_url}' and site='75798' ORDER BY itemdetails.item_details_id DESC")
 
-              redis_vals = $redis_rtb.hgetall("url:#{ref_url}")
+              redis_vals = $redis_rtb.hgetall("url:#{url_without_params}")
 
               # item_details_by_itemtype_ids = item_details.group_by {|x| x.item_type_id}
               if !redis_vals.blank?
@@ -669,7 +669,7 @@ class CookieMatch < ActiveRecord::Base
 
             # impression = ImpressionMissing.where(:hosted_site_url => url_without_params).last
             # if impression.blank?
-            impression_missings_arr << ImpressionMissing.new(:hosted_site_url => url_without_params, :req_type => "vendor_page", :count => 1)
+            impression_missings_arr << ImpressionMissing.new(:hosted_site_url => ref_url, :req_type => "vendor_page", :count => 1)
             # else
             # impression.update_attributes(:count => impression.count + 1)
             # ActiveRecord::Base.connection.execute("update impression_missings set count=count+1 where id=#{impression.id}")
