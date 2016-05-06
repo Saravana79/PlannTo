@@ -4,6 +4,7 @@ class ErrorMessagesController < ApplicationController
   
   def index
     @error_messages = ErrorMessage.order('created_at desc').paginate :page => params[:page],:per_page => 20
+    render :layout => false
   end
 
   def show

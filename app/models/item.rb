@@ -1707,6 +1707,7 @@ end
           user_vals = $redis_rtb.lrange("users:visits", 0, 5000)
           Resque.enqueue(BuyingListProcess, "buying_list_process_in_redis", Time.zone.now.utc, user_vals)
           $redis_rtb.ltrim("users:visits", user_vals.count, -1)
+          break if user_vals.count < 5000
         end
       end
 

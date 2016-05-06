@@ -459,6 +459,7 @@ class CookieMatch < ActiveRecord::Base
           cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 5000)
           Resque.enqueue(CookieMatchingProcessBatch, "cookie_matching_process_in_redis", Time.zone.now.utc, cookie_details)
           $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
+          break if cookie_details.count < 5000
         end
       end
 
