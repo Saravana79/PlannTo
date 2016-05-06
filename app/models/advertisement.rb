@@ -3180,6 +3180,14 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     return_val
   end
 
+  def self.need_to_show_fashion_pagination?(ad_template_type, suitable_ui_size)
+    return_val = false
+    if ad_template_type == "type_9" && ["300", "336_280", "160_600"].include?(suitable_ui_size)
+      return_val = true
+    end
+    return_val
+  end
+
   private
 
   def file_dimensions

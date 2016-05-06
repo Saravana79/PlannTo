@@ -130,6 +130,7 @@ class AdvertisementsController < ApplicationController
       @click_url = @click_url.gsub("&amp;", "&")
     end
     @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
+    @fashion_pagination = Advertisement.need_to_show_fashion_pagination?(@ad_template_type, @suitable_ui_size)
 
     respond_to do |format|
       format.json {

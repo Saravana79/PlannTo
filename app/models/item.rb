@@ -1585,7 +1585,7 @@ end
   end
 
   def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size,used_cars = false)
-    if (ad_template_type == "type_4" || ad_template_type == "type_5")
+    if ["type_4", "type_5"].include?(ad_template_type)
       if ["300","728","336_280"].include?(suitable_ui_size)
         item_details = item_details.first(6)
         sliced_item_details = item_details.each_slice(2)
@@ -1623,10 +1623,27 @@ end
         item_details = item_details.first(6)
         sliced_item_details = []
       end
-    elsif ["type_8", "type_9"].include?(ad_template_type)
+    elsif ["type_8"].include?(ad_template_type)
+      if ["336_280", "250_250"].include?(suitable_ui_size)
+        item_details = item_details.first(6)
+        # sliced_item_details = item_details.each_slice(2)
+      elsif suitable_ui_size == "200_200"
+        item_details = item_details.first(4)
+      elsif suitable_ui_size == "300_600"
+        item_details = item_details.first(18)
+        correct_count = item_details.count > 2 ? item_details.count - (item_details.count % 3) : item_details.count
+        item_details = item_details.first(correct_count)
+        sliced_item_details = item_details.each_slice(3)
+      else
+        item_details = item_details.first(12)
+        sliced_item_details = item_details.each_slice(2)
+      end
+    elsif ["type_9"].include?(ad_template_type)
       item_details = item_details.first(12)
       sliced_item_details = item_details.each_slice(2)
-      if ad_template_type == "type_9" && ["160_600", "728"].exclude?(suitable_ui_size)
+      if suitable_ui_size == "200_200"
+        item_details = item_details.first(4)
+      elsif ["160_600", "728"].exclude?(suitable_ui_size)
         item_details = item_details.first(6)
       end
     else
