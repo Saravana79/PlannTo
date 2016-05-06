@@ -52,7 +52,7 @@ class PixelsController < ApplicationController
                                 when "housing"
                                   "&google_ula=8423560"
                                 when "autoportal"
-                                  "&google_ula=57128440"
+                                  "&google_ula=389421041"
                                 else
                                   ""
                               end
