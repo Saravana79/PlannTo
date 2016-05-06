@@ -1834,12 +1834,21 @@ end
                     plannto_user_detail.lid = plannto_location_id if !plannto_location_id.blank?
 
                     if item_ids.blank? || itemtype_id.blank? || type.blank?
-                      article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
+                      redis_vals = $redis_rtb.hgetall("url:#{url}")
+                      if redis_vals.blank?
+                        article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
 
-                      if !article_content.blank?
-                        item_ids = article_content.item_ids if item_ids.blank?
-                        itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
-                        type = article_content.sub_type rescue "" if type.blank?
+                        if !article_content.blank?
+                          item_ids = article_content.item_ids if item_ids.blank?
+                          itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
+                          type = article_content.sub_type rescue "" if type.blank?
+                        end
+                      else
+                        if !article_content.blank?
+                          item_ids = redis_vals["item_ids"] if item_ids.blank?
+                          itemtype_id = redis_vals["itemtype"] rescue "" if itemtype_id.blank?
+                          type = redis_vals["article_type"] rescue "" if type.blank?
+                        end
                       end
                     end
 
