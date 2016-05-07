@@ -1,42 +1,69 @@
 <div class="advt-block">
   <div class="advt-728">
     <% if @item_details.count != 0 %>
-        <span id="leftarrow" class="left" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> << </span>
-        <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
-            <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
-              <div class="item_details" id="item_detail_<%= indx + 1 %>">
-                <div class="advt-box">
-                  <% sliced_item_detail.each do |item_detail| %>
-                      <div class="product-container">
-                        <div class="product-img">
-                          <a href="javascript:void(0)">
-                            <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 92, 70).html_safe %>
-                            <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="92px" height="70px"> -->
-                          </a>
-                        </div>
-                        <div>
-                          <span style="font-size: 11px;color: #000;">Starting at - </span>
-                          <span class="price"><%= convert_num_to_laksh_or_crore(item_detail.price) %></span>
-                        </div>
-                        <div style="padding: 5px 0px;color: #000;font-size: 10px;">
-                          <!--  <span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span> -->
-                          <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span>
-                        </div>
+        <% @item_details.each_with_index do |item_detail, indx| %>
+            <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+            <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
-                        <p class="btn">
-                          <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
-                          <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
-                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
-                            <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
-                          </a>
-                        </p>
+            <div class="item_details" id="item_detail_<%= indx + 1 %>">
+              <div class="advt-box">
+                <div class="logo">
+                  <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a>
+                </div>
+
+                <div class="product-container">
+                  <div style="float:left;width:200px;">
+                    <a href="<%= shop_now_url %>" target="_blank" class="">
+                      <div style="text-align:center;">
+                        <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
                       </div>
-                  <% end %>
+                      <br clear="both"/>
+
+                      <div style="text-align:center;margin-top:5px;">
+                        <span style="font-size: 11px;color: #000;">Starting at - </span>
+                        <span class="price"><%= convert_num_to_laksh_or_crore(item_detail.price) %></span>
+                      </div>
+                      <div style="padding: 10px 0px;color: #000;font-size: 11px;text-align:center;">
+                        <!--  <span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span> -->
+                        <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="product-img">
+                    <a href="<%= shop_now_url %>" target="_blank">
+                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), '', 82).html_safe %>
+                      <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
+                    </a>
+                  </div>
+                  <div class="product-desc">
+                    <a href="<%= shop_now_url %>" target="_blank" class="">
+                      <%= raw get_autoportal_links_for_ad(@click_url, ad_url, item_detail) %>
+                      <!--<p class="text-desc">-->
+                      <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                      <!--</p>-->
+
+                    </a>
+                  </div>
+                </div>
+
+                <div class="right-div">
+                  <p class="btn">
+                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Check On-Road Price</a>
+                  </p>
                 </div>
               </div>
-            </span>
+              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+            </div>
         <% end %>
-        <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
+
+        <div id="pager2" class="pager">
+          <% if @item_details.count > 1 %>
+              <% [*1..@item_details.count].each do |each_loop| %>
+                  <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+              <% end %>
+          <% end %>
+        </div>
+
     <% else %>
         No Product Found
     <% end %>
@@ -50,22 +77,29 @@
         margin: 0px !important;
     }
 
-    .product-container a {text-decoration: none !important;}
-
-    .advt-box .product-container h3 {
-        font-size: 14px !important;
+    .product-container a {
+        text-decoration: none !important;
     }
 
-    #rightarrow:hover {
-        color: #D70707 !important;
+    .advt-728 .advt-box .product-container h3 {
+        word-break: normal;
+        padding: 7px 0 0;
     }
 
-    .type_2_description {
-        padding: 3px;
-
+    <% if @item_details.count < 2 %>
+    .advt-728 .advt-box .btn {
+        padding: 25px 0 0 !important;
     }
 
-    .foo3, .slider_plannto {
-        height: 198px !important;
+    <% end %>
+
+    .offer_ad {
+        color: #222 !important;
+        font-family: Arial !important;
+        font-size: 10px !important;
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        font-weight: 600;
     }
 </style>
