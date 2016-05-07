@@ -14,7 +14,7 @@ class AdvertisementsController < ApplicationController
   caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size", "exp_img_height") : params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size", "exp_img_height") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
-  before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads]
+  before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads, :get_adv_id]
   caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   # skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
@@ -946,6 +946,17 @@ class AdvertisementsController < ApplicationController
     render :nothing => true
   end
 
+  def get_adv_id
+    advertisement = Advertisement.get_ad_from_ref_url_for_image_ads(params)
+    advertisement_id = advertisement.id rescue ""
+    success = advertisement_id.blank? ? "false" : "true"
+    respond_to do |format|
+      format.json {
+        render :json => {:success => success, :ad_id => advertisement_id}.to_json
+      }
+    end
+  end
+
  private
 
   def create_impression_before_show_ads
@@ -1154,7 +1165,7 @@ class AdvertisementsController < ApplicationController
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
 
-    @ad = Advertisement.get_ad_from_ref_url_for_image_ads(params)
+    @ad = Advertisement.get_in_image_ad_from_ref_url_for_image_ads(params)
 
     #TODO: temporary changes
     # params[:ref_url] = "http://wonderwoman.intoday.in/story/5-make-up-tricks-to-hide-visible-signs-of-ageing/1/121454.html"  #TODO: temp check
