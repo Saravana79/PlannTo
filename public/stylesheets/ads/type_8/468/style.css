@@ -21,15 +21,15 @@ body {
 
 
 .advt-block { margin:0; padding:0;}
-.advt-728 { margin:0; padding:0; width:468px; height:60px; background:#fff; border:1px solid #F1F0F0;}
+.advt-728 { margin:0; padding:0; width:468px; height:60px; background:#e2e2e2; border:1px solid #F1F0F0;}
 
-.advt-728 .advt-box { margin:0; padding:0;}
+.advt-728 .advt-box { margin:0; padding:0;background: #e2e2e2;}
 .advt-728 .advt-box .logo{ margin:0 auto; padding: 0; text-align:center; vertical-align:middle; float:left; width:80px; height:60px; display:block; border-right:1px solid #F1F0F0;}
 .advt-728 .advt-box .logo img{ margin:0 auto; text-align:center; vertical-align:middle;   }
 .advt-728 .advt-box .logo a{vertical-align: middle;padding-top: 15px;display: block; }
     
 
-.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:245px; }
+.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:245px; background: #e2e2e2;}
 .advt-728 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-728 .advt-box .product-container:after { clear:both;}
 

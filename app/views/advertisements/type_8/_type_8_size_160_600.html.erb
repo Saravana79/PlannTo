@@ -21,9 +21,16 @@
                 <% if sliced_item_detail.count > 1 %>
                     <% sliced_item_detail.each_with_index do |item_detail, itindex| %>
                         <div class="product-container">
-                          <h3 class="product-title" title="<%= item_detail.ItemName %>"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
-
+                          <div class="product-img">
+                            <a href="javascript:void(0)">
+                              <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 140, 105).html_safe %>
+                              <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
+                            </a>
+                          </div>
+                          
                           <div>
+                            <div><h3 class="product-title" title="<%= item_detail.ItemName %>"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
+                            </div>
                             <div style="font-size: 11px;color: #000;">Starting at -</div>
                             <div class="price"><%= convert_num_to_laksh_or_crore(item_detail.price) %></div>
                           </div>
@@ -32,12 +39,7 @@
                             <!--  <span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span> -->
                             <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span>
                           </div>
-                          <div class="product-img">
-                            <a href="javascript:void(0)">
-                              <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 140, 105).html_safe %>
-                              <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
-                            </a>
-                          </div>
+                          
 
 
                           <!--
