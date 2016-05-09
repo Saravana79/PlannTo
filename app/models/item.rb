@@ -1643,7 +1643,7 @@ end
       sliced_item_details = item_details.each_slice(2)
       if suitable_ui_size == "200_200"
         item_details = item_details.first(4)
-      elsif ["160_600", "728"].exclude?(suitable_ui_size)
+      elsif ["160_600"].exclude?(suitable_ui_size)
         item_details = item_details.first(6)
       end
     else
