@@ -14,7 +14,7 @@ var PlannTo = (function(window,undefined) {
 //for development
 //    var domain = "localhost:3000";
 // Localize jQuery variable
-//    var jQuery;
+    var jQuery;
 
     /******** Load jQuery if not present *********/
     if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.7.1') {
@@ -107,6 +107,7 @@ var PlannTo = (function(window,undefined) {
             var item_ids = getParam(url,"item_ids");
             var element_id = getParam(url,"element_id");
             var size = getParam(url,"ad_size");
+            var wo_ads_id = getParam(url,"wo_ads_id");
             var url_arr = url.split("/");
             url_protocol = url_arr[0]
 
@@ -120,21 +121,17 @@ var PlannTo = (function(window,undefined) {
 
             console.log("started creating ad")
 
-            url = url_protocol + "//"+ domain +"/advertisements/get_adv_id.json?item_ids="+item_ids+"&ref_url="+pathname
+
+//            url = url_protocol + "//"+ domain +"/advertisements/get_adv_id.json?item_ids="+item_ids+"&ref_url="+pathname
+            var adv_url = url_protocol + "//"+ domain+'/advertisements/show_ads?item_id='+ item_ids +'&ads_id=&size='+ size +'&wo_ads_id=true&format=json&ref_url='+pathname
 
             jQuery.ajax({
-                url: url,
+                url: adv_url,
                 type: "get",
                 dataType: "json",
                 success: function (data) {
-                    if (data.success == "true")
+                    if (data.success == true)
                     {
-                        console.log(data)
-                        console.log(data.ad_id)
-
-                        var adv_url = url_protocol + "//"+ domain+'/advertisements/show_ads?item_id='+ item_ids +'&ads_id='+data.ad_id+'&size='+ size +'&ad_as_widget=&ref_url='+pathname
-                        console.log(adv_url)
-
                         if (size != "" && size != undefined)
                         {
                             if (size.indexOf("x") >= 0)
@@ -149,10 +146,47 @@ var PlannTo = (function(window,undefined) {
                             }
                         }
 
-                        element.append("<iframe src="+adv_url +" width="+iframe_width+"px height="+iframe_height+"px style='border: medium none;'></iframe>")
+                        element.html(data.html)
+
+//                        element.append("<iframe src="+adv_url +" width="+iframe_width+"px height="+iframe_height+"px style='border: medium none;'></iframe>")
                     }
                 }
             });
+
+
+//            url = url_protocol + "//"+ domain +"/advertisements/get_adv_id.json?item_ids="+item_ids+"&ref_url="+pathname
+//
+//            jQuery.ajax({
+//                url: url,
+//                type: "get",
+//                dataType: "json",
+//                success: function (data) {
+//                    if (data.success == "true")
+//                    {
+//                        console.log(data)
+//                        console.log(data.ad_id)
+//
+//                        var adv_url = url_protocol + "//"+ domain+'/advertisements/show_ads?item_id='+ item_ids +'&ads_id='+data.ad_id+'&size='+ size +'&ad_as_widget=&ref_url='+pathname
+//                        console.log(adv_url)
+//
+//                        if (size != "" && size != undefined)
+//                        {
+//                            if (size.indexOf("x") >= 0)
+//                            {
+//                                iframe_width = size.split("x")[0]
+//                                iframe_height = size.split("x")[1]
+//                            }
+//                            else if (size.indexOf("*") >= 0)
+//                            {
+//                                iframe_width = size.split("*")[0]
+//                                iframe_height = size.split("*")[1]
+//                            }
+//                        }
+//
+//                        element.append("<iframe src="+adv_url +" width="+iframe_width+"px height="+iframe_height+"px style='border: medium none;'></iframe>")
+//                    }
+//                }
+//            });
 
         });
     }

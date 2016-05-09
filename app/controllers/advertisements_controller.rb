@@ -7,14 +7,15 @@ class AdvertisementsController < ApplicationController
 
   newrelic_ignore :only => [:show_ads]
 
-  before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
+  before_filter :create_impression_before_show_ads, :only => [:show_ads]#, :if => lambda { request.format.html? }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_image_show_ads, :only => [:image_show_ads]#, :if => lambda { request.format.html? }
   caches_action :image_show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "ref_url", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size", "exp_img_height") : params.slice("item_id", "ads_id", "protocol_type", "format", "ad_type", "nv_click_url", "ev_click_url", "expand_type", "need_close_btn", "viewable", "expand_on", "size", "exp_size", "exp_img_height") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking, :ads_visited, :image_show_ads, :get_adv_id]
+  before_filter :set_access_control_headers, :only => [:show_ads], :if => lambda { params[:wo_ads_id] == "true" }
   caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   # skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
@@ -949,7 +950,7 @@ class AdvertisementsController < ApplicationController
   def get_adv_id
     advertisement = Advertisement.get_ad_from_ref_url_for_image_ads(params)
     advertisement_id = advertisement.id rescue ""
-    success = advertisement_id.blank? ? "false" : "true"
+    success = !advertisement_id.blank?
     respond_to do |format|
       format.json {
         render :json => {:success => success, :ad_id => advertisement_id}.to_json
@@ -969,11 +970,14 @@ class AdvertisementsController < ApplicationController
     params[:click_url] ||= ""
     params[:r] ||= ""
     params[:a] ||= ""
+    format = request.format.to_s.split("/")[1]
+    params[:format] = format
     params[:fashion_id] ||= ""
     params[:vendor_ids] ||= ""
     params[:ad_type] ||= ""
     params[:hou_dynamic_l] ||= ""
     params[:l] ||= ""
+    params[:wo_ads_id] ||= "false"
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
@@ -981,7 +985,25 @@ class AdvertisementsController < ApplicationController
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
-    @ad = Advertisement.where(:id => params[:ads_id]).first
+    if (params[:ads_id].blank? && params[:wo_ads_id] == "true")
+      if !params[:ref_url].blank?
+        @ad = Advertisement.get_ad_from_ref_url_for_image_ads(params)
+        params[:ads_id] = @ad.id rescue "" if !@ad.blank?
+      end
+
+      if @ad.blank?
+        respond_to do |format|
+          format.json {
+            return render :json => {:success => false, :html => ""}, :callback => params[:callback]
+          }
+          format.html {
+            return render :nothing => true
+          }
+        end
+      end
+    else
+      @ad = Advertisement.where(:id => params[:ads_id]).first
+    end
 
     if !@ad.blank? && !@ad.template_type.blank? && params[:page_type].blank?
       params[:page_type] = @ad.template_type
@@ -1034,22 +1056,32 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format"))
     end
 
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
+    cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}.html"
+    if params[:format].to_s == "json"
+      cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}.json"
+    end
 
     # p cache_key
 
+    cache_json = {}
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
 
       unless cache.blank?
-        valid_html = cache.match(/_blank/).blank? ? false : true
+        if params[:format] == "json"
+          cache_json = JSON.parse(cache)
+          valid_html = cache_json["success"]
+          cache = cache_json["html"].to_s
+        else
+          valid_html = cache.match(/_blank/).blank? ? false : true
+        end
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
           impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
@@ -1059,7 +1091,7 @@ class AdvertisementsController < ApplicationController
             val = matched_val[0]
             item_id = val.split("=")[1].gsub("#", "")
           end
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
+          p @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
 
           if !cache.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
             if (params[:t].to_i == 1)
@@ -1126,8 +1158,15 @@ class AdvertisementsController < ApplicationController
         # p "*************************** Cache process success ***************************"
         # logger.info "*************************** Cache process success ***************************"
 
-        return render :text => cache.html_safe
+        # return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
+        set_access_control_headers()
+        if params[:format].to_s == "json"
+          cache_json["html"] = cache
+          return render :json => cache_json.to_json
+        else
+          return render :text => cache.html_safe
+        end
       end
     end
   end
@@ -1246,7 +1285,7 @@ class AdvertisementsController < ApplicationController
 
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}"
+    cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}.html"
     if params[:format].to_s == "json"
       cache_key = "views/#{host_name}/advertisements/image_show_ads?#{cache_params}.json"
     end

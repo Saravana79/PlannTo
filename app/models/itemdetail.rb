@@ -20,6 +20,9 @@ class Itemdetail < ActiveRecord::Base
   def self.get_item_details_by_item_ids(item_ids, vendor_ids, fashion_id=nil, ad=nil)
     # status_condition = vendor_ids.count > 1 ? " and itemdetails.status in (1,3,2)" : ""
     vendor_ids = vendor_ids.compact
+
+    vendor_ids_condition = vendor_ids.blank? ? "" : " and site in (#{vendor_ids.map(&:inspect).join(', ')})"
+
     item_ids = item_ids.compact
     status_condition = " and itemdetails.status in (1,3)"
     # vendor_id = sanitize(vendor_id)
@@ -35,7 +38,7 @@ class Itemdetail < ActiveRecord::Base
     end
 
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
-                 and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')}) #{order_by_condition}")
+                 and itemdetails.isError =0 #{status_condition} #{vendor_ids_condition} #{order_by_condition}")
   end
 
   def self.get_item_details_by_item_ids_for_women_widget(item_ids, vendor_ids, fashion_id=nil, ad=nil)

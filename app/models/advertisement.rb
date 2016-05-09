@@ -187,7 +187,7 @@ class Advertisement < ActiveRecord::Base
 
   def self.update_rtb_budget(log, actual_time)
     date = actual_time.to_date
-    advertisements = find_by_start_and_end_date(date)
+    advertisements = Advertisement.find_by_start_and_end_date(date)
     advertisements.each do |advertisement|
       account_name = "PlannToAccount_#{advertisement.id}"
       actual_time = actual_time.to_time
@@ -196,7 +196,7 @@ class Advertisement < ActiveRecord::Base
       p "time - #{actual_time}, hour - #{hour}"
 
       if (configatron.rtb_budget_reset_time == hour)
-        release_unspent_rtb_budget(account_name)
+        Advertisement.release_unspent_rtb_budget(account_name)
       end
 
       url = "#{configatron.rtbkit_hostname}/v1/accounts/#{account_name}"
@@ -212,10 +212,12 @@ class Advertisement < ActiveRecord::Base
         begin
           response = RestClient.post create_url, :content_type => :json, :accept => :json
         rescue Exception => e
-          raise "#{advertisement.id} - #{e.response}"
+          # raise "#{advertisement.id} - #{e.response}"
+          p "#{advertisement.id} - #{e.response}"
+          puts "Response #{response.code}: Created New Account #{account_name}"
+          next
         end
-        puts "Response #{response.code}: Created New Account #{account_name}"
-        account = response.body
+        # account = response.body
       end
 
       hourly_budget = advertisement.get_hourly_budget(hour)
@@ -225,7 +227,7 @@ class Advertisement < ActiveRecord::Base
         current_budget = effective_budget + configatron.rtb_initial_budget
         budget_now = current_budget + (hourly_budget * 1000000)
         payload = {"USD/1M" => budget_now}.to_json
-        post_budget(account_name, payload)
+        Advertisement.post_budget(account_name, payload)
       end
     end
   end

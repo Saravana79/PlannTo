@@ -7,11 +7,11 @@
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 
   <% if (params[:t].to_i == 1) %>
-    <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
-        <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%=params[:ref_url] %>" />
-    <% else %>
-        <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>&google_ula=8326120&google_ula=8365600" />
-    <% end %>
+      <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
+          <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%= params[:ref_url] %>"/>
+      <% else %>
+          <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>&google_ula=8326120&google_ula=8365600"/>
+      <% end %>
   <% end %>
 </head>
 <body>
@@ -34,12 +34,16 @@
         overflow: hidden;
     }
 
-    h3.product-title {word-break: break-all;}
+    h3.product-title {
+        word-break: break-all;
+    }
 
-    .product-txt-desc p a {text-decoration: none;}
+    .product-txt-desc p a {
+        text-decoration: none;
+    }
 
     a#offer_ad {
-        color:#222 !important;
+        color: #222 !important;
         font-family: Arial !important;
         font-size: 10px !important;
         margin: 0;
@@ -48,8 +52,7 @@
         font-weight: 600;
     }
 
-    a#offer_ad:hover
-    {
+    a#offer_ad:hover {
         color: #009CC4 !important;
 
     }
@@ -59,42 +62,41 @@
     }
 </style>
 
+
 <% if @fashion_pagination %>
     <script type="application/javascript">
-        $(document).ready(function()
-        {
+        <% if params[:wo_ads_id] == "true" %>
+            window.$ = PlannTo.jQuery
+        <% end %>
+
+        $(document).ready(function () {
 
             $("#rightarrow").hide()
             $("#leftarrow").hide()
 
-            $(".plannto-advertisement").mouseenter(function()
-            {
+            $(".plannto-advertisement").mouseenter(function () {
                 $("#rightarrow").show()
                 $("#leftarrow").show()
             })
 
-            $(".plannto-advertisement").mouseleave(function()
-            {
+            $(".plannto-advertisement").mouseleave(function () {
                 $("#rightarrow").hide()
                 $("#leftarrow").hide()
             })
 
             stop_sliding = false
 
-            if ("<%= configatron.fashion_auto_scroll %>" == "true")
-            {
+            if ("<%= configatron.fashion_auto_scroll %>" == "true") {
                 auto_scroll()
             }
-            else
-            {
+            else {
                 $(".slider_plannto").hide()
                 $("#1").show()
                 $("#1").addClass("active")
             }
         });
 
-        function auto_scroll()
-        {
+        function auto_scroll() {
             $(".slider_plannto").each(function (index) {
                 index = index + 1
 
@@ -115,8 +117,7 @@
                                     $("#1").show()
                                     $("#1").addClass("active")
 
-                                    if ("<%= configatron.fashion_auto_scroll_count %>" == "infinity")
-                                    {
+                                    if ("<%= configatron.fashion_auto_scroll_count %>" == "infinity") {
                                         auto_scroll()
                                     }
                                 }
@@ -130,8 +131,7 @@
             stop_sliding = true
         })
 
-        $(".item_details").click(function()
-        {
+        $(".item_details").click(function () {
             var shop_now_url = $(this).find(".shop-now").attr("href")
             window.open(shop_now_url, "_blank")
             stop_sliding = true
@@ -141,56 +141,48 @@
 
     <% if @suitable_ui_size != "300_600" %>
         <script type="application/javascript">
-            function next_arrow_check()
-            {
+            function next_arrow_check() {
                 var active_div = $(".active")
                 var next_div = $(active_div).next()
                 console.log(next_div)
                 $(".slider_plannto").hide()
                 $(".slider_plannto").removeClass("active")
 
-                if ($(next_div).attr("class") != "next" && next_div.length != 0)
-                {
+                if ($(next_div).attr("class") != "next" && next_div.length != 0) {
                     $(next_div).show()
                     $(next_div).addClass("active")
                 }
-                else
-                {
+                else {
                     $(".slider_plannto").first().show()
                     $(".slider_plannto").first().addClass("active")
                 }
             }
 
-            $(".next").click(function(event)
-            {
+            $(".next").click(function (event) {
                 stop_sliding = true
                 next_arrow_check()
                 event.preventDefault();
                 return false;
             });
 
-            $(".prev").click(function(event)
-            {
+            $(".prev").click(function (event) {
                 stop_sliding = true
                 prev_arrow_check()
                 event.preventDefault();
                 return false;
             });
 
-            function prev_arrow_check()
-            {
+            function prev_arrow_check() {
                 var active_div = $(".active")
                 var prev_div = $(active_div).prev()
                 $(".slider_plannto").hide()
                 $(".slider_plannto").removeClass("active")
 
-                if ($(prev_div).attr("class") != "prev" && prev_div.length != 0)
-                {
+                if ($(prev_div).attr("class") != "prev" && prev_div.length != 0) {
                     $(prev_div).show()
                     $(prev_div).addClass("active")
                 }
-                else
-                {
+                else {
                     $(".slider_plannto").last().show()
                     $(".slider_plannto").last().addClass("active")
                 }
@@ -198,142 +190,143 @@
         </script>
     <% end %>
 <% else %>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        //hide pixel img
-        $(".plannto-advertisement").siblings("img").hide()
-
-        $(".ad_img_tag").on("error", function()
-        {
-           var img_id = $(this).attr('id')
-            if (img_id == "item_details") {
-              $(this).attr('id', 'item')
-              $(this).attr("src", $(this).attr('next_src'))
-            }
-            else if (img_id == "item")
-            {
-                $(this).attr('id', 'default_image')
-                $(this).attr("src", $(this).attr('default_src'))
-            }
-        });
-
-        var stop_sliding = false
-
-        $(".item_details").hide();
-        $(".item_details").first().show();
-        $(".item_details").first().addClass('active')
-        set_logo_url($(".item_details").first(), "shop-now")
-
-        $("#1").addClass('selected')
-
-// TODO: temporary commented
-       <% if (@ad_template_type == "type_5" || (!@ad.blank? && @ad.sort_type == "random") || @auto_scroll == true) %>
-        $(".item_details").each(function (index) {
-
-            if (index == 0)
-                return
-
-            var that = this;
-            var t = setTimeout(function () {
-                if (stop_sliding == false) {
-                    $(".item_details").hide();
-                    $(".item_details").removeClass('active')
-                    $("#pager2 a").removeClass('selected')
-
-                    split_div = $(that).attr('id').split('_')
-                    $("#" + split_div[split_div.length - 1]).addClass('selected')
-
-                    $(that).show();
-                    $(that).addClass('active')
-                    set_logo_url(that, "shop-now")
-
-                    if (index == ($(".item_details").length - 1))
-                        setTimeout(function () {
-                            if (stop_sliding == false) {
-                                $(".item_details").last().hide()
-                                $(".item_details").removeClass('active')
-                                $("#pager2 a").removeClass('selected')
-                                $(".item_details").first().show();
-                                $(".item_details").first().addClass('active')
-                                set_logo_url($(".item_details").first(), "shop-now")
-
-                                $("#1").addClass("selected")
-                            }
-                        }, 5000)
-                }
-            }, 5000 * index);
-        });
-
+    <script type="text/javascript">
+        <% if params[:wo_ads_id] == "true" %>
+            window.$ = PlannTo.jQuery
         <% end %>
 
-        $(".next").click(function () {
-            var current_div = $(".item_details.active")
-            $(".item_details").hide();
-            $(".item_details").removeClass('active')
-            $("#pager2 a").removeClass('selected')
+        $(document).ready(function () {
+            //hide pixel img
+            $(".plannto-advertisement").siblings("img").hide()
 
-            var splited_val = $(current_div).attr("id").split('_')
+            $(".ad_img_tag").on("error", function () {
+                var img_id = $(this).attr('id')
+                if (img_id == "item_details") {
+                    $(this).attr('id', 'item')
+                    $(this).attr("src", $(this).attr('next_src'))
+                }
+                else if (img_id == "item") {
+                    $(this).attr('id', 'default_image')
+                    $(this).attr("src", $(this).attr('default_src'))
+                }
+            });
 
-            if (parseInt(splited_val[splited_val.length - 1]) < $(".item_details").length) {
-                $(current_div).next().show().addClass('active')
-                set_logo_url($(current_div).next(), "shop-now")
-
-                split_div = $(current_div).next().attr("id").split('_')
-                $("#" + split_div[split_div.length - 1]).addClass('selected')
-            }
-            else {
-                $(".item_details").first().show().addClass('active')
-                set_logo_url($(".item_details").first(), "shop-now")
-
-                $("#1").addClass('selected')
-            }
-        });
-
-
-        $(".prev").click(function () {
-            var current_div = $(".item_details.active")
-            $(".item_details").hide();
-            $(".item_details").removeClass('active')
-            $("#pager2 a").removeClass('selected')
-
-            var splited_val = $(current_div).attr("id").split('_')
-
-            if (parseInt(splited_val[splited_val.length - 1]) > 1) {
-                $(current_div).prev().show().addClass('active')
-                set_logo_url($(current_div).prev(), "shop-now")
-
-                split_div = $(current_div).prev().attr("id").split('_')
-                $("#" + split_div[split_div.length - 1]).addClass('selected')
-            }
-            else {
-                $(".item_details").last().show().addClass('active')
-                set_logo_url($(".item_details").last(), "shop-now")
-
-                last = $(".item_details").length
-                $("#" + last).addClass('selected')
-            }
-        });
-
-        $("#pager2 a").click(function () {
-            var that = this
-            selected_id = $(that).attr("id")
-            selected_div = $("#item_detail_" + selected_id)
+            var stop_sliding = false
 
             $(".item_details").hide();
-            $(".item_details").removeClass('active')
+            $(".item_details").first().show();
+            $(".item_details").first().addClass('active')
+            set_logo_url($(".item_details").first(), "shop-now")
 
-            $(selected_div).show()
-            $(selected_div).addClass('active')
-            set_logo_url($(selected_div), "shop-now")
+            $("#1").addClass('selected')
 
-            $("#pager2 a").removeClass('selected')
-            $(that).addClass('selected')
-        })
+// TODO: temporary commented
+            <% if (@ad_template_type == "type_5" || (!@ad.blank? && @ad.sort_type == "random") || @auto_scroll == true) %>
+            $(".item_details").each(function (index) {
 
-        $(".advt-block").click(function () {
-            stop_sliding = true
-        })
+                if (index == 0)
+                    return
+
+                var that = this;
+                var t = setTimeout(function () {
+                    if (stop_sliding == false) {
+                        $(".item_details").hide();
+                        $(".item_details").removeClass('active')
+                        $("#pager2 a").removeClass('selected')
+
+                        split_div = $(that).attr('id').split('_')
+                        $("#" + split_div[split_div.length - 1]).addClass('selected')
+
+                        $(that).show();
+                        $(that).addClass('active')
+                        set_logo_url(that, "shop-now")
+
+                        if (index == ($(".item_details").length - 1))
+                            setTimeout(function () {
+                                if (stop_sliding == false) {
+                                    $(".item_details").last().hide()
+                                    $(".item_details").removeClass('active')
+                                    $("#pager2 a").removeClass('selected')
+                                    $(".item_details").first().show();
+                                    $(".item_details").first().addClass('active')
+                                    set_logo_url($(".item_details").first(), "shop-now")
+
+                                    $("#1").addClass("selected")
+                                }
+                            }, 5000)
+                    }
+                }, 5000 * index);
+            });
+
+            <% end %>
+
+            $(".next").click(function () {
+                var current_div = $(".item_details.active")
+                $(".item_details").hide();
+                $(".item_details").removeClass('active')
+                $("#pager2 a").removeClass('selected')
+
+                var splited_val = $(current_div).attr("id").split('_')
+
+                if (parseInt(splited_val[splited_val.length - 1]) < $(".item_details").length) {
+                    $(current_div).next().show().addClass('active')
+                    set_logo_url($(current_div).next(), "shop-now")
+
+                    split_div = $(current_div).next().attr("id").split('_')
+                    $("#" + split_div[split_div.length - 1]).addClass('selected')
+                }
+                else {
+                    $(".item_details").first().show().addClass('active')
+                    set_logo_url($(".item_details").first(), "shop-now")
+
+                    $("#1").addClass('selected')
+                }
+            });
+
+
+            $(".prev").click(function () {
+                var current_div = $(".item_details.active")
+                $(".item_details").hide();
+                $(".item_details").removeClass('active')
+                $("#pager2 a").removeClass('selected')
+
+                var splited_val = $(current_div).attr("id").split('_')
+
+                if (parseInt(splited_val[splited_val.length - 1]) > 1) {
+                    $(current_div).prev().show().addClass('active')
+                    set_logo_url($(current_div).prev(), "shop-now")
+
+                    split_div = $(current_div).prev().attr("id").split('_')
+                    $("#" + split_div[split_div.length - 1]).addClass('selected')
+                }
+                else {
+                    $(".item_details").last().show().addClass('active')
+                    set_logo_url($(".item_details").last(), "shop-now")
+
+                    last = $(".item_details").length
+                    $("#" + last).addClass('selected')
+                }
+            });
+
+            $("#pager2 a").click(function () {
+                var that = this
+                selected_id = $(that).attr("id")
+                selected_div = $("#item_detail_" + selected_id)
+
+                $(".item_details").hide();
+                $(".item_details").removeClass('active')
+
+                $(selected_div).show()
+                $(selected_div).addClass('active')
+                set_logo_url($(selected_div), "shop-now")
+
+                $("#pager2 a").removeClass('selected')
+                $(that).addClass('selected')
+            })
+
+            $(".advt-block").click(function () {
+                stop_sliding = true
+            })
 
 //        $(".plannto-advertisement").click(function(event)
 //        {
@@ -349,59 +342,53 @@
 //            }
 //        })
 
-        // All place clickable
+            // All place clickable
 
-        $(".plannto-advertisement.main_div").click(function(a)
-        {
-            var ids_list = []
-            ids_list.push(a.target.id)
-            ids_list.push(a.target.parentNode.id)
-            ids_list.push(a.target.parentNode.parentNode.id)
-            var present = $.inArray("pager2", ids_list)
-            if (present < 0)
-            {
-                <% if ["728", "120", "160_600"].include?(@suitable_ui_size) %>
+            $(".plannto-advertisement.main_div").click(function (a) {
+                var ids_list = []
+                ids_list.push(a.target.id)
+                ids_list.push(a.target.parentNode.id)
+                ids_list.push(a.target.parentNode.parentNode.id)
+                var present = $.inArray("pager2", ids_list)
+                if (present < 0) {
+                    <% if ["728", "120", "160_600"].include?(@suitable_ui_size) %>
                     var x = a.target
                     var d = $(x).closest(".product-container")
                     var shop_now_url = d.find(".shop-now").attr('href')
-                <% else %>
+                    <% else %>
                     var x = a.target
                     var d = $(x).closest(".advt-box")
                     var shop_now_url = d.find(".shop-now").attr('href')
-                <% end %>
+                    <% end %>
 
-                if (shop_now_url == undefined)
-                {
-                    var shop_now_url = $(".item_details.active").find(".shop-now").attr('href')
+                    if (shop_now_url == undefined) {
+                        var shop_now_url = $(".item_details.active").find(".shop-now").attr('href')
+                    }
+
+                    window.open(shop_now_url, "_blank")
+                    return false;
                 }
+            });
 
-                window.open(shop_now_url, "_blank")
+            $(".car_extra_link_ad").click(function () {
+                var href = $(this).attr("href")
+
+                window.open(href, "_blank")
                 return false;
-            }
+            })
+
         });
 
-        $(".car_extra_link_ad").click(function()
-        {
-            var href = $(this).attr("href")
+        function set_logo_url(that, class_name) {
+            var href_val = $(that).find("." + class_name).attr('href')
 
-            window.open(href, "_blank")
-            return false;
-        })
+            var image_src = $(that).find(".vendor_image_src").attr('src')
 
-    });
-
-    function set_logo_url(that, class_name)
-    {
-        var href_val = $(that).find("."+class_name).attr('href')
-
-        var image_src = $(that).find(".vendor_image_src").attr('src')
-
-        if (href_val == "" || href_val == undefined)
-        {
-            href_val = $("."+class_name).attr('href')
+            if (href_val == "" || href_val == undefined) {
+                href_val = $("." + class_name).attr('href')
+            }
+            $(".logo").find('a img').attr('src', image_src)
+            $(".logo").find('a.vendor_image').attr('href', href_val)
         }
-        $(".logo").find('a img').attr('src', image_src)
-        $(".logo").find('a.vendor_image').attr('href', href_val)
-    }
-</script>
+    </script>
 <% end %>
