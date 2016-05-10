@@ -22,7 +22,7 @@
     </div>
 
     <% if @sliced_item_details.count != 0 %>
-        <div class="divshadow">
+        <div class="divshadow1">
           <ul id="foo3" height="190px;">
             <% @sliced_item_details.each_with_index do |item_detail, indx| %>
                 <% ad_url = get_ad_url(item_detail.first.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
@@ -49,6 +49,9 @@
                               <div style="padding: 5px 0px;color: #000;font-size: 10px;">
                                 <!--  <span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span>-->
                                 <span>EMI: <%= prettifyforcaremi(each_slice_item_detail) %></span><span>*</span>
+                              </div>
+                               <div class="" style="padding: 5px 0px;color: #000;font-size: 10px;font-weight:bold;">
+                                    <%= raw get_autoportal_links_for_ad(@click_url, ad_url, each_slice_item_detail) %>
                               </div>
 
                             </a>

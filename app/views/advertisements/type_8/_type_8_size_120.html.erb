@@ -38,6 +38,9 @@
                         <!--  <span style="font-style:italic;">Benefits upto Rs 32,000<sup>*</sup>.</span> -->
                         <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span>
                       </div>
+                      <div style="padding: 5px 0px;color: #000;font-size: 10px;font-weight:bold;">
+                         <%= raw get_autoportal_links_for_ad(@click_url, ad_url_extra, sliced_item_detail.first) %>
+                       </div> 
                           </div>
                    
                     
@@ -57,12 +60,12 @@
                     </p>
                   </div>
               <% end %>
-              <div class="product-extra-desc">
+              <!-- <div class="product-extra-desc">
                 <p>
                   <%= raw get_autoportal_links_for_ad(@click_url, ad_url_extra, sliced_item_detail.first) %>
                   <%#= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil) %>
                 </p>
-              </div>
+              </div> -->
                 <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
                 <% else %>
                     <%= item_detail = sliced_item_detail.first %>
@@ -182,7 +185,7 @@
 
 
     .advt-120 .advt-box .product-container {
-        height: 240px;
+        height: 265px;
     }
     .main_div {
         text-align: center;
