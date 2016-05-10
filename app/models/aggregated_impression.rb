@@ -132,6 +132,8 @@ class AggregatedImpression
           "size"
         when "Sid"
           "agg_coll"
+        when "Page Type"
+          "page_types"
       end
 
       result_hash = results.map(&:"#{option}")
@@ -139,16 +141,33 @@ class AggregatedImpression
       final_hash = {}
       result_hash = result_hash.compact
 
-      result_hash.each do |each_hash|
-        each_hash.each do |key, val|
-          final_hash[key] = {} if final_hash[key].blank?
-          final_hash[key]["total_imp"] = final_hash[key]["total_imp"].to_i + val["imp"].to_i
-          final_hash[key]["total_clicks"] = final_hash[key]["total_clicks"].to_i + val["clicks"].to_i
-          final_hash[key]["total_orders"] = final_hash[key]["total_orders"].to_i + val["orders"].to_i
-          final_hash[key]["total_costs"] = (final_hash[key]["total_costs"].to_f + val["costs"].to_f).round(2)
-          final_hash[key]["total_product_price"] = (final_hash[key]["total_product_price"].to_f + val["product_price"].to_f).round(2)
-          final_hash[key]["tot_valid_orders"] = final_hash[key]["tot_valid_orders"].to_i + val["orders"].to_i
-          final_hash[key]["tot_valid_product_price"] = (final_hash[key]["tot_valid_product_price"].to_f + val["product_price"].to_f).round(2)
+      if option == "page_types"
+        result_hash.each do |each_hash|
+          each_hash.each do |key, each_val|
+            each_val.each do |each_key, val|
+              final_hash[key] = {} if final_hash[key].blank?
+              final_hash[key]["total_imp"] = final_hash[key]["total_imp"].to_i + val["imp"].to_i
+              final_hash[key]["total_clicks"] = final_hash[key]["total_clicks"].to_i + val["clicks"].to_i
+              final_hash[key]["total_orders"] = final_hash[key]["total_orders"].to_i + val["orders"].to_i
+              final_hash[key]["total_costs"] = (final_hash[key]["total_costs"].to_f + val["costs"].to_f).round(2)
+              final_hash[key]["total_product_price"] = (final_hash[key]["total_product_price"].to_f + val["product_price"].to_f).round(2)
+              final_hash[key]["tot_valid_orders"] = final_hash[key]["tot_valid_orders"].to_i + val["orders"].to_i
+              final_hash[key]["tot_valid_product_price"] = (final_hash[key]["tot_valid_product_price"].to_f + val["product_price"].to_f).round(2)
+            end
+          end
+        end
+      else
+        result_hash.each do |each_hash|
+          each_hash.each do |key, val|
+            final_hash[key] = {} if final_hash[key].blank?
+            final_hash[key]["total_imp"] = final_hash[key]["total_imp"].to_i + val["imp"].to_i
+            final_hash[key]["total_clicks"] = final_hash[key]["total_clicks"].to_i + val["clicks"].to_i
+            final_hash[key]["total_orders"] = final_hash[key]["total_orders"].to_i + val["orders"].to_i
+            final_hash[key]["total_costs"] = (final_hash[key]["total_costs"].to_f + val["costs"].to_f).round(2)
+            final_hash[key]["total_product_price"] = (final_hash[key]["total_product_price"].to_f + val["product_price"].to_f).round(2)
+            final_hash[key]["tot_valid_orders"] = final_hash[key]["tot_valid_orders"].to_i + val["orders"].to_i
+            final_hash[key]["tot_valid_product_price"] = (final_hash[key]["tot_valid_product_price"].to_f + val["product_price"].to_f).round(2)
+          end
         end
       end
 
