@@ -748,6 +748,7 @@ class Advertisement < ActiveRecord::Base
                 ret_val = impression.r.to_i == 1
                 visited = impression.visited.to_i == 1
                 ad_size = impression_mongo["size"].to_s
+                page_type = impression_mongo["design_type"].to_s
 
                 current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
 
@@ -782,6 +783,19 @@ class Advertisement < ActiveRecord::Base
                   current_hash["size"].merge!({"#{ad_size}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
                   curr_size.merge!({"imp" => curr_size["imp"].to_i + 1, "costs" => curr_size["costs"].to_f + winning_price.to_f})
+                end
+
+                current_hash["page_types"] = {} if current_hash["page_types"].blank?
+                curr_page_type = current_hash["page_types"]["#{page_type}"]
+                if curr_page_type.blank?
+                  current_hash["page_types"].merge!("#{page_type}" => {"#{ad_size}" => {"imp" => 1, "costs" => winning_price.to_f}})
+                else
+                  curr_page_type_size = curr_page_type["#{ad_size}"]
+                  if curr_page_type_size.blank?
+                    curr_page_type.merge!("#{ad_size}" => {"imp" => 1, "costs" => winning_price.to_f})
+                  else
+                    curr_page_type_size.merge!({"imp" => curr_page_type_size["imp"].to_i + 1, "costs" => curr_page_type_size["costs"].to_f + winning_price.to_f})
+                  end
                 end
 
                 current_hash["rii"] = {} if current_hash["rii"].blank?
@@ -960,6 +974,7 @@ class Advertisement < ActiveRecord::Base
 
                     device_name = url_params[:device].to_s
                     ad_size = url_params[:size].to_s
+                    page_type = url_params[:page_type].to_s
 
                     current_hash["device"] = {} if current_hash["device"].blank?
                     curr_device = current_hash["device"]["#{device_name}"]
@@ -975,6 +990,19 @@ class Advertisement < ActiveRecord::Base
                       current_hash["size"].merge!({"#{ad_size}" => {"clicks" => 1}})
                     else
                       curr_size.merge!({"clicks" => curr_size["clicks"].to_i + 1})
+                    end
+
+                    current_hash["page_types"] = {} if current_hash["page_types"].blank?
+                    curr_page_type = current_hash["page_types"]["#{page_type}"]
+                    if curr_page_type.blank?
+                      current_hash["page_types"].merge!("#{page_type}" => {"#{ad_size}" => {"clicks" => 1}})
+                    else
+                      curr_page_type_size = curr_page_type["#{ad_size}"]
+                      if curr_page_type_size.blank?
+                        curr_page_type.merge!("#{ad_size}" => {"clicks" => 1})
+                      else
+                        curr_page_type_size.merge!({"clicks" => curr_page_type_size["clicks"].to_i + 1})
+                      end
                     end
 
                     if ret_val == false
@@ -1201,6 +1229,7 @@ class Advertisement < ActiveRecord::Base
               agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, val["hours"]) if !val["hours"].blank?
               agg_imp.device = Advertisement.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
               agg_imp.size = Advertisement.combine_hash(agg_imp.size, val["size"]) if !val["size"].blank?
+              agg_imp.page_types = Advertisement.combine_hash(agg_imp.page_types, val["page_types"]) if !val["page_types"].blank?
               agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
               agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
               agg_imp.visited = Advertisement.combine_hash(agg_imp.visited, val["visited"]) if !val["visited"].blank?

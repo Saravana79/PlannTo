@@ -294,6 +294,7 @@ class OrderHistory < ActiveRecord::Base
         url_params.symbolize_keys!
         device_name = url_params[:device].to_s
         size = url_params[:size].to_s
+        page_type = url_params[:page_type].to_s
         ret_val = url_params[:r].to_i == 1
 
         agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
@@ -339,6 +340,20 @@ class OrderHistory < ActiveRecord::Base
           curr_size["#{size}"].merge!({"orders" => curr_size["#{size}"]["orders"].to_i + 1, "product_price" => curr_size["#{size}"]["product_price"].to_f + price})
         end
 
+        curr_page_types = agg_imp.page_types.blank? ? {} : agg_imp.page_types
+        curr_page_type = curr_page_types["#{page_type}"]
+        # curr_page_type = current_hash["page_types"]["#{page_type}"]
+        if curr_page_type.blank?
+          curr_page_types.merge!("#{page_type}" => {"#{size}" => {"orders" => 1, "product_price" => price}})
+        else
+          curr_page_type_size = curr_page_type["#{size}"]
+          if curr_page_type_size.blank?
+            curr_page_type.merge!("#{size}" => {"orders" => 1, "product_price" => price})
+          else
+            curr_page_type_size.merge!({"orders" => curr_page_type_size["#{size}"]["orders"].to_i + 1, "product_price" => curr_page_type_size["#{size}"]["product_price"].to_f + price})
+          end
+        end
+
         rii = agg_imp.rii.blank? ? {} : agg_imp.rii
         if rii["#{is_rii}"].blank?
           rii.merge!({"#{is_rii}" => {"orders" => 1, "product_price" => price}})
@@ -360,6 +375,7 @@ class OrderHistory < ActiveRecord::Base
         agg_imp.hours = hours
         agg_imp.device = device
         agg_imp.size = curr_size
+        agg_imp.page_types = curr_page_types
         agg_imp.ret = ret
         agg_imp.rii = rii
         agg_imp.save!

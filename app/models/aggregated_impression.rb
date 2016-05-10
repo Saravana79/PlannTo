@@ -18,6 +18,7 @@ class AggregatedImpression
   field :ret, type: Hash #Retargetting True or False
   field :rii, type: Hash #Related Item Impression True or False
   field :size, type: Hash #Related Item Impression True or False
+  field :page_types, type: Hash #Page types hash
   field :visited, type: Hash #Related Item Impression True or False
   field :expanded, type: Hash #Related Item Impression True or False
 
