@@ -2053,12 +2053,17 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         old_hash[each_key] = each_val
       else
         each_val.each do |e_key, e_val|
-          e_val.each do |key, val|
-            e_key_val = old_hash[each_key][e_key]
-            if e_key_val.blank?
-              old_hash[each_key][e_key][key] = val.to_i
-            else
-              old_hash[each_key][e_key][key] = old_hash[each_key][e_key][key].to_i + val.to_i
+          e_key_val_hash = old_hash[each_key][e_key]
+          if e_key_val_hash.blank?
+            old_hash[each_key][e_key] = e_val
+          else
+            e_val.each do |key, val|
+              e_key_val = old_hash[each_key][e_key]
+              if e_key_val.blank?
+                old_hash[each_key][e_key][key] = val.to_i
+              else
+                old_hash[each_key][e_key][key] = old_hash[each_key][e_key][key].to_i + val.to_i
+              end
             end
           end
         end
