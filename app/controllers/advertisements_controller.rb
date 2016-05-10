@@ -91,7 +91,8 @@ class AdvertisementsController < ApplicationController
 
     item_ids = @items.blank? ? [] : @items.map(&:id)
     @item = @items.first
-    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad)
+    skip_limit_in_query = @items.compact.collect {|item| item.is_a?(Car)}.include?(true) rescue false
+    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids, @ad, skip_limit_in_query)
     # Default item_details based on vendor if item_details empty
     #TODO: temporary solution, have to change based on ecpm
     if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"

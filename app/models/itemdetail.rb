@@ -17,7 +17,7 @@ class Itemdetail < ActiveRecord::Base
                  else itemdetails.cashback end) asc")
   end
 
-  def self.get_item_details_by_item_ids(item_ids, vendor_ids, fashion_id=nil, ad=nil)
+  def self.get_item_details_by_item_ids(item_ids, vendor_ids, fashion_id=nil, ad=nil, skip_limit_in_query=false)
     # status_condition = vendor_ids.count > 1 ? " and itemdetails.status in (1,3,2)" : ""
     vendor_ids = vendor_ids.compact
 
@@ -33,8 +33,9 @@ class Itemdetail < ActiveRecord::Base
     if (!fashion_id.blank? || (!ad.blank? && ad.sort_type == "random"))
       order_by_condition = " order by rand(), sort_priority desc limit 12"
     else
+      limit_condition = skip_limit_in_query ? "" : " limit 12"
       order_by_condition = "ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, sort_priority desc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
-                 itemdetails.cashback end) asc limit 12"
+                 itemdetails.cashback end) asc #{limit_condition}"
     end
 
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
@@ -81,14 +82,14 @@ class Itemdetail < ActiveRecord::Base
                  else itemdetails.cashback end) asc")
   end
 
-  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, more_vendors, p_item_ids=[], ad=nil)
+  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, more_vendors, p_item_ids=[], ad=nil, skip_limit_in_query=false)
     item_details = []
     if item_ids.count > 1
-      item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad).group_by { |each_rec| each_rec.itemid }
+      item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad, skip_limit_in_query).group_by { |each_rec| each_rec.itemid }
     elsif item_ids.count == 1
       items = Item.get_related_items_if_one_item(items, publisher, status) #if (activate_tab && items.count == 1)
       item_ids = items.map(&:id)
-      item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad).group_by { |each_rec| each_rec.itemid }
+      item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids, nil, ad, skip_limit_in_query).group_by { |each_rec| each_rec.itemid }
       # item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
     end
 
