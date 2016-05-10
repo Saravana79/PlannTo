@@ -1229,7 +1229,7 @@ class Advertisement < ActiveRecord::Base
               agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, val["hours"]) if !val["hours"].blank?
               agg_imp.device = Advertisement.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
               agg_imp.size = Advertisement.combine_hash(agg_imp.size, val["size"]) if !val["size"].blank?
-              agg_imp.page_types = Advertisement.combine_hash(agg_imp.page_types, val["page_types"]) if !val["page_types"].blank?
+              agg_imp.page_types = Advertisement.combine_hash_multi_hash(agg_imp.page_types, val["page_types"]) if !val["page_types"].blank?
               agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
               agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
               agg_imp.visited = Advertisement.combine_hash(agg_imp.visited, val["visited"]) if !val["visited"].blank?
@@ -2040,6 +2040,27 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       else
         each_val.each do |e_key, e_val|
           old_hash[each_key][e_key] = old_hash[each_key][e_key].to_i + e_val.to_i
+        end
+      end
+    end
+    old_hash
+  end
+
+  def self.combine_hash_multi_hash(old_hash, new_hash)
+    old_hash = {} if old_hash.blank?
+    new_hash.each do |each_key, each_val|
+      if old_hash[each_key].blank?
+        old_hash[each_key] = each_val
+      else
+        each_val.each do |e_key, e_val|
+          e_val.each do |key, val|
+            e_key_val = old_hash[each_key][e_key]
+            if e_key_val.blank?
+              old_hash[each_key][e_key][key] = val.to_i
+            else
+              old_hash[each_key][e_key][key] = old_hash[each_key][e_key][key].to_i + val.to_i
+            end
+          end
         end
       end
     end
