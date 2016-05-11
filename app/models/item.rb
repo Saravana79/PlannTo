@@ -1861,11 +1861,9 @@ end
                           type = article_content.sub_type rescue "" if type.blank?
                         end
                       else
-                        if !article_content.blank?
-                          item_ids = redis_vals["item_ids"] if item_ids.blank?
-                          itemtype_id = redis_vals["itemtype"] rescue "" if itemtype_id.blank?
-                          type = redis_vals["article_type"] rescue "" if type.blank?
-                        end
+                        item_ids = redis_vals["item_ids"] if item_ids.blank?
+                        itemtype_id = redis_vals["itemtype"] rescue "" if itemtype_id.blank?
+                        type = redis_vals["article_type"] rescue "" if type.blank?
                       end
                     end
 
@@ -2167,7 +2165,7 @@ end
 
   def self.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits")
     exists = false
-    p key = "#{url_prefix}:#{user_id}"
+    p key = "$redis.lrange(#{url_prefix}:#{user_id},0,-1)"
     visited_urls = $redis.lrange(key, 0, -1)
 
     if visited_urls.include?(url)
