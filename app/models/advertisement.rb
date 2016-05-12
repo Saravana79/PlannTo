@@ -649,6 +649,7 @@ class Advertisement < ActiveRecord::Base
 
       valid_item_ids = (valid_item_ids_from_ads + valid_item_ids).flatten.uniq
 
+      error_count = 0
       begin
         add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 1000)
 
@@ -733,7 +734,11 @@ class Advertisement < ActiveRecord::Base
 
                   winning_price_com = winning_price_com.to_f.round(2)
                 rescue Exception => e
+                  error_count += 1
                   winning_price_com = 0.0
+                  if error_count > 10
+                    raise e
+                  end
                 end
 
                 if impression.video_impression_id.blank?
@@ -1200,8 +1205,11 @@ class Advertisement < ActiveRecord::Base
               # update_impressions << {impression_id => obj_params} if !impression_id.blank?
             end
           rescue Exception => e
+            error_count += 1
             p "There was problem while running impressions process => #{e.backtrace}"
-            p e
+            if error_count > 10
+              raise e
+            end
           end
           p "Remaining click_or_impressions Count - #{count}"
         end
@@ -1299,6 +1307,10 @@ class Advertisement < ActiveRecord::Base
           end
         rescue Exception => e
           p "fixes for => #{e.backtrace}"
+          error_count += 1
+          if error_count > 10
+            raise e
+          end
         end
 
         # Process bulk insert for mongo collection impression
@@ -1327,7 +1339,11 @@ class Advertisement < ActiveRecord::Base
               MCompanionImpression.collection.insert(:timestamp => each_comp_imp["timestamp"], :_id => each_comp_imp["_id"], :video_impression_id => each_comp_imp["video_impression_id"])
             end
           rescue Exception => e
+            error_count += 1
             p "rescue while comp mongodb insert"
+            if error_count > 10
+              raise e
+            end
           end
         end
 
@@ -1404,7 +1420,11 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               # plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
             end
           rescue Exception => e
+            error_count += 1
             p "Error invalid url errors => #{impression.hosted_site_url}"
+            if error_count > 10
+              raise e
+            end
           end
         end
 
@@ -1544,11 +1564,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               unless ad_impression_mon.blank?
                 each_click_mongo.delete("ad_impression_id")
 
-                begin
-                  ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
-                rescue Exception => e
-                  p "Error while push m_click"
-                end
+                ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
               end
             else
               ad_impression_mon = AdImpression.where(:_id => each_click_mongo["video_impression_id"]).first
@@ -1558,15 +1574,15 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   click_imp.merge!({:video_impression_id => each_click_mongo["ad_impression_id"]})
                 end
 
-                begin
-                  ad_impression_mon.m_clicks << MClick.new(click_imp)
-                rescue Exception => e
-                  p "Error while push m_click"
-                end
+                ad_impression_mon.m_clicks << MClick.new(click_imp)
               end
             end
           rescue Exception => e
+            error_count += 1
             p "Error while process click mongo"
+            if error_count > 10
+              raise e
+            end
           end
         end
 

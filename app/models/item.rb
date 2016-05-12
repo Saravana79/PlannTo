@@ -1759,6 +1759,7 @@ end
 
     valid_item_ids = (valid_item_ids_from_ads + valid_item_ids).flatten.uniq
 
+    error_count = 0
     begin
       # redis_rtb_hash = {}
       # pud_redis_rtb_hash = {}
@@ -2101,7 +2102,11 @@ end
 
           end
         rescue Exception => e
+          error_count += 1
           p "Error While Processing => #{e.backtrace}"
+          if error_count > 10
+            raise e
+          end
         end
       end
 
@@ -2135,31 +2140,32 @@ end
         end
       end
 
-      p "--------------------------------CookieMatch Table Update ------------------------------"
-
-      begin
-        cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
-        # cookie_matches.update_all(:updated_at => Time.now)
-        cookie_matches.each do |each_rec|
-          each_rec.touch
-        end
-
-        $redis_rtb.pipelined do
-          cookie_matches.each do |cookie_match|
-            if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
-              $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-              $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
-            end
-          end
-        end
-      rescue Exception => e
-        p "Error processing cookie match"
-      end
-
       p "------------------------------ Process Completed ------------------------------"
     rescue Exception => e
       p "Problem in buying list process"
       p e.backtrace
+      error_count += 1
+      if error_count > 10
+        raise e
+      end
+    end
+
+    p "--------------------------------CookieMatch Table Update ------------------------------"
+
+    error_count = 0
+    cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
+    # cookie_matches.update_all(:updated_at => Time.now)
+    cookie_matches.each do |each_rec|
+      each_rec.touch
+    end
+
+    $redis_rtb.pipelined do
+      cookie_matches.each do |cookie_match|
+        if !cookie_match.google_user_id.blank? && !cookie_match.plannto_user_id.blank?
+          $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
+          $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 1.weeks)
+        end
+      end
     end
   end
 
