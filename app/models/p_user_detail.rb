@@ -247,14 +247,12 @@ class PUserDetail
   private
 
   def update_lad
-    p 6666666666666666666666666
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
       # update_duplicate_record
     end
 
     if self.skip_callback != true
-      p 111111111111111
       self.skip_duplicate_update = true
       self.skip_callback = true
       self.lad = Time.now
