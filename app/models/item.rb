@@ -1784,6 +1784,9 @@ end
                 next
               else
                 p "-------------------------- Continue Process --------------------------"
+                if match_item_ids.count > 10
+                  next
+                end
                 impression_item_ids << match_item_ids
                 item_ids = match_item_ids.join(",")
                 #TODO: have to implement impression item ids to redis_rtb
