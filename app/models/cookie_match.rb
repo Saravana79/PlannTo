@@ -371,6 +371,7 @@ class CookieMatch < ActiveRecord::Base
 
         if !cookie_matches_plannto_ids.compact!.blank?
           begin
+            cookie_matches_plannto_ids = cookie_matches_plannto_ids.uniq
             cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
             # cookie_matches.update_all(:updated_at => Time.now)
             cookie_matches.each do |each_rec|
@@ -767,6 +768,7 @@ class CookieMatch < ActiveRecord::Base
 
     if !cookie_matches_plannto_ids.compact!.blank?
       begin
+        cookie_matches_plannto_ids = cookie_matches_plannto_ids.uniq
         cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
         # cookie_matches.update_all(:updated_at => Time.now)
         cookie_matches.each do |each_rec|

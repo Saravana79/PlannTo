@@ -347,6 +347,7 @@ class UserAccessDetail < ActiveRecord::Base
     # p "-------------------------------- CookieMatch In User Access Detail ------------------------------"
     #
     # if !cookie_matches_plannto_ids.compact!.blank?
+    #   cookie_matches_plannto_ids = cookie_matches_plannto_ids.uniq
     #   begin
     #     cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
     #     cookie_matches.update_all(:updated_at => Time.now)

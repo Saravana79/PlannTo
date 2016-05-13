@@ -1858,6 +1858,7 @@ end
                     plannto_user_detail.lid = plannto_location_id if !plannto_location_id.blank?
 
                     if item_ids.blank? || itemtype_id.blank? || type.blank?
+                      p "Get details from redis_rtb => 'url:#{url}'"
                       redis_vals = $redis_rtb.hgetall("url:#{url}")
                       if redis_vals.blank?
                         article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
@@ -1905,9 +1906,9 @@ end
                       end
 
                       if i_type.blank?
-                        # plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url], :r => resale, :fad => Date.today)
-                        # i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
-                        i_type = IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today)
+                        plannto_user_detail.i_types << IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today)
+                        i_type = plannto_user_detail.i_types.where(:itemtype_id => itemtype_id, :r => resale).last
+                        # i_type = IType.new(:itemtype_id => itemtype_id, :lu => [url].compact, :r => resale, :fad => Date.today)
                       else
                         lu = i_type.lu
                         lu = lu.to_a
@@ -2155,14 +2156,16 @@ end
         raise e
       end
     end
+    impression_item_ids = impression_item_ids.flatten
 
-    p "--------------------------------Item ids impressions ------------------------------"
+    p "--------------------------------Item ids impressions => #{impression_item_ids.count}------------------------------"
 
+    impression_item_ids = impression_item_ids.group_by {|each_val| each_val}
 
     $redis_rtb.pipelined do
-      impression_item_ids.flatten.each do |each_key|
+      impression_item_ids.each do |each_key, each_val|
         redis_key = "imp:#{Date.today.to_s}:#{each_key}"
-        $redis_rtb.incr(redis_key)
+        $redis_rtb.incrby(redis_key, each_val.count)
         $redis_rtb.expire(redis_key, 5.days)
       end
     end
@@ -2170,6 +2173,7 @@ end
     p "--------------------------------CookieMatch Table Update ------------------------------"
 
     error_count = 0
+    cookie_matches_plannto_ids = cookie_matches_plannto_ids.uniq
     cookie_matches = CookieMatch.where(:plannto_user_id => cookie_matches_plannto_ids)
     # cookie_matches.update_all(:updated_at => Time.now)
     cookie_matches.each do |each_rec|
