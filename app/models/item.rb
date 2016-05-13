@@ -1766,6 +1766,7 @@ end
       # redis_hash = {}
       #
       # buying_list_del_keys = []
+      impression_item_ids = []
       user_vals.each_with_index do |each_user_val, index|
         p "Processing: url => #{each_user_val};"
         # p "index => #{index}"
@@ -1783,7 +1784,9 @@ end
                 next
               else
                 p "-------------------------- Continue Process --------------------------"
+                impression_item_ids << match_item_ids
                 item_ids = match_item_ids.join(",")
+                #TODO: have to implement impression item ids to redis_rtb
               end
             end
 
@@ -2147,6 +2150,17 @@ end
       error_count += 1
       if error_count > 10
         raise e
+      end
+    end
+
+    p "--------------------------------Item ids impressions ------------------------------"
+
+
+    $redis_rtb.pipelined do
+      impression_item_ids.flatten.each do |each_key|
+        redis_key = "imp:#{Date.today.to_s}:#{each_key}"
+        $redis_rtb.incr(redis_key)
+        $redis_rtb.expire(redis_key, 5.days)
       end
     end
 
