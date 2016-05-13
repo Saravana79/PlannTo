@@ -1733,6 +1733,7 @@ end
   end
 
   def self.buying_list_process_in_redis(user_vals)
+    user_vals = user_vals.uniq
     base_item_ids = Item.get_base_items_from_config()
     google_geo_targeting_hash = GoogleGeoTargeting.get_location_id_hash_list()
 
