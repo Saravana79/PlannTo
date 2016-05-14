@@ -281,9 +281,14 @@ class AddImpression < ActiveRecord::Base
     impression_params = {"imp_id" => impression_id, "type" => impression_type, "itemid" => item_id, "request_referer" => request_referer, "time" => Time.zone.now.utc, "user" => user_id, "remote_ip" => remote_ip, "impression_id" => impressionid, "itemaccess" => itemsaccess,
                          "params" => url_params, "temp_user_id" => plan_to_temp_user_id, "ad_id" => ad_id, "winning_price" => nil, "winning_price_enc" => winning_price_enc, "sid" => sid, "t" => t, "r" => r, "a" => a, "video" => video, "video_impression_id" => video_impression_id, "visited" => visited}.to_json
 
-    unless (impression_type == "amazon_sports_widget" || impression_type == "elec_widget_1")                     
-     Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
-     impression_params.clear rescue ""
+    unless (impression_type == "amazon_sports_widget")
+      if (impression_type == "elec_widget_1" || impression_type == "price_text_widget")
+        p buying_list_params = "<<#{request_referer}<<<<#{item_id}<<<<<<#{plan_to_temp_user_id}<<"
+        $redis_rtb.rpush("users:visits", buying_list_params)
+      else
+        Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+        impression_params.clear rescue ""
+      end
     else
       begin
         publisher = Publisher.getpublisherfromdomain(request_referer)

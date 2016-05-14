@@ -1771,6 +1771,8 @@ end
       user_vals.each_with_index do |each_user_val, index|
         p "Processing: url => #{each_user_val};"
         # p "index => #{index}"
+        plannto_user_detail = nil
+        for_widget = false
         begin
           t_length -= 1
           p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
@@ -1788,9 +1790,16 @@ end
                 if match_item_ids.count > 10
                   next
                 end
-                impression_item_ids << match_item_ids
+
+                if user_id.blank? && !plannto_user_id.blank?
+                  for_widget = true
+                  plannto_user_detail = PUserDetail.where(:pid => plannto_user_id).to_a.last
+                  user_id = plannto_user_detail.gid.to_s
+                else
+                  impression_item_ids << match_item_ids
+                end
+
                 item_ids = match_item_ids.join(",")
-                #TODO: have to implement impression item ids to redis_rtb
               end
             end
 
