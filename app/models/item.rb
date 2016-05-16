@@ -1845,6 +1845,11 @@ end
                       cookie_match_pid = $redis_rtb.get("cm:#{user_id}")
                       if !cookie_match_pid.blank?
                         plannto_user_detail.pid = cookie_match_pid
+                      else
+                        cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                        if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                          plannto_user_detail.pid = cookie_match.plannto_user_id
+                        end
                       end
                     else
                       plannto_user_detail.pid = plannto_user_id
@@ -1861,6 +1866,11 @@ end
                       cookie_match_pid = $redis_rtb.get("cm:#{user_id}")
                       if !cookie_match_pid.blank?
                         plannto_user_detail.pid = cookie_match_pid
+                      else
+                        cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                        if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                          plannto_user_detail.pid = cookie_match.plannto_user_id
+                        end
                       end
                     else
                       plannto_user_detail.pid = plannto_user_id
