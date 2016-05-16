@@ -531,10 +531,10 @@ class CookieMatch < ActiveRecord::Base
     result = CookieMatch.import(imported_values) #TODO: have to enable later
 
     #TODO: have to delete duplicate records
-    result.failed_instances.each do |cookie_detail|
-      cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
-      cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
-    end
+    # result.failed_instances.each do |cookie_detail|
+    #   cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
+    #   cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
+    # end
 
     $redis_rtb.pipelined do
       imported_values.each do |cookie_detail|
