@@ -1,7 +1,9 @@
 class PUserDetail
   include Mongoid::Document
+  # validates_uniqueness_of :pid
   # include Mongoid::Timestamps::Created
   # after_save :update_lad#, :update_duplicate_record
+  after_save :update_duplicate_record
 
   attr_accessor :skip_callback, :skip_duplicate_update
 
@@ -274,14 +276,16 @@ class PUserDetail
 
   def update_duplicate_record
     # if self.pid_changed? || self.google_user_id_changed?
+    if self.skip_duplicate_update != true
+      self.skip_duplicate_update = true
       plannto_user_details = PUserDetail.where(:pid => self.pid)
       if plannto_user_details.count > 1
         old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
         old_plannto_user_details.each do |old_detail|
 
-          if self.google_user_id.blank? && !old_detail.google_user_id.blank?
-            self.google_user_id = old_detail.google_user_id
+          if self.gid.blank? && !old_detail.gid.blank?
+            self.gid = old_detail.gid
           end
 
           old_detail.i_types.each do |old_i_type|
@@ -311,7 +315,7 @@ class PUserDetail
         self.save!
       end
 
-      plannto_user_details = PUserDetail.where(:gid => self.google_user_id)
+      plannto_user_details = PUserDetail.where(:gid => self.gid)
       if plannto_user_details.count > 1
         old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
@@ -355,6 +359,7 @@ class PUserDetail
           $redis_rtb.expire("cm:#{self.gid}", 1.weeks)
         end
       end
-    # end
+      # end
+    end
   end
 end
