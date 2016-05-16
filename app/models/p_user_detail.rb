@@ -278,7 +278,7 @@ class PUserDetail
     # if self.pid_changed? || self.google_user_id_changed?
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
-      plannto_user_details = PUserDetail.where(:pid => self.pid)
+      plannto_user_details = self.pid.blank? ? [] : PUserDetail.where(:pid => self.pid)
       if plannto_user_details.count > 1
         old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
@@ -315,7 +315,7 @@ class PUserDetail
         self.save!
       end
 
-      plannto_user_details = PUserDetail.where(:gid => self.gid)
+      plannto_user_details = self.gid.blank? ? [] : PUserDetail.where(:gid => self.gid)
       if plannto_user_details.count > 1
         old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
