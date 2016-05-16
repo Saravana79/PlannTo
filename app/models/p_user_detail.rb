@@ -275,91 +275,106 @@ class PUserDetail
   end
 
   def update_duplicate_record
-    # if self.pid_changed? || self.google_user_id_changed?
     if self.skip_duplicate_update != true
       self.skip_duplicate_update = true
-      plannto_user_details = self.pid.blank? ? [] : PUserDetail.where(:pid => self.pid)
-      if plannto_user_details.count > 1
-        old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
+      if self.pid_changed? || self.gid_changed?
+        plannto_user_details = self.pid.blank? ? [] : PUserDetail.where(:pid => self.pid)
+        if plannto_user_details.count > 1
+          old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
-        old_plannto_user_details.each do |old_detail|
+          old_plannto_user_details.each do |old_detail|
 
-          if self.gid.blank? && !old_detail.gid.blank?
-            self.gid = old_detail.gid
-          end
-
-          old_detail.i_types.each do |old_i_type|
-            valid_attributes = old_detail.attributes.slice("lid","mr", "g", "ai", "fr", "a")
-            valid_attributes.delete_if {|k,v| v.blank?}
-            self.update_attributes!(valid_attributes)
-            i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
-            if i_type.blank?
-              self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id, :fad => Date.today)
-              i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
+            if self.gid.blank? && !old_detail.gid.blank?
+              self.gid = old_detail.gid
             end
 
-            if !i_type.blank?
-              old_i_type.m_items.each do |old_m_item|
-                m_item = i_type.m_items.where(:item_id => old_m_item.item_id).last
-                if m_item.blank?
-                  i_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :rk => old_m_item.rk)
-                else
-                  m_item.rk = m_item.rk.to_i + old_m_item.rk.to_i
-                  m_item.save!
+            old_detail.i_types.each do |old_i_type|
+              # valid_attributes = old_detail.attributes.slice("lid","mr", "g", "ai", "fr", "a")
+              # valid_attributes.delete_if {|k,v| v.blank?}
+              # self.update_attributes!(valid_attributes)
+
+              self.lid = old_detail.lid if self.lid.blank? && !old_detail.lid.blank?
+              self.mr = old_detail.mr if self.mr.blank? && !old_detail.mr.blank?
+              self.g = old_detail.g if self.g.blank? && !old_detail.g.blank?
+              self.ai = old_detail.ai if self.ai.blank? && !old_detail.ai.blank?
+              self.fr = old_detail.fr if self.fr.blank? && !old_detail.fr.blank?
+              self.a = old_detail.a if self.a.blank? && !old_detail.a.blank?
+
+              i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
+              if i_type.blank?
+                self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id, :fad => Date.today)
+                i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
+              end
+
+              if !i_type.blank?
+                old_i_type.m_items.each do |old_m_item|
+                  m_item = i_type.m_items.where(:item_id => old_m_item.item_id).last
+                  if m_item.blank?
+                    i_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :rk => old_m_item.rk)
+                  else
+                    m_item.rk = m_item.rk.to_i + old_m_item.rk.to_i
+                    m_item.save!
+                  end
                 end
               end
             end
+            old_detail.destroy
           end
-          old_detail.destroy
+          self.save!
         end
-        self.save!
-      end
 
-      plannto_user_details = self.gid.blank? ? [] : PUserDetail.where(:gid => self.gid)
-      if plannto_user_details.count > 1
-        old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
+        plannto_user_details = self.gid.blank? ? [] : PUserDetail.where(:gid => self.gid)
+        if plannto_user_details.count > 1
+          old_plannto_user_details = plannto_user_details.delete_if {|pud| pud.id == self.id }
 
-        old_plannto_user_details.each do |old_detail|
+          old_plannto_user_details.each do |old_detail|
 
-          if self.pid.blank? && !old_detail.pid.blank?
-            self.pid = old_detail.pid
-          end
-
-          old_detail.i_types.each do |old_i_type|
-            valid_attributes = old_detail.attributes.slice("lid","mr", "g", "ai", "fr", "a")
-            valid_attributes.delete_if {|k,v| v.blank?}
-            self.update_attributes!(valid_attributes)
-
-            i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
-            if i_type.blank?
-              self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id, :fad => Date.today)
-              i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
+            if self.pid.blank? && !old_detail.pid.blank?
+              self.pid = old_detail.pid
             end
 
-            if !i_type.blank?
-              old_i_type.m_items.each do |old_m_item|
-                m_item = i_type.m_items.where(:item_id => old_m_item.item_id).last
-                if m_item.blank?
-                  i_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :rk => old_m_item.rk)
-                else
-                  m_item.rk = m_item.rk.to_i + old_m_item.rk.to_i
-                  m_item.save!
+            old_detail.i_types.each do |old_i_type|
+              # valid_attributes = old_detail.attributes.slice("lid","mr", "g", "ai", "fr", "a")
+              # valid_attributes.delete_if {|k,v| v.blank?}
+              # self.update_attributes!(valid_attributes)
+
+              self.lid = old_detail.lid if self.lid.blank? && !old_detail.lid.blank?
+              self.mr = old_detail.mr if self.mr.blank? && !old_detail.mr.blank?
+              self.g = old_detail.g if self.g.blank? && !old_detail.g.blank?
+              self.ai = old_detail.ai if self.ai.blank? && !old_detail.ai.blank?
+              self.fr = old_detail.fr if self.fr.blank? && !old_detail.fr.blank?
+              self.a = old_detail.a if self.a.blank? && !old_detail.a.blank?
+
+              i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
+              if i_type.blank?
+                self.i_types << IType.new(:itemtype_id => old_i_type.itemtype_id, :fad => Date.today)
+                i_type = self.i_types.where(:itemtype_id => old_i_type.itemtype_id).last
+              end
+
+              if !i_type.blank?
+                old_i_type.m_items.each do |old_m_item|
+                  m_item = i_type.m_items.where(:item_id => old_m_item.item_id).last
+                  if m_item.blank?
+                    i_type.m_items << MItem.new(:item_id => old_m_item.item_id, :lad => old_m_item.lad, :rk => old_m_item.rk)
+                  else
+                    m_item.rk = m_item.rk.to_i + old_m_item.rk.to_i
+                    m_item.save!
+                  end
                 end
               end
             end
+            old_detail.destroy
           end
-          old_detail.destroy
+          self.save!
         end
-        self.save!
-      end
 
-      if !self.gid.blank? && !self.pid.blank?
-        $redis_rtb.pipelined do
-          $redis_rtb.set("cm:#{self.gid}", self.pid)
-          $redis_rtb.expire("cm:#{self.gid}", 1.weeks)
+        if !self.gid.blank? && !self.pid.blank?
+          $redis_rtb.pipelined do
+            $redis_rtb.set("cm:#{self.gid}", self.pid)
+            $redis_rtb.expire("cm:#{self.gid}", 1.weeks)
+          end
         end
       end
-      # end
     end
   end
 end
