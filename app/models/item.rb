@@ -1794,7 +1794,7 @@ end
                 if user_id.blank? && !plannto_user_id.blank?
                   for_widget = true
                   plannto_user_detail = PUserDetail.where(:pid => plannto_user_id).to_a.last
-                  user_id = plannto_user_detail.gid.to_s
+                  user_id = plannto_user_detail.gid.to_s rescue nil
                 else
                   impression_item_ids << match_item_ids
                 end
