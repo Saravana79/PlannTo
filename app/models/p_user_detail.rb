@@ -168,9 +168,7 @@ class PUserDetail
 
     # p "***************** redis query calling *****************"
     # values = $redis_rtb.hgetall(key_prefix) # No need to get value
-    p "----------------------------------"
-    p values
-    values = {} if values.blank?
+    values = {}
     redis_rtb = {key_prefix => values}
 
     redis_rtb_ubl = redis_rtb[key_prefix]
