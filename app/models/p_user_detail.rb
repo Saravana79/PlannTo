@@ -166,8 +166,8 @@ class PUserDetail
       key_prefix = "ubl:pl:#{user_id_for_key}"
     end
 
-    p "***************** redis query calling *****************"
-    values = $redis_rtb.hgetall(key_prefix)
+    # p "***************** redis query calling *****************"
+    # values = $redis_rtb.hgetall(key_prefix) # No need to get value
     p "----------------------------------"
     p values
     values = {} if values.blank?

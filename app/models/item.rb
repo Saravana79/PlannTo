@@ -1837,19 +1837,9 @@ end
                   if plannto_user_detail.blank?
                     plannto_user_detail = PUserDetail.new(:gid => user_id)
                     if plannto_user_id.blank?
-                      # cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
-                      # if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                      #   plannto_user_detail.pid = cookie_match.plannto_user_id
-                      # end
-
-                      cookie_match_pid = $redis_rtb.get("cm:#{user_id}")
-                      if !cookie_match_pid.blank?
-                        plannto_user_detail.pid = cookie_match_pid
-                      else
-                        cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
-                        if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                          plannto_user_detail.pid = cookie_match.plannto_user_id
-                        end
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.pid = cookie_match.plannto_user_id
                       end
                     else
                       plannto_user_detail.pid = plannto_user_id
@@ -1858,19 +1848,9 @@ end
                     # plannto_user_detail.save!
                   elsif plannto_user_detail.pid.blank?
                     if plannto_user_id.blank?
-                      # cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
-                      # if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                      #   plannto_user_detail.pid = cookie_match.plannto_user_id
-                      # end
-
-                      cookie_match_pid = $redis_rtb.get("cm:#{user_id}")
-                      if !cookie_match_pid.blank?
-                        plannto_user_detail.pid = cookie_match_pid
-                      else
-                        cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
-                        if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                          plannto_user_detail.pid = cookie_match.plannto_user_id
-                        end
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.pid = cookie_match.plannto_user_id
                       end
                     else
                       plannto_user_detail.pid = plannto_user_id
@@ -1888,20 +1868,12 @@ end
                     plannto_user_detail.lid = plannto_location_id if !plannto_location_id.blank?
 
                     if item_ids.blank? || itemtype_id.blank? || type.blank?
-                      p "Get details from redis_rtb => 'url:#{url}'"
-                      redis_vals = $redis_rtb.hgetall("url:#{url}")
-                      if redis_vals.blank?
-                        article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
+                      article_content = ArticleContent.where(:url => url).select("id,itemtype_id,sub_type").last
 
-                        if !article_content.blank?
-                          item_ids = article_content.item_ids if item_ids.blank?
-                          itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
-                          type = article_content.sub_type rescue "" if type.blank?
-                        end
-                      else
-                        item_ids = redis_vals["item_ids"] if item_ids.blank?
-                        itemtype_id = redis_vals["itemtype"] rescue "" if itemtype_id.blank?
-                        type = redis_vals["article_type"] rescue "" if type.blank?
+                      if !article_content.blank?
+                        item_ids = article_content.item_ids if item_ids.blank?
+                        itemtype_id = article_content.itemtype_id rescue "" if itemtype_id.blank?
+                        type = article_content.sub_type rescue "" if type.blank?
                       end
                     end
 
