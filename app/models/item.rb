@@ -1831,8 +1831,8 @@ end
                 item_ids = item_ids.to_s.split(",")
                 if item_ids.count < 10
 
-                  #Updating PUserDetail
-                  plannto_user_detail = PUserDetail.where(:gid => user_id).to_a.last
+                  # Updating PUserDetail
+                  plannto_user_detail = PUserDetail.where(:gid => user_id).to_a.last if plannto_user_detail.blank?
 
                   if plannto_user_detail.blank?
                     plannto_user_detail = PUserDetail.new(:gid => user_id)
