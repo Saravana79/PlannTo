@@ -95,8 +95,12 @@ class Sourceitem < ActiveRecord::Base
   def self.update_source_item_for_auto_portals()
     require 'xmlsimple'
     # url = "http://autoportal.com/vizury_feed.xml"
-    url = "http://autoportal.com/variants_feed.xml"
-    xml_data = Net::HTTP.get_response(URI.parse(url)).body
+    url = "https://autoportal.com/variants_feed.xml"
+    # xml_data = Net::HTTP.get_response(URI.parse(url)).body
+
+    require "open-uri"
+    xml_data = URI.parse(url).read
+
     data = XmlSimple.xml_in(xml_data)
     items = data["Row"]
 
