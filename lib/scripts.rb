@@ -157,7 +157,7 @@ items.each do |item|
       basename = File.basename(safe_thumbnail_url, extname).delete("%")
       file = Tempfile.new([basename, extname])
       file.binmode
-      open(URI.parse(safe_thumbnail_url)) do |data|
+      open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
         file.write data.read
       end
       file.rewind
@@ -691,7 +691,7 @@ items.each do |item|
         basename = File.basename(safe_thumbnail_url, extname).delete("%")
         file = Tempfile.new([basename, extname])
         file.binmode
-        open(URI.parse(safe_thumbnail_url)) do |data|
+        open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
           file.write data.read
         end
         file.rewind
@@ -884,7 +884,7 @@ source_items.each do |source_item|
         basename = File.basename(safe_thumbnail_url, extname).delete("%")
         file = Tempfile.new([basename, extname])
         file.binmode
-        open(URI.parse(safe_thumbnail_url)) do |data|
+        open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
           file.write data.read
         end
         file.rewind
@@ -1045,7 +1045,7 @@ products.each do |each_product|
         basename = File.basename(safe_thumbnail_url, extname).delete("%")
         file = Tempfile.new([basename, extname])
         file.binmode
-        open(URI.parse(safe_thumbnail_url)) do |data|
+        open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
           file.write data.read
         end
         file.rewind
@@ -1123,7 +1123,7 @@ jockey_hash.each do |int_key, int_val|
             basename = File.basename(safe_thumbnail_url, extname).delete("%")
             file = Tempfile.new([basename, extname])
             file.binmode
-            open(URI.parse(safe_thumbnail_url)) do |data|
+            open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
               file.write data.read
             end
             file.rewind

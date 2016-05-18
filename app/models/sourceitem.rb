@@ -150,7 +150,7 @@ class Sourceitem < ActiveRecord::Base
             basename = File.basename(safe_thumbnail_url, extname).delete("%")
             file = Tempfile.new([basename, extname])
             file.binmode
-            open(URI.parse(safe_thumbnail_url)) do |data|
+            open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
               file.write data.read
             end
             file.rewind
@@ -242,7 +242,7 @@ class Sourceitem < ActiveRecord::Base
               basename = File.basename(safe_thumbnail_url, extname).delete("%")
               file = Tempfile.new([basename, extname])
               file.binmode
-              open(URI.parse(safe_thumbnail_url)) do |data|
+              open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
                 file.write data.read
               end
               file.rewind
@@ -460,7 +460,7 @@ class Sourceitem < ActiveRecord::Base
 
                   file = Tempfile.new([basename, extname])
                   file.binmode
-                  open(URI.parse(safe_thumbnail_url)) do |data|
+                  open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
                     file.write data.read
                   end
                   file.rewind

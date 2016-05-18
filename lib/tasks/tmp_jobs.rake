@@ -220,7 +220,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
 
             file = Tempfile.new([basename, extname])
             file.binmode
-            open(URI.parse(safe_thumbnail_url)) do |data|
+            open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
               file.write data.read
             end
             file.rewind
@@ -285,7 +285,7 @@ task :image_upload_for_item_detail_other => :environment do
 
         file = Tempfile.new([basename, extname])
         file.binmode
-        open(URI.parse(safe_thumbnail_url)) do |data|
+        open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
           file.write data.read
         end
         file.rewind
@@ -626,7 +626,7 @@ task :update_item_beauty_detail_from_xml_feed => :environment do
           basename = File.basename(safe_thumbnail_url, extname).delete("%")
           file = Tempfile.new([basename, extname])
           file.binmode
-          open(URI.parse(safe_thumbnail_url)) do |data|
+          open(URI.parse(safe_thumbnail_url), :allow_redirections => :all) do |data|
             file.write data.read
           end
           file.rewind
