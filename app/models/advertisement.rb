@@ -326,7 +326,7 @@ class Advertisement < ActiveRecord::Base
 
   def self.make_url_params(param)
     url_params = "Params = "
-    param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined", "wp"].include?(s.to_s)}
     keys = param.keys
     values = param.values
 
