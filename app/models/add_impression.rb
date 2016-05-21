@@ -283,7 +283,7 @@ class AddImpression < ActiveRecord::Base
 
     unless (impression_type == "amazon_sports_widget")
       if (impression_type == "elec_widget_1" || impression_type == "price_text_widget")
-        p buying_list_params = "<<#{request_referer}<<<<#{item_id}<<<<<<#{plan_to_temp_user_id}<<"
+        buying_list_params = "<<#{request_referer}<<<<#{item_id}<<<<<<#{plan_to_temp_user_id}<<"
         $redis_rtb.rpush("users:visits", buying_list_params)
       else
         Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
