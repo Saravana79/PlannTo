@@ -343,7 +343,8 @@ class AdvertisementsController < ApplicationController
     end
 
     @search_url = CGI.escape(@search_url)
-    url_params = Advertisement.make_url_params(params)
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = Advertisement.make_url_params(req_param)
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -449,7 +450,8 @@ class AdvertisementsController < ApplicationController
 
     # @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
-    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
     winning_price_enc = params[:wp]
     return impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc
   end
@@ -1084,7 +1086,8 @@ class AdvertisementsController < ApplicationController
           valid_html = cache.match(/_blank/).blank? ? false : true
         end
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+          url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
           impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
           item_id = params[:item_ids]
           matched_val = cache.match(/present_item_id=.*#/)
@@ -1302,7 +1305,8 @@ class AdvertisementsController < ApplicationController
         cache_html = cache_json["html"].to_s
         if valid_html
           if params[:expanded].blank?
-            url_params = set_cookie_for_temp_user_and_url_params_process(params)
+            req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+            url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
             impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
             item_id = params[:item_ids]
             matched_val = cache.match(/present_item_id=.*#/)
@@ -1399,7 +1403,8 @@ class AdvertisementsController < ApplicationController
     params[:ref_url] = url
     params[:itemsaccess] = itemsaccess
 
-    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
     params[:url_params] = url_params
     params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
 

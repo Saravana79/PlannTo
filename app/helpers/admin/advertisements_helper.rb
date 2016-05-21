@@ -169,7 +169,8 @@ module Admin::AdvertisementsHelper
       cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now}
     end
 
-    url_params = Advertisement.make_url_params(param)
+    req_param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = Advertisement.make_url_params(req_param)
     return url_params
   end
 

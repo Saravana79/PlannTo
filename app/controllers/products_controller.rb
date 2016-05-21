@@ -446,7 +446,8 @@ class ProductsController < ApplicationController
     end
 
     @search_url = CGI.escape(@search_url)
-    url_params = Advertisement.make_url_params(params)
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = Advertisement.make_url_params(req_param)
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -512,7 +513,8 @@ class ProductsController < ApplicationController
     @items = @items.flatten.uniq(&:id)
 
     @search_url = CGI.escape(@search_url)
-    url_params = Advertisement.make_url_params(params)
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = Advertisement.make_url_params(req_param)
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -835,7 +837,8 @@ class ProductsController < ApplicationController
 
   def buy_at_best_price
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
-    # url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    # req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    # url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
     # tempurl = url
 
     publisher = Publisher.getpublisherfromdomain(url)
@@ -1054,7 +1057,8 @@ class ProductsController < ApplicationController
     @path = params[:path]
     @moredetails = params[:price_full_details]
 
-    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
     return url_params, url.to_s, itemsaccess, item_ids
@@ -1306,7 +1310,8 @@ class ProductsController < ApplicationController
         valid_html = cache.match(/_blank/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+          url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
           item_id = params[:item_ids]
           matched_val = cache.match(/present_item_id=.*#/)
           unless matched_val.blank?
@@ -1353,7 +1358,8 @@ class ProductsController < ApplicationController
         valid_html = cache.match(/_blank/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+          url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
           item_id = params[:item_ids]
           matched_val = cache.match(/present_item_id=.*#/)
           unless matched_val.blank?
@@ -1428,7 +1434,8 @@ class ProductsController < ApplicationController
         valid_html = cache.match(/_blank/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+          url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
           item_id = params[:item_ids]
           ## have to implement to store the category_item_details
           category_item_detail_id = FeedUrl.get_value_from_pattern(cache, "item_id=<item_id>&amp;", "<item_id>")
@@ -1488,7 +1495,8 @@ class ProductsController < ApplicationController
         valid_html = cache.match(/_blank/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback]) if extname == "js"
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+          url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
@@ -1534,7 +1542,8 @@ class ProductsController < ApplicationController
         valid_html = cache.include?('"success":true')
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+          url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
@@ -1567,7 +1576,8 @@ class ProductsController < ApplicationController
     @ref_url = url
 
     vendor_ids = [9882]
-    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
     winning_price_enc = params[:wp]
     return impression_type, url, url_params, itemsaccess, vendor_ids, nil, winning_price_enc
   end
@@ -1635,7 +1645,8 @@ class ProductsController < ApplicationController
         valid_html = cache.match(/_blank/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+          url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
           item_id = params[:item_ids]
           matched_val = cache.match(/present_item_id=.*#/)
           unless matched_val.blank?
