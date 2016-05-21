@@ -1318,7 +1318,8 @@ class ProductsController < ApplicationController
             val = matched_val[0]
             item_id = val.split("=")[1].gsub("#", "")
           end
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", item_id, nil)
+          imp_param = params.slice("wp", "sid", "t", "r", "a", "video", "video_impression_id", "visited", "is_test", "more_vendors", "ref_url")
+          @impression_id = Advertisement.create_impression_before_cache(imp_param, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", item_id, nil)
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
@@ -1366,7 +1367,8 @@ class ProductsController < ApplicationController
             val = matched_val[0]
             item_id = val.split("=")[1].gsub("#", "")
           end
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "fashion", item_id, nil)
+          imp_param = params.slice("wp", "sid", "t", "r", "a", "video", "video_impression_id", "visited", "is_test", "more_vendors", "ref_url")
+          @impression_id = Advertisement.create_impression_before_cache(imp_param, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "fashion", item_id, nil)
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
@@ -1439,7 +1441,8 @@ class ProductsController < ApplicationController
           item_id = params[:item_ids]
           ## have to implement to store the category_item_details
           category_item_detail_id = FeedUrl.get_value_from_pattern(cache, "item_id=<item_id>&amp;", "<item_id>")
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "amazon_sports_widget", category_item_detail_id, nil)
+          imp_param = params.slice("wp", "sid", "t", "r", "a", "video", "video_impression_id", "visited", "is_test", "more_vendors", "ref_url")
+          @impression_id = Advertisement.create_impression_before_cache(imp_param, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "amazon_sports_widget", category_item_detail_id, nil)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
           cache = cache.gsub(old_iid, @impression_id) if !old_iid.blank? && !@impression_id.blank?
@@ -1497,7 +1500,8 @@ class ProductsController < ApplicationController
         if valid_html
           req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
           url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
+          imp_param = params.slice("wp", "sid", "t", "r", "a", "video", "video_impression_id", "visited", "is_test", "more_vendors", "ref_url")
+          @impression_id = Advertisement.create_impression_before_cache(imp_param, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
           cache = cache.gsub(old_iid, @impression_id) if !old_iid.blank? && !@impression_id.blank?
@@ -1544,7 +1548,8 @@ class ProductsController < ApplicationController
         if valid_html
           req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
           url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
+          imp_param = params.slice("wp", "sid", "t", "r", "a", "video", "video_impression_id", "visited", "is_test", "more_vendors", "ref_url")
+          @impression_id = Advertisement.create_impression_before_cache(imp_param, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
           cache = cache.gsub(old_iid, @impression_id) if !old_iid.blank? && !@impression_id.blank?
@@ -1653,7 +1658,8 @@ class ProductsController < ApplicationController
             val = matched_val[0]
             item_id = val.split("=")[1].gsub("#", "")
           end
-          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "fashion", item_id, nil)
+          imp_param = params.slice("wp", "sid", "t", "r", "a", "video", "video_impression_id", "visited", "is_test", "more_vendors", "ref_url")
+          @impression_id = Advertisement.create_impression_before_cache(imp_param, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "fashion", item_id, nil)
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
