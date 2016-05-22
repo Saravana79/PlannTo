@@ -20,7 +20,7 @@ class PixelsController < ApplicationController
 
   def conv_track_pixel
     ref_url = request.referer
-    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined", "source_source_url"].include?(s.to_s)}
     url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
     conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:ref], :conversion_time => Time.now, :params => url_params)
     render :nothing => true
@@ -35,7 +35,7 @@ class PixelsController < ApplicationController
 
     if params[:type].to_s == "conversion"
       @img_src = nil
-      req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+      req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined", "source_source_url"].include?(s.to_s)}
       url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
 
       conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
