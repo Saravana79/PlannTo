@@ -40,13 +40,13 @@ class PixelsController < ApplicationController
 
       conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
     else
-      ref_url = CGI.escape(ref_url) if ref_url.exclude?("%3A%2F%2F")
-      source_source_url = CGI.escape(source_source_url) if source_source_url.exclude?("%3A%2F%2F")
+      ref_url = CGI.escape(ref_url) if ref_url.to_s.exclude?("%3A%2F%2F")
+      source_source_url = CGI.escape(source_source_url) if source_source_url.to_s.exclude?("%3A%2F%2F")
       if params[:source] != "mysmartprice"
 
-        @cookie_match = CookieMatch.find_user_by_source(cookies[:plan_to_temp_user_id], params[:source]).first
-        if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-          @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}&source_source_url=#{source_source_url}"
+        cookie_match = CookieMatch.find_user_by_source(cookies[:plan_to_temp_user_id], params[:source]).first
+        if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+          @img_src = "https://www.plannto.com/pixels?google_gid=#{cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}&source_source_url=#{source_source_url}"
         else
           google_ula_vendor = case params[:source]
                                 when "mysmartprice"

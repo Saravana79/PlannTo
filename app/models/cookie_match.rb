@@ -2,7 +2,7 @@ class CookieMatch < ActiveRecord::Base
   validates_uniqueness_of :plannto_user_id
 
   scope :find_user, lambda {|plannto_user_id| where("plannto_user_id = '#{plannto_user_id}' and updated_at > '#{14.days.ago}'")}
-  scope :find_user_by_source, lambda {|plannto_user_id, source| where("plannto_user_id = '#{plannto_user_id}' and match_source like '%#{source}%' and updated_at > '#{14.days.ago}'")}
+  # scope :find_user_by_source, lambda {|plannto_user_id, source| where("plannto_user_id = '#{plannto_user_id}' and match_source like '%#{source}%' and updated_at > '#{14.days.ago}'")}
 
   def self.check_cookie_user_exists?(plannto_user_id)
     matches = find_user(plannto_user_id)
@@ -792,6 +792,10 @@ class CookieMatch < ActiveRecord::Base
     # UserAccessDetail.update_buying_list_only_housing(housing_user_access_details_user_ids)
 
     # UserAccessDetail.import(user_access_details_import)
+  end
+
+  def self.find_user_by_source(plannto_user_id, source)
+    CookieMatch.where("plannto_user_id = '#{plannto_user_id}' and match_source like '%#{source}%' and updated_at > '#{14.days.ago}'")
   end
 
 end
