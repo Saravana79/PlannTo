@@ -299,11 +299,11 @@ class Advertisement < ActiveRecord::Base
   end
 
   def self.create_impression_before_cache(param, request_referer, url_params, plan_to_temp_user_id, user_id, remote_ip, impression_type, item_ids, ads_id, advertisement=false)
-    param = param.symbolize_keys
-    param[:is_test] ||= 'false'
-    param[:more_vendors] ||= "false"
-    param[:ref_url] ||= ""
-    url, itemsaccess = assign_url_and_item_access(param[:ref_url], request_referer)
+    # param = param.symbolize_keys
+    param["is_test"] ||= 'false'
+    param["more_vendors"] ||= "false"
+    param["ref_url"] ||= ""
+    url, itemsaccess = assign_url_and_item_access(param["ref_url"], request_referer)
 
     # if advertisement != true
     #   @publisher = Publisher.getpublisherfromdomain(url)
@@ -316,10 +316,10 @@ class Advertisement < ActiveRecord::Base
     #   end
     # end
 
-    if param[:is_test] != "true"
+    if param["is_test"] != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,
-                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r], param[:a], param[:video], param[:video_impression_id], param[:visited])
-      Advertisement.check_and_update_act_spent_budget_in_redis(ads_id,param[:wp])
+                                                              plan_to_temp_user_id, ads_id, param["wp"], param["sid"], param["t"], param["r"], param["a"], param["video"], param["video_impression_id"], param["visited"])
+      Advertisement.check_and_update_act_spent_budget_in_redis(ads_id,param["wp"])
     end
     return @impression_id
   end

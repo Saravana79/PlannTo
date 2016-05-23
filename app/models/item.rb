@@ -3274,8 +3274,8 @@ end
   end
 
   def self.get_price_text_from_url(url, publisher, page_type="")
-    @items = []
-    @itemdetail = nil
+    items = []
+    itemdetail = nil
     unless url.nil?
       tempurl = url;
       if url.include?("?")
@@ -3289,19 +3289,19 @@ end
         tempurl = tempurl.gsub("m.mouthshut", "www.mouthshut")
       end
 
-      @articles = ArticleContent.where(url: tempurl)
+      articles = ArticleContent.where(url: tempurl)
 
-      if @articles.empty? || @articles.nil?
+      if articles.empty? || articles.nil?
         #for pagination in publisher website. removing /2/
         tempstr = tempurl.split(//).last(3).join
         matchobj = tempstr.match(/^\/\d{1}\/$/)
         unless matchobj.nil?
           tempurlpage = tempurl[0..(tempurl.length-3)]
-          @articles = ArticleContent.where(url: tempurlpage)
+          articles = ArticleContent.where(url: tempurlpage)
         end
       end
 
-      if @articles.blank?
+      if articles.blank?
         if tempurl.include?("-Photos-")
           tempurl = tempurl.gsub("-Photos-", "-reviews-")
         elsif tempurl.include?("-discussion-")
@@ -3309,13 +3309,13 @@ end
         elsif tempurl.include?("-page-")
           tempurl = tempurl.gsub(/-page-.*/, "")
         end
-        @articles = ArticleContent.where(url: tempurl)
+        articles = ArticleContent.where(url: tempurl)
 
-        if @articles.blank?
+        if articles.blank?
           last_word = tempurl.to_s.split("/").last
           last_word = last_word.to_s.gsub(/-review.*/, "-review%")
           tempurl = "http://www.mouthshut.com/%/#{last_word}"
-          @articles = ArticleContent.where("url like '#{tempurl}'")
+          articles = ArticleContent.where("url like '#{tempurl}'")
         end
       end
 
@@ -3325,31 +3325,31 @@ end
         status_details = [1,2,3]
       end
 
-      unless @articles.empty?
-        @items = @articles[0].allitems.select{|a| a.is_a? Product}
-        article_items_ids = @items.map(&:id)
+      unless articles.empty?
+        items = articles[0].allitems.select{|a| a.is_a? Product}
+        article_items_ids = items.map(&:id)
         new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
         if !new_items.blank?
-          @items = new_items
+          items = new_items
         end
       end
     end
 
-    if !@items.blank?
-      item = @items.first
+    if !items.blank?
+      item = items.first
       if !publisher.blank? && !publisher.vendor_ids.blank?
-        @itemdetail = item.itemdetails.where("site in (#{publisher.vendor_ids.to_s.split(",").map(&:inspect).join(',')}) and IsError=false and status in (#{status_details.map(&:inspect).join(',')}) and price != 0").order("sort_priority desc, price").first
+        itemdetail = item.itemdetails.where("site in (#{publisher.vendor_ids.to_s.split(",").map(&:inspect).join(',')}) and IsError=false and status in (#{status_details.map(&:inspect).join(',')}) and price != 0").order("sort_priority desc, price").first
       else
-        @itemdetail = item.itemdetails.where("IsError=false and status in (#{status_details.map(&:inspect).join(',')}) and price != 0").order("sort_priority desc, price").first
+        itemdetail = item.itemdetails.where("IsError=false and status in (#{status_details.map(&:inspect).join(',')}) and price != 0").order("sort_priority desc, price").first
       end
     end
-    @itemdetail
+    itemdetail
   end
 
   def self.get_item_from_name_in_search(term, search_type=Car)
     search_type = Product.search_type(nil) if search_type.blank?
-    @items = Sunspot.search(search_type) do
+    items = Sunspot.search(search_type) do
       keywords term do
         minimum_match 1
       end
@@ -3359,7 +3359,7 @@ end
       paginate(:page => 1, :per_page => 5)
     end
 
-    item = @items.results.first
+    item = items.results.first
   end
 
   def self.check_and_get_article_item_ids_vicky_in(url)
@@ -3462,7 +3462,7 @@ end
   end
 
   def self.get_city_from_location(location)
-    @items = Sunspot.search([City,Place]) do
+    items = Sunspot.search([City,Place]) do
       keywords location do
         minimum_match 1
       end
@@ -3471,9 +3471,9 @@ end
       paginate(:page => 1, :per_page => 5)
     end
 
-    city = @items.results.first rescue nil
+    city = items.results.first rescue nil
 
-    score = @items.hits.first.score.to_f rescue 0
+    score = items.hits.first.score.to_f rescue 0
     city = nil if score < 0.3
 
     city
