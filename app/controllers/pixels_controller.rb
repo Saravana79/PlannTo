@@ -1,6 +1,7 @@
 class PixelsController < ApplicationController
   include Admin::AdvertisementsHelper
-  skip_before_filter :cache_follow_items, :store_session_url
+  # skip_before_filter :cache_follow_items, :store_session_url
+  skip_filter *_process_action_callbacks.map(&:filter)
   before_filter :generate_cookie_if_not_exist, :except => [:pixel_matching]
 
   # cookie matching
@@ -32,6 +33,7 @@ class PixelsController < ApplicationController
     ref_url = request.referer
     source_source_url = params[:source_source_url]
     ref_url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    ref_url = ref_url.to_s
 
     if params[:type].to_s == "conversion"
       @img_src = nil
