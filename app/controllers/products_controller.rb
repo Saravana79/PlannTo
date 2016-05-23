@@ -416,6 +416,7 @@ class ProductsController < ApplicationController
 
     included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
     if (url.include?("bebeautiful.in") || included_beauty || params[:page_type] == "type_3")
+      return render :nothing => true #TODO: temp check for memory issue
       exclude_valid_item_names = params[:page_type] == "type_3" ? true : false
       show_widget_for_bebeautiful(url, itemsaccess, exclude_valid_item_names)
     # elsif included_beauty
