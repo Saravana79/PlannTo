@@ -44,16 +44,16 @@ class PixelsController < ApplicationController
     else
       ref_url = CGI.escape(ref_url) if ref_url.to_s.exclude?("%3A%2F%2F")
       if source_source_url.to_s.exclude?("%3A%2F%2F")
-        ref_url_params = CookieMatch.get_params(source_source_url)
-        source_source_url_domain = ""
-        if !ref_url_params.blank?
-          source_source_url_domain = ref_url_params["utm_source"].blank? ? "" : ref_url_params["utm_source"][0].to_s
-        end
-        if !source_source_url_domain.blank?
-          source_source_url = source_source_url.split("?")[0].to_s + "?utm_source=#{source_source_url_domain}"
-        else
-          source_source_url = ""
-        end
+        # ref_url_params = CookieMatch.get_params(source_source_url)
+        # source_source_url_domain = ""
+        # if !ref_url_params.blank?
+        #   source_source_url_domain = ref_url_params["utm_source"].blank? ? "" : ref_url_params["utm_source"][0].to_s
+        # end
+        # if !source_source_url_domain.blank?
+        #   source_source_url = source_source_url.split("?")[0].to_s + "?utm_source=#{source_source_url_domain}"
+        # else
+        #   source_source_url = ""
+        # end
         source_source_url = CGI.escape(source_source_url)
       end
 
