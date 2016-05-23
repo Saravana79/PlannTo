@@ -378,7 +378,7 @@ resources :comments do
   resources :items do
        resources :reports    
     collection do
-      # get :compare
+      get :compare
       get :update_page
       get :remove_duplicate_item
     end
@@ -564,7 +564,7 @@ resources :comments do
   match "/publishers" => "publishers#index", :via => [:get]
 
   # Removed actions
-  match "/items/compare",:to => "dummy#index"
+  # get "items/compare",:to => "dummy#index"
   match ':itemtype/guides/:guide_type' => "dummy#index"
   match ':itemtype/:item_id/guides/:guide_type' => "dummy#index"
 
