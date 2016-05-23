@@ -2,6 +2,7 @@ class RelatedItemsController < ApplicationController
   layout "product"
   
   def index
+    return render :nothing => true
     item_ids = params[:car_id].to_s.split(",").compact
     @items = Item.find(item_ids)
     related_item_ids = RelatedItem.where(:item_id => item_ids).order("variance desc").collect(&:related_item_id) #.order("RAND()").limit(3)
