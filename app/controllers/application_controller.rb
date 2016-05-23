@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
   # prepend_before_filter { |c| RecordCache::Strategy::RequestCache.clear }
   # before_filter :cache_follow_items
-  # before_filter :change_image_url_path
+  before_filter :change_image_url_path
   #before_filter :set_referer
   
   #def set_referer
@@ -40,7 +40,8 @@ class ApplicationController < ActionController::Base
   def cache_follow_items
     user = current_user
     if user
-      user.set_user_follow_item
+      # temp commented
+      # user.set_user_follow_item
     else
       false
     end
