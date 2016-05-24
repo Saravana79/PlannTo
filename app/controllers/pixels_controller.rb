@@ -29,8 +29,6 @@ class PixelsController < ApplicationController
 
 
   def vendor_page
-    return render :nothing => true
-    
     params[:source] ||= "google"
     # ref_url = request.referer
     source_source_url = params[:source_source_url]
