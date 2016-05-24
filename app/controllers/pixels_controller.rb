@@ -61,7 +61,7 @@ class PixelsController < ApplicationController
 
         cookie_match = CookieMatch.find_user_by_source(cookies[:plan_to_temp_user_id], params[:source]).first
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
-          @img_src = "https://www.plannto.com/pixels?google_gid=#{cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}&source_source_url=#{source_source_url}"
+          # @img_src = "https://www.plannto.com/pixels?google_gid=#{cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}&source_source_url=#{source_source_url}"
         else
           google_ula_vendor = case params[:source]
                                 when "mysmartprice"
@@ -74,12 +74,13 @@ class PixelsController < ApplicationController
                                   ""
                               end
 
-          @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}&source_source_url=#{source_source_url}"
+          # @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}&source_source_url=#{source_source_url}"
         end
       else
         @img_src = nil
       end
     end
+    @img_src = ""
 
     respond_to do |format|
       format.js
