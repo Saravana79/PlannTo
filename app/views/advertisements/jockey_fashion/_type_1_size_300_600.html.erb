@@ -19,7 +19,7 @@
                     <div class="product-container">
                       <div style="margin-bottom:10px;width:100%;float:left">
                             <span style="float:left">  
-                            <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:2px;" height="60px">
+                            <img class="vendor_image_src" src="<%= @current_vendor.full_imageurl %>" alt="" style="margin-top:2px;" height="60px">
                           </span>
                            <span style="float:right;margin:10px 10px 0px 0px;"> 
 
@@ -35,9 +35,9 @@
                         <a href="<%= shop_now_url %>" target="_blank">
                           <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                            <span style="display: inline-block;width: 289px;text-align: center;"> 
-                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "", "", "original").html_safe %>
+                          <%= get_image_tag(item_detail, @current_vendor.vendor_name, @item.base_item_image_url(:medium), "", "", "original").html_safe %>
                         </span>
-                          <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                          <!-- <img src="<%#= get_image_url(item_detail, @current_vendor.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
@@ -69,15 +69,15 @@
           <% @item_details.each_with_index do |item_detail, indx| %>
             <% if indx == 5 %>
               <span id="thumbnail_<%= indx + 1 %>" class="thumbnails" style="padding:4px 3px;border:1px solid #BABABA;float:left;border-right:0px;">
-                <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "40", "", "medium").html_safe %>
+                <%= get_image_tag(item_detail, @current_vendor.vendor_name, @item.base_item_image_url(:medium), "40", "", "medium").html_safe %>
               </span>
             <%else%>
               <span id="thumbnail_<%= indx + 1 %>" class="thumbnails" style="padding:4px 4px;border:1px solid #BABABA;float:left;">
-                <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "40", "", "medium").html_safe %>
+                <%= get_image_tag(item_detail, @current_vendor.vendor_name, @item.base_item_image_url(:medium), "40", "", "medium").html_safe %>
 
               </span>
             <%end%>
-                <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                <!-- <img src="<%#= get_image_url(item_detail, @current_vendor.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
              <%end%> 
         </div>
         <div class="clearfix"></div>

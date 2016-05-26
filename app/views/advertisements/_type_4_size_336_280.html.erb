@@ -11,8 +11,10 @@
           </div>
           <ul id="foo3">
             <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
+                <% vendor_detail = get_vendor_detail(sliced_item_detail.first.site.to_i) %>
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
                   <% sliced_item_detail.each do |item_detail| %>
+                      <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
                       <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                       <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
@@ -20,15 +22,15 @@
                         <div class="product-container">
                           <div class="product-img-left">
                             <a href="#">
-                              <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 124, 94).html_safe %>
-                              <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" alt="" width="119px" height="89px"> -->
+                              <%= get_image_tag(item_detail, vendor_detail.vendor_name, @item.base_item_image_url(:medium), 124, 94).html_safe %>
+                              <!-- <img src="<%#= get_image_url(item_detail, vendor_detail.vendor_name) %>" alt="" width="119px" height="89px"> -->
                             </a>
                           </div>
                           <div class="product-txt-right">
-                            <h3 style="font-size:15px;"><%= item_detail.ItemName %></h3>
+                            <h3 style="font-size:15px;"><%= item_detail.ItemName.to_s.truncate(52) %></h3>
 
                             <p class="product-desc">
-                              <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 50, shop_now_url) %>
+                              <%#= raw get_offer_for_ad(@ad, item_detail, vendor_detail.default_text, 50, shop_now_url) %>
                             </p>
 
                             <p class="price"><%= prettify(item_detail) %></p>
@@ -43,10 +45,10 @@
                   <% end %>
                   <div class="product-txt-desc" style="border-top: 1px solid #D9D9D9;text-align: center;">
                     <p style="font-size: 12px;font-weight: 600;padding-top: 3px;">
-                         <%= raw get_offer_for_ad(@ad, @sliced_item_details.first.first, @vendor_ad_details[@sliced_item_details.first.first.site.to_i]['default_text'], 60, "") %>
+                         <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, vendor_detail.default_text, 60, "") %>
                     </p>
                   </div>
-                  <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                  <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
                 </li>
             <% end %>
           </ul>

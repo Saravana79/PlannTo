@@ -3,16 +3,16 @@
 # .NET, PHP, Python and Node applications with deep visibility and low
 # overhead.  For more information, visit www.newrelic.com.
 #
-# Generated December 07, 2015
-# 
-# This configuration file is custom generated for PlannTo_1
+# Generated May 26, 2016
+#
+# This configuration file is custom generated for Plannto
 #
 # For full documentation of agent configuration options, please refer to
 # https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration
 
 common: &default_settings
   # Required license key associated with your New Relic account.
-  license_key: dbd12c47c3d06b8c2be0274cc915dde1b3972634
+  license_key: 35a176c94cf6ace3ca6d3dcc8faac56023c4c1e1
 
   # Your application name. Renaming here affects where data displays in New
   # Relic.  For more details, see https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/renaming-applications

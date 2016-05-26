@@ -1,3 +1,4 @@
+<% vendor_detail = get_vendor_detail(@item_details.first.site.to_i) %>
 <div class="advt-block">
   <div class="advt-160-600">
     <!--<div class="planntoadlogo">
@@ -8,7 +9,7 @@
         <div class="">
           <ul id="foo3">
             <div style="text-align: center;border-bottom: 1px solid #F1F0F0;height:40px;">
-              <img class="vendor_image_src" src="<%= @vendor_ad_details[@item_details.first.site.to_i]['imageurl'] %>" alt="" style="margin-top:2px;" width="">
+              <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="margin-top:2px;" width="">
             </div>
             <a id="leftarrow" class="prev" href="#" style="display: block;">&lt;</a>
 
@@ -16,6 +17,7 @@
                 <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
 
                <% item_details.each_with_index do |item_detail, next_indx| %>
+                      <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
                 <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                       <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
@@ -26,8 +28,8 @@
                                <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                                <span style="display: inline-block;width: 152px;text-align: center;"> 
                               <a href="<%= shop_now_url %>" target="_blank">
-                                <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), "", "", "org").html_safe %>
-                                <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                                <%= get_image_tag(item_detail, vendor_detail.vendor_name, @item.base_item_image_url(:medium), "", "", "org").html_safe %>
+                                <!-- <img src="<%#= get_image_url(item_detail, @current_vendor.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                               </a>
                              </span>
                             </div>

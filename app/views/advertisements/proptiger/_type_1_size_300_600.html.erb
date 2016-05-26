@@ -25,6 +25,7 @@
         <div class="divshadow">
           <ul id="foo3" height="190px;">
             <% @sliced_item_details.each_with_index do |item_detail, indx| %>
+                <% vendor_detail = get_vendor_detail(item_detail.first.vendor_id.to_i) %>
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
                   <% item_detail.each do |each_slice_item_detail| %>
                   <% ad_url = get_ad_url_from_detail_other(each_slice_item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
@@ -35,7 +36,7 @@
                         <a href="<%= shop_now_url %>" target="_blank">
                            <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                           <%= get_image_tag_from_item_detail_other(each_slice_item_detail, @vendor_ad_details[each_slice_item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium), 132 ,'' , "original").html_safe %>
-                          <!-- <img src="<%#= get_image_url(each_slice_item_detail, @vendor_ad_details[each_slice_item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                          <!-- <img src="<%#= get_image_url(each_slice_item_detail, vendor_detail.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
@@ -57,11 +58,11 @@
                   <% end %>
                   <div class="product-txt-desc">
                     <p>
-                      <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                      <%= raw get_offer_for_ad(@ad, item_detail.first, @vendor_ad_details[item_detail.first.vendor_id.to_i]['default_text'], 90, "") %>
+                      <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, vendor_detail.default_text), 90) %>
+                      <%= raw get_offer_for_ad(@ad, item_detail.first, vendor_detail.default_text, 90, "") %>
                     </p>
                   </div>
-                  <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.first.vendor_id.to_i]['imageurl'] %>" alt="" style="display: none;">
+                  <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
                 </li>
             <% end %>
           </ul>

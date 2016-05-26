@@ -25,6 +25,7 @@
         <div class="divshadow">
           <ul id="foo3" height="190px;">
             <% @item_details.each_with_index do |item_detail, indx| %>
+                <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
                 <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
@@ -38,8 +39,8 @@
                       <div class="product-img-left">
                         <a href="<%= shop_now_url %>" target="_blank">
                            <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 112, '').html_safe %>
-                          <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                          <%= get_image_tag(item_detail, vendor_detail.vendor_name, @item.base_item_image_url(:medium), 112, '').html_safe %>
+                          <!-- <img src="<%#= get_image_url(item_detail, vendor_detail.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
@@ -56,12 +57,12 @@
                     </div>
                     <div class="product-txt-desc">
                       <p>
-                        <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                        <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, vendor_detail.default_text), 90) %>
+                        <%= raw get_offer_for_ad(@ad, item_detail, vendor_detail.default_text, 90, shop_now_url) %>
                       </p>
                     </div>
                   </div>
-                  <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                  <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
                 </li>
             <% end %>
           </ul>
