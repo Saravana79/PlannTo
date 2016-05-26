@@ -79,13 +79,13 @@ class FeedsController < ApplicationController
     end
 
     if date_condition.blank?
-      @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25, :total_entries => 5000)
+      @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 20, :total_entries => 5000)
       @feed_urls_count = @feed_urls.length
     else
       # @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25, :total_entries => 5000)
       sql_query = "SELECT * FROM (SELECT `feed_urls`.* FROM feed_urls WHERE (#{date_condition})) feed_urls_results where #{condition} ORDER BY #{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}"
 
-      @feed_urls = FeedUrl.paginate_by_sql(sql_query, :page => params[:page], :per_page => 25, :total_entries => 5000)
+      @feed_urls = FeedUrl.paginate_by_sql(sql_query, :page => params[:page], :per_page => 20, :total_entries => 5000)
       @feed_urls_count = @feed_urls.length
     end
 
@@ -171,13 +171,13 @@ class FeedsController < ApplicationController
     end
 
     if date_condition.blank?
-      @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50, :total_entries => 5000)
+      @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 20, :total_entries => 5000)
       @feed_urls_count = @feed_urls.length
     else
       # @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25, :total_entries => 5000)
       sql_query = "SELECT * FROM (SELECT `feed_urls`.* FROM feed_urls WHERE (#{date_condition})) feed_urls_results where #{condition} ORDER BY #{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}"
 
-      @feed_urls = FeedUrl.paginate_by_sql(sql_query, :page => params[:page], :per_page => 50, :total_entries => 5000)
+      @feed_urls = FeedUrl.paginate_by_sql(sql_query, :page => params[:page], :per_page => 20, :total_entries => 5000)
       @feed_urls_count = @feed_urls.length
     end
 

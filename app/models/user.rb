@@ -375,7 +375,7 @@ class User < ActiveRecord::Base
   end
 
   def graph_api
-    Koala::Facebook::API.new(self.token)
+    # Koala::Facebook::API.new(self.token)
   end
   
   

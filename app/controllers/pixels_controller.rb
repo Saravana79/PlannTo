@@ -1,5 +1,5 @@
 class PixelsController < ApplicationController
-  include Admin::AdvertisementsHelper
+  # include Admin::AdvertisementsHelper
   # skip_before_filter :cache_follow_items, :store_session_url
   skip_filter *_process_action_callbacks.map(&:filter)
   before_filter :generate_cookie_if_not_exist, :except => [:pixel_matching]
@@ -30,9 +30,12 @@ class PixelsController < ApplicationController
 
   def vendor_page
     params[:source] ||= "google"
-    # ref_url = request.referer
+    ref_url = params[:ref_url]
     source_source_url = params[:source_source_url]
-    ref_url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+
+    if ref_url.blank? || ref_url == 'undefined'
+      ref_url = request.referer
+    end
     ref_url = ref_url.to_s
 
     if params[:type].to_s == "conversion"
@@ -40,7 +43,7 @@ class PixelsController < ApplicationController
       req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined", "source_source_url"].include?(s.to_s)}
       url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
 
-      conversion_pixel_detail = ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
+      ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
     else
       ref_url = CGI.escape(ref_url) if ref_url.to_s.exclude?("%3A%2F%2F")
       # if source_source_url.to_s.exclude?("%3A%2F%2F")

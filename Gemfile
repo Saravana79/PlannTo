@@ -6,7 +6,7 @@ ruby '1.9.3'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 gem 'mysql2'
-gem 'uuidtools' 
+#gem 'uuidtools'
 gem "configatron", "~> 2.8.4"
 gem 'memcachier'
 gem 'dalli'
@@ -16,10 +16,10 @@ gem "oauth2"
 gem "omniauth"
 gem "omniauth-facebook"
 gem "omniauth-oauth2"
-gem "hashie"
+# gem "hashie"
 gem 'devise', '~> 2.0.0'
 gem "friendly_id", "~> 4.0.1"
-gem "koala"
+# gem "koala"
 gem "mogli"
 gem 'will_paginate'
 gem 'youtube_it'
@@ -79,13 +79,13 @@ gem 'progress_bar'
 gem "feedzirra", '~> 0.1.3'
 
 # TO DO the daily jobs to queue
-gem "clockwork", "~> 0.7.2"
+#gem "clockwork", "~> 0.7.2"
 
 # gem 'mailcatcher'
 #gem 'exception_notification', '3.0.1'
 gem 'highcharts-rails', '~> 3.0.10'
 gem 'activeuuid'
-gem 'newrelic_rpm'
+#gem 'newrelic_rpm'
 gem 'rest-client', '~> 1.7.1'
 gem "facets", require: false
 gem 'addressable', '~> 2.3.6'

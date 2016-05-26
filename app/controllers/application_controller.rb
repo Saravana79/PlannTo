@@ -162,6 +162,15 @@ class ApplicationController < ActionController::Base
     user_follow_items.blank? ? false : user_follow_items
   end
 
+  def set_cookie_for_temp_user_and_url_params_process(param)
+    if cookies[:plan_to_temp_user_id].blank? && cookies[:plannto_optout].blank?
+      cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now}
+    end
+
+    req_param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+    url_params = Advertisement.make_url_params(req_param)
+    return url_params
+  end
 
   def store_location
     session[:return_to] = request.env['REQUEST_URI'] if request.get? and controller_name != "user_sessions" and controller_name != "sessions"

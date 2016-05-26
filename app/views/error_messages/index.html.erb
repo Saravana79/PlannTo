@@ -5,7 +5,7 @@
   <% @error_messages.each do |error_message| %>
       <h2>Date:<%= error_message.created_at %></h2>
 
-      <h2>Message: <%= link_to error_message.message, error_message_path(m) %></h2>
+      <h2>Message: <%= link_to error_message.message, error_message_path(error_message) %></h2>
 
       <h3>------------------------------------------------------------------------------------------------------------------------------------------------------------------------- </h3>
   <% end %>
