@@ -75,7 +75,7 @@ group :test do
   gem 'turn', :require => false
 end
 gem 'geocoder'
-gem 'progress_bar'
+# gem 'progress_bar'
 gem "feedzirra", '~> 0.1.3'
 
 # TO DO the daily jobs to queue
@@ -116,12 +116,15 @@ gem 'net-http-digest_auth'
 gem 'api_cache'
 
 #gem for generate video from frames
-gem 'streamio-ffmpeg'
+# gem 'streamio-ffmpeg'
 
 #gem for animation work in videos
-gem 'phantomjs', '~> 1.9.7.1'
+# gem 'phantomjs', '~> 1.9.7.1'
 
-gem 'roo', '~> 2.1.1'
+# Roo provides an interface to spreadsheets of several sorts.
+# gem 'roo', '~> 2.1.1'
+
+
 #
 # #gem to terminate long request
 gem 'rack-timeout', '~> 0.3.2'
@@ -129,7 +132,7 @@ gem 'rack-timeout', '~> 0.3.2'
 #Skylight is a smart profiler for Rails apps
 # gem 'skylight', '~> 0.10.0'
 
-gem 'puma'
+# gem 'puma'
 
 # group :development do
 # gem "rack-mini-profiler"
