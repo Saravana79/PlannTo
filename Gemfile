@@ -16,7 +16,7 @@ gem "oauth2"
 gem "omniauth"
 gem "omniauth-facebook"
 gem "omniauth-oauth2"
-# gem "hashie"
+gem "hashie"
 gem 'devise', '~> 2.0.0'
 gem "friendly_id", "~> 4.0.1"
 # gem "koala"

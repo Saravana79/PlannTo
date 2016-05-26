@@ -358,6 +358,7 @@ DEPENDENCIES
   geocoder
   haml
   haml-rails
+  hashie
   heroku-api
   highcharts-rails (~> 3.0.10)
   jquery-rails
