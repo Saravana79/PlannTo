@@ -7,7 +7,7 @@ module Extensions
       before_create :generate_uuid
 
       def generate_uuid
-        self.uuid = UUIDTools::UUID.random_create.to_s
+        self.uuid = SecureRandom.uuid
       end
     end
   end

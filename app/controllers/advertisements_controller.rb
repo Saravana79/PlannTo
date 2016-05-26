@@ -5,7 +5,7 @@ class AdvertisementsController < ApplicationController
   skip_filter *_process_action_callbacks.map(&:filter), :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
   before_filter :change_image_url_path, :only => [:show_ads, :video_ads, :ads_visited, :image_show_ads]
 
-  newrelic_ignore :only => [:show_ads]
+  # newrelic_ignore :only => [:show_ads]
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads]#, :if => lambda { request.format.html? }
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "protocol_type", "r", "fashion_id", "ad_type", "hou_dynamic_l", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
