@@ -1,22 +1,26 @@
-<h1><center>Error Messages</center></h1>
+<h1>
+  <center>Error Messages</center>
+</h1>
 <ul>
-  <% for m in @error_messages %> 
-    <h2>Date:<%= m.created_at %></h2>
-    <h2>Message: <%=link_to m.message,error_message_path(m) %></h2>
- <h3>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------  </h3> 
+  <% @error_messages.each do |error_message| %>
+      <h2>Date:<%= error_message.created_at %></h2>
+
+      <h2>Message: <%= link_to error_message.message, error_message_path(m) %></h2>
+
+      <h3>------------------------------------------------------------------------------------------------------------------------------------------------------------------------- </h3>
   <% end %>
-  <%=will_paginate @error_messages%>
+  <%= will_paginate @error_messages %>
 </ul>
 
 
 
 <style>
-  .pagination {
-      font-size: 16px;
-  }
+    .pagination {
+        font-size: 16px;
+    }
 
-  body {
+    body {
 
-      font-size: 10px;
-  }
+        font-size: 10px;
+    }
 </style>
