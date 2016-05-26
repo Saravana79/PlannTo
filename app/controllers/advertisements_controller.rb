@@ -102,8 +102,8 @@ class AdvertisementsController < ApplicationController
     else
       @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
       @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-      @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-      @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+      # @vendor_ad_details.default = {"vendor_name" => "Amazon"}
       if @is_test != "true"
         @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, nil, request.remote_ip, nil, itemsaccess, url_params,
                                                                 cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
@@ -215,8 +215,9 @@ class AdvertisementsController < ApplicationController
           else
             @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
             @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-            @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-            @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+            # @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+            # @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+            @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
 
             @item_details = @item_details.uniq(&:url)
             @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
@@ -255,8 +256,9 @@ class AdvertisementsController < ApplicationController
       @iframe_height = @adv_detail.dynamic_ad_height.to_i == 0 ? 162 : @adv_detail.dynamic_ad_height.to_i if !@adv_detail.blank? && @adv_detail.ad_type == "dynamic"
 
       @ad_template_type = "type_1"
-      @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-      @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+      # @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+      # @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
       if @normal_view_ratio.to_f != 0.0 && !@iframe_width.blank?
         @iframe_height = (@iframe_width.to_f / @normal_view_ratio).to_s
@@ -488,12 +490,12 @@ class AdvertisementsController < ApplicationController
     # @vendor = Vendor.where(:name => "Amazon").first
     # vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+    @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
-    @current_vendor = @vendor_ad_details[@ad.vendor_id]
+    @current_vendor = @vendor_ad_details.select {|v| v.item_id == @ad.vendor_id.to_i }.last
     @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
-    @current_vendor = {} if @current_vendor.blank?
+    @current_vendor = nil if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
     @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id], @ad)
@@ -524,12 +526,14 @@ class AdvertisementsController < ApplicationController
     # @vendor = Vendor.where(:name => "Amazon").first
     # vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-    @vendor_ad_details.default = {"vendor_name" => "Jockey"}
 
-    @current_vendor = @vendor_ad_details[@ad.vendor_id]
+    @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids, "Jockey")
+    # @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details.default = {"vendor_name" => "Jockey"}
+
+    @current_vendor = @vendor_ad_details.select {|v| v.item_id == @ad.vendor_id.to_i }.last
     @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
-    @current_vendor = {} if @current_vendor.blank?
+    @current_vendor = nil if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
     @item, @item_details = Item.get_item_and_item_details_from_jockey_fashion_url(url, item_ids, vendor_ids, params[:fashion_id], @ad)
@@ -560,12 +564,13 @@ class AdvertisementsController < ApplicationController
     # @vendor = Vendor.where(:name => "Amazon").first
     # vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+    @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
-    @current_vendor = @vendor_ad_details[@ad.vendor_id]
+    @current_vendor = @vendor_ad_details.select {|v| v.item_id == @ad.vendor_id.to_i }.last
     @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
-    @current_vendor = {} if @current_vendor.blank?
+    @current_vendor = nil if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
     # @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
@@ -600,12 +605,13 @@ class AdvertisementsController < ApplicationController
     # @vendor = Vendor.where(:name => "Amazon").first
     # vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
-    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+    @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details.default = {"vendor_name" => "Amazon"}
 
-    @current_vendor = @vendor_ad_details[@ad.vendor_id]
+    @current_vendor = @vendor_ad_details.select {|v| v.item_id == @ad.vendor_id.to_i }.last
     @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
-    @current_vendor = {} if @current_vendor.blank?
+    @current_vendor = nil if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
     # @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
@@ -633,8 +639,9 @@ class AdvertisementsController < ApplicationController
     @item_details = DealItem.get_deal_item_based_on_hour(params[:fashion_id])
     @item_details = Itemdetail.convert_to_itemdetails(@item_details)
 
-    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-    @vendor_ad_details.default = {"vendor_name" => "Amazon"}
+    @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+    # @vendor_ad_details.default = {"vendor_name" => "Amazon"}
     @item = Item.new
     @vendor_detail = @ad.vendor_detail rescue VendorDetail.new
 

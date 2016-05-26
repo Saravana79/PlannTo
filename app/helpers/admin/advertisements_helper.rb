@@ -50,6 +50,15 @@ module Admin::AdvertisementsHelper
     return_val
   end
 
+  def get_vendor_detail(site_id)
+    if (!site_id.blank? && site_id != 0)
+      vendor_detail = @vendor_ad_details.select { |v| v.item_id == site_id }.last
+    else
+      vendor_detail = @vendor_ad_details.select { |v| v.item_id.blank? }.last
+    end
+    vendor_detail
+  end
+
   def get_image_tag(item_detail, vendor_name='', default_src='', width=100, height=100, format='medium')
     return_url = ''
     img_id = ''

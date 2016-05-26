@@ -554,7 +554,7 @@ class ProductsController < ApplicationController
     # @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     # @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
 
-    # @current_vendor = @vendor_ad_details[9882]
+    # @current_vendor = @vendor_ad_details.select {|each_vend| each_vend.item_id == 9882}.last
     # @current_vendor = {} if @current_vendor.blank?
     # item_ids = item_id.to_s.split(",")
 

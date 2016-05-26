@@ -36,6 +36,7 @@
           <div class="">
             <ul id="foo3" height="165px;">
               <% @item_details.each_with_index do |item_detail, indx| %>
+                  <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
                   <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
                   <% shop_now_url = get_general_click_url(item_detail.url) %>
 
@@ -48,7 +49,7 @@
                             <span style="  display: inline-block;vertical-align: middle;">
                             <%= get_image_tag_using_src(item_detail.image_url.to_s, '', '').html_safe %>
                           </span>
-                            <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                            <!-- <img src="<%#= get_image_url(item_detail, vendor_detail.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                           </a>
                         </div>
                         <div class="product-txt-right">
@@ -70,12 +71,12 @@
                       </div>
                       <div class="product-txt-desc">
                         <p>
-                          <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
+                          <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, vendor_detail.default_text), 90) %>
                          <h3 style="font-size:13px;font-weight:bold;">Amazon.in Great Indian Festive Sale</h3>
                         </p>
                       </div>
                     </div>
-                    <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                    <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
                   </li>
               <% end %>
             </ul>

@@ -1,7 +1,9 @@
+<% vendor_detail = get_vendor_detail(@item_detail[0].site.to_i) %>
 <div class="advt-block">
   <div class="advt-728">
     <% if @item_details.count != 0 %>
-     <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_ad_details[@item_details[0].site.to_i]['imageurl'] %>" width="68px" alt=""></a>
+        <% vendor_detail = get_vendor_detail(@item_details[0].site.to_i) %>
+     <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= vendor_detail.full_imageurl %>" width="68px" alt=""></a>
         <% if  @item_details[0].site.to_i == 9861%>
 
           <div style = "font-size: 9px;margin: 3px;" > Extra 10% off on App. </div>
@@ -17,6 +19,7 @@
         <%end%>
          </div>
         <% @item_details.each_with_index do |item_detail, indx| %>
+            <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
             <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
             <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
@@ -29,7 +32,7 @@
                    <div class="product-img">
                     <a href="<%= shop_now_url %>" target="_blank" style="text-decoration:none;">
                        <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), '', "").html_safe %>
+                      <%= get_image_tag(item_detail, vendor_detail.vendor_name, @item.base_item_image_url(:medium), '', "").html_safe %>
                       <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
                     </a>
                   </div>
@@ -56,7 +59,7 @@
                   <div class="product-desc">
                     <a href="<%#= shop_now_url %>" target="_blank" class="">
                       <p class="text-desc">
-                        <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                        <%#= raw get_offer_for_ad(@ad, item_detail, vendor_detail.default_text, 90, shop_now_url) %>
                       </p>
 
                     </a>

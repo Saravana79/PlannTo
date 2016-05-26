@@ -1505,3 +1505,46 @@ CookieMatch.find_in_batches(:batch_size => 10000) do |cookie_matches|
   p sel_cookie_matches.count
   sel_cookie_matches.each {|d| d.delete}
 end
+
+
+# aggregation of 
+start_date = (Date.today - 1.days).beginning_of_day
+start_date = Date.today.beginning_of_day
+
+unwind = { :"$unwind" => "$i_types" }
+unwind1 = { :"$unwind" => "$i_types.m_items" }
+match = {"$match" => {"lad" => {"$gte" => start_date}}}
+group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "imp_count" => { "$sum" => 1 } } }
+
+
+Benchmark.ms do
+pp = PUserDetail.collection.aggregate([unwind,unwind1,match,group])
+end
+
+
+
+keys = $redis_rtb.keys("imp:*")
+
+keys = $redis_rtb.keys("imp:#{Date.today}*")
+
+
+
+PUserDetail.where(:lad.gte => Date.today).count
+
+
+
+
+start_date = (Date.today - 1.days).beginning_of_day
+start_date = Date.today.beginning_of_day
+
+# unwind = { :"$unwind" => "$i_types" }
+# unwind1 = { :"$unwind" => "$i_types.m_items" }
+match = {"$match" => {"lad" => {"$gte" => start_date}}}
+# group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "imp_count" => { "$sum" => 1 } } }
+pp = PUserDetail.collection.aggregate([match])
+
+# Benchmark.ms do
+#   pp = PUserDetail.collection.aggregate([match])
+# end
+
+plannto_user_details = PUserDetail.where(:lad.gte => start_date)
