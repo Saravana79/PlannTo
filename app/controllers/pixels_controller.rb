@@ -85,10 +85,9 @@ class PixelsController < ApplicationController
         @img_src = nil
       end
     end
-
     respond_to do |format|
       format.js
-      format.html { render :json => {} }
+      format.html { render :nothing => true }
     end
   end
 
