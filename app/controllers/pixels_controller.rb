@@ -6,9 +6,9 @@ class PixelsController < ApplicationController
 
   # cookie matching
   def index
-    # if !params[:google_gid].blank? && params[:google_error].blank?
-    #   CookieMatch.enqueue_cookie_matching(params, cookies[:plan_to_temp_user_id])
-    # end
+    if !params[:google_gid].blank? && params[:google_error].blank?
+      CookieMatch.enqueue_cookie_matching(params, cookies[:plan_to_temp_user_id])
+    end
     head :no_content
   end
 
@@ -39,9 +39,11 @@ class PixelsController < ApplicationController
 
     if params[:type].to_s == "conversion"
       @img_src = nil
+      # req_param = params.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined", "source_source_url"].include?(s.to_s)}
+      # url_params = set_cookie_for_temp_user_and_url_params_process(req_param)
+
       req_param = params.slice("type", "source", "orderid", "orderamount")
-      set_cookie_for_temp_user_and_url_params_process(req_param, true)
-      url_params = Advertisement.make_url_params(req_param)
+      url_params = set_cookie_for_temp_user_and_url_params_process(req_param, true)
 
       ConversionPixelDetail.create(:plannto_user_id => cookies[:plan_to_temp_user_id], :ref_url => ref_url, :source => params[:source], :conversion_time => Time.now, :params => url_params)
     else
@@ -85,6 +87,7 @@ class PixelsController < ApplicationController
         @img_src = nil
       end
     end
+
     respond_to do |format|
       format.js
       format.html { render :nothing => true }
