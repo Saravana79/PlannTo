@@ -280,23 +280,35 @@ class FeedsController < ApplicationController
 
     @article_content = ArticleContent.find_by_url(@feed_url.url)
 
-    unless @article_content.blank?
+    if !@article_content.blank?
       @already_shared = true
       @feed_url.update_attributes!(:status => 1) rescue ""
 
-      @article_content.check_and_update_mobile_site_feed_urls_from_content(@feed_url, current_user, request.remote_ip)
+      # @article_content.check_and_update_mobile_site_feed_urls_from_content(@feed_url, current_user, request.remote_ip)
     else
       @already_shared = false
       @external = true
       @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
 
-      @feed_url, @article_content, @invalid = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, current_user, request.remote_ip)
+      # @feed_url, @article_content, @invalid = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, current_user, request.remote_ip)
+
+      url = @feed_url.url.to_s
+      old_host = Addressable::URI.parse(url).host.downcase
+      host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
+      source_category = SourceCategory.where(:source => host).first
+      if !source_category.blank?
+        if source_category.site_status == false
+          @feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
+          @invalid = "true"
+        end
+      end
 
       if @invalid == "true"
         @shared_message = "FeedUrl is Invalid Based on domain name"
         return
       end
 
+      @article_content = ArticleContent.find_by_url(@feed_url.url)
 
       if @feed_url.status == 1 && !@article_content.blank?
         @already_shared = true
