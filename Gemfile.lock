@@ -207,6 +207,7 @@ GEM
       mime-types
     polyglot (0.3.3)
     pr_geohash (1.0.0)
+    puma (2.15.3)
     rack (1.3.6)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -379,6 +380,7 @@ DEPENDENCIES
   omniauth-oauth2
   open_uri_redirections (~> 0.2.0)
   paperclip
+  puma
   rack-timeout (~> 0.3.2)
   rails (= 3.1.1)
   rails_exception_handler (~> 2)
