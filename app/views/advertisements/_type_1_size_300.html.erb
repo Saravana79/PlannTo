@@ -35,7 +35,6 @@
                       <div class="product-img-left">
                         <a href="<%= shop_now_url %>" target="_blank">
                             <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                          <% p vendor_detail %>
                           <%= get_image_tag(item_detail, vendor_detail.vendor_name, @item.base_item_image_url(:medium), 132, '').html_safe %>
                           <!-- <img src="<%#= get_image_url(item_detail, vendor_detail.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
