@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
 
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
-  before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
+  # before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
   before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
   before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
@@ -52,21 +52,21 @@ class ProductsController < ApplicationController
      end
    }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  caches_action :widget_for_women, :cache_path => proc {|c|
-    if params[:beauty] == "true"
-      if params[:item_ids].blank?
-        params.slice("ref_url", "page_type", "geo", "beauty")
-      else
-        params.slice("item_ids", "page_type", "geo", "beauty")
-      end
-    else
-      if params[:item_ids].blank?
-        params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty")
-      else
-        params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty")
-      end
-    end
-  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  # caches_action :widget_for_women, :cache_path => proc {|c|
+  #   if params[:beauty] == "true"
+  #     if params[:item_ids].blank?
+  #       params.slice("ref_url", "page_type", "geo", "beauty")
+  #     else
+  #       params.slice("item_ids", "page_type", "geo", "beauty")
+  #     end
+  #   else
+  #     if params[:item_ids].blank?
+  #       params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty")
+  #     else
+  #       params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty")
+  #     end
+  #   end
+  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   caches_action :sports_widget, :cache_path => proc {|c|
     if !params[:item_ids].blank?
@@ -88,13 +88,13 @@ class ProductsController < ApplicationController
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   # before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget]
-  skip_before_filter :all_user_follow_item
+  # skip_before_filter :all_user_follow_item
 
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
 
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget, :user_test_drive]
+  # skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women, :price_vendor_details, :book_price_widget, :user_test_drive]
   layout 'product'
   include FollowMethods
   include ItemsHelper
