@@ -173,13 +173,16 @@ module Admin::AdvertisementsHelper
     return vendor_ids, ad_id, ad_template_type
   end
 
-  def set_cookie_for_temp_user_and_url_params_process(param)
+  def set_cookie_for_temp_user_and_url_params_process(param, skip_url_params=false)
     if cookies[:plan_to_temp_user_id].blank? && cookies[:plannto_optout].blank?
       cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now}
     end
 
-    req_param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
-    url_params = Advertisement.make_url_params(req_param)
+    url_params = ""
+    if skip_url_params
+      req_param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url", "hou_dynamic_l", "protocol_type", "price_full_details", "doc_title-undefined"].include?(s.to_s)}
+      url_params = Advertisement.make_url_params(req_param)
+    end
     return url_params
   end
 

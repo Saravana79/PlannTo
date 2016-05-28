@@ -1484,17 +1484,16 @@ class ProductsController < ApplicationController
 
     params[:is_test] = "false" if params[:ref_url].to_s.include?("gizbot.com")
 
-    cache_params = ""
-    if !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "vendor_ids", "ret_format", "protocol_type"))
-    else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "vendor_ids", "ret_format", "protocol_type"))
-    end
-    cache_params = CGI::unescape(cache_params)
-
-    cache_key = "views/#{host_name}/elec_widget_1.#{extname}?#{cache_params}.#{extname}"
-
     if params[:is_test] != "true"
+      if !params[:item_ids].blank?
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "vendor_ids", "ret_format", "protocol_type"))
+      else
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "vendor_ids", "ret_format", "protocol_type"))
+      end
+      cache_params = CGI::unescape(cache_params)
+
+      cache_key = "views/#{host_name}/elec_widget_1.#{extname}?#{cache_params}.#{extname}"
+
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
         valid_html = cache.match(/_blank/).blank? ? false : true
