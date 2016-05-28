@@ -153,6 +153,26 @@ class Admin::AdReportsController < ApplicationController
     end
   end
 
+  def user_and_items_reports
+    params[:report_type] ||= "no_of_imp_per_item"
+    params[:sort_by] ||= "total_imp"
+
+    @report_date = params[:report_date].blank? ? Date.today : params[:report_date].to_date
+    @report_types = ["no_of_imp_per_item", "no_of_users_per_item"]
+
+    @results = Item.get_reports_of_user_and_items(params[:report_type], @report_date)
+    if @results.is_a?(Hash)
+      @results = Hash[@results.first(50)]
+    else
+      @results = @results.first(50)
+    end
+
+    # if params[:type] == "Item"
+    #   item_ids = @results.map {|k, _| k}.compact.map(&:to_i)
+    #   @items = Item.where(:id => item_ids)
+    # end
+  end
+
   def widget_reports
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date

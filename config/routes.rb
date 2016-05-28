@@ -488,6 +488,7 @@ resources :comments do
   get "admin/ad_reports/widget_reports" => "admin/ad_reports#widget_reports", :as => "admin_ad_report_widget_reports"
   get "admin/ad_reports/view_ad_chart" => "admin/ad_reports#view_ad_chart", :as => "admin_ad_report_view_ad_chart"
   # get "admin/payment_reports" => "admin/ad_reports#payment_reports", :as => "admin_payment_reports"
+  get "admin/user_and_items_reports" => "admin/ad_reports#user_and_items_reports", :as => "admin_user_and_items_reports"
 
   resources :feeds do
     collection do
