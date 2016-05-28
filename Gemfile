@@ -132,7 +132,8 @@ gem 'rack-timeout', '~> 0.3.2'
 #Skylight is a smart profiler for Rails apps
 # gem 'skylight', '~> 0.10.0'
 
-# gem 'puma'
+gem 'puma'
+gem 'puma_worker_killer', '~> 0.0.6'
 # gem 'unicorn'
 
 # group :development do
