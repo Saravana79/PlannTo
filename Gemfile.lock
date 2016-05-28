@@ -147,6 +147,7 @@ GEM
     json (1.7.4)
     jwt (0.1.5)
       multi_json (>= 1.0)
+    kgio (2.10.0)
     libv8 (3.3.10.4)
     loofah (1.2.1)
       nokogiri (>= 1.4.4)
@@ -207,7 +208,6 @@ GEM
       mime-types
     polyglot (0.3.3)
     pr_geohash (1.0.0)
-    puma (2.15.3)
     rack (1.3.6)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -244,6 +244,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (~> 0.14.6)
+    raindrops (0.16.0)
     rake (10.4.2)
     rdoc (3.12)
       json (~> 1.4)
@@ -316,6 +317,10 @@ GEM
     uglifier (1.2.7)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
+    unicorn (5.0.1)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
     uuidtools (2.1.3)
     vegas (0.1.11)
       rack (>= 1.0.0)
@@ -380,7 +385,6 @@ DEPENDENCIES
   omniauth-oauth2
   open_uri_redirections (~> 0.2.0)
   paperclip
-  puma
   rack-timeout (~> 0.3.2)
   rails (= 3.1.1)
   rails_exception_handler (~> 2)
@@ -400,6 +404,7 @@ DEPENDENCIES
   tinymce-rails-imageupload (~> 3.5.6.3)
   turn
   uglifier
+  unicorn
   will_paginate
   xml-simple (~> 1.1.4)
   youtube_it
