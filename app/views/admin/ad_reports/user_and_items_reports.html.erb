@@ -43,7 +43,7 @@ From Date
   </tr>
   <% @results.each do |each_result| %>
       <tr>
-        <td class="bdb_gray1" style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_result.item_id %> </td>
+        <td class="bdb_gray1" style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= get_item(each_result.item_id) %> </td>
         <td class="bdb_gray1" style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_result.count %> </td>
       </tr>
   <% end %>

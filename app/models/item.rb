@@ -3887,8 +3887,9 @@ end
       end
       fin_results = fin_results.sort_by {|d| d.count.to_i}.reverse
     else
-      report_date = report_date.blank? ? Date.today.beginning_of_day : report_date.beginning_of_day
-      match = {"$match" => {"lad" => {"$gte" => report_date}}}
+      report_date = report_date.blank? ? Date.today.beginning_of_day : report_date.to_date.beginning_of_day
+      report_date_end = report_date.blank? ? Date.today.end_of_day : report_date.to_date.end_of_day
+      match = {"$match" => {"lad" => {"$gte" => report_date, "$lte" => report_date_end}}}
       unwind = { :"$unwind" => "$i_types" }
       match1 = {"$match" => {"i_types.m_items" => {"$ne" => nil}}}
       unwind1 = { :"$unwind" => "$i_types.m_items" }

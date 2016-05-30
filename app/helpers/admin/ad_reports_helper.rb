@@ -7,8 +7,7 @@ module Admin::AdReportsHelper
 
   def get_if_item(id)
     if params[:type] == "Item"
-      item = @items.select {|item| item.id == id.to_i}.last
-      item.blank? ? id : item.name
+      get_item(id)
     else
       if params[:type] == "Domain"
         id.to_s.gsub("^", ".")
@@ -16,5 +15,10 @@ module Admin::AdReportsHelper
         id
       end
     end
+  end
+
+  def get_item(item_id)
+    item = @items.select {|item| item.id == item_id.to_i}.last
+    item.blank? ? item_id : item.name
   end
 end

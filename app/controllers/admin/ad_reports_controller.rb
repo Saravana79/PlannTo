@@ -167,10 +167,8 @@ class Admin::AdReportsController < ApplicationController
       @results = @results.first(50)
     end
 
-    # if params[:type] == "Item"
-    #   item_ids = @results.map {|k, _| k}.compact.map(&:to_i)
-    #   @items = Item.where(:id => item_ids)
-    # end
+    item_ids = @results.map {|k| k.item_id}.compact.map(&:to_i)
+    @items = Item.where(:id => item_ids)
   end
 
   def widget_reports

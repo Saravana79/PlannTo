@@ -840,6 +840,11 @@ class FeedUrl < ActiveRecord::Base
     $redis.set("automated_feed_process_is_running", 1)
     $redis.expire("automated_feed_process_is_running", 40.minutes)
 
+    #UPdate category to redis
+    categories = FeedUrl.find_by_sql("select distinct category from feed_urls").map(&:category).join(",").split(",").compact.uniq
+    $redis.set("categories_for_feed_urls", categories.join(","))
+    $redis.expire("categories_for_feed_urls", 1.day)
+
     # SourceCategory.update_all_to_cache()
     # sources_list = JSON.parse($redis.get("sources_list_details"))
 
