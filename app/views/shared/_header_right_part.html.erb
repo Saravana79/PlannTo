@@ -39,6 +39,7 @@
              <%if current_user && current_user.is_admin? %>
                  <a href="/admin/widget_reports">Widgets Report</a>
                  <a href="/admin/user_and_items_reports">User & Item Reports</a>
+                 <a href="/admin/update_redis">Redis Update with Items & Ads</a>
              <% end %>
               <% if current_user.is_a_advertiser?(session[:advertiser]) %>
                  <% session[:advertiser] = "true" %>

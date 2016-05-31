@@ -271,6 +271,11 @@ task :update_aggregated_impression_from_redis => :environment do
   Resque.enqueue(UpdateAggregatedImpressionFromRedis, Time.zone.now.utc)
 end
 
+desc "Update AggregatedImpressionByType from mongodb"
+task :update_aggregated_impression_from_mongodb => :environment do
+  Resque.enqueue(UpdateAggregatedImpressionFromMongodb, Time.zone.now.utc)
+end
+
 desc "Update ConversionPixelDetail from based on click for ad 83"
 task :update_conversion_pixel_detail_from_click => :environment do
   Resque.enqueue(UpdateConversionPixelDetailFromClick, Time.zone.now.utc)

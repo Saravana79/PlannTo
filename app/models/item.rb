@@ -3887,17 +3887,20 @@ end
       end
       fin_results = fin_results.sort_by {|d| d.count.to_i}.reverse
     else
-      report_date = report_date.blank? ? Date.today.beginning_of_day : report_date.to_date.beginning_of_day
-      report_date_end = report_date.blank? ? Date.today.end_of_day : report_date.to_date.end_of_day
-      match = {"$match" => {"lad" => {"$gte" => report_date, "$lte" => report_date_end}}}
-      unwind = { :"$unwind" => "$i_types" }
-      match1 = {"$match" => {"i_types.m_items" => {"$ne" => nil}}}
-      unwind1 = { :"$unwind" => "$i_types.m_items" }
-      group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "c" => { "$sum" => 1 } } }
-      sort =  { "$sort" => { "c" => -1 } }
-      limit =   {"$limit" => 100}
-      results = PUserDetail.collection.aggregate([match,unwind,match1,unwind1,group,sort,limit])
-      # Benchmark.ms { results = PUserDetail.collection.aggregate([match,unwind,match1,unwind1,group,sort,limit]) }
+      # report_date = report_date.blank? ? Date.today.beginning_of_day : report_date.to_date.beginning_of_day
+      # report_date_end = report_date.blank? ? Date.today.end_of_day : report_date.to_date.end_of_day
+      # match = {"$match" => {"lad" => {"$gte" => report_date, "$lte" => report_date_end}}}
+      # unwind = { :"$unwind" => "$i_types" }
+      # match1 = {"$match" => {"i_types.m_items" => {"$ne" => nil}}}
+      # unwind1 = { :"$unwind" => "$i_types.m_items" }
+      # group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "c" => { "$sum" => 1 } } }
+      # sort =  { "$sort" => { "c" => -1 } }
+      # limit =   {"$limit" => 100}
+      # results = PUserDetail.collection.aggregate([match,unwind,match1,unwind1,group,sort,limit])
+
+      results = {}
+      agg_imp = AggregatedImpressionByType.where(:agg_date => report_date, :agg_type => "no_of_users_per_item").last
+      results = agg_imp.agg_coll if !agg_imp.blank?
 
       fin_results = []
       results.each do |each_res|

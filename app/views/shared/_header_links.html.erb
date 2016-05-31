@@ -187,6 +187,7 @@
              <a href="/admin/widget_reports">Widgets Report</a>
              <%if current_user && current_user.is_admin? %>
                  <a href="/admin/user_and_items_reports">User & Item Reports</a>
+                 <a href="/admin/update_redis">Redis Update with Items & Ads</a>
                  <%= link_to "AB Test", advertisement_ab_test_path %>
                  <%= link_to "Ads More Reports", admin_more_reports_path %>
              <% end %>
