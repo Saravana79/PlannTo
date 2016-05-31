@@ -306,7 +306,7 @@ class ItemsController < ApplicationController
     end
 
   def update_redis
-    params[:redis_key] = "valid_ad_ids_for_buying_list"
+    params[:redis_key] ||= "valid_ad_ids_for_buying_list"
     if params[:commit] == "Update"
       $redis.set(params[:redis_key], params[:redis_val])
     end
