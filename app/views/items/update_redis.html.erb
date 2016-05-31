@@ -1,0 +1,129 @@
+<div class="alert-notice">
+  <% if !flash[:notice].blank? %>
+      <span class="notice"><%= flash[:notice] %></span>
+  <% elsif !flash[:alert].blank? %>
+      <span class="alert"><%= flash[:alert] %></span>
+  <% end %>
+</div>
+<br/>
+<br/>
+
+<%= form_for "update_redis", :url => update_redis_items_path, :method => :get do |f| %>
+    <div class="main_div" style="margin-left: 28%;">
+      <div class="fields-div">
+        <div class="title_header input-label float_lft">Select Redis Key to Update :</div>
+        <div>
+          <%= select_tag :redis_key, options_for_select(["valid_ad_ids_for_buying_list", "valid_item_ids_for_buying_list"], params[:redis_key]), :style => "width: 250px; margin-top: 8px;" %>
+        </div>
+      </div>
+    </div>
+
+  <div class="body_div">
+    <div class="form_div" id="valid_item_ids_for_buying_list" style="padding: 37px 0px 0px 130px;">
+      <div class="fields-div" id="reviewProducts">
+
+        <div id="ad_product_list_div" style="display:block;">
+          <a href="#" class="Closebut">&nbsp;</a>
+          <ul id="ad_product_list_ul" class="tagging" style=""></ul>
+        </div>
+      </div>
+
+      <div class="fields-div" style="clear: both;">
+        <div class="title_header float_lft" style="font-size: 13px;">Select Products :</div>
+        <div class="taggingdiv">
+          <div class="float_lft " id="displayTagBox">
+            <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product" style="width: 270px;"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="fields-div" style="clear: both;">
+        <div class="title_header float_lft" style="font-size: 13px;"><%= params[:redis_key] %></div>
+        <div>
+          <%= text_area_tag :redis_val, @redis_val, :style => "width: 800px;height: 70px;" %></div>
+      </div>
+    </div>
+    <div class="form_div" id="valid_ad_ids_for_buying_list" style="padding: 37px 0px 0px 130px;">
+      <div class="fields-div" style="clear: both;">
+        <div class="title_header float_lft" style="font-size: 13px;"><%= params[:redis_key] %></div>
+        <div>
+          <%= text_field_tag :redis_val, @redis_val, :style => "width: 80px;height: 20px;" %></div>
+      </div>
+    </div>
+  </div>
+  <%= f.submit "Update", :class => "btn-link report_btn generate_btn", :style => "margin: 24px 0px 0px 40%;" %>
+<% end %>
+
+
+<script type="text/javascript">
+    $("document").ready(function () {
+        $(".form_div").hide()
+        var val = $("#redis_key").val()
+        $("#"+val).show()
+
+
+        $("#redis_key").change(function()
+        {
+            $(".form_div").hide()
+            console.log(33333333333333)
+            var val = $(this).val()
+            $("#"+val).show()
+        })
+
+        var settings = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
+            hidden_field: "#redis_val"};
+
+        <%if !@items.blank? %>
+        <% @items.each do |item| %>
+
+        $.addTag("ad_product", "ad_product_list_ul", settings, "<%= item.name %>", "<%= item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
+        //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
+        <%end%>
+        <%end%>
+        $.textTagger("#ad_product", "#ad_product_list_ul", settings);
+    })
+</script>
+
+<style type="text/css">
+    #new_article_product {
+        border-style: groove;
+        border-width: 2px;
+        font-size: 14px;
+        height: 25px;
+        margin-top: 5px;
+        width: 305px;
+    }
+
+    #shareProduct {
+        clear: both;
+        display: block;
+        margin: 35px 0 0 211px;
+        padding: 5px 5px 0 0;
+    }
+
+    .input-label {
+        font-size: 16px !important;
+        padding: 9px 0 0;
+    }
+
+    .alert-notice .notice {
+        background-color: darkseagreen;
+        color: green;
+        font-size: 15px;
+        height: 28px;
+        padding: 19px 0 0 401px;
+        position: absolute;
+        width: 58%;
+    }
+
+    .alert-notice .alert {
+        background-color: peachpuff;
+        color: red;
+        font-size: 15px;
+        height: 28px;
+        padding: 19px 0 0 401px;
+        position: absolute;
+        width: 58%;
+    }
+</style>

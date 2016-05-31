@@ -3895,7 +3895,7 @@ end
       unwind1 = { :"$unwind" => "$i_types.m_items" }
       group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "c" => { "$sum" => 1 } } }
       sort =  { "$sort" => { "c" => -1 } }
-      limit =   {"$limit" => 50}
+      limit =   {"$limit" => 100}
       results = PUserDetail.collection.aggregate([match,unwind,match1,unwind1,group,sort,limit])
       # Benchmark.ms { results = PUserDetail.collection.aggregate([match,unwind,match1,unwind1,group,sort,limit]) }
 

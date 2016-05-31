@@ -161,11 +161,7 @@ class Admin::AdReportsController < ApplicationController
     @report_types = ["no_of_imp_per_item", "no_of_users_per_item"]
 
     @results = Item.get_reports_of_user_and_items(params[:report_type], @report_date)
-    if @results.is_a?(Hash)
-      @results = Hash[@results.first(50)]
-    else
-      @results = @results.first(50)
-    end
+    @results = @results.first(100)
 
     item_ids = @results.map {|k| k.item_id}.compact.map(&:to_i)
     @items = Item.where(:id => item_ids)

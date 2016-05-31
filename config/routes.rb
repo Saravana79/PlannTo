@@ -380,6 +380,7 @@ resources :comments do
     collection do
       get :compare
       get :update_page
+      get :update_redis
       get :remove_duplicate_item
     end
     member do

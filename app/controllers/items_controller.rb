@@ -305,6 +305,17 @@ class ItemsController < ApplicationController
 
     end
 
+  def update_redis
+    params[:redis_key] = "valid_ad_ids_for_buying_list"
+    if params[:commit] == "Update"
+      $redis.set(params[:redis_key], params[:redis_val])
+    end
+    @redis_val = $redis.get(params[:redis_key])
+    if params[:redis_key] == "valid_item_ids_for_buying_list"
+      @items = Item.where(:id => @redis_val.to_s.split(","))
+    end
+  end
+
     private
 
     def find_item
