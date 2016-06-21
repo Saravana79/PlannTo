@@ -93,23 +93,26 @@ class AggregatedImpressionByType
     results
   end
 
-  def self.update_user_count_for_items_ids
-    report_date = Date.today
+  def self.update_user_count_for_items_ids(date)
+    report_date = date.blank? ? Date.today : date.to_date
     agg_imp = AggregatedImpressionByType.where(:agg_date => report_date, :agg_type => "no_of_users_per_item").last
 
-    if agg_imp.blank?
-      report_date = report_date.blank? ? Date.today.beginning_of_day : report_date.to_date.beginning_of_day
-      report_date_end = report_date.blank? ? Date.today.end_of_day : report_date.to_date.end_of_day
-      match = {"$match" => {"lad" => {"$gte" => report_date, "$lte" => report_date_end}}}
-      unwind = { :"$unwind" => "$i_types" }
-      match1 = {"$match" => {"i_types.m_items" => {"$ne" => nil}}}
-      unwind1 = { :"$unwind" => "$i_types.m_items" }
-      group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "c" => { "$sum" => 1 } } }
-      sort =  { "$sort" => { "c" => -1 } }
-      limit =   {"$limit" => 100}
-      results = PUserDetail.collection.aggregate([match,unwind,match1,unwind1,group,sort,limit])
+    report_date = report_date.blank? ? Date.today.beginning_of_day : report_date.to_date.beginning_of_day
+    report_date_end = report_date.blank? ? Date.today.end_of_day : report_date.to_date.end_of_day
+    match = {"$match" => {"lad" => {"$gte" => report_date, "$lte" => report_date_end}}}
+    unwind = { :"$unwind" => "$i_types" }
+    match1 = {"$match" => {"i_types.m_items" => {"$ne" => nil}}}
+    unwind1 = { :"$unwind" => "$i_types.m_items" }
+    group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "c" => { "$sum" => 1 } } }
+    sort =  { "$sort" => { "c" => -1 } }
+    limit =   {"$limit" => 100}
+    results = PUserDetail.collection.aggregate([match,unwind,match1,unwind1,group,sort,limit])
 
+    if agg_imp.blank?
       AggregatedImpressionByType.create(:agg_date => report_date, :agg_type => "no_of_users_per_item", :agg_coll => results)
+    else
+      agg_imp.agg_coll = results
+      agg_imp.save
     end
   end
 

@@ -274,6 +274,7 @@ end
 desc "Update AggregatedImpressionByType from mongodb"
 task :update_aggregated_impression_from_mongodb => :environment do
   Resque.enqueue(UpdateAggregatedImpressionFromMongodb, Time.zone.now.utc)
+  Resque.enqueue(UpdateAggregatedImpressionFromMongodb, Date.yesterday)
 end
 
 desc "Update ConversionPixelDetail from based on click for ad 83"

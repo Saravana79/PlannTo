@@ -10,8 +10,10 @@ class UpdateAggregatedImpressionFromMongodb
     log.debug "********** Actual Time to Start #{actual_time.to_time.strftime('%b %d,%Y %r')} **********"
 
     now_time = actual_time.to_time
+    yesterday_time = actual_time.to_time - 1.day
 
-    AggregatedImpressionByType.send("update_user_count_for_items_ids")
+    AggregatedImpressionByType.send("update_user_count_for_items_ids", yesterday_time)
+    AggregatedImpressionByType.send("update_user_count_for_items_ids", now_time)
 
     #rescue => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
