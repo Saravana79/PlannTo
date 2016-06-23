@@ -622,16 +622,21 @@ class ProductsController < ApplicationController
 
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
       # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
-      if items.blank? && !manufacturers.blank?
-        items = Item.find_by_sql("SELECT `items`.* FROM `items` INNER JOIN `itemrelationships` ON `items`.`id` = `itemrelationships`.`item_id` WHERE `itemrelationships`.`relateditem_id` = #{manufacturers.first.id} order by id desc limit #{show_count}")
-      end
+      if params[:page_type].to_s == "type_5"
+        if items.blank? && !manufacturers.blank?
+          items = Item.find_by_sql("SELECT `items`.* FROM `items` INNER JOIN `itemrelationships` ON `items`.`id` = `itemrelationships`.`item_id` WHERE `itemrelationships`.`relateditem_id` = #{manufacturers.first.id} order by id desc limit #{show_count}")
+        end
 
-      if items.count < show_count
+        if items.count < show_count
+          item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
+          first_six_items = item_ids.shuffle.first(6)
+          items = Item.where(:id => first_six_items)
+        end
+      else
         item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
         first_six_items = item_ids.shuffle.first(6)
         items = Item.where(:id => first_six_items)
       end
-      # items = items.first(show_count)
       @item = items[0]
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
