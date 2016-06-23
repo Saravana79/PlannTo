@@ -581,7 +581,8 @@ class ProductsController < ApplicationController
   def elec_widget_1
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
-    items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
+    items, itemsaccess, url, tempurl, manufacturers = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
+
     @where_to_buy_items = []
     if params[:vendor_ids].blank?
       #defaulting to amazon.
@@ -621,9 +622,16 @@ class ProductsController < ApplicationController
 
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
       # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
-      item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
-      first_six_items = item_ids.shuffle.first(6)
-      items = Item.where(:id => first_six_items)
+      if items.blank? && !manufacturers.blank?
+        items = Item.find_by_sql("SELECT `items`.* FROM `items` INNER JOIN `itemrelationships` ON `items`.`id` = `itemrelationships`.`item_id` WHERE `itemrelationships`.`relateditem_id` = #{manufacturers.first.id} order by id desc limit #{show_count}")
+      end
+
+      if items.count < show_count
+        item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
+        first_six_items = item_ids.shuffle.first(6)
+        items = Item.where(:id => first_six_items)
+      end
+      # items = items.first(show_count)
       @item = items[0]
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)

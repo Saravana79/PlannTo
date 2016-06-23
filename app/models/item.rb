@@ -1470,6 +1470,7 @@ end
     new_item_access = itemsaccess
     tempurl = url
     items = []
+    manufacturers = []
     unless item_ids.blank?
       new_item_access = "ItemId"
       if ((for_widget == true && sort_disable == "true") || (for_widget == false && sort_disable == "true"))
@@ -1510,6 +1511,7 @@ end
 
           unless articles.empty?
             items = articles[0].allitems.select{|a| a.is_a? Product}
+            manufacturers = articles[0].allitems.select{|a| a.is_a? Manufacturer}
             article_items_ids = items.map(&:id)
             new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 8")
 
@@ -1521,7 +1523,7 @@ end
         end
       end
     end
-    return items, new_item_access, url, tempurl
+    return items, new_item_access, url, tempurl, manufacturers
   end
 
   def self.get_items_by_item_ids_with_related_items(item_ids, url, itemsaccess, request, for_widget=false, sort_disable='false')
