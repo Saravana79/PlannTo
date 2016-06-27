@@ -55,10 +55,10 @@
 </style>
 <div id="planntobuy" style="border: 1px solid #E2E2E2;">
   <div>
-    <!--  <ul class="shadetabs">
+      <ul class="shadetabs">
                 <li class="selected">
-                    <a href="javascript:void(0)" id="where_to_buy_items_a" ><img src="<%#= configatron.root_image_path %>static/images/<%#= @vendor_detail.theme_image %>" style="height: 20px;"></a>
-                </li>-->
+                    <a href="javascript:void(0)" id="where_to_buy_items_a" ><img src="<%= configatron.root_image_path %>static/images/<%= @vendor_detail.theme_image %>" style="height: 20px;width:100%;"></a>
+                </li>
   </div>
   <% @where_to_buy_items.each do |item_detail| %>
       <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
@@ -83,12 +83,12 @@
                 <img width="50px" height="px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(item_detail) %>">
               </span>
               <% end %>
-              <span style="float: right;width:12%;text-align:center;">
+              <span style="float: right;text-align:center;">
     
          <div style="margin-top:10px;">
            <p class="btn">
-             <a rel="nofollow" style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; background: #FF972E;padding: 3px 5px; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href="<%= configatron.hostname %>/history_details?iid=<%= @impression_id %>&detail_id=<%= item_detail.id %>">
-               GO
+             <a rel="nofollow" style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; background: #FF972E;padding: 3px 5px; color: #FFF; font-weight: bold; font-family: Arial;font-size: 12px;text-decoration: none;" class="shop-now" target="_blank" href="<%= configatron.hostname %>/history_details?iid=<%= @impression_id %>&detail_id=<%= item_detail.id %>">
+               Buy Now
              </a>
            </p>
          </div>
