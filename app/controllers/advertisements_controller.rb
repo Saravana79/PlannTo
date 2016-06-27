@@ -754,6 +754,13 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def amazon_demo_type_5
+    params[:page_type] ||= "type_5"
+    params[:geo] ||= "in"
+    params[:ref_url] ||= "http://www.gizmotimes.com/phones/oneplus"
+    render :layout => false
+  end
+
   def junglee_gadget_demo
     params[:ref_url] ||= "http://gadgetstouse.com/comparison/samsung-galaxy-s4-vs-galaxy-s5-specification-comparison/15912"
     params[:page_type] ||= "type_1"
