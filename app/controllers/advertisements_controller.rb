@@ -28,7 +28,7 @@ class AdvertisementsController < ApplicationController
     return_path = "advertisements/show_ads.html.erb"
     @sid = sid = params[:sid] ||= ""
 
-    # TODO: hot coded values, have to change in feature
+    # TODO: hot coded values, have to change in future
     if @suitable_ui_size == "120" && params[:page_type] != "type_4" && params[:page_type] != "type_6"
       @ad_template_type = ad_id == 21 ? "type_3" : "type_2"
     end
