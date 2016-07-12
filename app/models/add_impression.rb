@@ -3,7 +3,7 @@ class AddImpression < ActiveRecord::Base
   require 'facets/string/xor'
   require 'openssl'
 
-  set_table_name "add_impressions1"
+  # set_table_name "add_impressions1"
 
   attr_accessor :t, :r, :device, :a, :video, :video_impression_id, :geo, :having_related_items, :visited
 
