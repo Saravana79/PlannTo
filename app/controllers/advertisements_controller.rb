@@ -755,9 +755,9 @@ class AdvertisementsController < ApplicationController
   end
 
   def amazon_demo_type_5
-    params[:page_type] ||= "type_5"
+    params[:page_type] ||= "type_6"
     params[:geo] ||= "in"
-    params[:ref_url] ||= "http://www.gizmotimes.com/phones/oneplus"
+    params[:ref_url] ||= "http://tech.firstpost.com"
     render :layout => false
   end
 
