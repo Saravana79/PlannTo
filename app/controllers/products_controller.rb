@@ -622,7 +622,7 @@ class ProductsController < ApplicationController
 
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
       # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
-      if params[:page_type].to_s == "type_5"
+      if ["type_5", "type_6", "type_7"].include?(params[:page_type].to_s)
         if items.blank? && !manufacturers.blank?
           items = Item.find_by_sql("SELECT `items`.* FROM `items` INNER JOIN `itemrelationships` ON `items`.`id` = `itemrelationships`.`item_id` WHERE `itemrelationships`.`relateditem_id` = #{manufacturers.first.id} order by id desc limit #{show_count}")
         end
