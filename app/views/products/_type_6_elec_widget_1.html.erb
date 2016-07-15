@@ -53,20 +53,18 @@
         text-align: center;
     }
 </style>
-<div id="planntobuy" style="border: 1px solid #E2E2E2;">
+<div id="planntobuy" style="border: 0px solid #E2E2E2;max-height:300px;">
   <div>
     <div style="
-    font-family: 'Open Sans', Arial, sans-serif;
-            font-size: 12px;
+    font-family: 'nexa_bold', arial;
+            font-size: 18px;
             text-transform: uppercase;
-            background: #19232d;
-            color: #efefef;
-            padding: 0 14px;
-            line-height: 34px;
+            font-weight: bold;
+            color: black;
+            padding: 10px 0px 3px 0px;;
             margin-bottom: 0px;
-            text-align: center;
             border-bottom: 5px solid #ffe327;
-    ">Our Recommended Products
+    "> Recommended Products
     </div>
 
   </div>
@@ -79,7 +77,7 @@
           <%= get_image_tag(item_detail, vendor_detail.vendor_name, item_detail.base_item_image_url(:small), 50, 0, "medium").html_safe %>
         </span>
         <span style="font-size: 13px;float: left;padding-right: 2px;width:80%">
-            <div style="font-size: 13px;color:black;font-family:Arial;" id="nametext">
+            <div style="font-size: 13px;color:black;font-family:'nexa_bold', arial;" id="nametext">
               <%= item_detail.ItemName.to_s.truncate(34) %>
             </div>
         </span>
