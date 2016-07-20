@@ -54,7 +54,7 @@
     }
 
  .btn{ margin:10px 0px; }
- .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-family: Arial;font-size:13px;}
+ .btn .shop-now{ margin:0; padding:0;cursor:pointer;border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-family: Arial;font-size:13px;}
 
 
 </style>
@@ -80,7 +80,7 @@
       <div class="each_item_detail" style="padding: 3px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
         
         <span style="float:left;width:130px;">
-           <p class="btn" style="margin:5px;">
+           <p class="btn" style="margin:3px;">
                <img height="25px" class="ad_vendor_logo" id="vendor_logo" alt="" src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg">
             </p>
          </span>
@@ -93,20 +93,23 @@
               <%= item_detail.ItemName.to_s.truncate(34) %>
             </div>
         </span>
-        <span style="font-size: 13px;float: left;padding-right: 2px;margin-top:10px;">
+        <span style="font-size: 13px;float: right;padding-right: 2px;margin-top:2px;">
            
                <span class="btn">
-                            <span rel="nofollow" target="_blank" class="shop-now" href="<%= configatron.hostname %>/history_details?iid=<%= @impression_id %>&detail_id=<%= item_detail.id %>">
+                            <span rel="nofollow" target="_blank" class="shop-now" href="<%= configatron.hostname %>/history_details?iid=<%= @impression_id %>&detail_id=<%= item_detail.id %>" style="display:inline-block;">
+                              <span style="display:inline-block;width:100%;text-align: center;width:82px;">
                               <%= @vendor_detail.action_text.blank? ?  display_price_detail(item_detail)  : display_price_detail(item_detail) %>
+                              </span>
                             </span>
                </span>
              
             
         </span>
        
-
-        <br clear="all">
+    <br clear="all"/>
+        
       </div>
+      
   <% end %>
   <!--   <div height="20px;" style="height:20px;padding:2px;">
         <div style="text-align:center;" style="font-size:14px;margin-top:2px;">
