@@ -608,7 +608,7 @@ class ProductsController < ApplicationController
       @where_to_buy_items.map {|each_item| each_item.match_type = "exact" if each_item.match_type.blank? }
 
       # Update Items if there is only one item
-      if @where_to_buy_items.count < show_count
+      if params[:page_type] != "type_7" && @where_to_buy_items.count < show_count
         itemsaccess = "related_items"
         items = Item.get_related_items_if_one_item(items, @publisher, status)
 
