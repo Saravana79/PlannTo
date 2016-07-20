@@ -52,49 +52,59 @@
         margin: 0;
         text-align: center;
     }
+
+ .btn{ margin:10px 0px; }
+ .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-family: Arial;font-size:13px;}
+
+
 </style>
-<div id="planntobuy" style="border: 1px solid #E2E2E2;width:300px;height:300px;overflow: hidden;">
+<div id="planntobuy" style="border: 0px solid #E2E2E2;">
   <div>
     <div style="
-    font-family: 'Open Sans', Arial, sans-serif;
-            font-size: 12px;
+    font-family: 'nexa_bold', arial;
+            font-size: 16px;
             text-transform: uppercase;
-            background: #19232d;
-            color: #efefef;
-            padding: 0 14px;
-            line-height: 34px;
+            font-weight: bold;
+            color: black;
+            padding: 10px 0px 3px 0px;;
             margin-bottom: 0px;
             text-align: center;
             border-bottom: 5px solid #ffe327;
-    ">Our Recommended Products
+    "> Recommended Products
     </div>
 
   </div>
-  <% @where_to_buy_items.first(3).each do |item_detail| %>
+  <% @where_to_buy_items[0..3].each do |item_detail| %>
       <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
 
-      <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
-        <div class="clearfix PT20 PB15 brdb">
-          <div class="image_tag" style="float: left;">
-            <a title="" href="">
-              <%= get_image_tag(item_detail, vendor_detail.vendor_name, item_detail.base_item_image_url(:small), 128, 68, "medium").html_safe %>
-            </a>
-          </div>
-          <div class="product_description" style="float:left;">
-            <span style="font-size: 13px;float: left;padding-right: 2px;width:80%">
-              <div style="font-size: 13px;color:black;font-family:Arial;" id="nametext">
-                <%= item_detail.ItemName.to_s.truncate(13) %>
-              </div>
-            </span>
-            <span style="font-size: 13px;float: left;padding-right: 2px;width:78%">
-              <div style="font-family: arial;font-size: 13px;color: #F00;line-height:1px;">
-                <span style="float:left;margin-top: 13px;">
-                  <%= display_price_detail(item_detail) %>
-                </span>
-              </div>
-             </span>
-          </div>
-        </div>
+      <div class="each_item_detail" style="padding: 3px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
+        
+        <span style="float:left;width:130px;">
+           <p class="btn" style="margin:5px;">
+               <img height="25px" class="ad_vendor_logo" id="vendor_logo" alt="" src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg">
+            </p>
+         </span>
+        
+       <!--  <span style="float: left;padding-right: 2px;">
+          <%= get_image_tag(item_detail, vendor_detail.vendor_name, item_detail.base_item_image_url(:small), 50, 0, "medium").html_safe %>
+        </span> -->
+        <span style="font-size: 13px;float: left;padding-right: 2px;width:50%;">
+            <div style="font-size: 13px;color:black;font-family:'nexa_bold', arial;font-weight:bold;margin-top: 6px;" id="nametext">
+              <%= item_detail.ItemName.to_s.truncate(34) %>
+            </div>
+        </span>
+        <span style="font-size: 13px;float: left;padding-right: 2px;margin-top:10px;">
+           
+               <span class="btn">
+                            <span rel="nofollow" target="_blank" class="shop-now" href="<%= configatron.hostname %>/history_details?iid=<%= @impression_id %>&detail_id=<%= item_detail.id %>">
+                              <%= @vendor_detail.action_text.blank? ?  display_price_detail(item_detail)  : display_price_detail(item_detail) %>
+                            </span>
+               </span>
+             
+            
+        </span>
+       
+
         <br clear="all">
       </div>
   <% end %>
