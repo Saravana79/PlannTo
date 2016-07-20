@@ -627,7 +627,7 @@ class ProductsController < ApplicationController
           items = Item.find_by_sql("SELECT `items`.* FROM `items` INNER JOIN `itemrelationships` ON `items`.`id` = `itemrelationships`.`item_id` WHERE `itemrelationships`.`relateditem_id` = #{manufacturers.first.id} order by id desc limit #{show_count}")
         end
 
-        if items.count < show_count
+        if params[:page_type] != "type_7" && items.count < show_count
           item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
           first_six_items = item_ids.shuffle#.first(6)
           items = Item.where(:id => first_six_items)
@@ -644,8 +644,13 @@ class ProductsController < ApplicationController
       @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids)
       @where_to_buy_items.map {|each_item| each_item.match_type = "top" if each_item.match_type.blank? }
       @where_to_buy_items.uniq!
-
-      if @where_to_buy_items.count < show_count
+      @where_to_buy_items = []
+      if params[:page_type] == "type_7" && @where_to_buy_items.blank?
+        item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
+        first_six_items = item_ids.shuffle.first(6)
+        items = Item.where(:id => first_six_items)
+        @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids)
+      elsif params[:page_type] != "type_7" && @where_to_buy_items.count < show_count
         item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
         first_six_items = item_ids.shuffle.first(6)
         items = Item.where(:id => first_six_items)
@@ -1174,7 +1179,6 @@ class ProductsController < ApplicationController
           order_by :orderbyid , :asc
       #order_by :status, :asc      
           order_by :launch_date, :desc
-
         end
         @items = @items.results
       else
