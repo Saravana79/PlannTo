@@ -644,7 +644,7 @@ class ProductsController < ApplicationController
       @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids)
       @where_to_buy_items.map {|each_item| each_item.match_type = "top" if each_item.match_type.blank? }
       @where_to_buy_items.uniq!
-      @where_to_buy_items = []
+      
       if params[:page_type] == "type_7" && @where_to_buy_items.blank?
         item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
         first_six_items = item_ids.shuffle.first(6)
