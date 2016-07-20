@@ -1,0 +1,131 @@
+<style type="text/css">
+
+    .shadetabs {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        list-style-type: none;
+        text-align: left;
+        z-index: -1;
+    }
+
+    .shadetabs li.unselected {
+        float: left;
+        padding: 0px !important;
+        margin: 0 0 0 2px !important;
+        background: #E65E7B !important;
+        list-style-type: none !important;
+        width: 49.2%;
+        text-align: center;
+        border-bottom: 2px solid #D2D2D2;
+    }
+
+    .shadetabs li.unselected a {
+        text-decoration: none;
+        font-size: 14px;
+        color: #fff !important;
+        text-decoration: none;
+        padding: 6px 15px;
+        display: inline-block;
+        margin: 0;
+        text-align: center;
+    }
+
+    .shadetabs li.selected {
+        padding: 0px !important;
+        margin: 0px !important;
+        text-align: center;
+        /*background: <%#= @vendor_detail.theme_colour %> !important;*/
+        list-style-type: none !important;
+        text-align: center;
+        text-transform: uppercase;
+        border: 1px solid #929292 !important;
+        font-weight: 700;
+    }
+
+    .shadetabs li.selected a {
+        color: black !important;
+        font-size: 14px;
+        text-decoration: none;
+        padding: 4px 15px;
+        display: inline-block;
+        margin: 0;
+        text-align: center;
+    }
+</style>
+<div id="planntobuy" style="border: 1px solid #E2E2E2;">
+  <div>
+  <div style="
+    font-family: &quot;Open Sans&quot;, Arial, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    background: #19232d;
+    color: #efefef;
+    padding: 0 14px;
+    line-height: 34px;
+     margin-bottom: 0px; 
+         text-align: center;
+">Our Recommended Products</div>
+      
+  </div>
+  <% @where_to_buy_items.each do |item_detail| %>
+      <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
+   
+        <span style="float: left;padding-right: 2px;">
+              <a href="<%= configatron.hostname%>/history_details?item_id=&geo=in&red_url=<%=item_detail.click_url%>&iid=<%=@impression_id%>" target = "_blank" rel= "nofollow" >
+
+                <img src="<%= item_detail.image_url %>" alt="" id="item_details">
+              </a>
+        </span>
+        <span style="font-size: 13px;float: left;padding-right: 2px;width:80%">
+            <div style="font-size: 13px;color:black;font-family:Arial;" id="nametext">
+              <%= item_detail.name.to_s.truncate(34) %>
+            </div>
+        </span>
+        <span style="font-size: 13px;float: left;padding-right: 2px;width:78%">
+            <div style="font-family: arial;font-size: 13px;color: #F00;line-height:1px;">
+              <span style="float:left;margin-top: 13px;">
+              <%= item_detail.sale_price.blank? ? item_detail.price : item_detail.sale_price %>
+            </span>
+              <% if @multiple_vendors == true %>
+               <span style="float: right;margin-top:2px;margin-right:40px;">
+                <img width="50px" height="px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(item_detail) %>">
+              </span>
+              <% end %>
+              <span style="float: right;text-align:center;">
+    
+         <div style="margin-top:10px;">
+           <p class="btn" style="margin:5px;">
+             <a href="<%= configatron.hostname%>/history_details?item_id=&geo=in&red_url=<%=item_detail.click_url%>&iid=<%=@impression_id%>" target = "_blank" rel= "nofollow">
+               <img height="18px" class="ad_vendor_logo" id="vendor_logo" alt="" src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg">
+             </a>
+           </p>
+         </div>
+        </span>
+            </div>
+        </span>
+
+
+        <br clear="all">
+      </div>
+  <% end %>
+    <!--   <div height="20px;" style="height:20px;padding:2px;">
+        <div style="text-align:center;" style="font-size:14px;margin-top:2px;">
+          <span style="vertical-align:top;font-size:12px;"> Powered by </span><span><a rel="nofollow" href="http://www.plannto.com/history_details?red_url=http://www.junglee.com?tag=plannto-junglee-g-21" style="display:inline-block;margin-top:0px;height:14px" target="_blank"><img height="18px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(@where_to_buy_items[0]) %>"></a></span>
+        </div>
+      </div> -->
+
+ </div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function()
+    {
+        jQuery(".each_item_detail").live("click", function()
+        {
+            var shop_now_url = jQuery(this).find(".shop-now").attr('href')
+
+            window.open(shop_now_url, "_blank")
+            return false;
+        })
+    })
+</script>

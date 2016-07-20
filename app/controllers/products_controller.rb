@@ -629,12 +629,12 @@ class ProductsController < ApplicationController
 
         if items.count < show_count
           item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
-          first_six_items = item_ids.shuffle.first(6)
+          first_six_items = item_ids.shuffle#.first(6)
           items = Item.where(:id => first_six_items)
         end
       else
         item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
-        first_six_items = item_ids.shuffle.first(6)
+        first_six_items = item_ids.shuffle#.first(6)
         items = Item.where(:id => first_six_items)
       end
       @item = items[0]
@@ -643,6 +643,15 @@ class ProductsController < ApplicationController
       itemaccess = "popular_items"
       @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids)
       @where_to_buy_items.map {|each_item| each_item.match_type = "top" if each_item.match_type.blank? }
+      @where_to_buy_items.uniq!
+
+      if @where_to_buy_items.count < show_count
+        item_ids = $redis.get("amazon_top_mobiles").to_s.split(",")
+        first_six_items = item_ids.shuffle.first(6)
+        items = Item.where(:id => first_six_items)
+        @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids)
+      end
+
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
 
@@ -742,45 +751,50 @@ class ProductsController < ApplicationController
 
     if params[:item_ids].blank?
       url_param = params[:ref_url].to_s.downcase.split("?").last
-      url_splt_params = CGI.parse(url_param)
-      isbn = url_splt_params["isbn"][0].to_s
+      url_splt_params = CGI.parse(url_param) rescue {}
+      isbn = url_splt_params["isbn"][0].to_s rescue ""
       params[:item_ids] = isbn if !isbn.blank?
     end
 
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     @ad_template_type ||= params[:page_type]
-    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
-    @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
-    tempurl = "" #TODO: Hot coded values
-    @item = Item.get_amazon_book_item_from_isbn(params[:item_ids])
-
-    @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
-
-    # include pre order status if we show more details.
-    unless @item.blank?
-      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-      # @publisher = Publisher.getpublisherfromdomain(url)
-      @publisher = nil
-      # Check have to activate tabs for publisher or not
-      @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
-
-      @where_to_buy_items = []
-
-      if @is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque("book_price_widget", params[:item_ids], url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
-      end
-
-      # @show_count = Item.get_show_item_count(@items)
-
-      responses = []
-      @where_to_buy_items = []
+    if params[:page_type] == "type_4"
+      get_popular_books_from_amazon()
     else
-      @where_to_buy_items =[]
-      itemsaccess = "none"
-      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "book_price_widget")
+      url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+      @test_condition = @is_test == "true" ? "&is_test=true" : ""
+
+      tempurl = "" #TODO: Hot coded values
+      @item = Item.get_amazon_book_item_from_isbn(params[:item_ids])
+
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
+
+      # include pre order status if we show more details.
+      unless @item.blank?
+        status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+        # @publisher = Publisher.getpublisherfromdomain(url)
+        @publisher = nil
+        # Check have to activate tabs for publisher or not
+        @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+
+        @where_to_buy_items = []
+
+        if @is_test != "true"
+          @impression_id = AddImpression.add_impression_to_resque("book_price_widget", params[:item_ids], url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                  cookies[:plan_to_temp_user_id], nil, nil, nil)
+        end
+
+        # @show_count = Item.get_show_item_count(@items)
+
+        responses = []
+        @where_to_buy_items = []
+      else
+        @where_to_buy_items =[]
+        itemsaccess = "none"
+        @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "book_price_widget")
+      end
     end
 
     @ref_url = url
@@ -790,6 +804,38 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.js { render :text => jsonp, :content_type => "text/javascript" }
     end
+  end
+
+  def get_popular_books_from_amazon
+    res = Amazon::Ecs.item_search("", {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 4149429031, :sort => 'relevancerank', :item_page => 1})
+
+    items = []
+    excluded_items = []
+    page_type = "type_2"
+    loop_items = res.items
+    loop_items.each_with_index do |each_item, index|
+      item = OpenStruct.new
+      # item.id = 1000 + index
+      item.id = each_item.get("ASIN")
+      if excluded_items.include?(item.id)
+        next
+      end
+
+      item.name = each_item.get_element("ItemAttributes").get("Title")
+      item.sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue nil
+      item.price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue nil
+
+      if page_type == "type_1"
+        item.image_url = each_item.get("ImageSets/ImageSet/TinyImage/URL")
+      else
+        item.image_url = each_item.get("SmallImage/URL")
+      end
+      item.small_image_url = each_item.get("ImageSets/ImageSet/SwatchImage/URL")
+      item.click_url = each_item.get("DetailPageURL")
+      items << item
+    end
+    @where_to_buy_items = items.sample(4)
+    @search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content rescue nil
   end
 
   def get_price_from_vendor

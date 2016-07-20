@@ -342,6 +342,7 @@ class Itemdetail < ActiveRecord::Base
     end
 
     if !old_where_to_buy_items.blank?
+      where_to_buy_items = where_to_buy_items.shuffle
       where_to_buy_items = old_where_to_buy_items + where_to_buy_items
     end
 
