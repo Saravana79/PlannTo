@@ -137,35 +137,35 @@ module HerokuResqueAutoScale
       end
     end
 
-    min_urgentworkers_count = $redis.get("resque_min_urgentworker_count").to_i
-    urgentworkers_count = Scaler.urgentworkers
-    urgent_job_count = Scaler.urgent_job_count
+    # min_urgentworkers_count = $redis.get("resque_min_urgentworker_count").to_i
+    # urgentworkers_count = Scaler.urgentworkers
+    # urgent_job_count = Scaler.urgent_job_count
 
-    [
-        {
-            :workers => min_urgentworkers_count, # This many workers
-            :job_count => 1 # For this many jobs or more, until the next level
-        },
-        {
-            :workers => min_urgentworkers_count+1,
-            :job_count => 400000
-        },
-        {
-            :workers => min_urgentworkers_count+2,
-            :job_count => 800000
-        }
-    ].reverse_each do |scale_info|
-      # Run backwards so it gets set to the highest value first
-      # Otherwise if there were 70 jobs, it would get set to 1, then 2, then 3, etc
-      # If we have a job count greater than or equal to the job limit for this scale info
-      if urgent_job_count >= scale_info[:job_count]
-        # Set the number of workers unless they are already set to a level we want. Don't scale down here!
-        if urgentworkers_count != scale_info[:workers]
-          Scaler.set_workers(scale_info[:workers], "urgentworker")
-        end
-        break # We've set or ensured that the worker count is high enough
-      end
-    end
+    # [
+    #     {
+    #         :workers => min_urgentworkers_count, # This many workers
+    #         :job_count => 1 # For this many jobs or more, until the next level
+    #     },
+    #     {
+    #         :workers => min_urgentworkers_count+1,
+    #         :job_count => 400000
+    #     },
+    #     {
+    #         :workers => min_urgentworkers_count+2,
+    #         :job_count => 800000
+    #     }
+    # ].reverse_each do |scale_info|
+    #   # Run backwards so it gets set to the highest value first
+    #   # Otherwise if there were 70 jobs, it would get set to 1, then 2, then 3, etc
+    #   # If we have a job count greater than or equal to the job limit for this scale info
+    #   if urgent_job_count >= scale_info[:job_count]
+    #     # Set the number of workers unless they are already set to a level we want. Don't scale down here!
+    #     if urgentworkers_count != scale_info[:workers]
+    #       Scaler.set_workers(scale_info[:workers], "urgentworker")
+    #     end
+    #     break # We've set or ensured that the worker count is high enough
+    #   end
+    # end
 
   end
 end
