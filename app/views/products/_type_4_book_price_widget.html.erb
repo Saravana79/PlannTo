@@ -72,15 +72,15 @@
       <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
         <a href="<%= configatron.hostname%>/history_details?item_id=&geo=in&red_url=<%=item_detail.click_url%>&iid=<%=@impression_id%>" class="shop-now" target = "_blank" rel= "nofollow">
           </a>
-        <span style="float: left;padding-right: 2px;">
-              <img src="<%= item_detail.image_url %>" alt="" id="item_details">
+        <span style="float: left;padding-right: 2px;width:70px;">
+              <img src="<%= item_detail.image_url %>" alt="" id="item_details" >
         </span>
-        <span style="font-size: 13px;float: left;padding-right: 2px;width:80%">
-            <div style="font-size: 13px;color:black;font-family:Arial;" id="nametext">
-              <%= item_detail.name.to_s.truncate(34) %>
+        <span style="font-size: 13px;float: left;padding-right: 2px;width:70%">
+            <div style="font-size: 13px;color:black;font-family:Arial;font-weight:bold;" id="nametext">
+              <%= item_detail.name.to_s.truncate(84) %>
             </div>
         </span>
-        <span style="font-size: 13px;float: left;padding-right: 2px;width:78%">
+        <span style="font-size: 13px;float: left;padding-right: 2px;width:68%">
             <div style="font-family: arial;font-size: 13px;color: #F00;line-height:1px;">
               <span style="float:left;margin-top: 13px;">
               <%= item_detail.sale_price.blank? ? item_detail.price : item_detail.sale_price %>
