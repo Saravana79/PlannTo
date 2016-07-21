@@ -827,6 +827,7 @@ class ProductsController < ApplicationController
       end
 
       item.name = each_item.get_element("ItemAttributes").get("Title")
+      item.name = CGI.unescapeHTML(item.name) rescue item.name
       item.sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue nil
       item.price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue nil
 
