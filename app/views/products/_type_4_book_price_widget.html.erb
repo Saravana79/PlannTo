@@ -70,12 +70,10 @@
   </div>
   <% @where_to_buy_items.each do |item_detail| %>
       <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
-   
+        <a href="<%= configatron.hostname%>/history_details?item_id=&geo=in&red_url=<%=item_detail.click_url%>&iid=<%=@impression_id%>" class="shop-now" target = "_blank" rel= "nofollow">
+          </a>
         <span style="float: left;padding-right: 2px;">
-              <a href="<%= configatron.hostname%>/history_details?item_id=&geo=in&red_url=<%=item_detail.click_url%>&iid=<%=@impression_id%>" target = "_blank" rel= "nofollow" >
-
-                <img src="<%= item_detail.image_url %>" alt="" id="item_details">
-              </a>
+              <img src="<%= item_detail.image_url %>" alt="" id="item_details">
         </span>
         <span style="font-size: 13px;float: left;padding-right: 2px;width:80%">
             <div style="font-size: 13px;color:black;font-family:Arial;" id="nametext">
@@ -93,12 +91,10 @@
               </span>
               <% end %>
               <span style="float: right;text-align:center;">
-    
+
          <div style="margin-top:10px;">
            <p class="btn" style="margin:5px;">
-             <a href="<%= configatron.hostname%>/history_details?item_id=&geo=in&red_url=<%=item_detail.click_url%>&iid=<%=@impression_id%>" target = "_blank" rel= "nofollow">
-               <img height="18px" class="ad_vendor_logo" id="vendor_logo" alt="" src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg">
-             </a>
+             <img height="18px" class="ad_vendor_logo " id="vendor_logo" alt="" src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg">
            </p>
          </div>
         </span>
@@ -118,11 +114,13 @@
  </div>
 
 <script type="text/javascript">
-    jQuery(document).ready(function()
+    PlannTo.jQuery(document).ready(function()
     {
-        jQuery(".each_item_detail").live("click", function()
+        PlannTo.jQuery(".each_item_detail").live("click", function()
         {
-            var shop_now_url = jQuery(this).find(".shop-now").attr('href')
+            var shop_now_url = PlannTo.jQuery(this).find(".shop-now").attr('href')
+
+            console.log(shop_now_url)
 
             window.open(shop_now_url, "_blank")
             return false;
