@@ -25,7 +25,7 @@ has_one :manufacturer,
               'Accessory'.camelize.constantize, "Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,'Training'.camelize.constantize,
               "AttributeTag".camelize.constantize,"Topic".camelize.constantize,'Insurance'.camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
    end
-   type = type.split(",") if type.include?(",")
+   # type = type.split(",") if type.is_a?(String) && type.include?(",")
    if type.is_a?(Array)
      return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue (t.to_s.gsub(/\s+/,'').strip.camelize.constantize rescue nil)}
    else
