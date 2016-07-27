@@ -77,7 +77,7 @@
           <%= get_image_tag(item_detail, vendor_detail.vendor_name, item_detail.base_item_image_url(:small), 50, 0, "medium").html_safe %>
         </span>
         <span style="font-size: 13px;float: left;padding-right: 2px;width:80%">
-            <div style="font-size: 13px;color:black;font-family:'nexa_bold', arial;" id="nametext">
+            <div style="font-size: 13px;color:black;font-family:'nexa_bold', arial;text-align: left;" id="nametext">
               <%= item_detail.ItemName.to_s.truncate(34) %>
             </div>
         </span>
