@@ -30,7 +30,7 @@ class CookieMatch < ActiveRecord::Base
 
     valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => ref_url, "source" => param["source"].to_s.downcase, "source_source_url" => source_source_url_domain}
 
-    if ["google_pixel", "mysmartprice"].exclude?(param["source"])
+    if ["google_pixel", "mysmartprice", "autoportal"].exclude?(param["source"])
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
     end
   end
