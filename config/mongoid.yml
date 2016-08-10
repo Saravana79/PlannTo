@@ -85,8 +85,8 @@ production:
       # replica set connection setup.
       # Use environment variables or a config file to keep your
       # credentials safe.
-#      uri: 'mongodb://planntouser:planntouser@ds143405-a0.mlab.com:43405,ds143405-a1.mlab.com:43405/planntomongodbshort'
-      uri: "mongodb://planntonew:planntonew@ds051061-a0.mongolab.com:51061,ds051061-a1.mongolab.com:51061/planntonew"
+#      uri: "mongodb://planntonew:planntonew@ds051061-a0.mongolab.com:51061,ds051061-a1.mongolab.com:51061/planntonew"
+      uri: "mongodb://planntomongo:planntomongo@ds153975-a0.mlab.com:53975,ds153975-a1.mlab.com:53975/planntonew2612?replicaSet=rs-ds153975"
 
       options:
        # The default consistency is :eventual, which reads from
