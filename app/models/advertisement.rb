@@ -717,6 +717,7 @@ class Advertisement < ActiveRecord::Base
               time = impression.impression_time.utc rescue Time.now
               date = time.to_date rescue ""
               hour = time.hour rescue ""
+              publisher_id = impression.publisher_id.to_s
 
               if !impression.temp_user_id.blank? && !url_params[:gid].blank?
                 cookie_match = CookieMatch.new(:plannto_user_id => impression.temp_user_id, :google_user_id => url_params[:gid], :match_source => "add_impression", :google_mapped => false)
@@ -903,10 +904,10 @@ class Advertisement < ActiveRecord::Base
                 current_hash.merge!("total_imp" => current_hash["total_imp"].to_i + 1)
 
                 current_hash["publishers"] = {} if current_hash["publishers"].blank?
-                curr_publisher = current_hash["publishers"]["#{impression.publisher_id.to_s}"]
+                curr_publisher = current_hash["publishers"]["#{publisher_id.to_s}"]
 
                 if curr_publisher.blank?
-                  current_hash["publishers"].merge!("#{impression.publisher_id.to_s}" => {"imp" => 1})
+                  current_hash["publishers"].merge!("#{publisher_id.to_s}" => {"imp" => 1})
                 else
                   curr_publisher.merge!("imp"=> curr_publisher["imp"].to_i + 1)
                 end
