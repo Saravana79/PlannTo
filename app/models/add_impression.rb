@@ -281,7 +281,7 @@ class AddImpression < ActiveRecord::Base
     if (impression_type != "amazon_sports_widget")
       if (impression_type == "elec_widget_1" || impression_type == "price_text_widget")
         buying_list_params = "<<#{request_referer}<<<<#{item_id}<<<<<<#{plan_to_temp_user_id}<<"
-        $redis_rtb.rpush("users:visits", buying_list_params)
+       # $redis_rtb.rpush("users:visits", buying_list_params)
       end
     else
       begin
