@@ -944,7 +944,7 @@ class ProductsController < ApplicationController
     # end
     @category_item_details = []
 
-    if (params[:page_type] == "type_4" || params[:page_type] == "type_6")
+    if (["type_4","type_6","type_7"].include?(params[:page_type]))
         return deal_item_process(url, itemsaccess, url_params)
     elsif params[:page_type] == "type_5"
       return price_widget_type_2(url, itemsaccess, url_params, item_ids)
@@ -1002,7 +1002,9 @@ class ProductsController < ApplicationController
   end
 
   def deal_item_process(url, itemsaccess, url_params)
-    @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id], for_widget="true")
+    for_widget = "true"
+    for_widget = "lightning_deal" if params[:page_type] == "type_7"
+    @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id], for_widget)
     return_path = "products/deal_widget.html.erb"
 
     if @is_test != "true"
@@ -1015,6 +1017,10 @@ class ProductsController < ApplicationController
       @suitable_ui_size = "300_250"
       @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
       return_path = "products/deal_widget_type_6.html.erb"
+    elsif params[:page_type] == "type_7"
+      @suitable_ui_size = "300_250"
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
+      return_path = "products/deal_widget_type_7.html.erb"
     end
 
     respond_to do |format|
