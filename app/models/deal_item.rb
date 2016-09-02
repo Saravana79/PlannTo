@@ -10,6 +10,8 @@ class DealItem < ActiveRecord::Base
     elsif for_widget == "lightning_deal"
       ids = DealItem.find_by_sql("select distinct(category), id from deal_items where deal_type = 'LIGHTNING_DEAL' and deal_price > 199 and deal_price < 1001 and start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc + 3.hours}' #{filter_condition} order by rand() limit 6")
       items = DealItem.where(:id => ids.map(&:id))
+    else
+      items = DealItem.find_by_sql("select * from deal_items where start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}' #{filter_condition} order by rand() limit 6")
     end
     items
     # items = DealItem.where("start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}' #{filter_condition}").order("rand()").limit(6)

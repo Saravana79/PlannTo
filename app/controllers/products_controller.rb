@@ -1468,7 +1468,7 @@ class ProductsController < ApplicationController
     if (params[:page_type] == "type_4")
       random_id = rand(20)
       params[:random_id] = random_id
-    elsif (params[:page_type] == "type_6")
+    elsif ["type_6", "type_7"].include?(params[:page_type])
       random_id = rand(100)
       params[:random_id] = random_id
     end
