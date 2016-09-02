@@ -2,15 +2,16 @@ class DealItem < ActiveRecord::Base
 
   def self.get_deal_item_based_on_hour(random_id, for_widget="false")
     filter_condition = ""
+    items = []
     if for_widget == "true"
       filter_arr = [976419031,1805560031,1375424031,1388977031,1350380031,1983518031,4091095031,1983396031,1350387031,1389396031,1380369031,1389375031,1355016031,1378509031,1983550031,10272111,1953602031,1968024031,1953149031,1967851031]
       filter_condition = " and category in (#{filter_arr.map(&:inspect).join(",")})"
-    elsif for_widget == "lightning_deal"
-      ids = DealItem.find_by_sql("select distinct(category), id from deal_items where deal_state = 'AVAILABLE' and deal_type = 'LIGHTNING_DEAL' and deal_price > 199 and deal_price < 1001 and start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc + 3.hours}' #{filter_condition} order by rand() limit 6")
-      items = DealItem.where(:id => ids.map(&:id))
-    else
       items = DealItem.find_by_sql("select * from deal_items where start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}' #{filter_condition} order by rand() limit 6")
+    elsif for_widget == "lightning_deal"
+      ids = DealItem.find_by_sql("select distinct(category), id from deal_items where deal_type = 'LIGHTNING_DEAL' and deal_price > 199 and deal_price < 1001 and start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc + 3.hours}' #{filter_condition} order by rand() limit 6")
+      items = DealItem.where(:id => ids.map(&:id))
     end
+    items
     # items = DealItem.where("start_time < '#{Time.now.utc}' and end_time > '#{Time.now.utc}' #{filter_condition}").order("rand()").limit(6)
     
     # order_by_condition = " order by rand() limit 12"
