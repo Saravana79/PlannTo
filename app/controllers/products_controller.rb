@@ -944,7 +944,7 @@ class ProductsController < ApplicationController
     # end
     @category_item_details = []
 
-    if (["type_4","type_6","type_7"].include?(params[:page_type]))
+    if (["type_4","type_6","type_7","type_8"].include?(params[:page_type]))
         return deal_item_process(url, itemsaccess, url_params)
     elsif params[:page_type] == "type_5"
       return price_widget_type_2(url, itemsaccess, url_params, item_ids)
@@ -1004,6 +1004,7 @@ class ProductsController < ApplicationController
   def deal_item_process(url, itemsaccess, url_params)
     for_widget = "true"
     for_widget = "lightning_deal" if params[:page_type] == "type_7"
+    for_widget = "lightning_deal" if params[:page_type] == "type_8"
     @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id], for_widget)
     return_path = "products/deal_widget.html.erb"
 
@@ -1021,6 +1022,10 @@ class ProductsController < ApplicationController
       @suitable_ui_size = "300_250"
       @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
       return_path = "products/deal_widget_type_7.html.erb"
+    elsif params[:page_type] == "type_8"
+      @suitable_ui_size = "300_600"
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
+      return_path = "products/deal_widget_type_8.html.erb"  
     end
 
     respond_to do |format|
@@ -1468,7 +1473,7 @@ class ProductsController < ApplicationController
     if (params[:page_type] == "type_4")
       random_id = rand(20)
       params[:random_id] = random_id
-    elsif ["type_6", "type_7"].include?(params[:page_type])
+    elsif ["type_6", "type_7","type_8"].include?(params[:page_type])
       random_id = rand(100)
       params[:random_id] = random_id
     end

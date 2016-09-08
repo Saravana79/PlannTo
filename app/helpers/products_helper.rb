@@ -112,9 +112,9 @@ module ProductsHelper
     if each_item.end_time.to_date == Date.today
       remaining_time = each_item.end_time.hour - Time.now.hour
       if (remaining_time > 8)
-        return_val = " - Only for Today."
+        return_val = " Only for Today."
       else
-        return_val = " - Expires in #{remaining_time} hours."
+        return_val = " Expires in #{remaining_time} hours."
       end
     else
       return_val = ""
