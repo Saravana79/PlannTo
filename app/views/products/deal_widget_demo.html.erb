@@ -40,10 +40,10 @@
       <div class="widget_row">
         <span><%= params[:size] %> </span>
 
-        <div id="where_to_buy_items" style="width: <%= @weight %>px;height: <%= @height %>px;">
+        <div id="where_to_buy_items" style="width: <%= @weight.to_i + 2 %>px;height: <%= @height %>px;">
         </div>
         <script src="<%= "#{configatron.hostname}/javascripts/plannto.sports.widget.js?ref_url=&item_id=&show_details=true&element_id=where_to_buy_items&page_type=#{params[:page_type]}&size=#{params[:size]}&tag=#{params[:tag]}"; %>" style="border: medium none;;"></script>
-        <div class="text_area">
+        <div class="text_area" style="padding-top:30px;">
           <textarea style="width: 80%;height: 25%;"><div id="where_to_buy_items" style="width: <%= @weight %>px;height: <%= @height %>px;"></div><script src="<%= "#{configatron.hostname}/javascripts/plannto.sports.widget.js?ref_url=&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=#{params[:page_type]}&size=#{params[:size]}&tag=#{params[:tag]}"; %>" style="border: medium none;;"></script></textarea>
         </div>
       </div>
