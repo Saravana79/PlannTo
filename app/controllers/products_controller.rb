@@ -1003,7 +1003,7 @@ class ProductsController < ApplicationController
 
   def deal_item_process(url, itemsaccess, url_params)
     for_widget = "true"
-    for_widget = "lightning_deal" if params[:page_type] == "type_7"
+    # for_widget = "lightning_deal" if params[:page_type] == "type_7"
     for_widget = "lightning_deal" if params[:page_type] == "type_8"
     @item_details = @items = DealItem.get_deal_item_based_on_hour(params[:random_id], for_widget)
     return_path = "products/deal_widget.html.erb"
@@ -1015,11 +1015,11 @@ class ProductsController < ApplicationController
     end
 
     if params[:page_type] == "type_6"
-      @suitable_ui_size = "300_250"
+      # @suitable_ui_size = "300_250"
       @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
       return_path = "products/deal_widget_type_6.html.erb"
     elsif params[:page_type] == "type_7"
-      @suitable_ui_size = "300_250"
+      # @suitable_ui_size = "300_250"
       @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
       return_path = "products/deal_widget_type_7.html.erb"
     elsif params[:page_type] == "type_8"
@@ -1461,12 +1461,16 @@ class ProductsController < ApplicationController
     params[:request_referer] ||= request.referer
     params[:ref_url] ||= ""
     params[:item_ids] ||= ""
+    params[:size] ||= "300x250"
     params[:page_type] ||= "type_1"
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
     params[:ref_url] ||= ""
     params[:random_id] ||= ""
+
+    params[:size] = params[:size].to_s.gsub("*", "x")
+    @suitable_ui_size = params[:size].to_s.gsub("x", "_")
 
     #Get dynamic id from url
 
@@ -1747,6 +1751,13 @@ class ProductsController < ApplicationController
 
   def user_test_drive
     render :json => {:success => true}
+  end
+
+  def deal_widget_demo
+    params[:page_type] = "type_7"
+    params[:size] ||= "300x250"
+    @weight, @height = params[:size].to_s.split("x")
+    render :layout => false
   end
 
   private

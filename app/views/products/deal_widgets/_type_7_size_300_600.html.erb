@@ -1,0 +1,89 @@
+<div class="advt-block">
+  <div class="advt-300">
+    <!--<div class="planntoadlogo">
+      <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
+    </div>
+  -->
+    <div class="logo" style="border-bottom:1px solid #F1F0F0;height:25px;">
+      <div style="float:left;width:110px;">
+        <a rel="nofollow" class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
+        </a>
+      </div>
+      <!-- <div class="list_carousel">
+          <div id="pager2" class="pager">
+            <%if @item_details.count > 1 %>
+                <% [*1..@item_details.count].each do |each_loop| %>
+                    <a rel="nofollow" href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+                <% end %>
+            <% end %>
+          </div>
+        </div> -->
+      <div class="clearfix"></div>
+    </div>
+
+    <% if @item_details.count != 0 %>
+        <div class="">
+          <ul id="foo3" height="165px;" style="list-style-type: none;">
+            <% @item_details.each_with_index do |item_detail, indx| %>
+                <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
+                <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
+                <% shop_now_url = get_general_click_url(item_detail.url) %>
+
+                <li class="item_details" id="item_detail_<%= indx + 1 %>">
+                  <div class="advt-box">
+                    <div class="product-container">
+                      <div class="product-img-left">
+                        <a rel="nofollow" href="<%= shop_now_url %>" target="_blank">
+                          <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+                            <span style="  display: inline-block;vertical-align: middle;">
+                            <%= get_image_tag_using_src(item_detail.image_url.to_s, '', '').html_safe %>
+                          </span>
+                          <!-- <img src="<%#= get_image_url(item_detail, vendor_detail.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                        </a>
+                      </div>
+                      <div class="product-txt-right">
+                        <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
+                          <p style="    margin: 0;padding: 0 0 0 0;font-size: 13px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 13px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(52) %></p>
+
+
+                        </a>
+                          <span style="float:left;"> <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
+                            <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p></span>
+                        </a>
+                          <span style="float:right;">     <p class="btn">
+                            <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="shop-now">
+                              <%= "Buy Now" %>
+                            </a>
+                          </p></span>
+
+                        <div style="clear:both;">
+                          <p style="padding: 3px 0px;font-size:11px;"><%= get_expire_time_from_deal_item(item_detail) == "" ? "" : "#{get_expire_time_from_deal_item(item_detail)}"%></p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
+                </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="product-txt-desc">
+          <p>
+            <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, vendor_detail.default_text), 90) %>
+          <h3 style="font-size:13px;font-weight:bold;padding-top:5px;text-align:center;">Great Savings. Every Day.</h3>
+          </p>
+        </div>
+        <div class="clearfix"></div>
+        <!--<a id="prev3" class="prev" href="#">&lt;</a>
+        <a id="next3" class="next" href="#">&gt;</a>
+       -->
+
+    <% else %>
+        No Product Found
+    <% end %>
+
+  </div>
+  <!-- end of advt-300 -->
+</div>
+<!-- end of advt-block -->

@@ -2,99 +2,14 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Advt <%= @suitable_ui_size %></title>
-  <link href="<%= configatron.root_image_path %>static/stylesheets/widget/300_250/style.css" type="text/css" rel="stylesheet" media="all"/>
-  <!--<link href="http://localhost:3000/stylesheets/widget/300/style.css" type="text/css" rel="stylesheet" media="all"/>-->
+  <link href="<%= configatron.root_image_path %>static/stylesheets/widgets/deal_widgets/<%= params[:page_type] %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
+  <link href="http://localhost:3000/stylesheets/widgets/deal_widgets/<%= params[:page_type] %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/PlannTo.jQuery/1.7.1/PlannTo.jQuery.min.js" %>
 </head>
 <body>
 
 <div class="plannto-advertisement main_div" style="cursor:pointer;">
-  <div class="advt-block">
-    <div class="advt-300">
-      <!--<div class="planntoadlogo">
-      <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
-    </div>
-  -->
-      <div class="logo" style="border-bottom:1px solid #F1F0F0;">
-        <div style="float:left;width:110px;">
-          <a rel="nofollow" class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
-          </a>
-        </div>
-        <div class="list_carousel">
-          <div id="pager2" class="pager">
-            <%if @item_details.count > 1 %>
-                <% [*1..@item_details.count].each do |each_loop| %>
-                    <a rel="nofollow" href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
-                <% end %>
-            <% end %>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-      </div>
-
-      <% if @item_details.count != 0 %>
-          <div class="">
-            <ul id="foo3" height="165px;">
-              <% @item_details.each_with_index do |item_detail, indx| %>
-                  <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
-                  <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
-                  <% shop_now_url = get_general_click_url(item_detail.url) %>
-
-                  <li class="item_details" id="item_detail_<%= indx + 1 %>">
-                    <div class="advt-box">
-                      <div class="product-container">
-                        <div class="product-img-left">
-                          <a rel="nofollow" href="<%= shop_now_url %>" target="_blank">
-                            <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                            <span style="  display: inline-block;vertical-align: middle;">
-                            <%= get_image_tag_using_src(item_detail.image_url.to_s, '', '').html_safe %>
-                          </span>
-                            <!-- <img src="<%#= get_image_url(item_detail, vendor_detail.vendor_name) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
-                          </a>
-                        </div>
-                        <div class="product-txt-right">
-                          <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
-                            <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(52) %></p>
-
-                            <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
-                          </a>
-
-                          <p class="btn">
-                            <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="shop-now">
-                              <%= "Shop Now" %>
-                            </a>
-                          </p>
-
-                          <p style="padding: 3px 0px;font-size:11px;"><%= get_expire_time_from_deal_item(item_detail) == "" ? "" : "#{get_expire_time_from_deal_item(item_detail)}"%></p>
-
-                        </div>
-                      </div>
-                      <div class="product-txt-desc">
-                        <p>
-                          <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, vendor_detail.default_text), 90) %>
-                         <h3 style="font-size:13px;font-weight:bold;">Great Savings. Every Day.</h3>
-                        </p>
-                      </div>
-                    </div>
-                    <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
-                  </li>
-              <% end %>
-            </ul>
-          </div>
-          <div class="clearfix"></div>
-          <!--<a id="prev3" class="prev" href="#">&lt;</a>
-          <a id="next3" class="next" href="#">&gt;</a>
-         -->
-
-      <% else %>
-          No Product Found
-      <% end %>
-
-    </div>
-    <!-- end of advt-300 -->
-  </div>
-  <!-- end of advt-block -->
-
+  <%= render "products/deal_widgets/type_7_size_#{@suitable_ui_size}" %>
   <style type="text/css">
       #pager2 a {
           margin: 0px !important;
@@ -116,34 +31,6 @@
         width: <%= @iframe_width %>px !important;
         height: <%= @iframe_height %>px !important;
         overflow: hidden;
-    }
-
-    h3.product-title {word-break: break-all;}
-
-    .product-txt-desc p a {text-decoration: none;}
-
-    a#offer_ad {
-        color:#222 !important;
-        font-family: Arial !important;
-        font-size: 10px !important;
-        margin: 0;
-        padding: 0;
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    a#offer_ad:hover
-    {
-        color: #009CC4 !important;
-
-    }
-
-    .ad_img_tag {
-        max-height: 140px;
-        max-width: 132px;
-        width:auto;
-        height: auto;
-        vertical-align: middle;
     }
 </style>
 
@@ -168,6 +55,7 @@
 
         var stop_sliding = false
 
+        <% if @suitable_ui_size != "300_600" %>
         PlannTo.jQuery(".item_details").hide();
         PlannTo.jQuery(".item_details").first().show();
         PlannTo.jQuery(".item_details").first().addClass('active')
@@ -294,6 +182,10 @@
 //        })
 
         // All place clickable
+        <% else %>
+          PlannTo.jQuery(".item_details").first().show();
+          set_logo_url(PlannTo.jQuery(".item_details").first(), "shop-now")
+        <% end %>
 
         PlannTo.jQuery(".plannto-advertisement.main_div").click(function(a)
         {

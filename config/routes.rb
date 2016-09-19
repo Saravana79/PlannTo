@@ -550,6 +550,7 @@ resources :comments do
   match "advertisments/image_show_ads" => "advertisements#image_show_ads", :as => "image_show_ads"
   match "advertisements/get_adv_id" => "advertisements#get_adv_id", :as => "get_adv_id"
   match "/buy_at_best_price" => "products#buy_at_best_price", :as => "buy_at_best_price"
+  match "/deal_widget_demo" => "products#deal_widget_demo", :as => "deal_widget_demo"
 
   match "/products/user_test_drive" => "products#user_test_drive", :as => "user_test_drive", :via => [:post]
 
