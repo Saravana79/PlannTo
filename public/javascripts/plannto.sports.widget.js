@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
     var SubPath="/sports_widget.js"
 //for production
-//    var domain = "www.plannto.com";
+    var domain = "www.plannto.com";
 //for development
-var domain = "localhost:3000";
+//var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
@@ -106,11 +106,11 @@ var domain = "localhost:3000";
         jQuery.getJSON(url, function (data) {
 
             element_id.html(data.html);
-            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).removeClass();
-            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).addClass("unselected");
-            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).removeClass();
-            jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).addClass("selected");
-            if(show_details.toString() == "true" && jQuery(window).width() < 500)
+            // jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).removeClass();
+            // jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).addClass("unselected");
+            // jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).removeClass();
+            // jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).addClass("selected");
+             if(show_details.toString() == "true" && jQuery(window).width() < 500)
             {
                 jQuery("#" + parentdivid).css("width", jQuery(window).width() - 30)
 

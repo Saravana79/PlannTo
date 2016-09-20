@@ -50,30 +50,30 @@
 /* end Sliding gallery */
 
 
-h3.product-title {word-break: break-all;}
+ h3.product-title {word-break: break-all;}
 
 .product-txt-desc p a {text-decoration: none;}
-
 a#offer_ad {
-    color:#222 !important;
-    font-family: Arial !important;
-    font-size: 10px !important;
-    margin: 0;
-    padding: 0;
-    text-decoration: none;
-    font-weight: 600;
-}
+        color:#222 !important;
+        font-family: Arial !important;
+        font-size: 10px !important;
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        font-weight: 600;
+    }
 
-a#offer_ad:hover
-{
-    color: #009CC4 !important;
+    a#offer_ad:hover
+    {
+        color: #009CC4 !important;
+    }
 
-}
+    .ad_img_tag {
+        max-height: 140px;
+        max-width: 132px;
+        width:auto;
+        height: auto;
+        vertical-align: middle;
+    }
 
-.ad_img_tag {
-    max-height: 140px;
-    max-width: 132px;
-    width:auto;
-    height: auto;
-    vertical-align: middle;
-}
+

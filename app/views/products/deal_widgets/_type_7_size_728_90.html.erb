@@ -1,10 +1,14 @@
 <div class="advt-block">
   <div class="advt-728">
+
     <% if @item_details.count != 0 %>
+  <div>
+    
         <% @item_details.each_with_index do |item_detail, indx| %>
             <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
-            <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
-            <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+                  <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
+                  <% shop_now_url = get_general_click_url(item_detail.url) %>
+
 
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
@@ -14,36 +18,33 @@
                   <div style="float:left;width:200px;">
                   <a href="<%= shop_now_url %>" target="_blank" class="">
                     <div style="float:left;">
-                    <h3 class="product-title">
-                      <%= item_detail.deal_title.to_s.truncate(57) %>
-                    </h3>
+                    <h3 class="product-title"><%= item_detail.deal_title.to_s.truncate(57) %></h3>
                   </div>
                     <div style="float:left;">
-                      <p class="price">
-                        <%= prettify_mrpprice_widget(item_detail.deal_price) %>
-                      </p>
+                        <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
                     </div>
                   </a>
                   </div>  
                   <div class="product-img">
                     <a href="<%= shop_now_url %>" target="_blank" style="text-decoration:none;">
                        <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                      <%= get_image_tag_using_src(item_detail.image_url.to_s, '', 82).html_safe %>
+                    <%= get_image_tag_using_src(item_detail.image_url.to_s, '', '82').html_safe %>
                       <!-- <img src="<%#= item_detail.item.image_url %>" alt="" height="82px"> -->
                     </a>
                   </div>
-                  <div class="product-txt-desc">
-                    <p>
-                      <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, vendor_detail.default_text), 90) %>
-                    <h3 style="font-size:13px;font-weight:bold;">Great Savings. Every Day.</h3>
-                    </p>
+                  <div class="product-desc">
+                    <a href="<%= shop_now_url %>" target="_blank" class="">
+                      <p class="text-desc">
+                       <p style="padding: 3px 0px;font-size:11px;"><%= get_expire_time_from_deal_item(item_detail) == "" ? "" : "#{get_expire_time_from_deal_item(item_detail)}"%></p>                      </p>
+                      
+                    </a>
                   </div>
                 </div>
 
                 <div class="right-div">
                   <p class="btn">
                     <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
-                      <%= "Shop Now" %>
+                      Shop Now
                     </a>
                   </p>
                 </div>
@@ -52,6 +53,8 @@
             </div>
         <% end %>
 
+   
+       </div>
         <div id="pager2" class="pager">
           <% if @item_details.count > 1 %>
           <% [*1..@item_details.count].each do |each_loop| %>
@@ -67,21 +70,3 @@
   <!-- end of advt-300 -->
 </div><!-- end of advt-block -->
 
-
-<style type="text/css">
-    .pager a {
-        margin: 0px !important;
-    }
-    .product-container a {text-decoration: none !important;}
-
-    .advt-728 .advt-box .product-container h3 {
-        word-break: normal;
-        padding: 7px 0 0;
-    }
-
-    <% if @item_details.count < 2 %>
-      .advt-728 .advt-box .btn {
-        padding: 25px 0 0 !important;
-      }
-    <% end %>
-</style>
