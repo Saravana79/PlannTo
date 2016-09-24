@@ -48,6 +48,9 @@
 
                         </a>
                           <span style="float:left;"> <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
+                            <% if !item_detail.list_price.blank? && item_detail.list_price.to_i != 0 %>
+                                <p class="price-strike"><%= prettify_mrpprice_widget(item_detail.list_price) %></p>
+                            <% end %>
                             <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p></span>
                         </a>
                           <span style="float:right;">     <p class="btn">

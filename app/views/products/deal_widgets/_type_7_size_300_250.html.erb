@@ -46,6 +46,9 @@
                           <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
                             <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(52) %></p>
 
+                            <% if !item_detail.list_price.blank? && item_detail.list_price.to_i != 0 %>
+                                <p class="price-strike"><%= prettify_mrpprice_widget(item_detail.list_price) %></p>
+                            <% end %>
                             <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
                           </a>
 

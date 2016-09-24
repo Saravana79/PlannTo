@@ -199,6 +199,7 @@ module Admin::AdvertisementsHelper
 
   def get_ad_url(item_detail_id, impression_id, ref_url, sid, ads_id, param={}, item_detail)
     deal_item = item_detail.deal_item rescue false
+    deal_item = item_detail.class == DealItem ? true : deal_item
     param[:only_layout] ||= "false"
     ad_url = ""
     red_sports_url = ""

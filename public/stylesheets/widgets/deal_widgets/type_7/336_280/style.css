@@ -59,7 +59,7 @@ body {
 .advt-box .product-txt-desc { margin:0; padding:5px 10px;text-align: center;min-height: 34px;}
 .advt-box .product-txt-desc p{ margin:0; padding:0; font-size:11px; color:#222;font-family: Arial;}
 .divshadow{margin: 0px 7px 7px 7px;/*border-radius: 10px 10px 10px 10px;-moz-box-shadow: 2px 2px 3px 3px #E0E0E0;-webkit-box-shadow: 2px 2px 3px 3px #E0E0E0;box-shadow: 2px 2px 3px 3px #E0E0E0;*/}
-
+.advt-box .product-container .price-strike{ margin:0; padding:10px 0 1px 0px; color:#000; font-size:13px; font-weight:bold;font-family: Arial monospace;text-decoration: line-through;}
 
 
 

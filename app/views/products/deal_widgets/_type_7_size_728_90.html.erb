@@ -21,6 +21,9 @@
                     <h3 class="product-title"><%= item_detail.deal_title.to_s.truncate(57) %></h3>
                   </div>
                     <div style="float:left;">
+                      <% if !item_detail.list_price.blank? && item_detail.list_price.to_i != 0 %>
+                          <p class="price-strike"><%= prettify_mrpprice_widget(item_detail.list_price) %></p>
+                      <% end %>
                         <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
                     </div>
                   </a>

@@ -325,8 +325,7 @@ module ApplicationHelper
   end
 
   def prettify_mrpprice_widget(price)
-
-    price = price.blank? ? "" : number_to_indian_currency("%.2f" % price.to_f)
+    price = (price.blank? || price.to_i == 0) ? "" : number_to_indian_currency("%.2f" % price.to_f)
 
     if price == number_to_indian_currency("%.2f" % price.to_f)
       price =""
