@@ -25,6 +25,7 @@
                           <p class="price-strike"><%= prettify_mrpprice_widget(item_detail.list_price) %></p>
                       <% end %>
                         <p class="price"><%= prettify_mrpprice_widget(item_detail.deal_price) %></p>
+                              <p style="padding: 3px 0px;font-size:11px;color:black;text-align:center;"><%= get_expire_time_from_deal_item(item_detail) == "" ? "" : "#{get_expire_time_from_deal_item(item_detail)}"%></p>                      </p>
                     </div>
                   </a>
                   </div>  
@@ -38,10 +39,18 @@
                   <div class="product-desc">
                     <a href="<%= shop_now_url %>" target="_blank" class="">
                       <p class="text-desc">
-                       <p style="padding: 3px 0px;font-size:11px;"><%= get_expire_time_from_deal_item(item_detail) == "" ? "" : "#{get_expire_time_from_deal_item(item_detail)}"%></p>                      </p>
+                 
                       
                     </a>
                   </div>
+                  <div class="product-txt-desc">
+                     <span style="float: left;width: 90px;padding: 0px 0px 0 55px;"><img src="https://cdn1.plannto.com/static/images/amazongreatindianfestival.jpeg" height="40px;"> </span>
+
+                      <span style="float: left;width: 120px;padding: 0 10px 0 10;">
+                        <p style="font-size:13px;font-weight:bold;height: 34px;vertical-align: middle;text-align: center;width: 160px;">Great Indian Festival. Oct 1st - 5th</p>
+                     </span>
+              
+                    </div>
                 </div>
 
                 <div class="right-div">
