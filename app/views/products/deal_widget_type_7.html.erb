@@ -3,8 +3,8 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Advt <%= @suitable_ui_size %></title>
   <link href="<%= configatron.root_image_path %>static/stylesheets/widgets/deal_widgets/<%= params[:page_type] %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
-<!--   <link href="http://localhost:3000/stylesheets/widgets/deal_widgets/<%= params[:page_type] %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
- -->  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/PlannTo.jQuery/1.7.1/PlannTo.jQuery.min.js" %>
+<!--    <link href="http://localhost:3000/stylesheets/widgets/deal_widgets/<%= params[:page_type] %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
+ -->   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/PlannTo.jQuery/1.7.1/PlannTo.jQuery.min.js" %>
 </head>
 <body>
 
@@ -100,6 +100,7 @@
         });
 
         PlannTo.jQuery(".next").click(function () {
+            stop_sliding = true
             var current_div = PlannTo.jQuery(".item_details.active")
             PlannTo.jQuery(".item_details").hide();
             PlannTo.jQuery(".item_details").removeClass('active')
@@ -120,10 +121,13 @@
 
                 PlannTo.jQuery("#1").addClass('selected')
             }
+            event.preventDefault();
+            return false;
         });
 
 
         PlannTo.jQuery(".prev").click(function () {
+            stop_sliding = true
             var current_div = PlannTo.jQuery(".item_details.active")
             PlannTo.jQuery(".item_details").hide();
             PlannTo.jQuery(".item_details").removeClass('active')
@@ -145,9 +149,12 @@
                 last = PlannTo.jQuery(".item_details").length
                 PlannTo.jQuery("#" + last).addClass('selected')
             }
+            event.preventDefault();
+            return false;
         });
 
         PlannTo.jQuery("#pager2 a").click(function () {
+            stop_sliding = true
             var that = this
             selected_id = PlannTo.jQuery(that).attr("id")
             selected_div = PlannTo.jQuery("#item_detail_" + selected_id)
@@ -166,6 +173,43 @@
         PlannTo.jQuery(".advt-block").click(function () {
             stop_sliding = true
         })
+
+
+        // function next_arrow_check()
+        //     {
+        //         var active_div = $(".active")
+        //         var next_div = $(active_div).next()
+        //         console.log(next_div)
+        //         PlannTo.jQuery(".slider_plannto").hide()
+        //         PlannTo.jQuery(".slider_plannto").removeClass("active")
+
+        //         if (PlannTo.jQuery(next_div).attr("class") != "next" && next_div.length != 0)
+        //         {
+        //             $(next_div).show()
+        //             $(next_div).addClass("active")
+        //         }
+        //         else
+        //         {
+        //             $(".slider_plannto").first().show()
+        //             $(".slider_plannto").first().addClass("active")
+        //         }
+        //     }
+
+        // PlannTo.jQuery(".next").click(function(event)
+        // {
+        //     stop_sliding = true
+        //     next_arrow_check()
+        //     event.preventDefault();
+        //     return false;
+        // });
+
+        // PlannTo.jQuery(".prev").click(function(event)
+        // {
+        //     stop_sliding = true
+        //     prev_arrow_check()
+        //     event.preventDefault();
+        //     return false;
+        // });
 
 //        PlannTo.jQuery(".plannto-advertisement").click(function(event)
 //        {
@@ -225,6 +269,9 @@
         })
 
     });
+
+     
+
 
     function set_logo_url(that, class_name)
     {

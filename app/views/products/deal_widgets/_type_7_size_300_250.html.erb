@@ -5,12 +5,12 @@
       <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
     </div>
   -->
-      <div class="logo" style="border-bottom:1px solid #F1F0F0;height:40px;">
-        <div style="float:left;width:110px;">
-          <a rel="nofollow" class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
+      <div class="logo" style="border-bottom:1px solid #F1F0F0;height:80px;">
+        <div style="float:left;text-align:center;width:100%">
+          <a rel="nofollow" class="" href="javascript:void(0)" target="_blank"><img src="http://cdn1.plannto.com/static/images/greatindianfestival.jpeg" alt="" style="max-height:78px;">
           </a>
         </div>
-        <div class="list_carousel">
+     <!--    <div class="list_carousel">
           <div id="pager2" class="pager">
             <%if @item_details.count > 1 %>
                 <% [*1..@item_details.count].each do |each_loop| %>
@@ -18,13 +18,16 @@
                 <% end %>
             <% end %>
           </div>
-        </div>
+        </div> -->
         <div class="clearfix"></div>
       </div>
 
       <% if @item_details.count != 0 %>
           <div class="">
-            <ul id="foo3" height="165px;">
+            <ul id="foo3" height="165px;" style="text-align:left;list-style:none;">
+             <a id="leftarrow" class="prev" href="#" style="display: block;">&lt;</a>
+             <a id="rightarrow" class="next" href="javascript:void(0)" style="display: block;">&gt;</a>
+           
               <% @item_details.each_with_index do |item_detail, indx| %>
                   <% vendor_detail = get_vendor_detail(item_detail.site.to_i) %>
                   <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params, item_detail) %>
@@ -44,7 +47,7 @@
                         </div>
                         <div class="product-txt-right">
                           <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="">
-                            <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: #0066c0;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(52) %></p>
+                            <p style="    margin: 0;padding: 0 0 0 0;font-size: 14px;color: black;font-weight: 800;font-family: Arial;word-break: break-word;min-height: 40px;line-height: 15px;font-weight: bold;"><%= item_detail.deal_title.to_s.truncate(52) %></p>
 
                             <% if !item_detail.list_price.blank? && item_detail.list_price.to_i != 0 %>
                                 <p class="price-strike"><%= prettify_mrpprice_widget(item_detail.list_price) %></p>
@@ -62,7 +65,7 @@
 
                         </div>
                       </div>
-                      <div class="product-txt-desc">
+                   <!--    <div class="product-txt-desc">
 
                       <span style="float: left;width: 80px;padding: 0px 0px 0 40px;"><img src="https://cdn1.plannto.com/static/images/amazongreatindianfestival.jpeg" height="30px;"> </span>
 
@@ -70,9 +73,9 @@
                         <h3 style="font-size:13px;font-weight:bold;height: 34px;vertical-align: middle;text-align: center;">Great Indian Festival. Oct 1st - 5th</h3>
                      </span>
               
-                      </div>
+                      </div> -->
                     </div>
-                    <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
+                   
                   </li>
               <% end %>
             </ul>

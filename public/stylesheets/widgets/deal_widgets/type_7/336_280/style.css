@@ -48,18 +48,19 @@ body {
 .advt-box .product-container{ margin:5px 0 0 0; padding:5px;height:170px;}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
-.advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:142px;float:left;white-space:nowrap;}
+.advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:112px;float:left;white-space:nowrap;}
 .advt-box .product-container .product-img-left img { margin:0 auto; text-align:center;height:auto;}
 .advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:158px;}
 .advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:16px; color:#222; font-weight:800; font-family: Arial;word-break:break-word;min-height: 40px;}
-.advt-box .product-container .price{ margin:0; padding:10px 0 10px 0; color:#bf0000; font-size:16px; font-weight:bold;font-family: Arial monospace;}
+.advt-box .product-container .price{ margin:0; padding:5px 0 10px 0; color:#bf0000; font-size:16px; font-weight:bold;font-family: Arial monospace;}
 .advt-box .product-container .btn{ margin:10px 0px; }
-.advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:15px;text-transform: uppercase;}
+/*.advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:15px;text-transform: uppercase;}*/
+.advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px;  cursor:pointer;  text-indent:-99999px; border:0;color: #151515;font-weight: bold;font-family: Arial;font-size:14px;text-transform: uppercase;background: white;border: 1px solid #808080;}
 
 .advt-box .product-txt-desc { margin:0; padding:5px 10px;text-align: center;min-height: 34px;}
 .advt-box .product-txt-desc p{ margin:0; padding:0; font-size:11px; color:#222;font-family: Arial;}
 .divshadow{margin: 0px 7px 7px 7px;/*border-radius: 10px 10px 10px 10px;-moz-box-shadow: 2px 2px 3px 3px #E0E0E0;-webkit-box-shadow: 2px 2px 3px 3px #E0E0E0;box-shadow: 2px 2px 3px 3px #E0E0E0;*/}
-.advt-box .product-container .price-strike{ margin:0; padding:10px 0 1px 0px; color:#000; font-size:13px; font-weight:bold;font-family: Arial monospace;text-decoration: line-through;}
+.advt-box .product-container .price-strike{ margin:0; padding:5px 0 1px 0px; color:#000; font-size:13px; font-weight:bold;font-family: Arial monospace;text-decoration: line-through;}
 
 
 
@@ -117,7 +118,26 @@ body {
 	background:#F76300;
 	color:white;
 }
-
+.prev {
+	float: left;
+	background: url(https://cdn1.plannto.com/static/images/det-arrow.png) 0 0 no-repeat;
+	width: 26px;
+	height: 25px;
+	text-indent: -99999px;
+	position: relative;
+	left: 2px;
+	top: 70px;
+}
+.next {
+float: right;
+background: url(https://cdn1.plannto.com/static/images/det-arrow.png) -26px 0 no-repeat;
+width: 26px;
+height: 25px;
+text-indent: -99999px;
+position: relative;
+left: 0px;
+top: 70px;
+}
 
 a { outline: none; }
 
@@ -146,7 +166,7 @@ a#offer_ad:hover
 
 .ad_img_tag {
     max-height: 160px;
-    max-width: 142px;
+    max-width: 112px;
     width:auto;
     height: auto;
     vertical-align: middle;
