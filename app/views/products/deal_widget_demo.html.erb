@@ -38,9 +38,9 @@
 </center>
   <div class="demo_form row">
     <div class="search_form" style="font-weight:bold;text-align:center;">
-      <%= form_for :search, :url => "/deal_widget_demo", :html => {:method => 'get'} do |search_form| %>
+      <%= form_for :search, :url => "/deal_widget_demo", :html => {:method => 'get', :id => "search_form"} do |search_form| %>
           Size: <%= select_tag  :size, options_for_select(["300x250", "336x280", "728x90", "300x100", "300x600"], params[:size]),:style => "margin-right:50px;" %>
-          Tag: <%= text_field_tag :tag, params[:tag], :style => "width: 200px;" ,:placeholder => "Eg. Test-21"%>
+          Tag: <%= text_field_tag :tag, params[:tag], :style => "width: 200px;border-color: mintcream;" ,:placeholder => "Eg. Test-21", :title => "Enter Valid tag : Eg. Test-21" %>
           <%= search_form.submit "Go" %>
       <% end %>
     </div>
@@ -57,7 +57,7 @@
         <script src="<%= "#{configatron.hostname}/javascripts/plannto.sports.widget.js?ref_url=&item_id=&show_details=true&element_id=where_to_buy_items&page_type=#{params[:page_type]}&size=#{params[:size]}&tag=#{params[:tag]}"; %>" style="border: medium none;;"></script>
         <div class="text_area" style="padding-top:30px;font-weight:bold;">
            Widget Script<br/><br/>
-            <textarea style="width: 800px;height: 50px;"><div id="where_to_buy_items" style="width: <%= @weight %>px;height: <%= @height %>px;"></div><script src="<%= "#{configatron.hostname}/javascripts/plannto.sports.widget.js?ref_url=&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=#{params[:page_type]}&size=#{params[:size]}&tag=#{params[:tag]}"; %>" style="border: medium none;;"></script></textarea>
+            <textarea style="width: 800px;height: 50px;"><div id="where_to_buy_items" style="width: <%= @weight %>px;height: <%= @height %>px;"></div><script src="<%= "#{configatron.hostname}/javascripts/plannto.sports.widget.js?ref_url=&item_id=&show_details=true&element_id=where_to_buy_items&page_type=#{params[:page_type]}&size=#{params[:size]}&tag=#{params[:tag]}"; %>" style="border: medium none;;"></script></textarea>
         </div>
       </div>
     </div>
@@ -114,4 +114,28 @@
         margin: 0 7px 7px;
     }
 
+    .error {
+        box-shadow: 0 0 3px #cc0000 !important;
+    }
+
 </style>
+
+
+<script type="application/javascript">
+  $(document).ready(function()
+  {
+      $("#search_form").submit(function(event)
+      {
+          console.log($("#tag").val())
+          var tag_val = $("#tag").val()
+          var valid_tag = tag_val.match(/-21/)
+          if (valid_tag == null)
+          {
+              $("#tag").addClass("error")
+
+              event.preventDefault()
+              return false;
+          }
+      })
+  })
+</script>
