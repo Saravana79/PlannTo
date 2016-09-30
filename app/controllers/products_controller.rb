@@ -70,9 +70,9 @@ class ProductsController < ApplicationController
 
   caches_action :sports_widget, :cache_path => proc {|c|
     if !params[:item_ids].blank?
-      params.slice("item_ids", "category_item_detail_id", "page_type", "random_id")
+      params.slice("item_ids", "category_item_detail_id", "page_type", "random_id", "tag")
     else
-      params.slice("category_item_detail_id", "category_type", "page_type", "random_id")
+      params.slice("category_item_detail_id", "category_type", "page_type", "random_id", "tag")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -1468,6 +1468,7 @@ class ProductsController < ApplicationController
     params[:ref_url] = url
     params[:ref_url] ||= ""
     params[:random_id] ||= ""
+    params[:is_test] ||= ""
 
     params[:size] = params[:size].to_s.gsub("*", "x")
     @suitable_ui_size = params[:size].to_s.gsub("x", "_")
@@ -1503,9 +1504,9 @@ class ProductsController < ApplicationController
 
     cache_params = ""
     if !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type", "random_id"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type", "random_id", "tag"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type", "random_id"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type", "random_id", "tag"))
     end
     cache_params = CGI::unescape(cache_params)
 
