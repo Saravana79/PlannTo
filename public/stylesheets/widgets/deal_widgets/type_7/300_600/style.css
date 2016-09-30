@@ -9,9 +9,9 @@
 .advt-box .product-container{ margin:3px 0 0 3px; padding:3px;height:80px;border-bottom:1px solid #d2d2d2}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
-.advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:132px;height:80px;float:left;white-space:nowrap;}
+.advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:122px;height:80px;float:left;white-space:nowrap;}
 .advt-box .product-container .product-img-left img { margin:0 auto; text-align:center;height:auto;}
-.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:150px;}
+.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:160px;}
 .advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:13px; color:#222; font-weight:800; font-family: Arial;word-break:break-word;min-height: 30px;}
 .advt-box .product-container .price{ margin:0; padding:5px 0 5px 0; color:#bf0000; font-size:12px; font-weight:bold;font-family: Arial monospace;}
 .advt-box .product-container .price-strike{ margin:0; padding:0px 0 1px 0px; color:#000; font-size:11px; font-weight:bold;font-family: Arial monospace;text-decoration: line-through;}
@@ -73,7 +73,7 @@ a#offer_ad:hover
 
 .ad_img_tag {
     max-height: 80px;
-    max-width: 132px;
+    max-width: 122px;
     width:auto;
     height: auto;
     vertical-align: middle;
