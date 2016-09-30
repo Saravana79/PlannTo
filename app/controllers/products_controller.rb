@@ -1503,9 +1503,9 @@ class ProductsController < ApplicationController
 
     cache_params = ""
     if !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type", "random_id"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type", "random_id", "size"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type", "random_id"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type", "random_id", "size"))
     end
     cache_params = CGI::unescape(cache_params)
 
