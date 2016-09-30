@@ -68,13 +68,13 @@ class ProductsController < ApplicationController
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
-  # caches_action :sports_widget, :cache_path => proc {|c|
-  #   if !params[:item_ids].blank?
-  #     params.slice("item_ids", "category_item_detail_id", "page_type", "random_id","size")
-  #   else
-  #     params.slice("category_item_detail_id", "category_type", "page_type", "random_id","size")
-  #   end
-  # }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :sports_widget, :cache_path => proc {|c|
+    if !params[:item_ids].blank?
+      params.slice("item_ids", "category_item_detail_id", "page_type", "random_id","size", "tag")
+    else
+      params.slice("category_item_detail_id", "category_type", "page_type", "random_id","size", "tag")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
 
   caches_action :show,  :cache_path => Proc.new { |c|
@@ -1503,9 +1503,9 @@ class ProductsController < ApplicationController
 
     cache_params = ""
     if !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type", "random_id", "size"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type", "random_id", "size", "tag"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type", "random_id", "size"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type", "random_id", "size", "tag"))
     end
     cache_params = CGI::unescape(cache_params)
 
