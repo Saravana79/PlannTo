@@ -10,7 +10,7 @@ class FeedsController < ApplicationController
   end
 
   def create
-    feed = Feedzirra::Feed.fetch_and_parse(params[:feed][:url])
+    feed = Feedjira::Feed.fetch_and_parse(params[:feed][:url])
     if (!feed.blank? && feed != 0)
       categories = params[:feed][:category] ? params[:feed][:category].join(",") : ""
       @feed = Feed.create(url: feed.feed_url, title: feed.title, category: categories, created_by: current_user.id, process_type: "feed", process_value: "rss", :priorities => params[:feed][:priorities])

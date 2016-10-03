@@ -1,11 +1,11 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.1'
+gem 'rails', '3.2.17'
 ruby '1.9.3'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
-gem 'mysql2'
+gem "mysql2", ">= 0.3.11"
 #gem 'uuidtools'
 gem "configatron", "~> 2.8.4"
 gem 'memcachier'
@@ -35,11 +35,11 @@ gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
+
 group :assets do
-  #please dont change the versionof sass-rails
-  gem 'sass-rails', "3.1.4"
-  gem 'coffee-rails', "~> 3.1.0"
-  gem 'uglifier'
+  gem 'sass-rails',   '~> 3.2.6'
+  gem 'coffee-rails', '~> 3.2.2'
+  gem 'uglifier',     '>= 1.0.3'
 end
 #gem 'sqlite3'
 gem 'citier', '~>0.1.15'
@@ -76,7 +76,7 @@ group :test do
 end
 gem 'geocoder'
 # gem 'progress_bar'
-gem "feedzirra", '~> 0.1.3'
+gem "feedjira"#, '~> 0.1.3'
 
 # TO DO the daily jobs to queue
 #gem "clockwork", "~> 0.7.2"

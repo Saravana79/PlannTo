@@ -34,7 +34,7 @@ class Feed < ActiveRecord::Base
   end
 
   def feed_process()
-    feed = Feedzirra::Feed.fetch_and_parse(url)
+    feed = Feedjira::Feed.fetch_and_parse(url)
     admin_user = User.where(:is_admin => true).first
 
     if (!feed.blank? && feed != 0)

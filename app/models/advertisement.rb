@@ -549,7 +549,7 @@ class Advertisement < ActiveRecord::Base
 
     filename = ad_report.filename
 
-    object = $s3_object.objects["reports/#{filename}"]
+    object = $s3_object.object(["reports/#{filename}"])
     object.write(return_val)
     object.acl = :public_read
 
@@ -603,7 +603,7 @@ class Advertisement < ActiveRecord::Base
 
     filename = ad_report.filename
 
-    object = $s3_object.objects["reports/#{filename}"]
+    object = $s3_object.object(["reports/#{filename}"])
     object.write(return_val)
     object.acl = :public_read
 
