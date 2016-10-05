@@ -5,7 +5,7 @@ ruby '1.9.3'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
-gem "mysql2", ">= 0.3.11"
+gem "mysql2", "~> 0.3.11"
 #gem 'uuidtools'
 gem "configatron", "~> 2.8.4"
 gem 'memcachier'
