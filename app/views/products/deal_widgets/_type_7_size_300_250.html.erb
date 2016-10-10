@@ -5,9 +5,9 @@
       <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
     </div>
   -->
-      <div class="logo" style="border-bottom:1px solid #F1F0F0;height:80px;">
+      <div class="logo" style="border-bottom:1px solid #F1F0F0;height:40px;">
         <div style="float:left;text-align:center;width:100%">
-          <a rel="nofollow" class="" href="javascript:void(0)" target="_blank"><img src="http://cdn1.plannto.com/static/images/greatindianfestival.jpeg" alt="" style="max-height:78px;">
+          <a rel="nofollow" class="" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
           </a>
         </div>
      <!--    <div class="list_carousel">
@@ -57,7 +57,7 @@
 
                           <p class="btn">
                             <a rel="nofollow" href="<%= shop_now_url %>" target="_blank" class="shop-now">
-                              <%= "Shop Now" %>
+                              <%= "Add to Cart" %>
                             </a>
                           </p>
 
@@ -65,17 +65,18 @@
 
                         </div>
                       </div>
-                   <!--    <div class="product-txt-desc">
+                      <div class="product-txt-desc">
 
-                      <span style="float: left;width: 80px;padding: 0px 0px 0 40px;"><img src="https://cdn1.plannto.com/static/images/amazongreatindianfestival.jpeg" height="30px;"> </span>
-
-                      <span style="float: left;width: 170;padding: 0 10px 0 10;">
-                        <h3 style="font-size:13px;font-weight:bold;height: 34px;vertical-align: middle;text-align: center;">Great Indian Festival. Oct 1st - 5th</h3>
+                 <!--      <span style="float: left;width: 80px;padding: 0px 0px 0 40px;"><img src="https://cdn1.plannto.com/static/images/amazongreatindianfestival.jpeg" height="30px;"> </span>
+ -->
+                      <span style="float: left;width: 100%;text-align:center;padding: 0 10px 0 10;">
+                        <h3 style="font-size:13px;font-weight:bold;height: 34px;vertical-align: middle;text-align: center;">Daily Deals - New Deal. Every Day.</h3>
                      </span>
               
-                      </div> -->
+                      </div>
                     </div>
-                   
+                     <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
+      
                   </li>
               <% end %>
             </ul>
@@ -84,7 +85,6 @@
           <!--<a id="prev3" class="prev" href="#">&lt;</a>
           <a id="next3" class="next" href="#">&gt;</a>
          -->
-
       <% else %>
           No Product Found
       <% end %>

@@ -25,7 +25,7 @@ body {
 
 .advt-728 .advt-box { margin:0; padding:0;}
 .advt-728 .advt-box .logo{ margin:0 auto; padding: 0; text-align:center; vertical-align:middle; float:left; width:130px; height:88px; display:block; border-right:1px solid #F1F0F0;}
-.advt-728 .advt-box .logo img{ margin:0 auto; text-align:center; vertical-align:middle;   }
+.advt-728 .advt-box .logo img{ margin:0 auto; text-align:center; vertical-align:middle; margin-top:25px;  }
 .advt-728 .advt-box .logo a{vertical-align: middle;padding-top: 0px;display: block; }
     
 
@@ -44,8 +44,8 @@ body {
 .advt-728 .advt-box .product-container .price{ margin: 1px 0 0 0; padding:0; color:#f60; font-size:15px; font-weight:bold;text-align:center;font-family: Arial monospace;width:200px;}
 
 .advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
-/*.advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 10px; background:#F76300; color:#fff; font-size:16px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}*/
-.advt-728 .advt-box .btn .shop-now{ margin:0; padding:5px 5px;  cursor:pointer;  text-indent:-99999px; border:0;color: #151515;font-weight: bold;font-family: Arial;font-size:14px;text-transform: uppercase;background: white;border: 1px solid #808080;    text-decoration: none;}
+.advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 6px; background:#F76300; color:#fff; font-size:13px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
+/*.advt-728 .advt-box .btn .shop-now{ margin:0; padding:5px 5px;  cursor:pointer;  text-indent:-99999px; border:0;color: #151515;font-weight: bold;font-family: Arial;font-size:14px;text-transform: uppercase;background: white;border: 1px solid #808080;    text-decoration: none;}*/
 
 
 

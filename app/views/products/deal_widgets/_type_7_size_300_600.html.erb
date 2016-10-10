@@ -4,9 +4,9 @@
       <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
     </div>
   -->
-    <div class="logo" style="border-bottom:1px solid #F1F0F0;height:60px;">
+    <div class="logo" style="border-bottom:1px solid #F1F0F0;height:40px;">
       <div style="float:left;width:100%;text-align:center;">
-        <a rel="nofollow" class="" href="javascript:void(0)" target="_blank"><img src="http://cdn1.plannto.com/static/images/greatindianfestival.jpeg" alt="" style="max-height:60px;">
+        <a rel="nofollow" class="" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" style="max-height:30px;">
         </a>
       </div>
       <!-- <div class="list_carousel">
@@ -66,19 +66,17 @@
                     </div>
 
                   </div>
-                
+                   <img class="vendor_image_src" src="<%= vendor_detail.full_imageurl %>" alt="" style="display: none;">
                 </li>
             <% end %>
           </ul>
         </div>
-      <!--   <div class="product-txt-desc">
-          <span style="float: left;width: 60px;padding: 0px 0px 0 30px;"><img src="https://cdn1.plannto.com/static/images/amazongreatindianfestival.jpeg" height="22px;"> </span>
-
-                      <span style="float: left;width: 200;padding: 0 0px 0 0;">
-                        <h3 style="font-size:13px;font-weight:bold;height: 34px;vertical-align: middle;text-align: center;">Great Indian Festival. Oct 1st - 5th</h3>
+        <div class="product-txt-desc">
+                      <span style="float: left;width: 100%;text-align:center;padding: 0 0px 0 0;">
+                        <h3 style="font-size:13px;font-weight:bold;height: 34px;vertical-align: middle;text-align: center;">Daily Deals. New Deals - Every Day.</h3>
                      </span>
               
-        </div> -->
+        </div>
         <div class="clearfix"></div>
         <!--<a id="prev3" class="prev" href="#">&lt;</a>
         <a id="next3" class="next" href="#">&gt;</a>
