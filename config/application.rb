@@ -4,11 +4,12 @@ require 'rails/all'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  Bundler.require *Rails.groups(:assets => %w(development test))
+  # Bundler.require *Rails.groups(:assets => %w(development test))
+  Bundler.require(*Rails.groups)
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
-configatron.configure_from_yaml(File.expand_path("../config.yml",__FILE__), :hash => Rails.env)
+configatron.configure_from_hash(YAML::load_file(File.expand_path("../config.yml",__FILE__))[Rails.env])
 module PlanNto
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -55,7 +56,7 @@ module PlanNto
       g.orm :active_record
     end
 
-    config.middleware.use Oink::Middleware, :logger => Hodel3000CompliantLogger.new(STDOUT)
+    # config.middleware.use Oink::Middleware, :logger => Hodel3000CompliantLogger.new(STDOUT)
 
     #Enable GC logger for newrelic
     GC::Profiler.enable
@@ -63,5 +64,6 @@ module PlanNto
     #Removed middleware to optimize performance ref: http://stackoverflow.com/questions/29082744/is-it-safe-to-remove-racklock
     # config.middleware.delete "Rack::Lock"
 
+    config.gem "mreinsch-acts_as_rateable", :source => "http://gems.github.com", :lib => "acts_as_rateable"
   end
 end

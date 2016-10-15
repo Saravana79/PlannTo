@@ -42,7 +42,7 @@ namespace :admin do
   resources :follows
   resources :source_categories, :only => [:index, :update]
  end
-  match "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
+  get "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
   get "home/index"
   resources :follows do
    collection do 
@@ -51,49 +51,49 @@ namespace :admin do
   end   
   resources :error_messages
 
-  match "/admin/impression_reports", :to => "admin/order_histories#index"
-  match "/admin/orders", :to => "admin/order_histories#orders", :as => :admin_orders
-  match "/admin/get_item_details", :to => "admin/order_histories#get_item_details"
+  get "/admin/impression_reports", :to => "admin/order_histories#index"
+  get "/admin/orders", :to => "admin/order_histories#orders", :as => :admin_orders
+  get "/admin/get_item_details", :to => "admin/order_histories#get_item_details"
 
-  match "/admin/orders/edit/:id", :to => "admin/order_histories#edit", :as => :admin_order_edit
-  match "/admin/orders/update", :to => "admin/order_histories#update", :as => :admin_order_update
-  match "/admin/orders/delete", :to => "admin/order_histories#destroy", :as => :admin_order_destroy
-  match "/admin/get_item_details", :to => "admin/order_histories#get_item_details"
+  get "/admin/orders/edit/:id", :to => "admin/order_histories#edit", :as => :admin_order_edit
+  put "/admin/orders/update", :to => "admin/order_histories#update", :as => :admin_order_update
+  delete "/admin/orders/delete", :to => "admin/order_histories#destroy", :as => :admin_order_destroy
+  get "/admin/get_item_details", :to => "admin/order_histories#get_item_details"
 
 
-  match "/terms_conditions" ,:to => "home#terms_conditions"
-  match "/privacy_policy" ,:to => "home#privacy_policy"
+  get "/terms_conditions" ,:to => "home#terms_conditions"
+  get "/privacy_policy" ,:to => "home#privacy_policy"
   get "/contact_us" => "contact_us#new"
-  match "/about_us",:to => "home#about_us"
-  match "/opt_out",:to => "home#opt_out"
-  match "/opt_out_submit",:to => "home#opt_out_submit"
-  match "/targeting",:to => "home#targeting"
-  match "/current_user_info",:to => "home#current_user_info"
-  match "/external_page",:to => "products#external_page"
-  match "/search_planto",:to => "products#search_items"
+  get "/about_us",:to => "home#about_us"
+  post "/opt_out",:to => "home#opt_out"
+  post "/opt_out_submit",:to => "home#opt_out_submit"
+  get "/targeting",:to => "home#targeting"
+  get "/current_user_info",:to => "home#current_user_info"
+  get "/external_page",:to => "products#external_page"
+  get "/search_planto",:to => "products#search_items"
   
-  match "/get_class_names",:to => "contents#get_class_names"
-  match "/external_page",:to => "products#external_page"
-  match "/where_to_buy_items",:to => "products#where_to_buy_items"
-  match "/where_to_buy_items_vendor",:to => "products#where_to_buy_items_vendor"
-  match "/widget_for_women",:to => "products#widget_for_women"
-  match "/elec_widget_1",:to => "products#elec_widget_1"
-  match "/price_vendor_details",:to => "products#price_vendor_details"
-  match "/get_price_from_vendor",:to => "products#get_price_from_vendor"
-  match "/price_text_vendor_details",:to => "products#price_text_vendor_details"
-  match "/book_price_widget",:to => "products#book_price_widget"
-  match "/sports_widget",:to => "products#sports_widget"
-  match "/vendor_widget",:to => "products#vendor_widget"
-  match "/product_offers",:to => "products#product_offers"
-  match "/product_autocomplete",:to => "products#product_autocomplete"
-  match "/get_item_for_widget",:to => "products#get_item_for_widget"
-  match "/show_search_widget",:to => "products#show_search_widget"
-  match "/get_item_item_advertisment",:to => "products#get_item_item_advertisment"
+  get "/get_class_names",:to => "contents#get_class_names"
+  get "/external_page",:to => "products#external_page"
+  get "/where_to_buy_items",:to => "products#where_to_buy_items"
+  get "/where_to_buy_items_vendor",:to => "products#where_to_buy_items_vendor"
+  get "/widget_for_women",:to => "products#widget_for_women"
+  get "/elec_widget_1",:to => "products#elec_widget_1"
+  get "/price_vendor_details",:to => "products#price_vendor_details"
+  get "/get_price_from_vendor",:to => "products#get_price_from_vendor"
+  get "/price_text_vendor_details",:to => "products#price_text_vendor_details"
+  get "/book_price_widget",:to => "products#book_price_widget"
+  get "/sports_widget",:to => "products#sports_widget"
+  get "/vendor_widget",:to => "products#vendor_widget"
+  get "/product_offers",:to => "products#product_offers"
+  get "/product_autocomplete",:to => "products#product_autocomplete"
+  get "/get_item_for_widget",:to => "products#get_item_for_widget"
+  get "/show_search_widget",:to => "products#show_search_widget"
+  get "/get_item_item_advertisment",:to => "products#get_item_item_advertisment"
   
-  match "/advertisement",:to => "products#advertisement"
-  # match "/current_user_info",:to => "home#current_user_info"
-  match "/get_class_names",:to => "contents#get_class_names"
-  match "products/ratings",:to => "products#ratings"
+  get "/advertisement",:to => "products#advertisement"
+  # get "/current_user_info",:to => "home#current_user_info"
+  get "/get_class_names",:to => "contents#get_class_names"
+  get "products/ratings",:to => "products#ratings"
   
   resources :contact_us
   resources :newuser_wizards do
@@ -106,12 +106,13 @@ namespace :admin do
    end 
   end 
   
-  match "/newuser_wizard", :to => "newuser_wizards#new"
-  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" ,:passwords => "users/passwords" } 
+  get "/newuser_wizard", :to => "newuser_wizards#new"
+  # devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" ,:passwords => "users/passwords" }
+  devise_for :users, :controllers => { sessions: 'users/sessions', passwords: 'users/passwords', registrations: 'users/registrations', omniauth_callbacks: 'users/omniauth_callbacks' }
   resource :oauth,:controller=>"oauth" 
 
- match "oauth_callback" => "oauth#create"
- match "content_post" => "oauth#content_post"
+ post "oauth_callback" => "oauth#create"
+ post "content_post" => "oauth#content_post"
   devise_scope :user do
     #get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
     get '/users/sign_out' => 'devise/sessions#destroy'
@@ -123,12 +124,12 @@ namespace :admin do
   # first created -> highest priority.
 
   # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
+  #   get 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :contfroller and :action
 
   # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  #  match 'products/:id' => 'products#show', :as => :products
+  #   get 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
+  #  get 'products/:id' => 'products#show', :as => :products
   # This route can be invoked with purchase_url(:id => product.id)
   resources :history_details
 
@@ -138,10 +139,10 @@ namespace :admin do
       post "add_vote"
     end
   end
-  match 'external_contents/:content_id' => 'external_contents#show', :as => 'external_content'
+  get 'external_contents/:content_id' => 'external_contents#show', :as => 'external_content'
   
-  match 'admin/search', :to => 'admin#index'
-  match ':search_type/search' => 'search#index'
+  get 'admin/search', :to => 'admin#index'
+  get ':search_type/search' => 'search#index'
   resources :search do
     collection do
       get :autocomplete_items
@@ -152,17 +153,17 @@ namespace :admin do
       get :search_items_by_relavance_housing
     end
   end
-  match ':search_type/related-items/:car_id' => 'related_items#index'
-  match 'groups/:id' => 'car_groups#show', :as => 'car_groups'
-  match ':type/topics' => 'products#topics'
-  match 'my_feeds'  => 'contents#my_feeds'
+  get ':search_type/related-items/:car_id' => 'related_items#index'
+  get 'groups/:id' => 'car_groups#show', :as => 'car_groups'
+  get ':type/topics' => 'products#topics'
+  get 'my_feeds'  => 'contents#my_feeds'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
 
   
 resources :field_values, :only => [:create]
 resources :answer_contents  
 
-# match 'accounts/:username', :to => "accounts#index", :as => "accounts"
+# get 'accounts/:username', :to => "accounts#index", :as => "accounts"
 
 
 resources :accounts do
@@ -178,8 +179,8 @@ resources :accounts do
       get :profile
      end 
   end
-  match 'account_update', :to => "accounts#update", :as => "account_update"
-  match 'personal_deals', :to => "preferences#personal_deals"
+  # match 'account_update', :to => "accounts#update", :as => "account_update", :via => [:put]
+  get 'personal_deals', :to => "preferences#personal_deals"
  
   resources :preferences do
     collection do
@@ -206,17 +207,17 @@ resources :accounts do
     end
     
   end
-   match 'create_buying_plan' => 'preferences#new'
-   match 'preferences/:search_type/:uuid' => 'preferences#show'
-   # match ':itemtype/guides/:guide_type' => 'contents#search_guide'
-   # match ':itemtype/:item_id/guides/:guide_type' => 'contents#search_guide'
+   get 'create_buying_plan' => 'preferences#new'
+   get 'preferences/:search_type/:uuid' => 'preferences#show'
+   # get ':itemtype/guides/:guide_type' => 'contents#search_guide'
+   # get ':itemtype/:item_id/guides/:guide_type' => 'contents#search_guide'
    
   resources :cars do
         resources :reports
         resources :shares
   end
    
-  #match "/contents/update_guide" => 'contents#update_guide'
+  #put "/contents/update_guide" => 'contents#update_guide'
 
   resources :contents do
    resources :reports 
@@ -231,7 +232,7 @@ resources :accounts do
     get :search_related_contents
     get :quick_new
   end
-  match "/contents/search" => 'contents#search'
+  get "/contents/search" => 'contents#search'
  
   post :search
   resources :comments 
@@ -357,7 +358,7 @@ resources :comments do
   resources :attribute_tags
   resources :topics
   resource :facebook, :except => :create do
-    get :callback, :to => :create
+    get :callback, :action => :create
     get :friends
     get :wall_post
     get :show_friends
@@ -405,20 +406,20 @@ resources :comments do
   end
 
 
-  match 'invitation/accept/:token' => "invitations#accept", :as => :accept_invitation
+  post 'invitation/accept/:token' => "invitations#accept", :as => :accept_invitation
     
   resources :imageuploads, :only => [:show] 
-  match "/imageuploads_tag" => 'imageuploads#tag' 
-  match "/autocomplete_tag" => 'imageuploads#autocomplete_tag' 
-   match "/messages/search_users" => 'messages#search_users'
+  get "/imageuploads_tag" => 'imageuploads#tag'
+  get "/autocomplete_tag" => 'imageuploads#autocomplete_tag'
+   get "/messages/search_users" => 'messages#search_users'
    
   resources :messages
-  match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
-  match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
-  match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
+  post "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
+  post "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
+  post "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
 
   
- # match '/:search_type', :to => "products#index"
+ # get '/:search_type', :to => "products#index"
   
   
   # Sample resource route with options:
@@ -460,22 +461,22 @@ resources :comments do
   # root :to => 'home#index'
   root :to => 'home#targeting'
 
-  match "/home" => 'home#index', :as => "home_products"
+  get "/home" => 'home#index', :as => "home_products"
   #root :controller => :item, :action => :index
   # See how all your routes lay out with "rake routes"
 
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))'
+  get ':controller(/:action(/:id(.:format)))'
 
   mount Resque::Server, :at => "/resque"
 
-  match "travels/show_ads" => "travels#show_ads", :as => "travel_ads"
-  match "travels/where_to_find_hotels",:to => "travels#where_to_find_hotels"
-  match "travels/related_hotels",:to => "travels#related_hotels"
+  get "travels/show_ads" => "travels#show_ads", :as => "travel_ads"
+  get "travels/where_to_find_hotels",:to => "travels#where_to_find_hotels"
+  get "travels/related_hotels",:to => "travels#related_hotels"
 
-  match "sourceitems/load_suggestions" => "feeds#load_suggestions"
+  get "sourceitems/load_suggestions" => "feeds#load_suggestions"
 
   get "admin/ad_reports" => "admin/ad_reports#index", :as => "admin_ad_reports"
   get "admin/ad_reports/report/:id" => "admin/ad_reports#report", :as => "admin_ad_reports_report"
@@ -514,63 +515,63 @@ resources :comments do
     end
   end
 
-  match "/delete_ad_image/:id" => "advertisements#delete_ad_image", :as => "delete_ad_image", :via => [:delete]
-  match "advertisements/test_ads" => "advertisements#test_ads"
-  match "advertisements/demo" => "advertisements#demo"
-  match "advertisements/price_widget_demo" => "advertisements#price_widget_demo"
-  match "advertisements/in_image_ads" => "advertisements#in_image_ads"
-  match "advertisements/in_image_ads_demo" => "advertisements#in_image_ads_demo"
-  match "advertisements/in_image_ads_demo_1" => "advertisements#in_image_ads_demo_1"
-  match "advertisements/vendor_demo" => "advertisements#vendor_demo"
-  match "advertisements/amazon_demo" => "advertisements#amazon_demo"
-  match "advertisements/amazon_demo_type_5" => "advertisements#amazon_demo_type_5"
-  match "advertisements/carwale_demo" => "advertisements#carwale_demo"
-  match "advertisements/paytm_demo" => "advertisements#paytm_demo"
-  match "advertisements/newcar_demo" => "advertisements#newcar_demo"
-  match "advertisements/gaadi_demo" => "advertisements#gaadi_demo"
-  match "advertisements/fashion_demo" => "advertisements#fashion_demo"
-  match "advertisements/junglee_gadget_demo" => "advertisements#junglee_gadget_demo"
-  match "advertisements/junglee_fashion_demo" => "advertisements#junglee_fashion_demo"
-  match "advertisements/junglee_used_car_demo" => "advertisements#junglee_used_car_demo"
-  match "advertisements/property_demo" => "advertisements#property_demo"
-  match "advertisements/amazon_widget" => "advertisements#amazon_widget"
-  match "advertisements/amazon_sports_widget" => "advertisements#amazon_sports_widget"
-  match "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"
-  match "advertisements/elec_widget_demo" => "advertisements#elec_widget_demo"
-  match "advertisements/women_widget_demo" => "advertisements#women_widget_demo"
-  match "advertisements/ad_via_iframe" => "advertisements#ad_via_iframe"
-  match "advertisments/show_ads" => "advertisements#show_ads", :as => "show_ads"
-  match "advertisments/check_user_details" => "advertisements#check_user_details", :as => "check_user_details"
-  match "advertisments/get_user_details" => "advertisements#get_user_details", :as => "get_user_details", :via => [:post]
-  match "advertisements/ab_test" => "advertisements#ab_test", :as => "advertisement_ab_test"
-  match "advertisements/create_ab_settings" => "advertisements#create_ab_settings", :as => "create_ab_settings", :via => [:post]
-  match "advertisements/video_ad_tracking" => "advertisements#video_ad_tracking", :as => "video_ad_tracking", :via => [:get]
-  match "advertisements/video_ads" => "advertisements#video_ads", :as => "video_ads", :via => [:get]
-  match "advertisements/ads_visited" => "advertisements#ads_visited", :via => [:post]
-  match "advertisments/image_show_ads" => "advertisements#image_show_ads", :as => "image_show_ads"
-  match "advertisements/get_adv_id" => "advertisements#get_adv_id", :as => "get_adv_id"
-  match "/buy_at_best_price" => "products#buy_at_best_price", :as => "buy_at_best_price"
-  match "/deal_widget_demo" => "products#deal_widget_demo", :as => "deal_widget_demo"
+  delete"/delete_ad_image/:id" => "advertisements#delete_ad_image", :as => "delete_ad_image", :via => [:delete]
+  get "advertisements/test_ads" => "advertisements#test_ads"
+  get "advertisements/demo" => "advertisements#demo"
+  get "advertisements/price_widget_demo" => "advertisements#price_widget_demo"
+  get "advertisements/in_image_ads" => "advertisements#in_image_ads"
+  get "advertisements/in_image_ads_demo" => "advertisements#in_image_ads_demo"
+  get "advertisements/in_image_ads_demo_1" => "advertisements#in_image_ads_demo_1"
+  get "advertisements/vendor_demo" => "advertisements#vendor_demo"
+  get "advertisements/amazon_demo" => "advertisements#amazon_demo"
+  get "advertisements/amazon_demo_type_5" => "advertisements#amazon_demo_type_5"
+  get "advertisements/carwale_demo" => "advertisements#carwale_demo"
+  get "advertisements/paytm_demo" => "advertisements#paytm_demo"
+  get "advertisements/newcar_demo" => "advertisements#newcar_demo"
+  get "advertisements/gaadi_demo" => "advertisements#gaadi_demo"
+  get "advertisements/fashion_demo" => "advertisements#fashion_demo"
+  get "advertisements/junglee_gadget_demo" => "advertisements#junglee_gadget_demo"
+  get "advertisements/junglee_fashion_demo" => "advertisements#junglee_fashion_demo"
+  get "advertisements/junglee_used_car_demo" => "advertisements#junglee_used_car_demo"
+  get "advertisements/property_demo" => "advertisements#property_demo"
+  get "advertisements/amazon_widget" => "advertisements#amazon_widget"
+  get "advertisements/amazon_sports_widget" => "advertisements#amazon_sports_widget"
+  get "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"
+  get "advertisements/elec_widget_demo" => "advertisements#elec_widget_demo"
+  get "advertisements/women_widget_demo" => "advertisements#women_widget_demo"
+  get "advertisements/ad_via_iframe" => "advertisements#ad_via_iframe"
+  get "advertisments/show_ads" => "advertisements#show_ads", :as => "show_ads"
+  get "advertisments/check_user_details" => "advertisements#check_user_details", :as => "check_user_details"
+  post "advertisments/get_user_details" => "advertisements#get_user_details", :as => "get_user_details", :via => [:post]
+  get "advertisements/ab_test" => "advertisements#ab_test", :as => "advertisement_ab_test"
+  post "advertisements/create_ab_settings" => "advertisements#create_ab_settings", :as => "create_ab_settings", :via => [:post]
+  get "advertisements/video_ad_tracking" => "advertisements#video_ad_tracking", :as => "video_ad_tracking", :via => [:get]
+  get "advertisements/video_ads" => "advertisements#video_ads", :as => "video_ads", :via => [:get]
+  post "advertisements/ads_visited" => "advertisements#ads_visited", :via => [:post]
+  get "advertisments/image_show_ads" => "advertisements#image_show_ads", :as => "image_show_ads"
+  get "advertisements/get_adv_id" => "advertisements#get_adv_id", :as => "get_adv_id"
+  get "/buy_at_best_price" => "products#buy_at_best_price", :as => "buy_at_best_price"
+  get "/deal_widget_demo" => "products#deal_widget_demo", :as => "deal_widget_demo"
 
-  match "/products/user_test_drive" => "products#user_test_drive", :as => "user_test_drive", :via => [:post]
+  post "/products/user_test_drive" => "products#user_test_drive", :as => "user_test_drive", :via => [:post]
 
-  match "/admin/source_categories/edit" => "admin/source_categories#edit", :as => "edit_admin_source_category", :via => [:get]
+  get "/admin/source_categories/edit" => "admin/source_categories#edit", :as => "edit_admin_source_category", :via => [:get]
 
-  match "/reports/article_reports" => "reports#article_reports", :via => [:get]
+  get "/reports/article_reports" => "reports#article_reports", :via => [:get]
 
   resources :plannto_user_details
 
-  match "/pages/estore_plugin" => "pages#estore_plugin", :via => [:get]
-  match "/pages/estore_search" => "pages#estore_search", :via => [:get]
+  get "/pages/estore_plugin" => "pages#estore_plugin", :via => [:get]
+  get "/pages/estore_search" => "pages#estore_search", :via => [:get]
 
-  # match '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
+  # get '/javascripts/plannto.elec_widget_1.js', :controller => :js, :action => :plannto_elec_widget_1_js, :format => :js, :as => :plannto_elec_widget_1_js
 
-  match "/publishers" => "publishers#index", :via => [:get]
+  get "/publishers" => "publishers#index", :via => [:get]
 
   # Removed actions
   # get "items/compare",:to => "dummy#index"
-  match ':itemtype/guides/:guide_type' => "dummy#index"
-  match ':itemtype/:item_id/guides/:guide_type' => "dummy#index"
+  get ':itemtype/guides/:guide_type' => "dummy#index"
+  get ':itemtype/:item_id/guides/:guide_type' => "dummy#index"
 
-  match '/:username', :to => "accounts#profile", :as => "profile"
+  get '/:username', :to => "accounts#profile", :as => "profile"
 end
