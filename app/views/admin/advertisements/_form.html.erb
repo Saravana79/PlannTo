@@ -326,7 +326,7 @@
                   <div class="existing_images" id="<%= a.id %>">
                     <%= image_tag(a.avatar) %>
 
-                    <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, :confirm => 'Are you sure you want to delete this?'  %>
+                    <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, data: {:confirm => 'Are you sure you want to delete this?'}  %>
                   </div>
               <% end %>
 

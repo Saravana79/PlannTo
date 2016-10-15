@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
-  acts_as_voter
+  # acts_as_voter
 
   # Message configurations
   acts_as_messageable :table_name => "messages",                        # default 'messages'
@@ -56,8 +56,8 @@ class User < ActiveRecord::Base
   scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type).group("follows.follower_id")}
   scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
 
-  scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
-  
+  scope :join_follows, -> { joins("INNER JOIN `follows` ON follows.follower_id = users.id") }
+
   scope :friends, lambda {|user| join_follows.followable_type('User').where("follows.follower_id = #{user.id}")}
   
  

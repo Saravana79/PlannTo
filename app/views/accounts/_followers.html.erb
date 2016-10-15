@@ -14,7 +14,7 @@
   <%end%>
  <%end%>        
 <%if User.profile_owner?(@user,current_user)  && params[:follow] == "Following"%>
-  <%= link_to '<span>Unfollow</span>'.html_safe, current_user.follow_by_type(u, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'plannto_button' %>
+  <%= link_to '<span>Unfollow</span>'.html_safe, current_user.follow_by_type(u, 'Plannto'), :method => :delete, data: {:confirm => "Are you sure?"}, :class => 'plannto_button' %>
 <%end%>
 </div>
 </div>

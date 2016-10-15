@@ -12,10 +12,10 @@ class Follow < ActiveRecord::Base
   scope :follow_type, lambda{|type| where(follow_type: type)}
   
   scope :recent,              lambda { |from| where(["created_at > ?", (from || 2.weeks.ago).to_s(:db)]) }
-  scope :descending,          order("follows.created_at DESC")
-  scope :unblocked,           where(:blocked => false)
-  scope :blocked,             where(:blocked => true)
-  scope :all_follower_type,        lambda { |follower, followable| where(["follower_id = ? AND follower_type = ? AND followable_type = ? AND followable_id = ?",
+  scope :descending, -> { order("follows.created_at DESC") }
+  scope :unblocked, -> { where(:blocked => false) }
+  scope :blocked, -> { where(:blocked => true) }
+  scope :all_follower_type, lambda { |follower, followable| where(["follower_id = ? AND follower_type = ? AND followable_type = ? AND followable_id = ?",
                                                          follower.id, parent_class_name(follower), followable.class.name, followable.id]) }
   
   

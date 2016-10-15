@@ -19,7 +19,7 @@
         <!--<%if !buying_plan.completed? %>
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>
        <%end%>  -->
-        <!-- <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""}, this will also delete the products that are considering to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%> 
+        <!-- <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, data: {:confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""}}, this will also delete the products that are considering to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%>
         -->
         <%end%> 
          <span>
@@ -70,7 +70,7 @@
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
 							</li>
-							<li class="subContentGap float_lft"><!--<img src="/images/delete.jpg"/>--><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
+							<li class="subContentGap float_lft"><!--<img src="/images/delete.jpg"/>--><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, data: {:confirm => "Are you sure you want to delete #{buying_plan.user_question.title}},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
 							</li>
 							<%if !buying_plan.completed? %>
 							 <li class="subContentGap float_lft">

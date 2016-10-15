@@ -7,6 +7,7 @@ class Admin::AdvertisementsController < ApplicationController
   layout "product"
 
   def index
+    p current_user
     params[:date] ||= Date.today
     params[:ad_status] ||= 1
 

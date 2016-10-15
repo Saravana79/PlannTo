@@ -1,6 +1,5 @@
 class ArticleContent < Content
-  acts_as_citier
-
+  # acts_as_citier
   validates :url, :presence => true
   # validates_uniqueness_of :url
   belongs_to :article_category

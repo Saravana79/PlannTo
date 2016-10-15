@@ -7,7 +7,7 @@ class Content < ActiveRecord::Base
   DELETE_STATUS = 5
   SENT_APPROVAL =6
   REJECTED = 7
-  acts_as_citier
+  # acts_as_citier
   has_many :reports, :as => :reportable, :dependent => :destroy 
   # extend FriendlyId
   # friendly_id :title, use: :slugged
@@ -669,8 +669,8 @@ def populate_pro_con
     self.type == "QuestionContent"
   end
 
-  acts_as_rateable
-  acts_as_voteable
+  # acts_as_rateable
+  # acts_as_voteable
   acts_as_commentable
 
   def rating_classnames(user)
