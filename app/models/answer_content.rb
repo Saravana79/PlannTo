@@ -1,5 +1,5 @@
 class AnswerContent < Content
-	# acts_as_citier
+	acts_as_citier
 	belongs_to :question_content
 	
 	def remove_user_activities

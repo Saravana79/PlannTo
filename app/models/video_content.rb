@@ -1,5 +1,5 @@
 class VideoContent < ArticleContent
-  # acts_as_citier
+  acts_as_citier
   acts_as_voteable
   
   def self.video_id(url)

@@ -7,7 +7,9 @@ class Content < ActiveRecord::Base
   DELETE_STATUS = 5
   SENT_APPROVAL =6
   REJECTED = 7
-  # acts_as_citier
+  acts_as_citier
+  # acts_as_superclass
+
   has_many :reports, :as => :reportable, :dependent => :destroy 
   # extend FriendlyId
   # friendly_id :title, use: :slugged

@@ -63,7 +63,5 @@ module PlanNto
 
     #Removed middleware to optimize performance ref: http://stackoverflow.com/questions/29082744/is-it-safe-to-remove-racklock
     # config.middleware.delete "Rack::Lock"
-
-    config.gem "mreinsch-acts_as_rateable", :source => "http://gems.github.com", :lib => "acts_as_rateable"
   end
 end

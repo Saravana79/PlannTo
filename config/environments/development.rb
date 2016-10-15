@@ -14,7 +14,7 @@ PlanNto::Application.configure do
   config.eager_load = false
   
   # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+  # config.whiny_nils = true
   #config.cache_store = :dalli_store, 'localhost:11211'
 
   # Show full error reports and disable caching
@@ -52,6 +52,4 @@ PlanNto::Application.configure do
   #config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   Paperclip.options[:command_path] = "/usr/local/bin/"
   ENV["REDISTOGO_URL"] = 'redis://:@localhost:6379'
-
-  config.active_record.raise_in_transactional_callbacks = true
 end
