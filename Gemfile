@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 4.0'
+# gem 'rails', '~> 4.0'
+gem 'rails', '4.0'
 ruby '2.0.0'
 
 # Bundle edge Rails instead:
@@ -41,7 +42,7 @@ gem 'therubyracer'
   gem 'coffee-rails'#, '~> 3.2.2'
   gem 'uglifier'#,     '>= 1.0.3'
 # end
-# gem 'citier', '~>0.1.15'
+# gem 'citier', '~>0.1.15' #TODO:4 rails 4 upgrade
 gem 'rails_sql_views' , :git=> 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
 # Use jquery as the JavaScript library
@@ -50,7 +51,7 @@ gem 'acts-as-taggable-on', '~>2.4.1'
 gem 'mreinsch-acts_as_rateable'
 gem 'remotipart', '~> 1.0'
 gem 'acts_as_commentable'
-# gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up' #TODO: rails 4 upgrade
+# gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up' #TODO:4 rails 4 upgrade
 #gem 'devise'
 # gem 'sunspot_rails', '~>1.3.1'
 gem 'sunspot_solr'
