@@ -30,7 +30,7 @@ class Admin::AdvertisementsController < ApplicationController
   def new
     user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
     vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
-    @vendor = Vendor.find_by_id(vendor_id)
+    @vendor = Vendor.where(:id => vendor_id).last
     @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25, :schedule_details => [*0..23].join(","), :device => "pc,mobile")
     @adv_detail = AdvDetail.new
     @advertisements = [@advertisement]
@@ -45,7 +45,7 @@ class Admin::AdvertisementsController < ApplicationController
     end
     @adv_detail = @advertisement.adv_detail if !@advertisement.blank?
     @adv_detail = AdvDetail.new if @adv_detail.blank?
-    @vendor = Vendor.find_by_id(@advertisement.vendor_id)
+    @vendor = Vendor.where(:id => @advertisement.vendor_id).last
     @ad_status = @advertisement.status == 1 ? "Enable" : "Disable"
 
     @items = Item.where(:id => @advertisement.content.related_items.collect(&:item_id)) rescue []

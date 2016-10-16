@@ -8,7 +8,7 @@ class SearchController < ApplicationController
   def index
     @static_page1 = "true"
     @search_type = params[:search_type]
-    itemtype = Itemtype.find_by_itemtype(params[:search_type])
+    itemtype = Itemtype.where(:itemtype => params[:search_type]).last
     #session[:warning] = "true"
     #session[:itemtype] = itemtype.itemtype
     status = Array.new

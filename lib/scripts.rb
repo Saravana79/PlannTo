@@ -70,7 +70,7 @@ end
 
 csv_details = CSV.read("/home/sivakumar/car.csv")
 itemtype = "Car"
-itemtype_id = Itemtype.find_by_itemtype(itemtype.camelize).id
+itemtype_id = Itemtype.where(:itemtype => itemtype.camelize).last.id rescue nil
 
 csv_details.each_with_index do |csv_detail, index|
   next if index == 0
@@ -98,7 +98,7 @@ end
 
 csv_details = CSV.read("/home/sivakumar/Newbikes.csv")
 itemtype = "Bike"
-itemtype_id = Itemtype.find_by_itemtype(itemtype.camelize).id
+itemtype_id = Itemtype.where(:itemtype => itemtype.camelize).last.id rescue nil
 
 csv_details.each_with_index do |csv_detail, index|
   next if index == 0
@@ -178,14 +178,14 @@ end
 
 csv_details = CSV.read("/home/sivakumar/Change in name_TV_21.csv")
 itemtype = "Television"
-itemtype_id = Itemtype.find_by_itemtype(itemtype.camelize).id
+itemtype_id = Itemtype.where(:itemtype => itemtype.camelize).last.id rescue nil
 
 csv_details.each_with_index do |csv_detail, index|
   p csv_detail
   id = csv_detail[0]
   name = csv_detail[1]
   new_name = csv_detail[2]
-  item = itemtype.camelize.constantize.find_by_id(id)
+  item = itemtype.camelize.constantize.where(:id => id).last
   if !item.blank?
     item.itemtype_id = itemtype_id
     item.name = new_name
@@ -346,7 +346,7 @@ def process_url_to_feed_url(article_urls, sources_list)
       rescue Exception => e
         source = Addressable::URI.parse(url).host.gsub("www.", "")
       end
-      article_content = ArticleContent.find_by_url(url)
+      article_content = ArticleContent.where(:url => url).last
       status = 0
       status = 1 unless article_content.blank?
 
@@ -363,7 +363,7 @@ def process_url_to_feed_url(article_urls, sources_list)
 
       # category = sources_list[source]["categories"]
 
-      category = SourceCategory.find_by_source(source).categories rescue ""
+      category = SourceCategory.where(:source => source).last.categories rescue ""
       category = "Others" if category.blank?
 
       new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,
@@ -1170,7 +1170,7 @@ csv_details.each_with_index do |csv_detail, index|
     rescue Exception => e
       source = Addressable::URI.parse(url).host.gsub("www.", "")
     end
-    article_content = ArticleContent.find_by_url(url)
+    article_content = ArticleContent.where(:url => url).last
     status = 0
     status = 1 unless article_content.blank?
 
@@ -1187,7 +1187,7 @@ csv_details.each_with_index do |csv_detail, index|
 
     # category = sources_list[source]["categories"]
 
-    category = SourceCategory.find_by_source(source).categories rescue ""
+    category = SourceCategory.where(:source => source).last.categories rescue ""
     category = "Others" if category.blank?
 
     new_feed_url = FeedUrl.new(feed_id: 43, url: url_for_save, title: title.to_s.strip, category: category,

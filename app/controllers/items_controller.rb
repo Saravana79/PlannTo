@@ -27,9 +27,9 @@ class ItemsController < ApplicationController
     #    @car.needapproval = false
 
     #   @car = Car.find :last
-    #    @itemtype = Itemtype.find_by_itemtype('Car')
-    #  @manufacturer = Manufacturer.find_by_name('Fiat')
-    # @accessories = Accessory.find_by_name 'Car'
+    #    @itemtype = Itemtype.where(:itemtype => 'Car').last
+    #  @manufacturer = Manufacturer.where(:name => 'Fiat').last
+    # @accessories = Accessory.where(:name => 'Car')
     # @relatedcars = Car.all
 
     #  @car.manufacturer = @manufacturer

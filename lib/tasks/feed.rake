@@ -21,7 +21,7 @@ namespace :feed do
 
       status = status_val[each_record.status.to_s] unless each_record.status.blank?
 
-      article_content = ArticleContent.find_by_url(each_record.hosted_site_url)
+      article_content = ArticleContent.where(:url => each_record.hosted_site_url).last
       status = 1 unless article_content.blank?
 
       source = ""
@@ -37,7 +37,7 @@ namespace :feed do
       # sources_list.default = "Others"
       # category = sources_list[source]
 
-      category = SourceCategory.find_by_source(source).categories rescue ""
+      category = SourceCategory.where(:source => source).last.categories rescue ""
       category = "Others" if category.blank?
 
       check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first

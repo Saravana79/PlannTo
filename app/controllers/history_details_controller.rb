@@ -39,7 +39,7 @@ class HistoryDetailsController < ApplicationController
 
 
     if params[:id].present?
-      @article_details = ArticleContent.find_by_id(params[:id])
+      @article_details = ArticleContent.where(:id => params[:id]).last
       #   base_uri, params = @article_details.url.split("?")
       url = "#{@article_details.url}"
       domain = VendorDetail.getdomain(url)
@@ -59,7 +59,7 @@ class HistoryDetailsController < ApplicationController
       @impression_id = params[:iid].present? ? params[:iid] : "0"
 
       if !params[:detail_id].blank?
-        @item_detail = Itemdetail.find_by_item_details_id(params[:detail_id])
+        @item_detail = Itemdetail.where(:item_details_id => params[:detail_id]).last
         if !@item_detail.blank?
           url = "#{@item_detail.url}"
           url = url.strip
@@ -173,7 +173,7 @@ class HistoryDetailsController < ApplicationController
                        :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
     else
-      @item_detail = Itemdetail.find_by_item_details_id(params[:detail_id])
+      @item_detail = Itemdetail.where(:item_details_id => params[:detail_id]).last
       type = params[:type].present? ? params[:type] : ""
 
       if (type == "Hotel")
@@ -251,7 +251,7 @@ class HistoryDetailsController < ApplicationController
 
         vendor_id = vendor.blank? ? "" : vendor.id
 
-        vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
+        vendor = @item_detail.blank? ? nil : Item.where(:id => @item_detail.site).last
 
         click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now.utc, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
                          :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
@@ -361,11 +361,11 @@ class HistoryDetailsController < ApplicationController
   def find_item_detail(detail_id, type)
     @item_detail = case type
                      when "Content" then
-                       Content.find_by_id(detail_id)
+                       Content.where(:id => detail_id).last
                      when "Hotel" then
-                       HotelVendorDetail.find_by_id(detail_id)
+                       HotelVendorDetail.where(:id => detail_id).last
                      else
-                       Itemdetail.find_by_item_details_id(detail_id)
+                       Itemdetail.where(:item_details_id => detail_id).last
                    end
 
 

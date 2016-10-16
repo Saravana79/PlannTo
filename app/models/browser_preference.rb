@@ -3,7 +3,7 @@ class BrowserPreference < ActiveRecord::Base
   belongs_to :search_attribute, :class_name => "SearchAttribute", :foreign_key => "search_display_attribute_id"
 
   def self.add_preference(user, search_type, params, ip= "") 
-    itemtype = Itemtype.find_by_itemtype(search_type)
+    itemtype = Itemtype.where(:itemtype => search_type).last
     search_attributes = SearchAttribute.by_itemtype(itemtype.id)
     BrowserPreference.clear_items(user, itemtype.id, search_attributes.collect(&:id), ip)
     BrowserPreference.add_items(user, itemtype.id, search_attributes, params, ip)

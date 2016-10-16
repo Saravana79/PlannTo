@@ -695,7 +695,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def delete_ad_image
-    image = Image.find_by_id(params[:id])
+    image = Image.where(:id => params[:id]).last
     image_id = image.id
     image.destroy
     render :js => "$('##{image_id}').remove(); alert('Image deleted successfully');"

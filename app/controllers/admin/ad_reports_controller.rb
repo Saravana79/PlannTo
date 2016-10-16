@@ -54,7 +54,7 @@ class Admin::AdReportsController < ApplicationController
     @publishers = Publisher.all
     params[:publisher_id] ||= Publisher.first.id
 
-    @publisher = Publisher.find_by_id(params[:publisher_id])
+    @publisher = Publisher.where(:id => params[:publisher_id]).last
     @vendors = Vendor.all
 
     params[:vendor_id] ||= nil
@@ -176,7 +176,7 @@ class Admin::AdReportsController < ApplicationController
       @publishers = Publisher.all
       params[:publisher_id] ||= Publisher.first.id
 
-      @publisher = Publisher.find_by_id(params[:publisher_id])
+      @publisher = Publisher.where(:id => params[:publisher_id]).last
       @vendors = Vendor.all
     else
       @publishers = current_user.publishers
@@ -239,7 +239,7 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def load_vendors
-    @publisher = Publisher.find_by_id(params[:publisher_id])
+    @publisher = Publisher.where(:id => params[:publisher_id]).last
     @vendors = Vendor.all
     render :partial => "vendor_details", :object => @vendors
   end
@@ -258,7 +258,7 @@ class Admin::AdReportsController < ApplicationController
     @publishers = Publisher.all
     params[:publisher_id] ||= Publisher.first.id
 
-    @publisher = Publisher.find_by_id(params[:publisher_id])
+    @publisher = Publisher.where(:id => params[:publisher_id]).last
     @vendors = Vendor.all
 
     params[:vendor_id] ||= nil

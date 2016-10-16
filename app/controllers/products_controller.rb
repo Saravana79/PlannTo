@@ -132,7 +132,7 @@ class ProductsController < ApplicationController
     @type = search_type.singularize.camelize.constantize
     session[:itemtype] = @type
     session[:warning] = "true" 
-    @itemtype = Itemtype.find_by_itemtype(@type)
+    @itemtype = Itemtype.where(:itemtype => @type).last
     @popular_topics = Item.popular_topics(@type)
     @article_categories = ArticleCategory.get_by_itemtype(@itemtype.id) #ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
     # @followers =  User.get_followers(search_type)
@@ -155,7 +155,7 @@ class ProductsController < ApplicationController
 
   def topics
     @type = params[:type].capitalize
-    @itemtype = Itemtype.find_by_itemtype(@type)
+    @itemtype = Itemtype.where(:itemtype => @type).last
     @topic_cloud_hash = Topic.topic_clouds(@itemtype)
   end
 
@@ -215,7 +215,7 @@ class ProductsController < ApplicationController
     # end
 
     if((@item.is_a? Product) &&  (!@item.manu.nil?))
-      @dealer_locators =  DealerLocator.find_by_item_id(@item.manu.id)
+      @dealer_locators =  DealerLocator.where(:item_id => @item.manu.id).last
     end 
 
     # @top_contributors = @item.get_top_contributors
@@ -1166,7 +1166,7 @@ class ProductsController < ApplicationController
   def advertisement
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
     content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id
-    @advertisement = Advertisement.find_by_content_id(content_id)
+    @advertisement = Advertisement.where(:content_id => content_id).last
      html = html = render_to_string(:layout => false)
      json = {"html" => html}.to_json
      callback = params[:callback]     

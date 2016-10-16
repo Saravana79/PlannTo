@@ -85,7 +85,7 @@ class Content < ActiveRecord::Base
       doc.elements.each('share_count/ / /') do |ele|
         counts << ele.text
       end
-      f_c = FacebookCount.find_by_content_id(self.id)
+      f_c = FacebookCount.where(:content_id => self.id).last
       if f_c.nil? or f_c.blank?
         #create new row in facebookcounts table
       else
@@ -377,7 +377,7 @@ end
     self.status = get_content_status("create")
     self.save!
     items.split(",").each_with_index do |id, index|
-      item = Item.find_by_id(id)
+      item = Item.where(:id => id).last
       # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
       item_type_ids << get_itemtype(item)
       self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0

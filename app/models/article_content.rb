@@ -186,7 +186,7 @@ class ArticleContent < Content
   def self.create_article_content(param, user_id, remote_ip)
 
     begin
-      user = user_id.blank? ? nil : User.find_by_id(user_id)
+      user = user_id.blank? ? nil : User.where(:id => user_id).last
 
       @through_rss = false
 

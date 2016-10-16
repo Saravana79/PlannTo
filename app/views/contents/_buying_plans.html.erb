@@ -13,7 +13,7 @@
            <%item = buying_plan.get_first_item%>
          <%end%>
          <%if item.blank?  %>
-            <%item =  Item.find_by_name(buying_plan.itemtype.itemtype.pluralize) %>
+            <%item =  Item.where(:name => buying_plan.itemtype.itemtype.pluralize).last %>
         <%end%>  
            <tr>
             <td width="113" height="85">

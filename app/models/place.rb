@@ -97,10 +97,10 @@ class Place < Item
       itemtype.save!
     end
 
-    country_itemtype = Itemtype.find_by_itemtype("Country")
-    state_itemtype = Itemtype.find_by_itemtype("State")
-    city_itemtype = Itemtype.find_by_itemtype("City")
-    place_itemtype = Itemtype.find_by_itemtype("Place")
+    country_itemtype = Itemtype.where(:itemtype => "Country").last
+    state_itemtype = Itemtype.where(:itemtype => "State").last
+    city_itemtype = Itemtype.where(:itemtype => "City").last
+    place_itemtype = Itemtype.where(:itemtype => "Place").last
 
     #create attributes
     latitude = Attribute.find_or_initialize_by_name(:name => "Latitude", :attribute_type => "String", :category_name => "Location")

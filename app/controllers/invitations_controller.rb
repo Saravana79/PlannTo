@@ -17,9 +17,9 @@ class InvitationsController < ApplicationController
   end
   
   def accept
-    invitation = Invitation.find_by_token(params[:token])
+    invitation = Invitation.where(:token => params[:token]).last
     unless invitation.blank?
-      user = User.find_by_email(invitation.email.strip)
+      user = User.where(:email => invitation.email.strip).last
       if user.blank?
         redirect_to new_user_registration_path(:token => invitation.token)
       else

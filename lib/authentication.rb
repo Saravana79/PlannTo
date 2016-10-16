@@ -33,7 +33,7 @@ module Authentication
   module ControllerMethods
 
     def require_authentication
-      user = User.find_by_id(current_user || session[:current_user])
+      user = User.where(:id => current_user || session[:current_user]).last
       session[:current_user] = user.facebook_id if user
       authenticate (user.facebook || user)
     rescue Unauthorized => e

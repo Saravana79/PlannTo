@@ -58,7 +58,7 @@ class Feed < ActiveRecord::Base
             rescue Exception => e
               source = Addressable::URI.parse(each_entry.url).host.gsub("www.", "")
             end
-            article_content = ArticleContent.find_by_url(each_entry.url)
+            article_content = ArticleContent.where(:url => each_entry.url).last
             status = 0
             status = 1 unless article_content.blank?
 
@@ -75,7 +75,7 @@ class Feed < ActiveRecord::Base
 
             # category = sources_list[source]["categories"]
 
-            category = SourceCategory.find_by_source(source).categories rescue ""
+            category = SourceCategory.where(:source => source).last.categories rescue ""
             category = "Others" if category.blank?
 
             new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
@@ -118,7 +118,7 @@ class Feed < ActiveRecord::Base
 
         status = status_val[each_record.status.to_s] unless each_record.status.blank?
 
-        article_content = ArticleContent.find_by_url(each_record.hosted_site_url)
+        article_content = ArticleContent.where(:url => each_record.hosted_site_url).last
         status = 1 unless article_content.blank?
 
         source = ""
@@ -136,7 +136,7 @@ class Feed < ActiveRecord::Base
         # sources_list = Rails.cache.read("sources_list_details")
         # category = sources_list[source]["categories"]
 
-        category = SourceCategory.find_by_source(source).categories rescue ""
+        category = SourceCategory.where(:source => source).last.categories rescue ""
         category = "Others" if category.blank?
 
         check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first

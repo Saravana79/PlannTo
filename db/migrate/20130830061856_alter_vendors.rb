@@ -1,7 +1,7 @@
 class AlterVendors < ActiveRecord::Migration
   def up
     #rename_table :vendors, :vendor_details
-    itemtype = Itemtype.find_by_itemtype("Vendor")
+    itemtype = Itemtype.where(:itemtype => "Vendor").last
     VendorDetail.all.each do |v|
       vendor = Vendor.create(:name => v.name,:imageurl => v.imageurl,:itemtype_id => itemtype.id)
       v.update_attribute('item_id',vendor.id)

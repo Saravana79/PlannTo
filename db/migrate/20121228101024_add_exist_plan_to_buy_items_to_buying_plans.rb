@@ -2,7 +2,7 @@ class AddExistPlanToBuyItemsToBuyingPlans < ActiveRecord::Migration
   def change
  
       Follow.where(:follow_type => "buyer").each do |follow| 
-      @itemtype = Itemtype.find_by_itemtype(follow.followable_type.downcase)
+      @itemtype = Itemtype.where(:itemtype => follow.followable_type.downcase).last
       @buying_plan = BuyingPlan.where(:user_id => follow.follower_id, :itemtype_id => @itemtype.id).first
        if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => follow.follower_id, :itemtype_id => @itemtype.id)

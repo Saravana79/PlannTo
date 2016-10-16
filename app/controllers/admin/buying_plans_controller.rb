@@ -12,7 +12,7 @@ class Admin::BuyingPlansController < ApplicationController
     @item = Item.find(params[:product_id]) rescue ''
     @item_type_id = @item.itemtype.id rescue ''
     if ((@item.type   == "Manufacturer") || (@item.type == "CarGroup") rescue false)
-      @item_type_id = Itemtype.find_by_itemtype("Car").id
+      @item_type_id = Itemtype.where(:itemtype => "Car").last.id rescue nil
       item_ids = @item.related_cars.collect(&:id)
       @buyers = Follow.where('follow_type= ? and followable_id in (?)','buyer',item_ids) rescue ''
     else 

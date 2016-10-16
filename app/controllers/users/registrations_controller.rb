@@ -3,7 +3,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def new
     @static_page = "true"
     @devise = "true"
-    @invitation = Invitation.find_by_token(params[:token])
+    @invitation = Invitation.where(:token => params[:token]).last
     @without_login = params[:type]
     build_resource
     resource.email = @invitation.email unless @invitation.nil?
@@ -13,7 +13,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     return redirect_to root_path if !current_user.blank?
     @static_page = "true"
     @devise = "true"
-    @invitation = Invitation.find_by_token(params[:token])
+    @invitation = Invitation.where(:token => params[:token]).last
     @without_login = params[:type]
     @publisher = Publisher.new
     build_resource
@@ -23,7 +23,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     # @static_page = "true"
     # @devise = "true"
-    # @invitation = Invitation.find_by_token(params[:token])
+    # @invitation = Invitation.where(:token => params[:token]).last
     # @item =  @invitation.item unless @invitation.blank?
     # @without_login = params[:type]
     # #from devise

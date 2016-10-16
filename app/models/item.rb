@@ -88,7 +88,7 @@ class Item < ActiveRecord::Base
                           self.itemtype_id
                         end
                       when "ItemtypeTag" then Itemtype.where("itemtype = ? ", self.name.singularize).first.try(:id)
-                      when "Topic" then TopicItemtypeRelation.find_by_item_id(self.id).itemtype_id
+                      when "Topic" then TopicItemtypeRelation.where(:item_id => self.id).last.itemtype_id rescue nil
                       else self.itemtype_id
                     end
       return itemtype_id
@@ -104,7 +104,7 @@ class Item < ActiveRecord::Base
   
   def get_base_itemtype
     itemtype_id = self.get_base_itemtypeid
-    itemtype1 = Itemtype.find_by_id(itemtype_id).itemtype
+    itemtype1 = Itemtype.where(:id => itemtype_id).last.itemtype rescue nil
     return itemtype1
   end
   
@@ -322,7 +322,7 @@ class Item < ActiveRecord::Base
     logger.info "(((((((((((((((((((((((((((((("
 
    # return item.relateditems.paginate(:page => page, :per_page => limit)
-   itemdetails = Item.find_by_id(item)
+   itemdetails = Item.where(:id => item).last
     if (itemdetails.is_a?AttributeTag)    
       Item.find_by_sql("SELECT distinct a.* from items AS a INNER JOIN attribute_values ON attribute_values.item_id = a.id  INNER JOIN item_attribute_tag_relations on attribute_values.attribute_id =item_attribute_tag_relations.attribute_id and  item_attribute_tag_relations.value = attribute_values.value  WHERE item_attribute_tag_relations.item_id = " + item.to_s + " order by a.created_at desc").paginate(:page => page, :per_page => limit)
     else
@@ -420,7 +420,7 @@ class Item < ActiveRecord::Base
       #save in cache
       $redis.multi do
         top_contributors.each do |cont|
-          user = User.find_by_id(cont[0])
+          user = User.where(:id => cont[0]).last
           avatar_url =  user.get_photo(:thumb)
           userurl = user.get_url()
           #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
@@ -833,7 +833,7 @@ def update_ratings()
          average_rating = rating
          review_count =  user_review_count + expert_review_count
          review_total_count =   user_review_total_count   +      expert_review_total_count
-         item_rating1 = ItemRating.find_by_item_id(item.id)
+         item_rating1 = ItemRating.where(:item_id => item.id).last
          if(item_rating1.nil?)
             item_rating1 = ItemRating.new
          end

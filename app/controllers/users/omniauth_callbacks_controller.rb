@@ -3,7 +3,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   
   def facebook
     auth = request.env["omniauth.auth"]
-    user = User.find_by_email(auth.info.email)
+    user = User.where(:email => auth.info.email).last
     @user_object = user
     if user.blank?
       user = User.create_from_fb_callback(auth)

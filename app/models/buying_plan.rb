@@ -10,7 +10,7 @@ class BuyingPlan < ActiveRecord::Base
     return "/preferences/#{self.itemtype.itemtype.downcase}/#{self.uuid}"
   end
   def self.finding_buyng_plan(user,itemtype ,remote_ip)
-    itemtype = Itemtype.find_by_itemtype(itemtype)
+    itemtype = Itemtype.where(:itemtype => itemtype).last
     if !user 
       buying_plan = BuyingPlan.where(:temporary_buying_plan_ip => remote_ip,:user_id => 0, :itemtype_id => itemtype.id,:completed => false,:deleted => false).first
     return buying_plan 

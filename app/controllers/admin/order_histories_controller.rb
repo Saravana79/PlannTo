@@ -59,7 +59,7 @@ class Admin::OrderHistoriesController < ApplicationController
     @search_path = "/admin/orders"
     # user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
     # vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
-    # @vendor = Vendor.find_by_id(vendor_id)
+    # @vendor = Vendor.where(:id => vendor_id).last
     # @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id)
     # @advertisements = [@advertisement]
     @publishers = Publisher.all

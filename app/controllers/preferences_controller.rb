@@ -10,7 +10,7 @@ class PreferencesController < ApplicationController
     def show
       @static_page1= "true"
       require 'will_paginate/array'
-      @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
+      @buying_plan = BuyingPlan.where(:uuid => params[:uuid]).last
       if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip == request.remote_ip
        @buying_warning_message = "true"
       end
@@ -351,7 +351,7 @@ class PreferencesController < ApplicationController
     Follow.wizard_save(params[:item_id],"owner",current_user)
     current_user.clear_user_follow_item
     type = Item.find(params[:item_id]).type
-    item_type_id = Itemtype.find_by_itemtype(type).id
+    item_type_id = Itemtype.where(:itemtype => type).last.id rescue nil
     @plan = BuyingPlan.where(:user_id => current_user.id,:completed => false,:deleted => false, :itemtype_id => item_type_id).first
     @follow_types = Itemtype.get_followable_types(@plan.itemtype.itemtype)
     @follow_item = Follow.for_follower(@plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) #.group_by(&:followable_type)
@@ -367,7 +367,7 @@ class PreferencesController < ApplicationController
   
   def new
     session[:no_popup_background] = ""
-    @itemtype = Itemtype.find_by_itemtype(params[:search_type])
+    @itemtype = Itemtype.where(:itemtype => params[:search_type]).last
     session[:product_warning_message] = ''
     session[:content_warning_message] = ''
     @from = params[:from]
@@ -393,7 +393,7 @@ sunspot_search_items
   def create_preference
     require 'will_paginate/array'
   
-    @itemtype = Itemtype.find_by_itemtype(params[:search_type])
+    @itemtype = Itemtype.where(:itemtype => params[:search_type]).last
      if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
        if !params[:separate_url_item_ids].blank?
@@ -470,7 +470,7 @@ sunspot_search_items
   end
 
   def get_advice
-    @itemtype = Itemtype.find_by_itemtype(params[:search_type])
+    @itemtype = Itemtype.where(:itemtype => params[:search_type]).last
     #search_attributes = SearchAttribute.where("itemtype_id =?", @itemtype.id)
     @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false, :deleted => false)
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
@@ -494,7 +494,7 @@ sunspot_search_items
   end
 
   def give_advice
-    @question = UserQuestion.find_by_id(params[:question_id])
+    @question = UserQuestion.where(:id => params[:question_id]).last
     @user_answer = UserAnswer.new
   end
   
@@ -608,7 +608,7 @@ sunspot_search_items
      follow =  current_user.follow(@item, follow_type) rescue ''
      if follow == ''
        item_considered = []
-       buying_plan = BuyingPlan.find_by_temporary_buying_plan_ip_and_itemtype_id(request.remote_ip,@item.itemtype.id)
+       buying_plan = BuyingPlan.where(:temporary_buying_plan_ip => request.remote_ip, itemtype_id => @item.itemtype.id).last
        items_considered =  buying_plan.items_considered.split(",") rescue []
        items_considered << @item.id
        buying_plan.update_attribute('items_considered',items_considered.uniq.join(","))
@@ -620,7 +620,7 @@ sunspot_search_items
 
   def sunspot_search_items
     @search_type = @buying_plan.try(:itemtype).try(:itemtype) || @search_type
-    itemtype = Itemtype.find_by_itemtype(@buying_plan.try(:itemtype).try(:itemtype) || @search_type)
+    itemtype = Itemtype.where(:itemtype => @buying_plan.try(:itemtype).try(:itemtype) || @search_type).last
 
     @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute)
     unless ($search_info_lookups.nil? || $search_type != params[:search_type])

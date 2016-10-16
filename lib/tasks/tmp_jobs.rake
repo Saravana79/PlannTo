@@ -777,7 +777,7 @@ task :update_mouthshut_details_to_feed_url => :environment do
       rescue Exception => e
         source = Addressable::URI.parse(url).host.gsub("www.", "")
       end
-      article_content = ArticleContent.find_by_url(url)
+      article_content = ArticleContent.where(:url => url).last
       status = 0
       status = 1 unless article_content.blank?
 
@@ -794,7 +794,7 @@ task :update_mouthshut_details_to_feed_url => :environment do
 
       # category = sources_list[source]["categories"]
 
-      category = SourceCategory.find_by_source(source).categories rescue ""
+      category = SourceCategory.where(:source => source).last.categories rescue ""
       category = "Others" if category.blank?
 
       new_feed_url = FeedUrl.new(feed_id: 41, url: url_for_save, title: title.to_s.strip, category: category,
@@ -824,7 +824,7 @@ task :update_feed_url_with_title_desc => :environment do
     feed_urls.each do |feed_url|
       begin
         valid_categories=["science & technology","Autos & Vehicles","Science & Tech"]
-        category = SourceCategory.find_by_source(feed_url.source).categories rescue ""
+        category = SourceCategory.where(:source => feed_url.source).last.categories rescue ""
         category = "Others" if category.blank?
         url = feed_url.url.to_s
         title, description, images, page_category = Feed.get_feed_url_values(url)

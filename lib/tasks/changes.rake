@@ -41,7 +41,7 @@ task :update_created_by_for_contents, [:start_id, :end_id, :needs] => :environme
   user_id = user_ids.shuffle.first
     content.update_attribute(:created_by, user_id)
     user = User.find user_id
-    point = Point.find_by_object_id(content.id)  
+    point = Point.where(:object_id => content.id).last
     if point.nil?
      points = Point.get_points(content, Point::PointReason::CONTENT_SHARE)
       Point.create(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(content.class.name), :object_id => content.id, :reason => Point::PointReason::CONTENT_SHARE, :points => points)

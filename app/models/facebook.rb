@@ -6,7 +6,7 @@ class Facebook < ActiveRecord::Base
 
   def create_user
     _fb_profile = profile
-    user = User.find_by_email(_fb_profile.email)
+    user = User.where(:email => _fb_profile.email).last
     if user.blank?
       User.create!(:email => _fb_profile.email, :name => _fb_profile.name, :password => 'password',
                    :password_confirmation => 'password', :facebook_id => self.id)
@@ -59,7 +59,7 @@ class Facebook < ActiveRecord::Base
 
     def store_facebook_users(current_user, facebook_profile)
       facebook_profile.friends.each do |facebook_friend|
-        facebook_user = Facebook.find_by_identifier(facebook_friend.identifier)
+        facebook_user = Facebook.where(:identifier => facebook_friend.identifier).last
         if facebook_user
           current_user.follow(facebook_user.user, 'Facebook')
           facebook_user.user.follow(current_user, 'Facebook')

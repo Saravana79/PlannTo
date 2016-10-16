@@ -40,7 +40,7 @@ class TravelsController < ApplicationController
 
           item_details.each { |_, val| @item_details << val[0] }
         else
-          item = Item.find_by_id(params[:item_id])
+          item = Item.where(:id => params[:item_id]).last
 
           if item.is_a?(City)
             item_ids_based_on_city = item.hotels.map(&:id)

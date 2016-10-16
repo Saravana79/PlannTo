@@ -278,7 +278,7 @@ class FeedsController < ApplicationController
     @is_beauty = @feed_url.category.include?("Beauty") rescue false
     @actual_title = @feed_url.created_at < 2.weeks.ago ? @feed_url.title : "" unless @feed_url.blank?
 
-    @article_content = ArticleContent.find_by_url(@feed_url.url)
+    @article_content = ArticleContent.where(:url => @feed_url.url).last
 
     if !@article_content.blank?
       @already_shared = true
@@ -308,7 +308,7 @@ class FeedsController < ApplicationController
         return
       end
 
-      @article_content = ArticleContent.find_by_url(@feed_url.url)
+      @article_content = ArticleContent.where(:url => @feed_url.url).last
 
       if @feed_url.status == 1 && !@article_content.blank?
         @already_shared = true

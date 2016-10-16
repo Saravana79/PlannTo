@@ -143,7 +143,7 @@ class User < ActiveRecord::Base
   end
 
   def invitation_token=(token)
-    self.invitation = Invitation.find_by_token(token)
+    self.invitation = Invitation.where(:token => token).last
   end
 
   def get_photo(type = :thumb)

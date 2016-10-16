@@ -29,7 +29,7 @@ class SitemapController < ApplicationController
       @pages_to_visit1+= static_urls
    end
    if params[:object_type] and params[:itemtype]
-       item_type = Itemtype.find_by_itemtype(params[:itemtype])
+       item_type = Itemtype.where(:itemtype => params[:itemtype]).last
        date_object = Date.today.beginning_of_week + 2 <= Date.today ?     Date.today.beginning_of_week + 2 : "false"
       if date_object == "false"
          last_wedday =  1.weeks.ago.beginning_of_week + 2

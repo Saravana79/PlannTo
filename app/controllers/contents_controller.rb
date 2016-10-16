@@ -191,7 +191,7 @@ class ContentsController < ApplicationController
           items = params[:items].split(",")
         end 
       if items.size == 1
-        item = Item.find_by_id(items[0])
+        item = Item.where(:id => items[0]).last
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
         elsif (item.type == "AttributeTag")
@@ -235,18 +235,18 @@ class ContentsController < ApplicationController
   
   def search_guide
     @static_page1 = "true"
-    @guide = Guide.find_by_name params[:guide_type]
+    @guide = Guide.where(:name => params[:guide_type]).last
     #@article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
     @item = item = Item.where("id = ? or slug = ?", params[:item_id], params[:item_id]).first
     param_item_id = item.try(:id)
     
     if (item.is_a? Product)
       @article_categories = ArticleCategory.get_by_itemtype(item.get_base_itemtypeid) #ArticleCategory.where("itemtype_id = ?", item.get_base_itemtypeid)
-       @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
+       @itemtype = Itemtype.where(:itemtype => params[:itemtype].singularize.camelize.constantize).last
      # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else
       @article_categories = ArticleCategory.get_by_itemtype(0) #ArticleCategory.where("itemtype_id = ?", 0)
-      @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize) if params[:itemtype].present?
+      @itemtype = Itemtype.where(:itemtype => params[:itemtype].singularize.camelize.constantize).last if params[:itemtype].present?
       
      # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end

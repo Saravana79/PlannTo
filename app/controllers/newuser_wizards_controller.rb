@@ -43,7 +43,8 @@ class NewuserWizardsController < ApplicationController
     @item = Item.find(params[:item_id])
     @wizard_type = params[:type]
     Follow.wizard_save(params[:item_id], @wizard_type,current_user)
-    @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
+    @itemtype = Itemtype.where(:itetype => @item.itemtype.itemtype).last
+
     if params[:type] == 'buyer'
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => 0,:deleted => 0).first
       if @buying_plan.nil?
@@ -78,7 +79,7 @@ class NewuserWizardsController < ApplicationController
      @item = Item.find(params[:id])
     unless current_user.follows.where('followable_id =? and followable_type =? and follow_type =?', @item.id,@item.type,params[:type]).blank?
     if params[:type] == 'buyer'
-      @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
+      @itemtype = Itemtype.where(:itemtype => @item.itemtype.itemtype).last
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype,:completed => 0,:deleted => 0).first
       @follow_types = Itemtype.get_followable_types(@itemtype.itemtype)
       @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) 
