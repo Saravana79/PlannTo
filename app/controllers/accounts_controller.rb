@@ -47,7 +47,7 @@ class AccountsController < ApplicationController
     if(!params[:follow])
       params[:follow] = 'Products'
     end
-    @user = User.find(:first, :conditions => ["username like ?","#{params[:username]}"])
+    @user = User.where("username like #{params[:username]}").last
      if params[:follow] == "Followers" || params[:follow] == "Following"
       @follows,@users = Follow.get_followers_following(@user,params[:follow],params[:page],8)
     else 

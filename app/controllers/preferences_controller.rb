@@ -4,7 +4,7 @@ class PreferencesController < ApplicationController
   layout "product"
 
     def index
-      @question = UserQuestion.find(:first)
+      @question = UserQuestion.first
     end
 
     def show
@@ -549,7 +549,7 @@ sunspot_search_items
       @user_answer.recommendations.build(:item_id => item_id)
     end
     @user_answer.save
-     @count = UserQuestion.find(:first, :conditions => {:id =>params[:user_question_answers][:user_question_id]}).user_answers.size
+     @count = UserQuestion.where(:id => params[:user_question_answers][:user_question_id]).last.user_answers.size
      @buying_plan = UserQuestion.find(params[:user_question_answers][:user_question_id]).buying_plan
      UserActivity.save_user_activity(current_user,@buying_plan.id,"recommended","Buying Plan", @user_answer.id,request.remote_ip)
   end

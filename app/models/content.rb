@@ -325,7 +325,7 @@ end
    contents.map{ |c| activity_ids << c.activity_id  if c.activity_id != nil} rescue ''
    content_ids = content_ids.blank? ? "" : content_ids
    activity_ids = activity_ids.blank? ? "" : activity_ids
-   contents_1 = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
+   contents_1 = Content.where(:id => content_ids).order(filter_params["order"])
    activity_contents = UserActivity.where("id in (?)", activity_ids).group(:id).order("time desc")
    contents = ((contents_1 + activity_contents).sort{|x,y| x.sort_by <=> y.sort_by}).reverse
   # contents = Content.find(content_ids)

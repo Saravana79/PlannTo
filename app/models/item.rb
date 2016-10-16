@@ -590,7 +590,7 @@ class Item < ActiveRecord::Base
   
    
   def itemtypetag
-    Item.find(:first,:conditions =>{:name => self.type.pluralize, :type => "ItemtypeTag"})
+    Item.where(:name => self.type.pluralize, :type => "ItemtypeTag").last
   end
   
   def related_content
@@ -1019,7 +1019,7 @@ end
   end
 
   def self.populate_slug()
-     items = Item.find(:all, :conditions=>["slug is null"])
+     items = Item.where(:slug => nil)
         items.each do |item|
           puts item.id
             item.save

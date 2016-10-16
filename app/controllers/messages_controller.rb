@@ -13,7 +13,7 @@ class MessagesController < ApplicationController
   end
 
   def show
-    @message_users = User.find(:all, :conditions => ['name like ? and id !=?',"%#{params[:q]}%", current_user.id])
+    @message_users = User.where("name like '%#{params[:q]}%' and id != #{current_user.id}")
     respond_to do |format|
       format.html
       format.json { render :json => @message_users.map(&:attributes)}
@@ -78,7 +78,7 @@ class MessagesController < ApplicationController
   
    def search_users
     #
-     @message_users = User.find(:all, :conditions => ['name like ? and id !=?',"%#{params[:term]}%", current_user.id])
+     @message_users = User.where("name like '%#{params[:term]}% and id != #{current_user.id}").last
 
        results = @message_users.collect{|item|
          logger.info item.email

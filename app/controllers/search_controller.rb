@@ -429,7 +429,7 @@ class SearchController < ApplicationController
 
   def message_users
     #
-     @message_users = User.find(:all, :conditions => ['email like ? and id !=?',"%#{params[:term]}%", current_user.id])
+     @message_users = User.where("email like '%#{params[:term]}%' and id != #{current_user.id}")
 
        results = @message_users.collect{|item|
       {:id => item.id, :value => "#{item.email}", :imgsrc =>"", :type => "", :url => "" }
