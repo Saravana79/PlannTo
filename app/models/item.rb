@@ -890,7 +890,14 @@ def populate_pro_con
                         end
                          pro = pro.capitalize
                          if item.itemtype.pro_con_categories.blank?
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: nil, text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size)
+                              # ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: nil, text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size)
+                              ip = ItemProCon.where(:item_id => item.id, :article_content_id => content.id, :proorcon => "Pro", :text => pro.strip).first_or_create
+                              ip.pro_con_category_id = nil
+                              ip.index = last_index
+                              ip.proandcon = "Pro"
+                              ip.letters_count = pro.length
+                              ip.words_count = pro.scan(/\w+/).size
+                              ip.save
                          else
                               tempid =  nil
                               item.itemtype.pro_con_categories.order(:sort_order).each do |pcc|
@@ -902,7 +909,14 @@ def populate_pro_con
                                    end
                                                                 
                               end
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: tempid , text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size) 
+                              # ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: tempid , text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size)
+                              ip = ItemProCon.where(:item_id => item.id, :article_content_id => content.id, :proorcon => "Pro", :text => pro.strip).first_or_create
+                              ip.pro_con_category_id = tempid
+                              ip.index = last_index
+                              ip.proandcon = "Pro"
+                              ip.letters_count = pro.length
+                              ip.words_count = pro.scan(/\w+/).size
+                              ip.save
                          end
                       end 
                     end
@@ -916,7 +930,14 @@ def populate_pro_con
                             end
                              con = con.capitalize             
                              if item.itemtype.pro_con_categories.blank?
-                                  ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: nil, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size)
+                                  # ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: nil, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size)
+                                  ip = ItemProCon.where(:item_id => item.id, :article_content_id => content.id, :proorcon => "Con", :text => con.strip).first_or_create
+                                  ip.pro_con_category_id = nil
+                                  ip.index = last_index
+                                  ip.proandcon = "Con"
+                                  ip.letters_count = con.length
+                                  ip.words_count = con.scan(/\w+/).size
+                                  ip.save
                              else
                                   tempid =  nil
                                   item.itemtype.pro_con_categories.each do |pcc|
@@ -927,7 +948,14 @@ def populate_pro_con
                                             break
                                        end                                  
                                   end
-                                   ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: tempid, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size) 
+                                   # ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: tempid, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size)
+                                  ip = ItemProCon.where(:item_id => item.id, :article_content_id => content.id, :proorcon => "Con", :text => con.strip).first_or_create
+                                  ip.pro_con_category_id = tempid
+                                  ip.index = last_index
+                                  ip.proandcon = "Con"
+                                  ip.letters_count = con.length
+                                  ip.words_count = con.scan(/\w+/).size
+                                  ip.save
                              end
                         end
                     end    

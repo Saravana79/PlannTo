@@ -7,7 +7,10 @@ task :related_items => :environment do
       puts item.item_id.to_s + " - " + related_item_ids.count.to_s
       related_item_ids.uniq.each do |ri|
         # if RelatedItem.where(:item_id => item.item_id,:related_item_id => ri).empty?
-        RelatedItem.find_or_create_by_item_id_and_related_item_id(:item_id => item.item_id, :related_item_id => ri, :variance => 10)
+        # RelatedItem.find_or_create_by_item_id_and_related_item_id(:item_id => item.item_id, :related_item_id => ri, :variance => 10)
+        ri = RelatedItem.where(:item_id => item.item_id, :related_item_id => ri).first_or_create
+        ri.variance = 10
+        ri.save
         # end
       end
     end

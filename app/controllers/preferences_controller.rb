@@ -395,7 +395,7 @@ sunspot_search_items
   
     @itemtype = Itemtype.where(:itemtype => params[:search_type]).last
      if !current_user
-      @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
+      @buying_plan = BuyingPlan.where(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false).first_or_create
        if !params[:separate_url_item_ids].blank?
          @buying_plan.update_attribute('items_considered',params[:separate_url_item_ids])
        end  
@@ -472,7 +472,7 @@ sunspot_search_items
   def get_advice
     @itemtype = Itemtype.where(:itemtype => params[:search_type]).last
     #search_attributes = SearchAttribute.where("itemtype_id =?", @itemtype.id)
-    @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false, :deleted => false)
+    @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false, :deleted => false).first_or_create
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
     #search_ids = search_attributes.collect{|item| item.id}
     #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
