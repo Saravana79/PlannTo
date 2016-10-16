@@ -7,8 +7,8 @@ csv_details.each_with_index do |csv_detail, index|
   item_id = csv_detail[0]
   old_related_item_name = csv_detail[3]
   related_item_name = csv_detail[4]
-  item_relationship = Itemrelationship.find_or_initialize_by_item_id(item_id)
-  related_item = CarGroup.find_or_initialize_by_name(related_item_name)
+  item_relationship = Itemrelationship.where(:item_id => item_id).first_or_initialize
+  related_item = CarGroup.where(:name => related_item_name).first_or_initialize
   if related_item.new_record?
     related_item.update_attributes(:itemtype_id => 5, :status => 1)
   end
@@ -25,14 +25,14 @@ csv_details.each_with_index do |csv_detail, index|
   p csv_detail
   name = csv_detail[0]
   related_item_name = csv_detail[2]
-  item = Lens.find_or_initialize_by_name(name)
+  item = Lens.where(:name => name).first_or_initialize
   item.itemtype_id = 20
   item.status = 1
   item.save!(:validate => false)
 
   if !related_item_name.blank?
-    item_relationship = Itemrelationship.find_or_initialize_by_item_id(item.id)
-    related_item = CarGroup.find_or_initialize_by_name(related_item_name)
+    item_relationship = Itemrelationship.where(:item_id => item.id).first_or_initialize
+    related_item = CarGroup.where(:name => related_item_name).first_or_initialize
     if related_item.new_record?
       related_item.update_attributes(:itemtype_id => 5, :status => 1)
     end
@@ -51,14 +51,14 @@ csv_details.each_with_index do |csv_detail, index|
   p csv_detail
   name = csv_detail[0]
   related_item_name = csv_detail[1]
-  item = Television.find_or_initialize_by_name(name)
+  item = Television.where(:name => name).first_or_initialize
   item.itemtype_id = 21
   item.status = 1
   item.save!(:validate => false)
 
   if !related_item_name.blank?
-    item_relationship = Itemrelationship.find_or_initialize_by_item_id(item.id)
-    related_item = CarGroup.find_or_initialize_by_name(related_item_name)
+    item_relationship = Itemrelationship.where(:item_id => item.id).first_or_initialize
+    related_item = CarGroup.where(:name => related_item_name).first_or_initialize
     if related_item.new_record?
       related_item.update_attributes(:itemtype_id => 5, :status => 1)
     end
@@ -78,15 +78,15 @@ csv_details.each_with_index do |csv_detail, index|
   name = csv_detail[0]
   related_item_name = csv_detail[1]
   image_name = csv_detail[2]
-  item = itemtype.camelize.constantize.find_or_initialize_by_name(name)
+  item = itemtype.camelize.constantize.where(:name => name).first_or_initialize
   item.itemtype_id = itemtype_id
   item.status = 1
   item.imageurl = image_name
   item.save!(:validate => false)
 
   if !related_item_name.blank?
-    item_relationship = Itemrelationship.find_or_initialize_by_item_id(item.id)
-    related_item = CarGroup.find_or_initialize_by_name(related_item_name)
+    item_relationship = Itemrelationship.where(:item_id => item.id).first_or_initialize
+    related_item = CarGroup.where(:name => related_item_name).first_or_initialize
     if related_item.new_record?
       related_item.update_attributes(:itemtype_id => 5, :status => 1)
     end
@@ -105,7 +105,7 @@ csv_details.each_with_index do |csv_detail, index|
   p csv_detail
   name = csv_detail[0]
   image_name = csv_detail[1]
-  item = itemtype.camelize.constantize.find_or_initialize_by_name(name)
+  item = itemtype.camelize.constantize.where(:name => name).first_or_initialize
   item.itemtype_id = itemtype_id
   item.status = 1
   item.imageurl = image_name
@@ -131,11 +131,11 @@ items.each do |item|
   image_url = item["image_link"][0]
   itemtype_hash = {"mobile" => 6, "laptops" => 23, "tablet" => 13}
 
-  source_item = Sourceitem.find_or_initialize_by_url(url)
+  source_item = Sourceitem.where(:url => url).first_or_initialize
   if source_item.new_record?
     source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_hash[product_type], :created_by => "System", :verified => false)
   elsif source_item.verified && !source_item.matchitemid.blank?
-    item_detail = Itemdetail.find_or_initialize_by_url(url)
+    item_detail = Itemdetail.where(:url => url).first_or_initialize
     if item_detail.new_record?
       item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false)
       image = item_detail.Image
@@ -201,11 +201,11 @@ csv_details.each do |each_rec|
   prev_item = nil
   each_rec.each do |item_name|
     next if item_name.blank?
-    item = Beauty.find_or_initialize_by_name(item_name)
+    item = Beauty.where(:name => item_name).first_or_initialize
     item.update_attributes!(:imageurl => "#{item_name}.jpeg", :itemtype_id => 27, :status => 1)
 
     if !prev_item.blank?
-      relation = Itemrelationship.find_or_initialize_by_item_id_and_relationtype(item.id, "Parent")
+      relation = Itemrelationship.where(:item_id => item.id, :relationtype => "Parent").first_or_initialize
       relation.update_attributes(:relateditem_id => prev_item.id)
     end
     prev_item = item
@@ -219,11 +219,11 @@ csv_details.each do |each_rec|
   prev_item = nil
   each_rec.each do |item_name|
     next if item_name.blank?
-    item = Beauty.find_or_initialize_by_name(item_name)
+    item = Beauty.where(:name => item_name).first_or_initialize
     item.update_attributes!(:imageurl => "#{item_name}.jpeg", :itemtype_id => 27, :status => 1)
 
     if !prev_item.blank?
-      relation = Itemrelationship.find_or_initialize_by_item_id_and_relationtype(item.id, "Parent")
+      relation = Itemrelationship.where(:item_id => item.id, :relationtype => "Parent").first_or_initialize
       relation.update_attributes(:relateditem_id => prev_item.id)
     end
     prev_item = item
@@ -594,12 +594,12 @@ csv_details.each do |each_val|
   style_name = each_val[1]
 
   if !apparel_name.blank?
-    item = Apparel.find_or_initialize_by_name(apparel_name)
+    item = Apparel.where(:name => apparel_name).first_or_initialize
     item.update_attributes!(:imageurl => "#{apparel_name}.jpeg", :itemtype_id => 52, :status => 1, :created_by => 1) rescue apparel_name
   end
 
   if !style_name.blank?
-    item = Style.find_or_initialize_by_name(style_name)
+    item = Style.where(:name => style_name).first_or_initialize
     item.update_attributes!(:imageurl => "#{style_name}.jpeg", :itemtype_id => 53, :status => 1, :created_by => 1) rescue style_name
   end
 end
@@ -664,11 +664,11 @@ items.each do |item|
     next
   end
 
-  source_item = Sourceitem.find_or_initialize_by_url(url)
+  source_item = Sourceitem.where(:url => url).first_or_initialize
   if source_item.new_record?
     source_item.update_attributes(:name => title, :status => 1, :urlsource => "Autoportal", :itemtype_id => 1, :created_by => "System", :verified => false, :additional_details => pid)
   elsif source_item.verified && !source_item.matchitemid.blank?
-    item_detail = Itemdetail.find_or_initialize_by_url(url)
+    item_detail = Itemdetail.where(:url => url).first_or_initialize
     if item_detail.new_record?
       item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 75798, :iscashondeliveryavailable => false, :isemiavailable => emi_available, :additional_details => pid, :cashback => emi_value, :description => "#{mileage}|#{fueltype}", :IsError => false)
       image = item_detail.Image
@@ -792,7 +792,7 @@ each_node_list.each_with_index do |each_node, index|
         # cashback = FeedUrl.get_value_from_pattern(offer.to_s.downcase, "rs<price>cashback", "<price>").strip rescue ""
         # isemiavailable = offer.to_s.downcase.include?("emi available") ? true : false
 
-        source_item = Sourceitem.find_or_initialize_by_url(url)
+        source_item = Sourceitem.where(:url => url).first_or_initialize
         if source_item.new_record?
           source_item.update_attributes(:name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => mpn)
         # elsif source_item.verified && !source_item.matchitemid.blank?
@@ -859,7 +859,7 @@ source_items.each do |source_item|
     isemiavailable = offer.to_s.downcase.include?("emi available") ? true : false
     iscashondeliveryavailable = offer.to_s.downcase.include?("cod option will be available") ? true : false
 
-    item_detail = Itemdetail.find_or_initialize_by_url(source_item.url)
+    item_detail = Itemdetail.where(:url => source_item.url).first_or_initialize
     if item_detail.new_record?
       item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => source_item.url, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => iscashondeliveryavailable, :isemiavailable => isemiavailable, :additional_details => product_id, :cashback => cashback, :description => description, :IsError => false, :mrpprice => mrpprice, :offer => offer)
       image = item_detail.Image
@@ -953,7 +953,7 @@ class MyDocument < Nokogiri::XML::SAX::Document
                     end
 
       if itemtype_id != 0
-        source_item = Sourceitem.find_or_initialize_by_url(@open_struct.url)
+        source_item = Sourceitem.where(:url => @open_struct.url).first_or_initialize
 
         if source_item.new_record?
           p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -990,7 +990,7 @@ products.each do |each_product|
     url = each_product["ProductURL"][0].to_s rescue ""
     url = CGI.unescape(url) rescue ""
     url = FeedUrl.get_value_from_pattern(url, "r=<url>?", "<url>").strip rescue ""
-    item_beauty_detail = ItemBeautyDetail.find_or_initialize_by_url(:url => url)
+    item_beauty_detail = ItemBeautyDetail.where(:url => url).first_or_initialize
     name = each_product["ProductName"][0].to_s rescue ""
     offer_price = each_product["ProductPrice"][0] rescue ""
     status = each_product["StockAvailability"][0].to_s.downcase.include?("in stock") ? 1 : 2 rescue 2
@@ -1097,7 +1097,7 @@ jockey_hash.each do |int_key, int_val|
         price = each_product.css(".details_1_new .pricedetailswithstylecode").at(".price_rs").inner_text.to_s.downcase.gsub("rs.", '').gsub(",", "") rescue ""
         style_code = each_product.css(".details_1_new .pricedetailswithstylecode").at(".style_code").inner_text.to_s.downcase.gsub("style # ", '') rescue ""
 
-        p item_detail = Itemdetail.find_or_initialize_by_url(url_link)
+        p item_detail = Itemdetail.where(:url => url_link).first_or_initialize
 
         if item_detail.new_record?
           item_detail.update_attributes!(:ItemName => title, :itemid => val, :url => url_link, :price => price, :status => 1, :last_verified_date => Time.now, :site => 76612, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => style_code, :cashback => "", :description => "", :IsError => false, :mrpprice => price, :offer => "")
@@ -1407,7 +1407,7 @@ if res.kind_of?(Net::HTTPFound)
           # p @open_struct.title
           # p @open_struct.url
           # p itemtype_id
-          source_item = Sourceitem.find_or_initialize_by_additional_details(@open_struct.item_unique_id)
+          source_item = Sourceitem.where(:additional_details => @open_struct.item_unique_id).first_or_initialize
 
           if source_item.new_record?
             p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -1457,7 +1457,7 @@ if res.kind_of?(Net::HTTPFound)
       #   #               end
       #
       #   # if itemtype_id != 0
-      #   #   source_item = Sourceitem.find_or_initialize_by_url(@open_struct.url)
+      #   #   source_item = Sourceitem.where(:url => @open_struct.url).first_or_initialize
       #
       #   #   if source_item.new_record?
       #   #     p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"

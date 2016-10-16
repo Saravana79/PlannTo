@@ -13,7 +13,7 @@ class SidAdDetail < ActiveRecord::Base
 
       add_impressions.each do |each_impression|
         s_id = each_impression.sid
-        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => s_id)
+        sid_ad_detail = SidAdDetail.where(:sid => s_id).first_or_initialize
         sid_ad_detail.save! if sid_ad_detail.new_record?
         p "Initialize sid: #{s_id}"
       end
@@ -49,7 +49,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
 
       impressions.each do |each_imp|
         begin
-          sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
+          sid_ad_detail = SidAdDetail.where(:sid => each_imp.sid).first_or_initialize
           sid_ad_detail.update_attributes(:impressions => each_imp.impression_count, :avg_winning_price => each_imp.avg_winning_price)
 
           if sid_ad_detail.sample_url.blank?
@@ -79,7 +79,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
     # @impressions = AddImpression.find_by_sql(impression_query)
     #
     # @impressions.each do |each_imp|
-    #   sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
+    #   sid_ad_detail = SidAdDetail.where(:sid => each_imp.sid).first_or_initialize
     #   sid_ad_detail.update_attributes(:impressions => each_imp.impression_count)
     #
     #   if sid_ad_detail.sample_url.blank?
@@ -103,7 +103,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
       clicks.each do |each_click|
         each_click_sid = each_click.sid
         p "Updating Clicks for #{each_click_sid}"
-        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_click_sid)
+        sid_ad_detail = SidAdDetail.where(:sid => each_click_sid).first_or_initialize
         sid_ad_detail.update_attributes(:clicks => each_click.click_count)
       end
       page += 1
@@ -114,7 +114,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
     @orders.each do |each_order|
       each_order_sid = each_order.sid
       p "Updating Orders for #{each_order_sid}"
-      sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_order_sid)
+      sid_ad_detail = SidAdDetail.where(:sid => each_order_sid).first_or_initialize
       sid_ad_detail.update_attributes(:orders => each_order.count)
     end
 
@@ -145,7 +145,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
 
         each_sid_ad_detail_sid = each_sid_ad_detail.sid
         p "Updating ectr for #{each_sid_ad_detail_sid}"
-        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_sid_ad_detail_sid)
+        sid_ad_detail = SidAdDetail.where(:sid => each_sid_ad_detail_sid).first_or_initialize
         sid_ad_detail.update_attributes!(:ectr => ectr)
 
         # Redis sid:XXX update with impresssions, clicks and orders #TODO: remove permanatly later

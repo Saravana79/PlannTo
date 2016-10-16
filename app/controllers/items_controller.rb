@@ -155,7 +155,7 @@ class ItemsController < ApplicationController
         if !params[:city_id].blank?
           cities = params[:city_id].to_s.split(",")
           cities.each do |city_id|
-            relation = Itemrelationship.find_or_initialize_by_item_id_and_relationtype(@item.id, "Place")
+            relation = Itemrelationship.where(:item_id => @item.id, :relationtype => "Place").first_or_initialize
             relation.update_attributes(:relateditem_id => city_id)
           end
         end

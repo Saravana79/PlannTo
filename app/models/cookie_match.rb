@@ -72,7 +72,7 @@ class CookieMatch < ActiveRecord::Base
 
   def self.process_cookie_matching(param)
     param["source"] ||= "google"
-    cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(param["plannto_user_id"])
+    cookie_match = CookieMatch.where(:plannto_user_id => param["plannto_user_id"]).first_or_initialize
     if cookie_match.new_record?
       source = param["source"]
     else
@@ -87,7 +87,7 @@ class CookieMatch < ActiveRecord::Base
     end
 
     if !param["ref_url"].blank?
-      user_access_detail = UserAccessDetail.find_or_initialize_by_plannto_user_id_and_ref_url_and_source(param["plannto_user_id"], param["ref_url"], param["source"])
+      user_access_detail = UserAccessDetail.where(:plannto_user_id => param["plannto_user_id"], :ref_url => param["ref_url"], :source => param["source"]).first_or_initialize
       user_access_detail.save
     end
   end
@@ -148,7 +148,7 @@ class CookieMatch < ActiveRecord::Base
 
         # ActiveRecord::Base.transaction do
         #   cookies_arr.each do |cookie_detail|
-        #     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
+        #     cookie_match = CookieMatch.where(:)plannto_user_id => cookie_detail["plannto_user_id"]).first_or_initialize
         #     cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
         #   end
         # end

@@ -274,7 +274,7 @@ class TravelsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.find_or_initialize_by_hosted_site_url_and_req_type(tempurl, "PriceComparison")
+      @impression = ImpressionMissing.where(:hosted_site_url => tempurl, :req_type => "PriceComparison").first_or_initialize
       if @impression.new_record?
         # @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
         @impression.save
@@ -416,7 +416,7 @@ class TravelsController < ApplicationController
     else
       @related_hotels =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.find_or_initialize_by_hosted_site_url_and_req_type(url, "PriceComparison")
+      @impression = ImpressionMissing.where(:hosted_site_url => url, :req_type => "PriceComparison").last
       if @impression.new_record?
         @impression.count = 1
         @impression.save

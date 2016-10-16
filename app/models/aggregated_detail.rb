@@ -31,7 +31,7 @@ class AggregatedDetail < ActiveRecord::Base
             commission = each_imp.commission.blank? ? 1 : each_imp.commission.to_f
             winning_price = winning_price.to_f + (winning_price.to_f * (commission/100))
           end
-          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail = AggregatedDetail.where(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type).first_or_initialize
           aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => winning_price)
         end
         page += 1
@@ -42,7 +42,7 @@ class AggregatedDetail < ActiveRecord::Base
         clicks = Click.paginate_by_sql(click_query, :page => page, :per_page => batch_size)
 
         clicks.each do |each_click|
-          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_click.entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail = AggregatedDetail.where(:entity_id => each_click.entity_id, :date => time.to_date, :entity_type => entity_type).first_or_initialize
           aggregated_detail.update_attributes(:clicks_count => each_click.click_count)
         end
         page += 1
@@ -73,7 +73,7 @@ class AggregatedDetail < ActiveRecord::Base
         if entity_id.blank?
           next
         end
-        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
+        aggregated_detail = AggregatedDetail.where(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type).first_or_initialize
         aggregated_detail.update_attributes(:impressions_count => each_result["imp_count"], :clicks_count => each_result["click_count"], :winning_price => each_result["winning_price"])
       rescue Exception => e
         p "Error While updating aggregated detail"
@@ -103,7 +103,7 @@ class AggregatedDetail < ActiveRecord::Base
           if entity_id.blank?
             next
           end
-          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail = AggregatedDetail.where(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type).first_or_initialize
           aggregated_detail.update_attributes(:impressions_count => each_val["total_imp"], :clicks_count => each_val["total_clicks"], :winning_price => each_val["total_costs"])
         rescue Exception => e
           p "Error While updating aggregated detail"
@@ -116,7 +116,7 @@ class AggregatedDetail < ActiveRecord::Base
           if entity_id.blank?
             next
           end
-          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail = AggregatedDetail.where(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type).first_or_initialize
           aggregated_detail.update_attributes(:impressions_count => each_result["total_imp"], :clicks_count => each_result["total_clicks"], :winning_price => each_result["total_costs_wc"])
         rescue Exception => e
           p "Error While updating aggregated detail"

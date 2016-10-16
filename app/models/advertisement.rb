@@ -506,7 +506,7 @@ class Advertisement < ActiveRecord::Base
 
       # create ad hourly spent detail
       price_usage = (prev_spent.to_f/spent)*100
-      ad_hourly_spent_detail = AdHourlySpentDetail.find_or_initialize_by_advertisement_id_and_spent_date_and_hour(advertisement_id, time.to_date, hour)
+      ad_hourly_spent_detail = AdHourlySpentDetail.where(:advertisement_id => advertisement_id, :spend_date => time.to_date, :hour => hour).first_or_initialize
       time_usage = ad_hourly_spent_detail.time_usage.to_i == 0 ? 100 : ad_hourly_spent_detail.time_usage
       ad_hourly_spent_detail.update_attributes(:time_usage => time_usage, :price_usage => price_usage)
 
@@ -3312,7 +3312,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       end
 
       creatable_user_ids.each do |each_id|
-        user_relationship = UserRelationship.find_or_initialize_by_user_id_and_relationship_type_and_relationship_id(each_id, "Advertisement", self.id)
+        user_relationship = UserRelationship.where(:user_id => each_id, :relationship_type => "Advertisement", :relationship_id => self.id).first_or_initialize
         if user_relationship.new_record?
           user_relationship.save
         end
@@ -3323,7 +3323,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       other_user_ids_arr = other_user_ids.to_s.split(",")
       users = User.where(:id => other_user_ids_arr)
       users.each do |each_user|
-        user_relationship = UserRelationship.find_or_initialize_by_user_id_and_relationship_type_and_relationship_id(each_user.id, "Advertisement", self.id)
+        user_relationship = UserRelationship.where(:user_id => each_user.id, :relationship_type => "Advertisement", :relationship_id => self.id).first_or_initialize
         if user_relationship.new_record?
           user_relationship.save
         end

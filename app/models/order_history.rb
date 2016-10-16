@@ -46,7 +46,7 @@ class OrderHistory < ActiveRecord::Base
 
           # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
           # order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id(time, impression_id)
-          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_product_price(time, impression_id, product_price)
+          order_history = OrderHistory.where(:order_date => time, :impression_id => impression_id, :product_price => product_price).first_or_initialize
           order_history.total_revenue = revenue
           order_history.order_status = "Validated"
           order_history.payment_status = "Validated"
@@ -89,7 +89,7 @@ class OrderHistory < ActiveRecord::Base
         impression = AddImpression.where(:id => impression_id).first
         time = (impression.blank? ? date.to_time : impression.impression_time) rescue Time.now
         product_price = product_price.to_s.gsub("," , "") if !product_price.blank?
-        order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_product_price(time, impression_id, product_price)
+        order_history = OrderHistory.where(:order_date => time, :impression_id => impression_id, :product_price => product_price).first_or_initialize
 
         if order_history.new_record?
           order_history.vendor_ids = 9882
@@ -177,7 +177,7 @@ class OrderHistory < ActiveRecord::Base
         next
       end
 
-      order_history = OrderHistory.find_or_initialize_by_order_item_id(csv_detail[headers.index("AffiliateOrderItemId")])
+      order_history = OrderHistory.where(:order_item_id => csv_detail[headers.index("AffiliateOrderItemId")]).first_or_initialize
       time = csv_detail[headers.index("OrderDate")].to_time
       time = time + 5.30.hours if time.is_a?(Time)
       order_history.order_date = time

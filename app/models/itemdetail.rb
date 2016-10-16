@@ -505,10 +505,10 @@ class Itemdetail < ActiveRecord::Base
 
         have_to_create_image = false
         if id.blank?
-          @item_detail = Itemdetail.find_or_initialize_by_url(url)
+          @item_detail = Itemdetail.where(:url => url).first_or_initialize
         else
-          @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
-          @item_detail = Itemdetail.find_or_initialize_by_url(url) if @item_detail.blank?
+          @item_detail = Itemdetail.where(:additional_details => id).first_or_initialize
+          @item_detail = Itemdetail.where(:url => url).first_or_initialize if @item_detail.blank?
         end
 
         if !@item_detail.new_record?
@@ -516,7 +516,7 @@ class Itemdetail < ActiveRecord::Base
           status = [6, 13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
           @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
         else
-          source_item = Sourceitem.find_or_initialize_by_url(url)
+          source_item = Sourceitem.where(:url => url).first_or_initialize
           if source_item.new_record?
             source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => id)
           elsif source_item.verified && !source_item.matchitemid.blank?
@@ -648,17 +648,17 @@ class Itemdetail < ActiveRecord::Base
 
             have_to_create_image = false
             if id.blank?
-              @item_detail = Itemdetail.find_or_initialize_by_url(url)
+              @item_detail = Itemdetail.where(:url => url).first_or_initialize
             else
-              @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
-              @item_detail = Itemdetail.find_or_initialize_by_url(url) if @item_detail.blank?
+              @item_detail = Itemdetail.where(:additional_details => id).first_or_initialize
+              @item_detail = Itemdetail.where(:url => url).first_or_initialize if @item_detail.blank?
             end
             if !@item_detail.new_record?
               have_to_create_image = @item_detail.Image.blank? ? true : false
               @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
             else
               s_url = url.split("flipkart.com").last
-              source_item = Sourceitem.find_or_initialize_by_url_and_urlsource(s_url, "Flipkart")
+              source_item = Sourceitem.where(:url => s_url, :urlsource => "Flipkart").first_or_initialize
               if source_item.new_record?
                 source_item.update_attributes(:name => title, :status => 1, :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => id)
               elsif source_item.verified && !source_item.matchitemid.blank?

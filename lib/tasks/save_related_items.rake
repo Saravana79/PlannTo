@@ -40,7 +40,7 @@ task :related_items_with_count, [:all_item] => :environment do |t, args|
       related_items = RelatedItem.find_by_sql(query)
       related_items.each do |each_rec|
         puts each_rec.item_id.to_s + " - " + each_rec.related_item_id.to_s
-        related_item = RelatedItem.find_or_initialize_by_item_id_and_related_item_id(:item_id => each_rec.item_id, :related_item_id => each_rec.related_item_id)
+        related_item = RelatedItem.where(:item_id => each_rec.item_id, :related_item_id => each_rec.related_item_id).first_or_initialize
         related_item.update_attributes(:variance => each_rec.variance)
       end
     end

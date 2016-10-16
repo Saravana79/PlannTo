@@ -48,7 +48,7 @@ class Sourceitem < ActiveRecord::Base
           # p @open_struct.title
           # p @open_struct.url
           # p itemtype_id
-          source_item = Sourceitem.find_or_initialize_by_additional_details(@open_struct.item_unique_id)
+          source_item = Sourceitem.where(:additional_details => @open_struct.item_unique_id).first_or_initialize
 
           if source_item.new_record?
             p "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -123,11 +123,11 @@ class Sourceitem < ActiveRecord::Base
         next
       end
 
-      source_item = Sourceitem.find_or_initialize_by_url(url)
+      source_item = Sourceitem.where(:url => url).first_or_initialize
       if source_item.new_record?
         source_item.update_attributes(:name => title, :status => 1, :urlsource => "Autoportal", :itemtype_id => 1, :created_by => "System", :verified => false, :additional_details => pid)
       elsif source_item.verified && !source_item.matchitemid.blank?
-        item_detail = Itemdetail.find_or_initialize_by_url(url)
+        item_detail = Itemdetail.where(:url => url).first_or_initialize
         if item_detail.new_record?
           item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :mrpprice => mrpprice, :status => 1, :last_verified_date => Time.now, :site => 75798, :iscashondeliveryavailable => false, :isemiavailable => emi_available, :additional_details => pid, :cashback => emi_value, :description => "#{mileage}|#{fueltype}", :IsError => false, :offer => offers)
           image = item_detail.Image
@@ -183,7 +183,7 @@ class Sourceitem < ActiveRecord::Base
           response_hash = JSON.parse(response) rescue {}
 
           if response_hash.blank?
-            item_detail = Itemdetail.find_or_initialize_by_url(source_item.url)
+            item_detail = Itemdetail.where(:url => source_item.url).first_or_initialize
             item_detail.update_attributes(:status => 2)
             next
           end
@@ -210,7 +210,7 @@ class Sourceitem < ActiveRecord::Base
           isemiavailable = offer.to_s.downcase.include?("emi available") ? true : false
           iscashondeliveryavailable = offer.to_s.downcase.include?("cod option will be available") ? true : false
 
-          item_detail = Itemdetail.find_or_initialize_by_url(source_item.url)
+          item_detail = Itemdetail.where(:url => source_item.url).first_or_initialize
           if item_detail.new_record?
             item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => source_item.url, :price => offer_price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => iscashondeliveryavailable, :isemiavailable => isemiavailable, :additional_details => product_id, :cashback => cashback, :description => effective_price, :IsError => false, :mrpprice => mrpprice, :offer => offer_text)
             image = item_detail.Image

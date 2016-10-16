@@ -344,7 +344,7 @@ class ArticleContent < Content
 
       @best_deals.select { |a| a }
     else
-      @impression = ImpressionMissing.find_or_initialize_by_hosted_site_url_and_req_type(url, "OffersDeals")
+      @impression = ImpressionMissing.where(:hosted_site_url => url, :req_type => "OffersDeals").first_or_initialize
       if @impression.new_record?
         # @impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
         @impression.count = 1

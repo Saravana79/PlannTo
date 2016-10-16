@@ -424,7 +424,7 @@ class FeedUrl < ActiveRecord::Base
       if missingad_count.to_i > count.to_i
         missing_ad_url = each_ad_key.split("missingad:")[1]
 
-        missing_ad_detail = MissingAdDetail.find_or_initialize_by_url(:url => missing_ad_url)
+        missing_ad_detail = MissingAdDetail.where(:url => missing_ad_url).first_or_initialize
 
         missingad_count = missing_ad_detail.count.to_i + missingad_count.to_i unless missing_ad_detail.new_record?
         missing_ad_detail.update_attributes(:count => missingad_count.to_i)

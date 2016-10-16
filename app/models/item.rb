@@ -3926,7 +3926,7 @@ end
         old_item_ad_detail.update_attributes!(:new_version_id => self.id)
       end
     end
-    new_item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => self.id) # new_item_ad_detail
+    new_item_ad_detail = ItemAdDetail.where(:item_id => self.id).first_or_initialize # new_item_ad_detail
     if old_item.blank?
       new_item_ad_detail.save
     else

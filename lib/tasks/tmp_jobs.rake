@@ -571,7 +571,7 @@ task :update_item_beauty_detail_from_xml_feed => :environment do
       url = each_product["ProductURL"][0].to_s rescue ""
       url = CGI.unescape(url) rescue ""
       url = FeedUrl.get_value_from_pattern(url, "r=<url>?", "<url>").strip rescue ""
-      item_beauty_detail = ItemBeautyDetail.find_or_initialize_by_url(:url => url)
+      item_beauty_detail = ItemBeautyDetail.where(:url => url).first_or_initialize
       name = each_product["ProductName"][0].to_s rescue ""
       offer_price = each_product["ProductPrice"][0] rescue ""
       status = each_product["StockAvailability"][0].to_s.downcase.include?("in stock") ? 1 : 2 rescue 2
