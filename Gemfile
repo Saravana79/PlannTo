@@ -53,8 +53,10 @@ gem 'remotipart', '~> 1.0'
 gem 'acts_as_commentable'
 # gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up' #TODO:4 rails 4 upgrade
 #gem 'devise'
-# gem 'sunspot_rails', '~>1.3.1'
-gem 'sunspot_solr'
+gem 'sunspot_rails'#, '~>1.3.1'
+group :test, :development do
+  gem 'sunspot_solr'
+end
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
 gem 'tinymce-rails'
