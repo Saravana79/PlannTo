@@ -47,7 +47,7 @@ class AccountsController < ApplicationController
     if(!params[:follow])
       params[:follow] = 'Products'
     end
-    @user = User.where("username like #{params[:username]}").last
+    @user = User.where("username like '#{params[:username]}'").last
      if params[:follow] == "Followers" || params[:follow] == "Following"
       @follows,@users = Follow.get_followers_following(@user,params[:follow],params[:page],8)
     else 
@@ -56,8 +56,7 @@ class AccountsController < ApplicationController
     @itemtypes =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id) if params[:follow] == 'Products'
     @itemtypes =  Itemtype.where("itemtype=?", params[:follow]).collect(&:id) if params[:follow] == 'Car' ||  params[:follow] == 'Mobile' || params[:follow] == 'Cycle' || params[:follow] == 'Camera' || params[:follow] == 'Tablet' || params[:follow] == 'Bike'
      if params[:follow].match("Preferences")
-       
-     
+
      @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES-["Manufacturer","Car Group","Topic"])
      buying_plans(@user)
      end
