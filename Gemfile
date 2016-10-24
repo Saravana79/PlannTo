@@ -27,7 +27,7 @@ gem 'youtube_it'
 gem 'nokogiri'
 gem "haml-rails"
 gem  "haml"
-gem 'tinymce-rails-imageupload', '~> 3.5.6.3'
+gem 'tinymce-rails-imageupload', '~> 3.5', '>= 3.5.8.6'
 gem 'rails_exception_handler', "~> 2"
 gem 'aws-sdk'
 # gem 'record-cache'
