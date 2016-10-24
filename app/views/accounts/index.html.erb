@@ -28,7 +28,7 @@
       <% @user.errors.full_messages.each do |error_message| %>
         <%= error_message %>
       <% end %>
-      <%= form_for(@user, :url => account_update_path, :method => :put, :html => { :multipart => true }) do |f| %>
+      <%= form_for(@user, :url => accounts_path, :method => :put, :html => { :multipart => true }) do |f| %>
         <div class="accountlabel">
         <%= f.label :name, 'Full Name' %>
         </div>
@@ -83,8 +83,8 @@
       <div style="background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:20px;">        
          <center><h2> Other Settings</h2> </center>
       </div>
-      <div style="padding-left:50px;"
-     <%= form_for(@user, :url => account_update_path, :method => :put, :html => { :multipart => true }) do |f| %>
+      <div style="padding-left:50px;">
+     <%= form_for(@user, :url => accounts_path, :method => :put, :html => { :multipart => true }) do |f| %>
       <br/>
       <br/>
       <div class="accountlabel">

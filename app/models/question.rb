@@ -5,7 +5,7 @@ class Question < ActiveRecord::Base
 
   acts_as_commentable
   acts_as_taggable
-  acts_as_voteable
+  # acts_as_voteable
   #acts_as_taggable_on :skills, :interests
   
   def self.sort_by_vote_count

@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
 
   # NOTE: install the acts_as_votable plugin if you
   # want user to vote on the quality of comments.
-  acts_as_voteable
+  # acts_as_voteable
   has_many :reports, :as => :reportable, :dependent => :destroy 
   validates_presence_of :comment
   # NOTE: Comments belong to a user

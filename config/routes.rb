@@ -167,8 +167,8 @@ resources :answer_contents
 
 
 resources :accounts do
-    put :update
     member do
+      # post :update_user
       put :change_password
       get :followers
       get :add_review
@@ -176,6 +176,7 @@ resources :accounts do
       get :add_photo
     end
     collection do
+      put :update
       get :profile
      end 
   end
