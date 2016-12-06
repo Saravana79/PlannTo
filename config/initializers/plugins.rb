@@ -1,0 +1,1 @@
+require "#{Rails.root}/lib/plugins/citier/lib/citier.rb" #citier plugin
