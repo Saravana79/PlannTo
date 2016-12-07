@@ -1,4 +1,5 @@
 class DownloadsController < ApplicationController
+  before_filter :authenticate_user!
   layout "product"
 
   def index
