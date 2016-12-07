@@ -556,6 +556,12 @@ resources :comments do
 
   match "/admin/source_categories/edit" => "admin/source_categories#edit", :as => "edit_admin_source_category", :via => [:get]
 
+  resources :downloads do
+    collection do
+      get "get_download"
+    end
+  end
+
   match "/reports/article_reports" => "reports#article_reports", :via => [:get]
 
   resources :plannto_user_details

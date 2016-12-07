@@ -322,7 +322,7 @@ def process_category_lists(category_list)
   article_urls = []
 
   get_article_urls(url, article_urls)
-  
+
   [*2..count].each do |page_no|
     tempurl = url + "page/#{page_no}"
     p "url => #{tempurl}"
@@ -507,7 +507,7 @@ csv_details.each_with_index do |csv_detail, index|
   # google_geo_targetings = GoogleGeoTargeting.where(:criteria_id => criteria_id).last
 
   google_geo_targeting = GoogleGeoTargeting.new(:criteria_id => criteria_id, :name => name, :canonical_name => canonical_name, :parent_id => parent_id,
-                         :country_code => country_code, :target_type => target_type, :status => status)
+                                                :country_code => country_code, :target_type => target_type, :status => status)
 
   if country_code == "IN"
     places = Sunspot.search([City,Place]) do
@@ -795,28 +795,28 @@ each_node_list.each_with_index do |each_node, index|
         source_item = Sourceitem.find_or_initialize_by_url(url)
         if source_item.new_record?
           source_item.update_attributes(:name => title, :status => 1, :urlsource => "Paytm", :itemtype_id => itemtype_id, :created_by => "System", :verified => false, :additional_details => mpn)
-        # elsif source_item.verified && !source_item.matchitemid.blank?
-        #   item_detail = Itemdetail.find_or_initialize_by_url(url)
-        #   if item_detail.new_record?
-        #     item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => mpn, :cashback => 0, :description => description, :IsError => false, :mrpprice => mrpprice)
-        #     image = item_detail.Image
-        #   else
-        #     item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
-        #     image = item_detail.Image
-        #   end
-        #   begin
-        #     if image.blank? && !image_url.blank?
-        #       image = item_detail.build_image
-        #       tempfile = open(image_url)
-        #       avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
-        #       filename = image_url.split("/").last
-        #       avatar.original_filename = filename
-        #       image.avatar = avatar
-        #       image.save
-        #     end
-        #   rescue Exception => e
-        #     p "There was a problem in image update"
-        #   end
+          # elsif source_item.verified && !source_item.matchitemid.blank?
+          #   item_detail = Itemdetail.find_or_initialize_by_url(url)
+          #   if item_detail.new_record?
+          #     item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 76201, :iscashondeliveryavailable => false, :isemiavailable => false, :additional_details => mpn, :cashback => 0, :description => description, :IsError => false, :mrpprice => mrpprice)
+          #     image = item_detail.Image
+          #   else
+          #     item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
+          #     image = item_detail.Image
+          #   end
+          #   begin
+          #     if image.blank? && !image_url.blank?
+          #       image = item_detail.build_image
+          #       tempfile = open(image_url)
+          #       avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile, :type => 'image/jpeg'})
+          #       filename = image_url.split("/").last
+          #       avatar.original_filename = filename
+          #       image.avatar = avatar
+          #       image.save
+          #     end
+          #   rescue Exception => e
+          #     p "There was a problem in image update"
+          #   end
         end
 
 
@@ -1390,16 +1390,16 @@ if res.kind_of?(Net::HTTPFound)
         @open_struct.merch_cat_name = @content
 
         itemtype_id = case merch_cat_name
-                      when "1805559031", "1805560031" #"Mobiles"
-                        6
-                      when "1375458031" #"Tablets"
-                        13
-                      when "1375424031" #"Laptops"
-                        23
-                      when "1389177031", "1389181031" #"DSLR", "Point & Shoot"
-                        12
-                      else
-                        0
+                        when "1805559031", "1805560031" #"Mobiles"
+                          6
+                        when "1375458031" #"Tablets"
+                          13
+                        when "1375424031" #"Laptops"
+                          23
+                        when "1389177031", "1389181031" #"DSLR", "Point & Shoot"
+                          12
+                        else
+                          0
                       end
 
         if itemtype_id != 0 && !@open_struct.item_unique_id.to_s.blank?
@@ -1518,7 +1518,7 @@ group =  { "$group" => { "_id" => "$i_types.m_items.item_id", "imp_count" => { "
 
 
 Benchmark.ms do
-pp = PUserDetail.collection.aggregate([unwind,unwind1,match,group])
+  pp = PUserDetail.collection.aggregate([unwind,unwind1,match,group])
 end
 
 
@@ -1548,3 +1548,311 @@ pp = PUserDetail.collection.aggregate([match])
 # end
 
 plannto_user_details = PUserDetail.where(:lad.gte => start_date)
+
+
+
+
+
+
+
+#New Implementation for apperal
+
+
+# Update sourceitem from amazon with SAX parser
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_apparel.xml.gz"
+
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+  @@main_array = []
+  @@header_set = false
+
+  require 'rubygems'
+  require 'nokogiri'
+
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @i = 0
+      @headers = []
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @i += 1
+    end
+
+    def end_element(name)
+      @open_struct.item_brand = @content if name == 'item_brand'
+      @open_struct.item_category = @content if name == "item_category"
+      @open_struct.department = @content if name == "department"
+      @contents << @content
+      @headers << name
+      if name == "item_data"
+        if !@@header_set
+          @@main_array << @headers
+          @@header_set = true
+        end
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "apparel" && ["adidas", "biba", "chemistry", "fabindia", "french connection", "lee", "puma", "united colors of benetton", "levis"].include?(@open_struct.item_brand.to_s.downcase)
+          @@main_array << @contents
+          p @@main_array.count
+        end
+        @contents = []
+      end
+
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
+  parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+  parser.parse(gz)
+
+
+else
+  p "Try Different format - Its not working"
+end
+
+
+#NEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWw
+
+# Apparel
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_apparel.xml.gz"
+# url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+  @@main_xml_str = ""
+
+  require 'rubygems'
+  require 'nokogiri'
+
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @each_data_str = ""
+      @i = 0
+      @headers = []
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @each_data_str << "<#{name}>"
+    end
+
+    def end_element(name)
+      @each_data_str << "#{CGI.escape_html(@content.to_s)}</#{name}>"
+      # p 11111111111111111
+      # p "#{name} : #{@content}"
+      @open_struct.item_brand = @content if name == 'item_brand'
+      @open_struct.item_category = @content if name == "item_category"
+      @open_struct.department = @content if name == "department"
+
+      if name == "item_data"
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "apparel" && ["adidas", "biba", "chemistry", "fabindia", "french connection", "lee", "puma", "united colors of benetton", "levis"].include?(@open_struct.item_brand.to_s.downcase)
+          # @@main_array << @contents
+          # p @@main_array.count
+          @i += 1
+          p @i
+          @@main_xml_str << @each_data_str
+        end
+        @each_data_str = ""
+      end
+
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
+  parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+  parser.parse(gz)
+
+  @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
+  @@main_xml_str << "</DataFeeds>"
+
+  filename = "report_#{Time.now.strftime('%d_%b_%Y')}_#{Time.now.to_i}.xml".downcase
+
+  object = $s3_object.objects["reports/#{filename}"]
+  object.write(@@main_xml_str)
+  # object.write(return_val)
+  object.acl = :public_read
+  p filename
+
+  # object = $s3_object.object(["reports/#{filename}"])
+  # object.write(return_val)
+  # object.acl = :public_read
+else
+  p "Try Different format - Its not working"
+end
+
+
+# Beauty
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_beauty.xml.gz"
+# url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+  @@main_xml_str = ""
+
+  require 'rubygems'
+  require 'nokogiri'
+
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @each_data_str = ""
+      @i = 0
+      @headers = []
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @each_data_str << "<#{name}>"
+    end
+
+    def end_element(name)
+      @each_data_str << "#{CGI.escape_html(@content.to_s)}</#{name}>"
+      # p 11111111111111111
+      # p "#{name} : #{@content}"
+      @open_struct.item_brand = @content if name == 'item_brand'
+      @open_struct.item_category = @content if name == "item_category"
+      @open_struct.department = @content if name == "department"
+
+      if name == "item_data"
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "beauty" && ["maybelliene", "l'oreal", "lakme", "urban decay", "colourpop", "tarte", "sephora", "benefit", "bobbi brown", "mac", "estee lauder", "clinique", "forest essentials", "kama"].include?(@open_struct.item_brand.to_s.downcase)
+          # @@main_array << @contents
+          # p @@main_array.count
+          @i += 1
+          p @i
+          @@main_xml_str << @each_data_str
+        end
+        @each_data_str = ""
+      end
+
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
+  parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+  parser.parse(gz)
+
+  @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
+  @@main_xml_str << "</DataFeeds>"
+
+  filename = "report_beauty_#{Time.now.strftime('%d_%b_%Y')}_#{Time.now.to_i}.xml".downcase
+
+  object = $s3_object.objects["reports/#{filename}"]
+  object.write(@@main_xml_str)
+  # object.write(return_val)
+  object.acl = :public_read
+  p filename
+
+  # object = $s3_object.object(["reports/#{filename}"])
+  # object.write(return_val)
+  # object.acl = :public_read
+else
+  p "Try Different format - Its not working"
+end

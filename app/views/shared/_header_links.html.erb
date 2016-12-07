@@ -185,6 +185,9 @@
                  <!-- <a href="/admin/ad_reports">Advertisement Report</a> -->  <!-- TODO: have to implement in future -->
              <%end%>
              <a href="/admin/widget_reports">Widgets Report</a>
+             <%if current_user %>
+                 <a href="/admin/downloads">Downloads</a>
+             <% end %>
              <%if current_user && current_user.is_admin? %>
                  <a href="/admin/user_and_items_reports">User & Item Reports</a>
                  <a href="/admin/update_redis">Redis Update with Items & Ads</a>
