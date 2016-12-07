@@ -1,8 +1,11 @@
 class DownloadsController < ApplicationController
-  before_filter :authenticate_user!
-  layout "product"
-
   def index
+  	if params[:category] == "apparel"
+  	  data = open("#{configatron.root_image_path}reports/report_07_dec_2016_1481093687.xml")
+      send_data data.read, filename: "plannto_in_amazon_apparel.xml", :type => data.content_type, :x_sendfile => true
+    else
+      render :nothing => true  
+  	end
   end
 
   def get_download
