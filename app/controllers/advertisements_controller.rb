@@ -761,6 +761,14 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def amazon_demo_type_8
+    params[:page_type] ||= "type_8"
+    params[:keyword] ||= ""
+    params[:geo] ||= "in"
+    params[:ref_url] ||= "http://www.gsmarena.com"
+    render :layout => false
+  end
+
   def junglee_gadget_demo
     params[:ref_url] ||= "http://gadgetstouse.com/comparison/samsung-galaxy-s4-vs-galaxy-s5-specification-comparison/15912"
     params[:page_type] ||= "type_1"

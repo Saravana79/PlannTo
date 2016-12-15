@@ -27,9 +27,9 @@ class ProductsController < ApplicationController
 
   caches_action :elec_widget_1, :cache_path => proc {|c|
     if !params[:item_ids].blank?
-      params.slice("item_ids", "page_type", "vendor_ids", "ret_format", "protocol_type")
+      params.slice("item_ids", "page_type", "vendor_ids", "ret_format", "protocol_type", "keyword")
     else
-      params.slice("ref_url", "page_type", "vendor_ids", "ret_format", "protocol_type")
+      params.slice("ref_url", "page_type", "vendor_ids", "ret_format", "protocol_type", "keyword")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -620,6 +620,24 @@ class ProductsController < ApplicationController
       end
     end
 
+    if ((items.blank? || @where_to_buy_items.blank?) && ["type_8"].include?(params[:page_type]) && !params[:keyword].blank?)
+      term = params[:keyword].to_s
+      terms = term.to_s.split(/\W+/)
+      terms.pop if ["phone", "phones"].include?(terms.last)
+
+      p term = terms.join(" ")
+
+      new_items = Sunspot.search(Product.search_type(["mobile","tablet"])) do
+        keywords term.gsub("-",""), :fields => :name
+        with :status,[1,2,3]
+        paginate(:page => 1, :per_page => 10)
+        order_by :score,:desc
+        order_by :orderbyid , :asc
+      end
+      items = new_items.results
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids) if !items.blank?
+    end
+
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
       # item_ids = configatron.amazon_top_mobiles.to_s.split(",")
       if ["type_5", "type_6", "type_7"].include?(params[:page_type].to_s)
@@ -637,6 +655,7 @@ class ProductsController < ApplicationController
         first_six_items = item_ids.shuffle#.first(6)
         items = Item.where(:id => first_six_items)
       end
+
       @item = items[0]
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
@@ -1550,6 +1569,7 @@ class ProductsController < ApplicationController
     params[:ret_format] ||= ""
     params[:is_test] ||= "false"
     params[:protocol_type] = request.protocol
+    params[:keyword] ||= ""
 
     if params[:ret_format] == "html"
       params[:format] = "html"
@@ -1565,9 +1585,9 @@ class ProductsController < ApplicationController
 
     if params[:is_test] != "true"
       if !params[:item_ids].blank?
-        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "vendor_ids", "ret_format", "protocol_type"))
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "vendor_ids", "ret_format", "protocol_type", "keyword"))
       else
-        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "vendor_ids", "ret_format", "protocol_type"))
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "vendor_ids", "ret_format", "protocol_type", "keyword"))
       end
       cache_params = CGI::unescape(cache_params)
 

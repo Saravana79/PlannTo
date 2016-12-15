@@ -524,6 +524,7 @@ resources :comments do
   match "advertisements/vendor_demo" => "advertisements#vendor_demo"
   match "advertisements/amazon_demo" => "advertisements#amazon_demo"
   match "advertisements/amazon_demo_type_5" => "advertisements#amazon_demo_type_5"
+  match "advertisements/amazon_demo_type_8" => "advertisements#amazon_demo_type_8"
   match "advertisements/carwale_demo" => "advertisements#carwale_demo"
   match "advertisements/paytm_demo" => "advertisements#paytm_demo"
   match "advertisements/newcar_demo" => "advertisements#newcar_demo"
