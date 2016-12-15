@@ -1,0 +1,11 @@
+<div class="demo_form row" style="padding: 10px 0px 0px 381px;">
+  <div class="search_form">
+    <form method="get" action="/advertisements/amazon_demo_type_8" accept-charset="UTF-8"><div style="margin:0;padding:0;display:inline"><input type="hidden" value="✓" name="utf8"></div>
+      ref url: <input type="text" value="<%= params[:ref_url] %>" style="width: 300px;" name="ref_url" id="ref_url">
+      Keyword: <input type="text" value="<%= params[:keyword] %>" style="width: 100px;" name="keyword" id="keyword">
+      <input type="submit" value="Go" name="commit">
+    </form>  </div>
+</div>
+
+<div class='contentAdsense300 blk_amazon' id='where_to_buy_items' style="width: 300px;"></div>
+<script src="<%= configatron.hostname %>/javascripts/plannto.elec_widget_1.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&is_test=true&page_type=<%= params[:page_type] %>&keyword=<%= params[:keyword]%>&element_id=where_to_buy_items"></script>
