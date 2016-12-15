@@ -628,11 +628,11 @@ class ProductsController < ApplicationController
       term = terms.join(" ")
 
       new_items = Sunspot.search(Product.search_type(["mobile","tablet"])) do
-        keywords term.gsub("-",""), :fields => :name
+        keywords term.gsub("-"," ").gsub("_"," "), :fields => :name
         with :status,[1,2,3]
-        paginate(:page => 1, :per_page => 10)
+        paginate(:page => 1, :per_page => 5)
         order_by :score,:desc
-        order_by :orderbyid , :asc
+        # order_by :orderbyid , :asc
       end
       items = new_items.results
       @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids) if !items.blank?
