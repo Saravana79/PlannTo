@@ -625,7 +625,7 @@ class ProductsController < ApplicationController
       terms = term.to_s.split(/\W+/)
       terms.pop if ["phone", "phones"].include?(terms.last)
 
-      p term = terms.join(" ")
+      term = terms.join(" ")
 
       new_items = Sunspot.search(Product.search_type(["mobile","tablet"])) do
         keywords term.gsub("-",""), :fields => :name
