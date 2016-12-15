@@ -158,11 +158,11 @@ var domain = "www.plannto.com";
 //    event.preventDefault();
     }
 
-    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable, geo, vendor_ids, tag, ascsubtag)
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable, geo, vendor_ids, tag, ascsubtag, keyword)
     {
         var doc_title =  PlannTo.jQuery(document).title;
 
-        url = url_protocol + "//"+ domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&geo="+geo+"&vendor_ids="+vendor_ids+"&tag="+tag+"&ascsubtag="+ascsubtag+"&callback=?"
+        url = url_protocol + "//"+ domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&geo="+geo+"&vendor_ids="+vendor_ids+"&tag="+tag+"&ascsubtag="+ascsubtag+"&keyword="+keyword+"&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
@@ -218,6 +218,7 @@ var domain = "www.plannto.com";
         page_type = getParam(url,"page_type");
         var tag = getParam(url,"tag");
         var ascsubtag = getParam(url,"ascsubtag");
+        var keyword = getParam(url,"keyword");
         var url_arr = url.split("/");
         url_protocol = url_arr[0]
 
@@ -227,7 +228,7 @@ var domain = "www.plannto.com";
             {
                 element_id = "where_to_buy_items";
                 element = jQuery("#"+element_id)
-                planntowtbdivcreation(item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids,tag,ascsubtag)
+                planntowtbdivcreation(item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids,tag,ascsubtag,keyword)
             }
             else
             {
@@ -245,14 +246,14 @@ var domain = "www.plannto.com";
                         {
                             page_type = ""
                         }
-                        planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids,tag,ascsubtag)
+                        planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids,tag,ascsubtag,keyword)
                     });
                 }
                 else
                 {
                     element = jQuery("#"+element_id)
                     console.log("good")
-                    planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids,tag,ascsubtag)
+                    planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids,tag,ascsubtag,keyword)
                 }
             }
         }
