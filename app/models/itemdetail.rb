@@ -309,7 +309,7 @@ class Itemdetail < ActiveRecord::Base
     return where_to_buy_items, item, best_deals, impression_id
   end
 
-  def self.get_where_to_buy_items_using_vendor(publisher, items, show_price, status, old_where_to_buy_items=[], vendor_ids=[])
+  def self.get_where_to_buy_items_using_vendor(publisher, items, show_price, status, old_where_to_buy_items=[], vendor_ids=[], sortbyitem = false)
     country = ""
     tempitems = []
     impression_id = ""
@@ -346,7 +346,7 @@ class Itemdetail < ActiveRecord::Base
       where_to_buy_items = old_where_to_buy_items + where_to_buy_items
     end
 
-    if !vendor_ids.blank?
+    if ((!vendor_ids.blank?) && (!sortbyitem))
       item_details = where_to_buy_items.group_by { |item_detail| item_detail.itemid }
       where_to_buy_items = Itemdetail.get_sort_by_vendor(item_details, vendor_ids)
     elsif !where_to_buy_items.blank?

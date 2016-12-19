@@ -635,7 +635,7 @@ class ProductsController < ApplicationController
         order_by :score,:desc
       end
       items = new_items.results
-      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids) if !items.blank?
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids,true) if !items.blank?
     end
 
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
