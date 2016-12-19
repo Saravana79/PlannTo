@@ -635,7 +635,10 @@ class ProductsController < ApplicationController
         order_by :score,:desc
       end
       items = new_items.results
-      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids,true) if !items.blank?
+      item_ids  = items.map(&:id)
+      vendor_ids_arrary = ['9882']
+      @where_to_buy_items =Itemdetail.get_item_details_by_item_ids(item_ids,vendor_ids_arrary)
+      #@where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, items, @show_price, status, @where_to_buy_items, vendor_ids,true) if !items.blank?
     end
 
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
