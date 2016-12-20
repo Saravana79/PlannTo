@@ -55,7 +55,7 @@
 </style>
 <div id="planntobuy" style="border: 0px solid #E2E2E2;max-height:300px;max-width:400px;">
   <div>
-    <div style="
+   <!--  <div style="
     font-family: 'nexa_bold', arial;
             font-size: 18px;
             text-transform: uppercase;
@@ -65,7 +65,7 @@
             border-bottom: 5px solid #ffe327;
             text-align: left;
     "> Recommended Products
-    </div>
+    </div> -->
 
   </div>
   <% @where_to_buy_items.each do |item_detail| %>
@@ -74,14 +74,14 @@
       <div class="each_item_detail" style="padding: 8px 0px;  border-bottom: 1px solid #ECEAEA;cursor: pointer;">
    
         <span style="float: left;padding-right: 2px;">
-          <%= get_image_tag(item_detail, vendor_detail.vendor_name, item_detail.base_item_image_url(:small), 50, 0, "medium").html_safe %>
+          <%= get_image_tag(item_detail, vendor_detail.vendor_name, item_detail.base_item_image_url(:small), 84, 0, "medium").html_safe %>
         </span>
-        <span style="font-size: 13px;float: left;padding-right: 2px;width:80%">
+        <span style="font-size: 13px;float: left;padding-right: 2px;width:70%">
             <div style="font-size: 13px;color:black;font-family:'nexa_bold', arial;text-align: left;" id="nametext">
               <%= item_detail.ItemName.to_s.truncate(34) %>
             </div>
         </span>
-        <span style="font-size: 13px;float: left;padding-right: 2px;width:78%">
+        <span style="font-size: 13px;float: left;padding-right: 2px;width:68%">
             <div style="font-family: arial;font-size: 13px;color: #F00;line-height:1px;">
               <span style="float:left;margin-top: 13px;">
               <%= display_price_detail(item_detail) %>
