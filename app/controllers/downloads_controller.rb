@@ -1,11 +1,13 @@
 class DownloadsController < ApplicationController
   def index
-  	if params[:category] == "apparel"
-  	  data = open("#{configatron.root_image_path}reports/report_07_dec_2016_1481093687.xml")
-      send_data data.read, filename: "plannto_in_amazon_apparel.xml", :type => data.content_type, :x_sendfile => true
-    else
-      render :nothing => true  
-  	end
+    filename = "report_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+    begin
+      file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
+      data = open(file_url)
+      send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase, :type => data.content_type, :x_sendfile => true
+    rescue Exception => e
+      render :text => "Wrong filename => plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml OR Not Present"
+    end
   end
 
   def get_download

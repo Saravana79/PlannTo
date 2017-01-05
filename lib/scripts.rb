@@ -1710,7 +1710,7 @@ if res.kind_of?(Net::HTTPFound)
       @open_struct.department = @content if name == "department"
 
       if name == "item_data"
-        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "apparel" && ["adidas", "biba", "chemistry", "fabindia", "french connection", "lee", "puma", "united colors of benetton", "levis"].include?(@open_struct.item_brand.to_s.downcase)
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "apparel" && ["adidas", "biba", "chemistry", "fabindia", "french connection", "lee", "puma", "united colors of benetton", "levis"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
           # @@main_array << @contents
           # p @@main_array.count
           @i += 1
@@ -1738,9 +1738,10 @@ if res.kind_of?(Net::HTTPFound)
   @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
   @@main_xml_str << "</DataFeeds>"
 
-  filename = "report_#{Time.now.strftime('%d_%b_%Y')}_#{Time.now.to_i}.xml".downcase
+  category = "apparel"
+  filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
 
-  object = $s3_object.objects["reports/#{filename}"]
+  object = $s3_object.objects["reports/#{category}/#{filename}"]
   object.write(@@main_xml_str)
   # object.write(return_val)
   object.acl = :public_read
@@ -1754,8 +1755,117 @@ else
 end
 
 
-# Beauty
-url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_beauty.xml.gz"
+  # Beauty
+  url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_beauty.xml.gz"
+  # url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
+  digest_auth = Net::HTTP::DigestAuth.new
+
+  uri = URI.parse(url)
+  uri.user = "pla04"
+  uri.password = "cyn04"
+
+  h = Net::HTTP.new uri.host, uri.port
+  h.use_ssl = true
+  h.ssl_version = :TLSv1
+
+  req = Net::HTTP::Get.new uri.request_uri
+
+  res = h.request req
+  # res is a 401 response with a WWW-Authenticate header
+
+  auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+  # create a new request with the Authorization header
+  req = Net::HTTP::Get.new uri.request_uri
+  req.add_field 'Authorization', auth
+
+  # re-issue request with Authorization
+  res = h.request req
+
+  if res.kind_of?(Net::HTTPFound)
+    location = res["location"]
+    infile = open(location)
+    gz = Zlib::GzipReader.new(infile)
+    @@main_xml_str = ""
+
+    require 'rubygems'
+    require 'nokogiri'
+
+    class MyDocument < Nokogiri::XML::SAX::Document
+      def initialize
+        @open_struct = OpenStruct.new
+        @contents = []
+        @each_data_str = ""
+        @i = 0
+        @headers = []
+      end
+
+      def start_element(name, attrs)
+        @attrs = attrs
+        @content = ''
+        @each_data_str << "<#{name}>"
+      end
+
+      def end_element(name)
+        @each_data_str << "#{CGI.escape_html(@content.to_s)}</#{name}>"
+        # p 11111111111111111
+        # p "#{name} : #{@content}"
+        @open_struct.item_brand = @content if name == 'item_brand'
+        @open_struct.item_category = @content if name == "item_category"
+        if name == "department"
+          p 333333333333333333
+          p @open_struct.department = @content
+        end
+        if name == "item_data"
+          p "#{@open_struct.department}-#{@open_struct.item_category}"
+          if @open_struct.item_category.to_s.downcase == "beauty" && ["maybelliene", "loreal", "lakme", "urbandecay", "colourpop", "tarte", "sephora", "benefit", "bobbibrown", "mac", "esteelauder", "clinique", "forestessentials", "kama"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
+            # @@main_array << @contents
+            # p @@main_array.count
+            @i += 1
+            p @i
+            @@main_xml_str << @each_data_str
+          end
+          @each_data_str = ""
+        end
+
+        @content = nil
+      end
+
+      def characters(string)
+        @content << string if @content
+      end
+
+      def cdata_block(string)
+        characters(string)
+      end
+    end
+
+    parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+    parser.parse(gz)
+
+    @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
+    @@main_xml_str << "</DataFeeds>"
+
+    category = "beauty"
+
+    filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+
+    object = $s3_object.objects["reports/#{category}/#{filename}"]
+    object.write(@@main_xml_str)
+    # object.write(return_val)
+    object.acl = :public_read
+    p filename
+
+    # object = $s3_object.object(["reports/#{filename}"])
+    # object.write(return_val)
+    # object.acl = :public_read
+  else
+    p "Try Different format - Its not working"
+  end
+
+
+##Bags
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_apparel.xml.gz"
 # url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
 digest_auth = Net::HTTP::DigestAuth.new
 
@@ -1814,7 +1924,7 @@ if res.kind_of?(Net::HTTPFound)
       @open_struct.department = @content if name == "department"
 
       if name == "item_data"
-        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "beauty" && ["maybelliene", "l'oreal", "lakme", "urban decay", "colourpop", "tarte", "sephora", "benefit", "bobbi brown", "mac", "estee lauder", "clinique", "forest essentials", "kama"].include?(@open_struct.item_brand.to_s.downcase)
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "bags" && ["caprese", "damilano", "dunelondon", "furla", "jansport", "kennethcole", "tumi", "hidesign"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
           # @@main_array << @contents
           # p @@main_array.count
           @i += 1
@@ -1842,9 +1952,326 @@ if res.kind_of?(Net::HTTPFound)
   @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
   @@main_xml_str << "</DataFeeds>"
 
-  filename = "report_beauty_#{Time.now.strftime('%d_%b_%Y')}_#{Time.now.to_i}.xml".downcase
+  category = "bags"
 
-  object = $s3_object.objects["reports/#{filename}"]
+  filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+
+  object = $s3_object.objects["reports/#{category}/#{filename}"]
+  object.write(@@main_xml_str)
+  # object.write(return_val)
+  object.acl = :public_read
+  p filename
+
+  # object = $s3_object.object(["reports/#{filename}"])
+  # object.write(return_val)
+  # object.acl = :public_read
+else
+  p "Try Different format - Its not working"
+end
+
+
+##Shoes
+category = "shoes"
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_#{category}.xml.gz"
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+  @@main_xml_str = ""
+
+  require 'rubygems'
+  require 'nokogiri'
+
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @each_data_str = ""
+      @i = 0
+      @headers = []
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @each_data_str << "<#{name}>"
+    end
+
+    def end_element(name)
+      @each_data_str << "#{CGI.escape_html(@content.to_s)}</#{name}>"
+      # p 11111111111111111
+      # p "#{name} : #{@content}"
+      @open_struct.item_brand = @content if name == 'item_brand'
+      @open_struct.item_category = @content if name == "item_category"
+      @open_struct.department = @content if name == "department"
+
+      if name == "item_data"
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "shoes" && ["catwalk", "converse", "desigual", "dunelondon", "havaianas", "nike", "puma", "tresmode", "carlton", "stevemadden"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
+          # @@main_array << @contents
+          # p @@main_array.count
+          @i += 1
+          p @i
+          @@main_xml_str << @each_data_str
+        end
+        @each_data_str = ""
+      end
+
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
+  parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+  parser.parse(gz)
+
+  @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
+  @@main_xml_str << "</DataFeeds>"
+
+  filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+
+  object = $s3_object.objects["reports/#{category}/#{filename}"]
+  object.write(@@main_xml_str)
+  # object.write(return_val)
+  object.acl = :public_read
+  p filename
+
+  # object = $s3_object.object(["reports/#{filename}"])
+  # object.write(return_val)
+  # object.acl = :public_read
+else
+  p "Try Different format - Its not working"
+end
+
+
+##Intimates
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_apparel.xml.gz"
+# url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+  @@main_xml_str = ""
+
+  require 'rubygems'
+  require 'nokogiri'
+
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @each_data_str = ""
+      @i = 0
+      @headers = []
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @each_data_str << "<#{name}>"
+    end
+
+    def end_element(name)
+      @each_data_str << "#{CGI.escape_html(@content.to_s)}</#{name}>"
+      # p 11111111111111111
+      # p "#{name} : #{@content}"
+      @open_struct.item_brand = @content if name == 'item_brand'
+      @open_struct.item_category = @content if name == "item_category"
+      @open_struct.department = @content if name == "department"
+
+      if name == "item_data"
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "intimates" && ["prettysecrets"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
+          # @@main_array << @contents
+          # p @@main_array.count
+          @i += 1
+          p @i
+          @@main_xml_str << @each_data_str
+        end
+        @each_data_str = ""
+      end
+
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
+  parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+  parser.parse(gz)
+
+  @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
+  @@main_xml_str << "</DataFeeds>"
+
+  category = "intimates"
+
+  filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+
+  object = $s3_object.objects["reports/#{category}/#{filename}"]
+  object.write(@@main_xml_str)
+  # object.write(return_val)
+  object.acl = :public_read
+  p filename
+
+  # object = $s3_object.object(["reports/#{filename}"])
+  # object.write(return_val)
+  # object.acl = :public_read
+else
+  p "Try Different format - Its not working"
+end
+
+##Accessories
+url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_apparel.xml.gz"
+# url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_kindle.xml.gz"
+digest_auth = Net::HTTP::DigestAuth.new
+
+uri = URI.parse(url)
+uri.user = "pla04"
+uri.password = "cyn04"
+
+h = Net::HTTP.new uri.host, uri.port
+h.use_ssl = true
+h.ssl_version = :TLSv1
+
+req = Net::HTTP::Get.new uri.request_uri
+
+res = h.request req
+# res is a 401 response with a WWW-Authenticate header
+
+auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+# create a new request with the Authorization header
+req = Net::HTTP::Get.new uri.request_uri
+req.add_field 'Authorization', auth
+
+# re-issue request with Authorization
+res = h.request req
+
+if res.kind_of?(Net::HTTPFound)
+  location = res["location"]
+  infile = open(location)
+  gz = Zlib::GzipReader.new(infile)
+  @@main_xml_str = ""
+
+  require 'rubygems'
+  require 'nokogiri'
+
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize
+      @open_struct = OpenStruct.new
+      @contents = []
+      @each_data_str = ""
+      @i = 0
+      @headers = []
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @each_data_str << "<#{name}>"
+    end
+
+    def end_element(name)
+      @each_data_str << "#{CGI.escape_html(@content.to_s)}</#{name}>"
+      # p 11111111111111111
+      # p "#{name} : #{@content}"
+      @open_struct.item_brand = @content if name == 'item_brand'
+      @open_struct.item_category = @content if name == "item_category"
+      @open_struct.department = @content if name == "department"
+
+      if name == "item_data"
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "Accessories" && ["accessories"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
+          # @@main_array << @contents
+          # p @@main_array.count
+          @i += 1
+          p @i
+          @@main_xml_str << @each_data_str
+        end
+        @each_data_str = ""
+      end
+
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
+
+  parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new)
+  parser.parse(gz)
+
+  @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
+  @@main_xml_str << "</DataFeeds>"
+
+  category = "accessories"
+
+  filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+
+  object = $s3_object.objects["reports/#{category}/#{filename}"]
   object.write(@@main_xml_str)
   # object.write(return_val)
   object.acl = :public_read
