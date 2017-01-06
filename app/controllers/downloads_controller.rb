@@ -1,12 +1,10 @@
 class DownloadsController < ApplicationController
   def index
-    filename = "report_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
     begin
-      file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
-      data = open(file_url)
+      data = Product.download_list_feeds(params[:category])
       send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase, :type => data.content_type, :x_sendfile => true
     rescue Exception => e
-      render :text => "Wrong filename => plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml OR Not Present"
+      render :text => "File Not Found"
     end
   end
 

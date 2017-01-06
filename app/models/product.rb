@@ -18,7 +18,7 @@ class Product < Item
       @open_struct = OpenStruct.new
       @contents = []
       @each_data_str = ""
-      @@uniq_cagories = []
+      @main_xml_str = ""
       @i = 0
       @headers = []
       @department = department
@@ -49,7 +49,7 @@ class Product < Item
         if (@department.blank? || @open_struct.department.to_s.downcase.match(@department).present?) && @open_struct.item_category.to_s.downcase.match(@category).present? && @brands.include?(@open_struct.item_brand.to_s.downcase.gsub(/\W+/, ''))
           @i += 1
           p @i
-          @@main_xml_str << @each_data_str
+          @main_xml_str << @each_data_str
         end
         @each_data_str = ""
       end
@@ -63,6 +63,10 @@ class Product < Item
 
     def cdata_block(string)
       characters(string)
+    end
+
+    def final_val
+      @main_xml_str
     end
   end
 
@@ -678,21 +682,22 @@ class Product < Item
       location = res["location"]
       infile = open(location)
       gz = Zlib::GzipReader.new(infile)
-      @@main_xml_str = ""
+      main_xml_str = ""
 
       require 'rubygems'
       require 'nokogiri'
 
-      parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new(department, category, brands))
+      document = MyDocument.new(department, category, brands)
+      parser = Nokogiri::XML::SAX::Parser.new(document)
       parser.parse(gz)
 
-      @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
-      @@main_xml_str << "</DataFeeds>"
+      main_xml_str = "<DataFeeds>" + document.final_val if !document.final_val.include?("<DataFeeds>")
+      main_xml_str << "</DataFeeds>"
 
       filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
 
       object = $s3_object.objects["reports/#{category}/#{filename}"]
-      object.write(@@main_xml_str)
+      object.write(main_xml_str)
       # object.write(return_val)
       object.acl = :public_read
       p filename
@@ -726,6 +731,18 @@ class Product < Item
     s_category = /shoes/
     s_brands = ["catwalk", "converse", "desigual", "dunelondon", "havaianas", "nike", "puma", "tresmode", "carlton", "stevemadden"]
     update_amazon_category_list_feeds(s_url, s_dep, s_category, s_brands)
+  end
+
+  def self.download_list_feeds(category)
+    begin
+      filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+      file_url = "#{configatron.root_image_path}reports/#{category}/#{filename}"
+      data = open(file_url)
+    rescue Exception => e
+      filename = "report_#{category}_#{Time.now.yesterday.strftime('%d_%b_%Y')}.xml".downcase
+      file_url = "#{configatron.root_image_path}reports/#{category}/#{filename}"
+      data = open(file_url)
+    end
   end
 
 end
