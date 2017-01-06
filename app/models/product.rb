@@ -3,59 +3,111 @@
 
 class Product < Item
 
-has_one :itemrelationship, :foreign_key => :item_id
-has_many :itemrelationships, :foreign_key => :item_id
+  has_one :itemrelationship, :foreign_key => :item_id
+  has_many :itemrelationships, :foreign_key => :item_id
 
-has_one :manufacturer,
-        :through => :itemrelationship
+  has_one :manufacturer,
+          :through => :itemrelationship
 #        :conditions => {'relationtype' => 'Manufacturer'}
 #        :class_name => 'Manufacturer',
 #        :source => :manufacturer
   has_one :cargroup, :through => :itemrelationship, :source => :cargroup
 
+  class MyDocument < Nokogiri::XML::SAX::Document
+    def initialize(department, category, brands)
+      @open_struct = OpenStruct.new
+      @contents = []
+      @each_data_str = ""
+      @@uniq_cagories = []
+      @i = 0
+      @headers = []
+      @department = department
+      @category = category
+      @brands = brands
+    end
+
+    def start_element(name, attrs)
+      @attrs = attrs
+      @content = ''
+      @each_data_str << "<#{name}>"
+    end
+
+    def end_element(name)
+      @each_data_str << "#{CGI.escape_html(@content.to_s)}</#{name}>"
+      # p 11111111111111111
+      # p "#{name} : #{@content}"
+      @open_struct.item_brand = @content if name == 'item_brand'
+      @open_struct.item_category = @content if name == "item_category"
+      @open_struct.department = @content if name == "department"
+
+      if name == "item_data"
+        # if !@@uniq_cagories.include?(@open_struct.item_category)
+        #   @@uniq_cagories << @open_struct.item_category
+        #   p @@uniq_cagories
+        # end
+
+        if (@department.blank? || @open_struct.department.to_s.downcase.match(@department).present?) && @open_struct.item_category.to_s.downcase.match(@category).present? && @brands.include?(@open_struct.item_brand.to_s.downcase.gsub(/\W+/, ''))
+          @i += 1
+          p @i
+          @@main_xml_str << @each_data_str
+        end
+        @each_data_str = ""
+      end
+
+      @content = nil
+    end
+
+    def characters(string)
+      @content << string if @content
+    end
+
+    def cdata_block(string)
+      characters(string)
+    end
+  end
 
 
- def self.search_type(type)
-   if (type.blank? || type.include?("Others"))
-      return [ "ItemtypeTag".camelize.constantize, "Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, 
-              "Beauty".camelize.constantize,"Color".camelize.constantize,"Apparel".camelize.constantize, "Style".camelize.constantize,
-              "Car".camelize.constantize, "Camera".camelize.constantize,"Laptop".camelize.constantize,
-              "Lens".camelize.constantize,"Television".camelize.constantize, 
-              "ApartmentType".camelize.constantize,"ApartmentSaleType".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Place".camelize.constantize,"State".camelize.constantize,
-              'Accessory'.camelize.constantize, "Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,'Training'.camelize.constantize,
-              "AttributeTag".camelize.constantize,"Topic".camelize.constantize,'Insurance'.camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
-   end
-   # type = type.split(",") if type.is_a?(String) && type.include?(",")
-   if type.is_a?(Array)
-     return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue (t.to_s.gsub(/\s+/,'').strip.camelize.constantize rescue nil)}
-   else
-      return_val = [*type.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize] rescue ([*type.to_s.gsub(/\s+/,'').strip.camelize.constantize] rescue [])
-   end
+  def self.search_type(type)
+    if (type.blank? || type.include?("Others"))
+      return ["ItemtypeTag".camelize.constantize, "Manufacturer".camelize.constantize, "CarGroup".camelize.constantize, "Mobile".camelize.constantize, "Tablet".camelize.constantize,
+              "Beauty".camelize.constantize, "Color".camelize.constantize, "Apparel".camelize.constantize, "Style".camelize.constantize,
+              "Car".camelize.constantize, "Camera".camelize.constantize, "Laptop".camelize.constantize,
+              "Lens".camelize.constantize, "Television".camelize.constantize,
+              "ApartmentType".camelize.constantize, "ApartmentSaleType".camelize.constantize, "Hotel".camelize.constantize, "City".camelize.constantize, "Place".camelize.constantize, "State".camelize.constantize,
+              'Accessory'.camelize.constantize, "Game".camelize.constantize, "Console".camelize.constantize, "WearableGadget".camelize.constantize, 'Training'.camelize.constantize,
+              "AttributeTag".camelize.constantize, "Topic".camelize.constantize, 'Insurance'.camelize.constantize, "Bike".camelize.constantize, "Cycle".camelize.constantize]
+    end
+    # type = type.split(",") if type.is_a?(String) && type.include?(",")
+    if type.is_a?(Array)
+      return_val = type.collect { |t| t.to_s.gsub(/\s+/, '').strip.camelize.singularize.constantize rescue (t.to_s.gsub(/\s+/, '').strip.camelize.constantize rescue nil) }
+    else
+      return_val = [*type.to_s.gsub(/\s+/, '').strip.camelize.singularize.constantize] rescue ([*type.to_s.gsub(/\s+/, '').strip.camelize.constantize] rescue [])
+    end
 
-   return_val = return_val.compact
+    return_val = return_val.compact
 
-    
-   if !type.blank?
-    return_val = return_val + ["WearableGadget".camelize.constantize] if type.include?("Mobile")
-    return_val = return_val + ["Console".camelize.constantize] if type.include?("Games")
-    return_val = return_val + ["Lens".camelize.constantize] if type.include?("Camera")
-   end
 
-   return return_val
- end
+    if !type.blank?
+      return_val = return_val + ["WearableGadget".camelize.constantize] if type.include?("Mobile")
+      return_val = return_val + ["Console".camelize.constantize] if type.include?("Games")
+      return_val = return_val + ["Lens".camelize.constantize] if type.include?("Camera")
+    end
+
+    return return_val
+  end
 
   def self.follow_search_type(type)
     if  type == "owner" || type == "buyer"
-       return ["Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
+      return ["Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize, "Bike".camelize.constantize, "Cycle".camelize.constantize]
     elsif  type == "follower"
-      return ["AttributeTag".camelize.constantize,"Topic".camelize.constantize]
+      return ["AttributeTag".camelize.constantize, "Topic".camelize.constantize]
     elsif  type == "profile_follower"
-       return ["Car".camelize.constantize,"AttributeTag".camelize.constantize,"Topic".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
-      end
+      return ["Car".camelize.constantize, "AttributeTag".camelize.constantize, "Topic".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize, "Bike".camelize.constantize, "Cycle".camelize.constantize]
+    end
   end
 
   def manu
-      self.manufacturer
+    self.manufacturer
   end
 
   def self.call_search_items_by_relavance(param, itemtypes=nil)
@@ -106,7 +158,7 @@ has_one :manufacturer,
     apartment_types = ApartmentType.where(:name => ["Land", "Apartment"])
 
     apartment_types.each do |each_apartment_type|
-      final_results << {:id => each_apartment_type.id, :value => each_apartment_type.name, :imgsrc =>"", :type => "ApartmentType", :url => "" }
+      final_results << {:id => each_apartment_type.id, :value => each_apartment_type.name, :imgsrc => "", :type => "ApartmentType", :url => ""}
     end
 
     apartment_type_name = ""
@@ -121,12 +173,12 @@ has_one :manufacturer,
       end
 
       if !apartment_type_name.blank?
-        names = final_results.map {|result| result[:value]}
+        names = final_results.map { |result| result[:value] }
 
         if !names.include?(apartment_type_name)
           apartment_type = ApartmentType.where(:name => apartment_type_name).first
           if !apartment_type.blank?
-            final_results << {:id => apartment_type.id, :value => apartment_type.name, :imgsrc =>"", :type => "ApartmentType", :url => "" }
+            final_results << {:id => apartment_type.id, :value => apartment_type.name, :imgsrc => "", :type => "ApartmentType", :url => ""}
             selected_list << apartment_type.id
           end
         end
@@ -136,7 +188,7 @@ has_one :manufacturer,
     apartment_sale_types = ApartmentSaleType.where(:name => "For Sale")
 
     apartment_sale_types.each do |each_apartment_sale_type|
-      final_results << {:id => each_apartment_sale_type.id, :value => each_apartment_sale_type.name, :imgsrc =>"", :type => "ApartmentSaleType", :url => "" }
+      final_results << {:id => each_apartment_sale_type.id, :value => each_apartment_sale_type.name, :imgsrc => "", :type => "ApartmentSaleType", :url => ""}
     end
 
     apartment_sale_type_name = ""
@@ -150,32 +202,32 @@ has_one :manufacturer,
       end
 
       if !apartment_sale_type_name.blank?
-        names = final_results.map {|result| result[:value]}
+        names = final_results.map { |result| result[:value] }
 
         if !names.include?(apartment_sale_type_name)
           apartment_sale_type = ApartmentSaleType.where(:name => apartment_sale_type_name).first
           if !apartment_sale_type.blank?
-            final_results << {:id => apartment_sale_type.id, :value => apartment_sale_type.name, :imgsrc =>"", :type => "ApartmentSaleType", :url => "" }
+            final_results << {:id => apartment_sale_type.id, :value => apartment_sale_type.name, :imgsrc => "", :type => "ApartmentSaleType", :url => ""}
             selected_list << apartment_sale_type.id
           end
         end
       end
     end
 
-    location = location.gsub("-"," ").gsub("_", " ")
+    location = location.gsub("-", " ").gsub("_", " ")
 
     removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
                         "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
-                        "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
-                        "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch"]
-    location = location.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+                        "access", "full", "depth", "detailed", "look", "difference", "update", "video", "top", "best", "list", "spec", "and", "point", "shoot", "camera", "mobile",
+                        "tablet", "car", "bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch"]
+    location = location.to_s.split(/\W+/).delete_if { |x| removed_keywords.include?(x.downcase) }.join(' ')
 
     @items = Sunspot.search([Place]) do
       keywords location do
         minimum_match 1
       end
-      order_by :score,:desc
-      order_by :orderbyid , :asc
+      order_by :score, :desc
+      order_by :orderbyid, :asc
       paginate(:page => 1, :per_page => 5)
     end
 
@@ -188,7 +240,7 @@ has_one :manufacturer,
       name = item.name.to_s
       city_name = "(#{item.related_city.name.to_s})" rescue ""
       f_name = "#{name} #{city_name}"
-      results << {:id => item.id.to_s, :value => f_name, :imgsrc =>image_url, :type => "Place", :url => url }
+      results << {:id => item.id.to_s, :value => f_name, :imgsrc => image_url, :type => "Place", :url => url}
     end
 
     final_results << results
@@ -225,10 +277,10 @@ has_one :manufacturer,
 
     removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
                         "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
-                        "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
-                        "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used"]
-    term = term.gsub("-","")
-    term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+                        "access", "full", "depth", "detailed", "look", "difference", "update", "video", "top", "best", "list", "spec", "and", "point", "shoot", "camera", "mobile",
+                        "tablet", "car", "bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used"]
+    term = term.gsub("-", "")
+    term = term.to_s.split(/\W+/).delete_if { |x| removed_keywords.include?(x.downcase) }.join(' ')
     # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     search_type_for_data = search_type.first if search_type.is_a?(Array)
 
@@ -244,9 +296,9 @@ has_one :manufacturer,
       keywords term do
         minimum_match 1
       end
-      with :status, [1,2,3]
-      order_by :score,:desc
-      order_by :orderbyid , :asc
+      with :status, [1, 2, 3]
+      order_by :score, :desc
+      order_by :orderbyid, :asc
       paginate(:page => 1, :per_page => 5)
     end
 
@@ -266,10 +318,10 @@ has_one :manufacturer,
 
       removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
                           "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
-                          "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
-                          "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used"]
-      term = term.gsub("-","")
-      term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+                          "access", "full", "depth", "detailed", "look", "difference", "update", "video", "top", "best", "list", "spec", "and", "point", "shoot", "camera", "mobile",
+                          "tablet", "car", "bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used"]
+      term = term.gsub("-", "")
+      term = term.to_s.split(/\W+/).delete_if { |x| removed_keywords.include?(x.downcase) }.join(' ')
       # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
       search_type_for_data = search_type.first if search_type.is_a?(Array)
 
@@ -279,9 +331,9 @@ has_one :manufacturer,
         keywords term do
           minimum_match 1
         end
-        with :status, [1,2,3]
-        order_by :score,:desc
-        order_by :orderbyid , :asc
+        with :status, [1, 2, 3]
+        order_by :score, :desc
+        order_by :orderbyid, :asc
         paginate(:page => 1, :per_page => 5)
       end
 
@@ -294,12 +346,15 @@ has_one :manufacturer,
     query_car_groups = "SELECT `itemrelationships`.`item_id` as item_id, items.id as car_group_id, items.name as name FROM `items` INNER JOIN `itemrelationships` ON `items`.`id` = `itemrelationships`.`relateditem_id` WHERE `items`.`type` IN ('CarGroup') AND `itemrelationships`.`item_id` IN (#{ids})"
     car_groups = ids.blank? ? [] : CarGroup.find_by_sql(query_car_groups)
     car_groups_hash = {}
-    car_groups.each {|each_group| car_groups_hash.merge!("#{each_group.item_id}" => each_group.attributes.delete_if {|k,v| k == "item_id"})}
+    car_groups.each { |each_group| car_groups_hash.merge!("#{each_group.item_id}" => each_group.attributes.delete_if { |k, v| k == "item_id" }) }
 
     item_names = {}
-    items.each {|item| item_names.merge!("#{item.id}" => "#{item.name}")}
-    item_names.each {|k,v| splt_val = v.split(" "); if splt_val.count > 2; splt_val.shift; item_names[k]=splt_val.join(" ");end}
-    item_names.each {|k,v| item_names[k] = v.to_s.split(/\W+/).join(' ')}
+    items.each { |item| item_names.merge!("#{item.id}" => "#{item.name}") }
+    item_names.each { |k, v| splt_val = v.split(" ");
+    if splt_val.count > 2;
+      splt_val.shift; item_names[k]=splt_val.join(" ");
+    end }
+    item_names.each { |k, v| item_names[k] = v.to_s.split(/\W+/).join(' ') }
 
     # Append suggestions based on category
     categories = []
@@ -312,7 +367,7 @@ has_one :manufacturer,
       end
       categories.each do |each_category|
         name, id = Item.find_root_level_id(each_category, each_category.pluralize).to_s.split(",")
-        results << {:id => id, :value => name, :imgsrc =>"", :type => "Groups", :url => "" } if !id.blank? && !name.blank?
+        results << {:id => id, :value => name, :imgsrc => "", :type => "Groups", :url => ""} if !id.blank? && !name.blank?
       end
     end
 
@@ -341,21 +396,21 @@ has_one :manufacturer,
     # items_by_score = {}
     # @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}0
     all_items_by_score = {}
-    @items.hits.map {|dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score) unless dd.result.blank?}
-    items_by_score = all_items_by_score.select {|key,val| val.to_f > 0.5}
-    sorted_hash = Hash[items_by_score.sort_by {|k,v| -v}]
-    all_items_by_score.each {|key,val| all_items_by_score[key] = val.to_f.round(2)}
+    @items.hits.map { |dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score) unless dd.result.blank? }
+    items_by_score = all_items_by_score.select { |key, val| val.to_f > 0.5 }
+    sorted_hash = Hash[items_by_score.sort_by { |k, v| -v }]
+    all_items_by_score.each { |key, val| all_items_by_score[key] = val.to_f.round(2) }
     all_items_by_score.default = 0
 
     if category_blank != true && search_type.include?(Beauty)
       selected_list = sorted_hash.keys
-      selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
+      selected_items = items.select { |each_item| selected_list.include?(each_item.id.to_s) }
 
       new_selected_list = []
 
-      new_selected_list << selected_items.select {|a| a.is_a?(Beauty)}.first
-      new_selected_list << selected_items.select {|a| a.is_a?(Color)}.first
-      new_selected_list << selected_items.select {|a| a.is_a?(Manufacturer)}.first
+      new_selected_list << selected_items.select { |a| a.is_a?(Beauty) }.first
+      new_selected_list << selected_items.select { |a| a.is_a?(Color) }.first
+      new_selected_list << selected_items.select { |a| a.is_a?(Manufacturer) }.first
       new_selected_list.compact!
 
       if new_selected_list.map(&:class).include?(Beauty)
@@ -363,22 +418,22 @@ has_one :manufacturer,
       end
 
       list_scores = []
-      new_selected_list.each {|each_item| list_scores << all_items_by_score["#{each_item.id}"]}
+      new_selected_list.each { |each_item| list_scores << all_items_by_score["#{each_item.id}"] }
 
       new_selected_list_ids = new_selected_list.map(&:id).map(&:to_s)
 
-      results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2))}
+      results.each { |each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2)) }
 
       return results, new_selected_list_ids, list_scores, auto_save
     elsif category_blank != true && search_type.include?(Apparel)
       selected_list = sorted_hash.keys
-      selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
+      selected_items = items.select { |each_item| selected_list.include?(each_item.id.to_s) }
 
       new_selected_list = []
 
-      new_selected_list << selected_items.select {|a| a.is_a?(Apparel)}.first
-      new_selected_list << selected_items.select {|a| a.is_a?(Color)}.first
-      new_selected_list << selected_items.select {|a| a.is_a?(Style)}
+      new_selected_list << selected_items.select { |a| a.is_a?(Apparel) }.first
+      new_selected_list << selected_items.select { |a| a.is_a?(Color) }.first
+      new_selected_list << selected_items.select { |a| a.is_a?(Style) }
       new_selected_list = new_selected_list.flatten.compact
 
       if new_selected_list.map(&:class).include?(Apparel)
@@ -386,11 +441,11 @@ has_one :manufacturer,
       end
 
       list_scores = []
-      new_selected_list.each {|each_item| list_scores << all_items_by_score["#{each_item.id}"]}
+      new_selected_list.each { |each_item| list_scores << all_items_by_score["#{each_item.id}"] }
 
       new_selected_list_ids = new_selected_list.map(&:id).map(&:to_s)
 
-      results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2))}
+      results.each { |each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]].to_f.round(2)) }
 
       if !new_selected_list_ids.blank?
         return results, new_selected_list_ids, list_scores, auto_save
@@ -408,7 +463,7 @@ has_one :manufacturer,
     groups = []
     new_selected_list = []
     list_scores = {}
-    selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
+    selected_items = items.select { |each_item| selected_list.include?(each_item.id.to_s) }
     selected_items.each_with_index do |each_selected_item, index|
       group = each_selected_item.cargroup rescue nil
       unless group.blank?
@@ -433,7 +488,7 @@ has_one :manufacturer,
     results.flatten!
     new_selected_list.uniq!
 
-    results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]])}
+    results.each { |each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]]) }
     # list_scores = sorted_hash.select {|key,_| new_selected_list.include?(key)}.values.map {|each_val| each_val.round(2)}
 
     items_group = {}
@@ -446,8 +501,11 @@ has_one :manufacturer,
       end
     end
 
-    items_group_names.each {|k,v| splt_val = v.split(" "); if splt_val.count > 2; splt_val.shift; items_group_names[k]=splt_val.join(" ");end}
-    items_group_names.each {|k,v| items_group_names[k] = v.to_s.split(/\W+/).join(' ')}
+    items_group_names.each { |k, v| splt_val = v.split(" ");
+    if splt_val.count > 2;
+      splt_val.shift; items_group_names[k]=splt_val.join(" ");
+    end }
+    items_group_names.each { |k, v| items_group_names[k] = v.to_s.split(/\W+/).join(' ') }
 
     keys = all_items_by_score.keys
     values = all_items_by_score.values
@@ -457,38 +515,38 @@ has_one :manufacturer,
     compare_val = 10
     keys.each_with_index do |each_key, index|
       each_new_key = each_key
-        if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec", "Resale"].include?(param[:ac_sub_type])
-          if index == 0
-            first_key = each_key
-            compare_val = 0.4
-            next
-          end
-        elsif param[:ac_sub_type] == "Comparisons"
-          index_val =  for_compare == "true" ? 0 : 1
-          if index == index_val
-            first_key = each_key
-            compare_val = 0.3
-            next
-          end
+      if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec", "Resale"].include?(param[:ac_sub_type])
+        if index == 0
+          first_key = each_key
+          compare_val = 0.4
+          next
         end
-        if !items_group[first_key].blank? && !items_group[each_key].blank?
-          if items_group[first_key] != items_group[each_key]
-            if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > compare_val)
-              auto_save = "true"
-              break
-            end
-          end
-        else
+      elsif param[:ac_sub_type] == "Comparisons"
+        index_val = for_compare == "true" ? 0 : 1
+        if index == index_val
+          first_key = each_key
+          compare_val = 0.3
+          next
+        end
+      end
+      if !items_group[first_key].blank? && !items_group[each_key].blank?
+        if items_group[first_key] != items_group[each_key]
           if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > compare_val)
             auto_save = "true"
             break
-          else
-            break
           end
         end
+      else
+        if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > compare_val)
+          auto_save = "true"
+          break
+        else
+          break
+        end
+      end
     end
 
-    keys_for_title_search = all_items_by_score.select {|key,val| val >= all_items_by_score[each_new_key]}.keys
+    keys_for_title_search = all_items_by_score.select { |key, val| val >= all_items_by_score[each_new_key] }.keys
 
     # first_key = keys_for_title_search.first if first_key.blank?
 
@@ -506,7 +564,7 @@ has_one :manufacturer,
           next
         end
 
-        results_keys = results.map {|x| x[:id]}
+        results_keys = results.map { |x| x[:id] }
         term = term.to_s.downcase
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           each_key_pos = keys_for_title_search.index(each_key) + 1
@@ -520,7 +578,7 @@ has_one :manufacturer,
               if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
                 auto_save = "true"
               else
-                item = items.select {|each_item| each_item.id == selected_key.to_i}.first
+                item = items.select { |each_item| each_item.id == selected_key.to_i }.first
                 item_car_group = item.cargroup rescue nil
                 if !item_car_group.blank?
                   (new_groups = []) << item_car_group
@@ -544,7 +602,7 @@ has_one :manufacturer,
             if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
               auto_save = "true"
             else
-              item = items.select {|each_item| each_item.id == selected_key.to_i}.first
+              item = items.select { |each_item| each_item.id == selected_key.to_i }.first
               item_car_group = item.cargroup rescue nil
               if !item_car_group.blank?
                 (new_groups = []) << item_car_group
@@ -568,17 +626,17 @@ has_one :manufacturer,
   end
 
   def self.get_results_from_items(items)
-    results = items.collect{|item|
+    results = items.collect { |item|
 
       image_url = item.image_url(:small)
 
-      if(item.is_a? (Product))
+      if (item.is_a? (Product))
         type = item.type.humanize
-      elsif(item.is_a? (CarGroup))
+      elsif (item.is_a? (CarGroup))
         type = "Groups"
-      elsif(item.is_a? (AttributeTag))
+      elsif (item.is_a? (AttributeTag))
         type = "Groups"
-      elsif(item.is_a? (ItemtypeTag))
+      elsif (item.is_a? (ItemtypeTag))
         type = "Topics"
       else
         type = item.type.to_s.humanize
@@ -587,10 +645,87 @@ has_one :manufacturer,
       # end
       url = item.get_url()
       # image_url = item.image_url
-      {:id => item.id.to_s, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id.to_s, :value => item.get_name, :imgsrc => image_url, :type => type, :url => url}
     }
 
     return results
+  end
+
+  def self.update_amazon_category_list_feeds(url, department, category, brands)
+    digest_auth = Net::HTTP::DigestAuth.new
+
+    uri = URI.parse(url)
+    uri.user = "pla04"
+    uri.password = "cyn04"
+
+    h = Net::HTTP.new uri.host, uri.port
+    h.use_ssl = true
+    h.ssl_version = :TLSv1
+
+    req = Net::HTTP::Get.new uri.request_uri
+    res = h.request req
+
+    auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+    # create a new request with the Authorization header
+    req = Net::HTTP::Get.new uri.request_uri
+    req.add_field 'Authorization', auth
+
+    # re-issue request with Authorization
+    res = h.request req
+
+    if res.kind_of?(Net::HTTPFound)
+      location = res["location"]
+      infile = open(location)
+      gz = Zlib::GzipReader.new(infile)
+      @@main_xml_str = ""
+
+      require 'rubygems'
+      require 'nokogiri'
+
+      parser = Nokogiri::XML::SAX::Parser.new(MyDocument.new(department, category, brands))
+      parser.parse(gz)
+
+      @@main_xml_str = "<DataFeeds>" + @@main_xml_str if !@@main_xml_str.include?("<DataFeeds>")
+      @@main_xml_str << "</DataFeeds>"
+
+      filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+
+      object = $s3_object.objects["reports/#{category}/#{filename}"]
+      object.write(@@main_xml_str)
+      # object.write(return_val)
+      object.acl = :public_read
+      p filename
+
+      # object = $s3_object.object(["reports/#{filename}"])
+      # object.write(return_val)
+      # object.acl = :public_read
+    else
+      p "Try Different format - Its not working"
+    end
+  end
+
+  def self.update_all_amazon_category_list_feeds()
+    #apparel
+    a_url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_apparel.xml.gz"
+    a_dep = /women/
+    a_category = /apparel/
+    a_brands = ["adidas", "biba", "chemistry", "fabindia", "frenchconnection", "lee", "puma", "unitedcolorsofbenetton", "levis"]
+    update_amazon_category_list_feeds(a_url, a_dep, a_category, a_brands)
+
+    #beauty
+    b_url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_beauty.xml.gz"
+    b_dep = ""
+    b_category = /beauty/
+    b_brands = ["maybelliene", "loreal", "lakme", "urbandecay", "colourpop", "tarte", "sephora", "benefit", "bobbibrown", "mac", "esteelauder", "clinique", "forestessentials", "kama"]
+    update_amazon_category_list_feeds(b_url, b_dep, b_category, b_brands)
+
+    #shoes
+    s_url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_shoes.xml.gz"
+    s_dep = /(women|girl|ladies|female|unisex)/
+    s_category = /shoes/
+    s_brands = ["catwalk", "converse", "desigual", "dunelondon", "havaianas", "nike", "puma", "tresmode", "carlton", "stevemadden"]
+    update_amazon_category_list_feeds(s_url, s_dep, s_category, s_brands)
   end
 
 end

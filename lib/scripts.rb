@@ -1691,6 +1691,7 @@ if res.kind_of?(Net::HTTPFound)
       @open_struct = OpenStruct.new
       @contents = []
       @each_data_str = ""
+      @@uniq_cagories = []
       @i = 0
       @headers = []
     end
@@ -1710,7 +1711,12 @@ if res.kind_of?(Net::HTTPFound)
       @open_struct.department = @content if name == "department"
 
       if name == "item_data"
-        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "apparel" && ["adidas", "biba", "chemistry", "fabindia", "french connection", "lee", "puma", "united colors of benetton", "levis"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
+        # if !@@uniq_cagories.include?(@open_struct.item_category)
+        #   @@uniq_cagories << @open_struct.item_category
+        #   p @@uniq_cagories
+        # end
+
+        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "apparel" && ["adidas", "biba", "chemistry", "fabindia", "frenchconnection", "lee", "puma", "unitedcolorsofbenetton", "levis"].include?(@open_struct.item_brand.to_s.downcase.gsub(/\W+/, ''))
           # @@main_array << @contents
           # p @@main_array.count
           @i += 1
@@ -1796,6 +1802,7 @@ end
         @open_struct = OpenStruct.new
         @contents = []
         @each_data_str = ""
+        @@uniq_departments = []
         @i = 0
         @headers = []
       end
@@ -1812,13 +1819,9 @@ end
         # p "#{name} : #{@content}"
         @open_struct.item_brand = @content if name == 'item_brand'
         @open_struct.item_category = @content if name == "item_category"
-        if name == "department"
-          p 333333333333333333
-          p @open_struct.department = @content
-        end
         if name == "item_data"
-          p "#{@open_struct.department}-#{@open_struct.item_category}"
-          if @open_struct.item_category.to_s.downcase == "beauty" && ["maybelliene", "loreal", "lakme", "urbandecay", "colourpop", "tarte", "sephora", "benefit", "bobbibrown", "mac", "esteelauder", "clinique", "forestessentials", "kama"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
+          i_category = @open_struct.item_category.to_s.downcase
+          if  i_category.match(/beauty/).present? && ["maybelliene", "loreal", "lakme", "urbandecay", "colourpop", "tarte", "sephora", "benefit", "bobbibrown", "mac", "esteelauder", "clinique", "forestessentials", "kama"].include?(@open_struct.item_brand.to_s.downcase.gsub(/\W+/, ''))
             # @@main_array << @contents
             # p @@main_array.count
             @i += 1
@@ -2002,6 +2005,8 @@ if res.kind_of?(Net::HTTPFound)
   infile = open(location)
   gz = Zlib::GzipReader.new(infile)
   @@main_xml_str = ""
+  @@uniq_brands = []
+  @@uniq_categories = []
 
   require 'rubygems'
   require 'nokogiri'
@@ -2030,7 +2035,8 @@ if res.kind_of?(Net::HTTPFound)
       @open_struct.department = @content if name == "department"
 
       if name == "item_data"
-        if @open_struct.department == "womens" && @open_struct.item_category.to_s.downcase == "shoes" && ["catwalk", "converse", "desigual", "dunelondon", "havaianas", "nike", "puma", "tresmode", "carlton", "stevemadden"].include?(@open_struct.item_brand.to_s.downcase.gsub!(/\W+/, ''))
+        department = @open_struct.department.to_s.downcase
+        if department.match(/(women|girl|ladies|female|unisex)/).present? && @open_struct.item_category.to_s.downcase == "shoes" && ["catwalk", "converse", "desigual", "dunelondon", "havaianas", "nike", "puma", "tresmode", "carlton", "stevemadden"].include?(@open_struct.item_brand.to_s.downcase.gsub(/\W+/, ''))
           # @@main_array << @contents
           # p @@main_array.count
           @i += 1
