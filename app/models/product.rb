@@ -21,7 +21,7 @@ class Product < Item
       @main_xml_str = ""
       @i = 0
       @headers = []
-      @department = department.blank? ? nil : /department/
+      @department = department.blank? ? nil : /#{department}/
       @category = /#{category}/
       @brands = brands
     end
