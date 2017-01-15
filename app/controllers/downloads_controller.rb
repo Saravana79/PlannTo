@@ -1,19 +1,20 @@
 class DownloadsController < ApplicationController
   def index
-    begin
-      begin
+    # begin
+    #   begin
         filename = "report_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
         file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
+        # send_file "http://planntonew.s3.amazonaws.com/reports/shoes/report_shoes_15_jan_2017.xml", :x_sendfile => true
         data = open(file_url)
-      rescue Exception => e
-        filename = "report_#{params[:category]}_#{Time.now.yesterday.strftime('%d_%b_%Y')}.xml".downcase
-        file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
-        data = open(file_url)
-      end
+      # rescue Exception => e
+      #   filename = "report_#{params[:category]}_#{Time.now.yesterday.strftime('%d_%b_%Y')}.xml".downcase
+      #   file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
+      #   data = open(file_url)
+      # end
       send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase, :type => data.content_type, :x_sendfile => true
-    rescue Exception => e
-      render :text => "File Not Found"
-    end
+    # rescue Exception => e
+    #   render :text => "File Not Found"
+    # end
   end
 
   def get_download
