@@ -734,6 +734,7 @@ class Product < Item
   end
 
   def self.download_list_feeds(category)
+    # data = ""
     begin
       filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
       file_url = "#{configatron.root_image_path}reports/#{category}/#{filename}"
@@ -743,6 +744,7 @@ class Product < Item
       file_url = "#{configatron.root_image_path}reports/#{category}/#{filename}"
       data = open(file_url)
     end
+    data
   end
 
 end
