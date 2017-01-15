@@ -21,8 +21,8 @@ class Product < Item
       @main_xml_str = ""
       @i = 0
       @headers = []
-      @department = department
-      @category = category
+      @department = department.blank? ? nil : /department/
+      @category = /#{category}/
       @brands = brands
     end
 
@@ -713,22 +713,22 @@ class Product < Item
   def self.update_all_amazon_category_list_feeds()
     #apparel
     a_url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_apparel.xml.gz"
-    a_dep = /women/
-    a_category = /apparel/
+    a_dep = "women"
+    a_category = "apparel"
     a_brands = ["adidas", "biba", "chemistry", "fabindia", "frenchconnection", "lee", "puma", "unitedcolorsofbenetton", "levis"]
     update_amazon_category_list_feeds(a_url, a_dep, a_category, a_brands)
 
     #beauty
     b_url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_beauty.xml.gz"
     b_dep = ""
-    b_category = /beauty/
+    b_category = "beauty"
     b_brands = ["maybelliene", "loreal", "lakme", "urbandecay", "colourpop", "tarte", "sephora", "benefit", "bobbibrown", "mac", "esteelauder", "clinique", "forestessentials", "kama"]
     update_amazon_category_list_feeds(b_url, b_dep, b_category, b_brands)
 
     #shoes
     s_url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getFeed?filename=in_amazon_shoes.xml.gz"
-    s_dep = /(women|girl|ladies|female|unisex)/
-    s_category = /shoes/
+    s_dep = "(women|girl|ladies|female|unisex)"
+    s_category = "shoes"
     s_brands = ["catwalk", "converse", "desigual", "dunelondon", "havaianas", "nike", "puma", "tresmode", "carlton", "stevemadden"]
     update_amazon_category_list_feeds(s_url, s_dep, s_category, s_brands)
   end
