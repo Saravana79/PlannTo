@@ -2,15 +2,14 @@ class DownloadsController < ApplicationController
   def index
     begin
       begin
-        filename = "report_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
-        file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
+        filename = "report_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml.gz".downcase
         data = open(file_url)
-        send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase, :type => data.content_type, :x_sendfile => true
+        send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml.gz".downcase, :type => data.content_type, :x_sendfile => true
       rescue Exception => e
-        filename = "report_#{params[:category]}_#{Time.now.yesterday.strftime('%d_%b_%Y')}.xml".downcase
+        filename = "report_#{params[:category]}_#{Time.now.yesterday.strftime('%d_%b_%Y')}.xml.gz".downcase
         file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
         data = open(file_url)
-        send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase, :type => data.content_type, :x_sendfile => true
+        send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml.gz".downcase, :type => data.content_type, :x_sendfile => true
       end
     rescue Exception => e
       render :text => "File Not Found"

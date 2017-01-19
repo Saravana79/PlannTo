@@ -694,10 +694,11 @@ class Product < Item
       main_xml_str = "<DataFeeds>" + document.final_val if !document.final_val.include?("<DataFeeds>")
       main_xml_str << "</DataFeeds>"
 
-      filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+      filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml.gz".downcase
 
       object = $s3_object.objects["reports/#{category}/#{filename}"]
-      object.write(main_xml_str)
+      gzip_data = ActiveSupport::Gzip.compress(main_xml_str)
+      object.write(gzip_data)
       # object.write(return_val)
       object.acl = :public_read
       p filename
@@ -736,11 +737,11 @@ class Product < Item
   def self.download_list_feeds(category)
     # data = ""
     begin
-      filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml".downcase
+      filename = "report_#{category}_#{Time.now.strftime('%d_%b_%Y')}.xml.gz".downcase
       file_url = "#{configatron.root_image_path}reports/#{category}/#{filename}"
       data = open(file_url)
     rescue Exception => e
-      filename = "report_#{category}_#{Time.now.yesterday.strftime('%d_%b_%Y')}.xml".downcase
+      filename = "report_#{category}_#{Time.now.yesterday.strftime('%d_%b_%Y')}.xml.gz".downcase
       file_url = "#{configatron.root_image_path}reports/#{category}/#{filename}"
       data = open(file_url)
     end
