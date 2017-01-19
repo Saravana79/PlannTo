@@ -3,6 +3,7 @@ class DownloadsController < ApplicationController
     begin
       begin
         filename = "report_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml.gz".downcase
+        file_url = "#{configatron.root_image_path}reports/#{params[:category]}/#{filename}"
         data = open(file_url)
         send_data data.read, filename: "plannto_in_amazon_#{params[:category]}_#{Time.now.strftime('%d_%b_%Y')}.xml.gz".downcase, :type => data.content_type, :x_sendfile => true
       rescue Exception => e
