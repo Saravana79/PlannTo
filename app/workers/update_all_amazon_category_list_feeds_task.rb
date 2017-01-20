@@ -10,7 +10,7 @@ class UpdateAllAmazonCategoryListFeedsTask
       log.debug "********** Actual Time to Start #{actual_time.to_time.strftime('%b %d,%Y %r')} **********"
       log.debug "********** ListFeedsUpdate Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
       Product.send(method_name)
-      log.debug "********** ListFeedsUpdate Completed At - #{Time.zone.now.strftime('%b %d,%Y %r')} - #{source_items} sourceitems updated with amazon ec **********"
+      log.debug "********** ListFeedsUpdate Completed At - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
     #rescue => e
     #  log.debug "Have some problem while updating SourceItem Suggestion details, please find the error below"
     #  log.debug e
